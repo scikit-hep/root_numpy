@@ -1,25 +1,32 @@
-=root_numpy=
+root_numpy
+----------
+
 Python Extension for converting root files to numpy structure array. This is very useful for using in interactive data exploration environment like ipython (especially notebook) or sage.
 
 Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster if you are trying to read a large file.
 
-=Requirement=
+Requirements
+------------
+
 Root installed http://root.cern.ch/
 numpy installed http://numpy.scipy.org/
 
 Tested with Root 5.32, numpy 1.6.1, Python 2.7.1 but it should in most places.
 
-=Installation=
+Installation
+------------
 python setup.py install
 
-=Short Tutorial=
+Short Tutorial
+--------------
 
 see tutorial.ipynb if you have ipython notebook with (open ipython notebook --pylab inline)
  
 or tutorial.pdf if you don't have ipynb
 
-=Doc string=
-
+Doc string
+----------
+<pre>
 read(fnames,treename,branches=None)
 convert tree treename in root files specified in fnames to numpy structured array
 ------------------
@@ -44,3 +51,4 @@ root_numpy.read(['a*.root','b*.root'],'mytree')#read all branches from tree name
 root_numpy.read('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
 
 root_numpy.read('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
+</pre>
