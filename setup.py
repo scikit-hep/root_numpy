@@ -17,7 +17,7 @@ setup (name = 'root_numpy',
        version = '1.0',
        description = 'Convert root tree to numpy array',
        author='Piti Ongmongkolkul',
-       author_email='piti@caltech.edu',
+       author_email='piti118@gmail.com',
        url='https://github.com/piti118/root_numpy',
        ext_modules = [module]
        )

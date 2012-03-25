@@ -255,7 +255,7 @@ static PyMethodDef methods[] = {
     "\tIf branches contains duplicate branches, only the first one is used.\n"
     "\n"
     "Caveat: This should not matter for most use cases. But, due to the way TChain works, if the trees specified in the input files have different\n"
-    "structure, only the branch in the first tree will be automatically extracted. You can work around this by either reordering the input file or\n"
+    "structures, only the branch in the first tree will be automatically extracted. You can work around this by either reordering the input file or\n"
     "specify the branches manually.\n"
     "------------------\n"
     "Ex:\n"
