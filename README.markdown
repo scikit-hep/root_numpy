@@ -5,6 +5,9 @@ Python Extension for converting root files to numpy structure array. This is ver
 
 Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster if you are trying to read a large file.
 
+Currently only support Float_t Int_t Double_t Bool_t (no array yet) but this should cover a large number of use cases already.
+If you are trying to convert some other type, it will throw RunTimeError Unknown root type typename. Let me know if other conversion is needed.
+
 Requirements
 ------------
 
