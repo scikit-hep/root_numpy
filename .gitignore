@@ -1,0 +1,3 @@
+build
+*.so
+.DS_Store
