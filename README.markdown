@@ -1,7 +1,7 @@
 root_numpy
 ----------
 
-Python Extension for converting root files to numpy structure array. This is very useful for using in interactive data exploration environment like ipython (especially notebook) or sage.
+Python Extension for converting root files to numpy [structure array](http://docs.scipy.org/doc/numpy/user/basics.rec.html). This is very useful for using in interactive data exploration environment like [ipython](http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html) (especially notebook).
 
 Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster if you are trying to read a large file.
 
@@ -11,9 +11,9 @@ If you are trying to convert some other type, it will throw RunTimeError Unknown
 Requirements
 ------------
 
-Root installed http://root.cern.ch/
+[Root](http://root.cern.ch/) installed
 
-numpy installed http://numpy.scipy.org/
+[numpy](http://numpy.scipy.org/) installed
 
 Tested with Root 5.32, numpy 1.6.1, Python 2.7.1 but it should work in most places.
 
