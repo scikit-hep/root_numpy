@@ -3,10 +3,12 @@ root_numpy
 
 Python Extension for converting root files to numpy [structure array](http://docs.scipy.org/doc/numpy/user/basics.rec.html). This is very useful for using in interactive data exploration environment like [ipython](http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html) (especially notebook).
 
-Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster if you are trying to read a large file.
+Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster especially if you are trying to read a large file in to memory (100MB+ or even GB's of Data).
 
-Currently only support Float_t Int_t Double_t Bool_t and other basic types (no array yet) but this should cover a large number of use cases already.
+Currently only support basic types like Float_t Int_t Double_t Bool_t etc. No array support yet. This should cover a large number of use cases already.
 If you are trying to convert some other type, it will throw RunTimeError Unknown root type typename.
+
+Tab completion for numpy.recarray column name is also available with this [numpy patch](https://github.com/piti118/numpy/commit/a996292238ab98dcf53f2d48476d637eab9f1a72)
 
 Requirements
 ------------
@@ -24,11 +26,22 @@ python setup.py install
 Short Tutorial
 --------------
 
-see tutorial.ipynb if you have ipython notebook with (open ipython notebook --pylab inline)
- 
-or tutorial.pdf if you don't have ipynb
+Basically it let you do things like this very fast and very memory efficient
 
-Doc string
+```
+import numpy as np
+import root_numpy 
+a = root_numpy.read('test/test.root','tree').view(np.recarray)
+print a.i
+print a.f
+```
+
+fore more information see tutorial.ipynb if you have ipython notebook 
+with (open ipython notebook --pylab inline)
+ 
+or tutorial.pdf if you don't have ipython notebook
+
+Docstring
 ----------
 <pre>
 read(fnames,treename,branches=None)
