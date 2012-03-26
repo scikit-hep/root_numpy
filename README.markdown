@@ -1,7 +1,7 @@
 root_numpy
 ----------
 
-Python Extension for converting root files to numpy [structure array](http://docs.scipy.org/doc/numpy/user/basics.rec.html). This is very useful for using in interactive data exploration environment like [ipython](http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html) (especially notebook).
+Python Extension for converting root files to numpy [recarray](http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html) or [structure array](http://docs.scipy.org/doc/numpy/user/basics.rec.html). This is very useful for using in interactive data exploration environment like [ipython](http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html) (especially notebook).
 
 Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster especially if you are trying to read a large file in to memory (100MB+ or even GB's of Data).
 
