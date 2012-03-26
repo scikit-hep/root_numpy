@@ -70,6 +70,7 @@ root2array(['a*.root','b*.root'],'mytree')#read all branches from tree named myt
 root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
 root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
 </pre>
+
 <pre>
 root2rec(fnames, treename, branches=None)
 read branches in tree treename in file(s) given by fnames can convert it to numpy recarray
