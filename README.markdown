@@ -41,8 +41,7 @@ print a['i']
 print a['f']
 ```
 
-fore more information see tutorial.ipynb if you have ipython notebook 
-with (open ipython notebook --pylab inline)
+fore more information see tutorial.ipynb if you have ipython notebook
  
 or tutorial.pdf if you don't have ipython notebook
 
