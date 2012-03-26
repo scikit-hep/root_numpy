@@ -39,7 +39,7 @@ print a.f
 a = root2array('test/test.root','tree')
 print a['i']
 print a['f']
-``
+```
 
 fore more information see tutorial.ipynb if you have ipython notebook 
 with (open ipython notebook --pylab inline)
