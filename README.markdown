@@ -35,6 +35,8 @@ from numpy import root2arry, root2rec
 a = root2rec('test/test.root','tree')
 print a.i
 print a.f
+#which you can then plot with matplotlib using
+#plot(a.i,a.f)
 
 a = root2array('test/test.root','tree')
 print a['i']
