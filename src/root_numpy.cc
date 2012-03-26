@@ -10,22 +10,62 @@
 #include <cassert>
 #include <set>
 struct TypeInfo{
-    TypeInfo(PyObject* nptype, int size):nptype(nptype),size(size){};
     PyObject* nptype;
     int size;//in bytes
+    TypeInfo(const TypeInfo& t):nptype(t.nptype),size(t.size){Py_INCREF(nptype);}
+    TypeInfo(const char* nptype, int size):nptype(PyString_FromString(nptype)),size(size){};
+    ~TypeInfo(){Py_DECREF(nptype);}
 };
 
 static std::map<std::string, TypeInfo> root_typemap;
-
+//map roottype string to TypeInfo Object
 void init_roottypemap(){
+    using std::make_pair;
     //TODO: correct this one so it doesn't depend on system
-    TypeInfo intLike(PyString_FromString("i4"),sizeof(Int_t));
-    TypeInfo floatLike(PyString_FromString("f4"),sizeof(Float_t));
-    TypeInfo doubleLike(PyString_FromString("f8"),sizeof(Double_t));
-    root_typemap.insert(std::make_pair("Int_t",intLike));
-    root_typemap.insert(std::make_pair("Bool_t",intLike));
-    root_typemap.insert(std::make_pair("Float_t",floatLike));
-    root_typemap.insert(std::make_pair("Double_t",doubleLike));
+    // from TTree doc
+    // - C : a character string terminated by the 0 character
+    // - B : an 8 bit signed integer (Char_t)
+    // - b : an 8 bit unsigned integer (UChar_t)
+    // - S : a 16 bit signed integer (Short_t)
+    // - s : a 16 bit unsigned integer (UShort_t)
+    // - I : a 32 bit signed integer (Int_t)
+    // - i : a 32 bit unsigned integer (UInt_t)
+    // - F : a 32 bit floating point (Float_t)
+    // - D : a 64 bit floating point (Double_t)
+    // - L : a 64 bit signed integer (Long64_t)
+    // - l : a 64 bit unsigned integer (ULong64_t)
+    // - O : [the letter 'o', not a zero] a boolean (Bool_t)
+    // from numericdtype.py
+    // # b -> boolean
+    // # u -> unsigned integer
+    // # i -> signed integer
+    // # f -> floating point
+    // # c -> complex
+    // # M -> datetime
+    // # m -> timedelta
+    // # S -> string
+    // # U -> Unicode string
+    // # V -> record
+    // # O -> Python object
+    
+    root_typemap.insert(make_pair("Char_t",TypeInfo("i1",1)));
+    root_typemap.insert(make_pair("UChar_t",TypeInfo("u1",1)));    
+
+    root_typemap.insert(make_pair("Short_t",TypeInfo("i2",1)));
+    root_typemap.insert(make_pair("UShort_t",TypeInfo("u2",1)));
+        
+    root_typemap.insert(make_pair("Int_t",TypeInfo("i4",4)));
+    root_typemap.insert(make_pair("UInt_t",TypeInfo("u4",4)));
+
+    root_typemap.insert(make_pair("Float_t",TypeInfo("f4",4)));
+    root_typemap.insert(std::make_pair("Double_t",TypeInfo("f8",8)));
+    
+    root_typemap.insert(make_pair("Long64_t",TypeInfo("i4",8)));
+    root_typemap.insert(make_pair("ULong64_t",TypeInfo("u4",8)));
+    
+    //this one is kinda special currently need to read c-api on exacly how numpy and root store bool
+    //but int seems to work
+    root_typemap.insert(make_pair("Bool_t",TypeInfo("i4",4)));  
 }
 
 TypeInfo* convert_roottype(const std::string& t){
@@ -128,6 +168,7 @@ PyObject* build_numpy_descr(const std::vector<LeafInfo*>& lis){
     }
     return mylist;
 }
+
 //convert all leaf specified in lis to numpy structured array
 PyObject* read_helper(TTree& chain, std::vector<LeafInfo*>& lis){
     int numEntries = chain.GetEntries();
@@ -267,6 +308,10 @@ static PyMethodDef methods[] = {
     },
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
+
+void cleanup(){
+    //do nothing
+}
 
 PyMODINIT_FUNC
 initroot_numpy(void)
