@@ -60,8 +60,8 @@ void init_roottypemap(){
     root_typemap.insert(make_pair("Float_t",TypeInfo("f4",4)));
     root_typemap.insert(std::make_pair("Double_t",TypeInfo("f8",8)));
     
-    root_typemap.insert(make_pair("Long64_t",TypeInfo("i4",8)));
-    root_typemap.insert(make_pair("ULong64_t",TypeInfo("u4",8)));
+    root_typemap.insert(make_pair("Long64_t",TypeInfo("i8",8)));
+    root_typemap.insert(make_pair("ULong64_t",TypeInfo("u8",8)));
     
     //this one is kinda special currently need to read c-api on exacly how numpy and root store bool
     //but int seems to work
