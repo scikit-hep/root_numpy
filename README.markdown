@@ -26,15 +26,20 @@ python setup.py install
 Short Tutorial
 --------------
 
-Basically it let you do things like this very fast and very memory efficient
+Basically it let you do things like this very fast and very efficiently memory wise.
 
 ```
 import numpy as np
-import root_numpy 
-a = root_numpy.read('test/test.root','tree').view(np.recarray)
+from numpy import root2arry, root2rec
+
+a = root2rec('test/test.root','tree')
 print a.i
 print a.f
-```
+
+a = root2array('test/test.root','tree')
+print a['i']
+print a['f']
+``
 
 fore more information see tutorial.ipynb if you have ipython notebook 
 with (open ipython notebook --pylab inline)
@@ -42,30 +47,34 @@ with (open ipython notebook --pylab inline)
 or tutorial.pdf if you don't have ipython notebook
 
 Docstring
-----------
+---------
 <pre>
-read(fnames,treename,branches=None)
+root2array(fnames,treename,branches=None)
 convert tree treename in root files specified in fnames to numpy structured array
 ------------------
-return numpy array
+return numpy structure array
 fnames: list of string or string. Root file name patterns. Anything that works with TChain.Add is accepted
 treename: name of tree to convert to numpy array
 branches(optional): list of string for branch name to be extracted from tree.
-        If branches is not specified or is none or is empty, all from the first treebranches are extracted
-        If branches contains duplicate branches, only the first one is used.
+\tIf branches is not specified or is none or is empty, all from the first treebranches are extracted
+\tIf branches contains duplicate branches, only the first one is used.
 
-Caveat: This should not matter for most use cases. But, due to the way TChain works, if the trees specified in the input files have different
-structure, only the branch in the first tree will be automatically extracted. You can work around this by either reordering the input file or
-specify the branches manually.
+Caveat: This should not matter for most use cases. But, due to the way TChain works, if the trees specified 
+in the input files have different structures, only the branch in the first tree will be automatically extracted. 
+You can work around this by either reordering the input file or specifying the branches manually.
 ------------------
 Ex:
-root_numpy.read('a.root','mytree')#read all branches from tree named mytree from a.root
-
-root_numpy.read('a*.root','mytree')#read all branches from tree named mytree from a*.root
-
-root_numpy.read(['a*.root','b*.root'],'mytree')#read all branches from tree named mytree from a*.root and b*.root
-
-root_numpy.read('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
-
-root_numpy.read('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
+root2array('a.root','mytree')#read all branches from tree named mytree from a.root
+root2array('a*.root','mytree')#read all branches from tree named mytree from a*.root
+root2array(['a*.root','b*.root'],'mytree')#read all branches from tree named mytree from a*.root and b*.root
+root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
+root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
+</pre>
+<pre>
+root2rec(fnames, treename, branches=None)
+read branches in tree treename in file(s) given by fnames can convert it to numpy recarray
+---------------
+This is equivalent to root2array(fnames,treename,branches).view(np.recarray)
+---------------
+see root2array for more details
 </pre>

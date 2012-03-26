@@ -246,7 +246,7 @@ TTree* loadTree(PyObject* fnames, const char* treename){
     return dynamic_cast<TTree*>(chain);
 }
 
-PyObject* root2numpy(PyObject *self, PyObject *args, PyObject* keywords){
+PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     using namespace std;
     PyObject* fnames;
     char* treename_;
@@ -272,8 +272,6 @@ PyObject* root2numpy(PyObject *self, PyObject *args, PyObject* keywords){
     
     vector<LeafInfo*> lis =  get_leafinfo(*chain,branches);
     
-
-    
     array = read_helper(*chain, lis);
     
     //don't switch these two lines because lis[i] contains payload
@@ -284,8 +282,8 @@ PyObject* root2numpy(PyObject *self, PyObject *args, PyObject* keywords){
 }
 
 static PyMethodDef methods[] = {
-    {"read",  (PyCFunction)root2numpy, METH_VARARGS|METH_KEYWORDS,
-    "read(fnames,treename,branches=None)\n"
+    {"root2array",  (PyCFunction)root2array, METH_VARARGS|METH_KEYWORDS,
+    "root2array(fnames,treename,branches=None)\n"
     "convert tree treename in root files specified in fnames to numpy structured array\n"
     "------------------\n"
     "return numpy array\n"
@@ -300,11 +298,11 @@ static PyMethodDef methods[] = {
     "specify the branches manually.\n"
     "------------------\n"
     "Ex:\n"
-    "root_numpy.read('a.root','mytree')#read all branches from tree named mytree from a.root\n\n"
-    "root_numpy.read('a*.root','mytree')#read all branches from tree named mytree from a*.root\n\n"
-    "root_numpy.read(['a*.root','b*.root'],'mytree')#read all branches from tree named mytree from a*.root and b*.root\n\n"
-    "root_numpy.read('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)\n\n"
-    "root_numpy.read('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root\n"
+    "root2array('a.root','mytree')#read all branches from tree named mytree from a.root\n\n"
+    "root2array('a*.root','mytree')#read all branches from tree named mytree from a*.root\n\n"
+    "root2array(['a*.root','b*.root'],'mytree')#read all branches from tree named mytree from a*.root and b*.root\n\n"
+    "root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)\n\n"
+    "root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root\n"
     },
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
@@ -314,10 +312,10 @@ void cleanup(){
 }
 
 PyMODINIT_FUNC
-initroot_numpy(void)
+initcroot_numpy(void)
 {
     import_array();
     init_roottypemap();
-    (void) Py_InitModule("root_numpy", methods);
+    (void) Py_InitModule("croot_numpy", methods);
     //import_array();
 }
