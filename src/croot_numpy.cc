@@ -149,6 +149,7 @@ std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& 
     return ret;
 }
 //helper function for building numpy descr
+//build == transfer ref ownershp to caller
 PyObject* build_numpy_descr(const std::vector<LeafInfo*>& lis){
     
     PyObject* mylist = PyList_New(0);
@@ -170,7 +171,7 @@ PyObject* build_numpy_descr(const std::vector<LeafInfo*>& lis){
 }
 
 //convert all leaf specified in lis to numpy structured array
-PyObject* read_helper(TTree& chain, std::vector<LeafInfo*>& lis){
+PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
     int numEntries = chain.GetEntries();
     PyObject* numpy_descr = build_numpy_descr(lis);
     if(numpy_descr==0){return NULL;}
@@ -248,7 +249,7 @@ TTree* loadTree(PyObject* fnames, const char* treename){
 
 PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     using namespace std;
-    PyObject* fnames;
+    PyObject* fnames=NULL;
     char* treename_;
     PyObject* branches_=NULL;
     PyObject* array=NULL;
@@ -260,9 +261,11 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     
     vector<string> branches;
     if(!los2vos(branches_,branches)){return NULL;}
+    Py_XDECREF(branches_);
     
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
+    Py_DECREF(fnames);
     
     int numEntries = chain->GetEntries();
     if(numEntries==0){
@@ -272,12 +275,12 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     
     vector<LeafInfo*> lis =  get_leafinfo(*chain,branches);
     
-    array = read_helper(*chain, lis);
+    array = build_array(*chain, lis);
     
     //don't switch these two lines because lis[i] contains payload
     delete chain;
     for(int i=0;i<lis.size();i++){delete lis[i];}
-
+ 
     return (PyObject*)array;
 }
 

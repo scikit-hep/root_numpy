@@ -12,7 +12,7 @@ module = Extension('root_numpy.croot_numpy',
                     extra_link_args = []+root_ldflags)
 
 setup (name = 'root_numpy',
-       version = '1.01',
+       version = '1.02',
        description = 'Convert root tree to numpy array',
        author='Piti Ongmongkolkul',
        author_email='piti118@gmail.com',
