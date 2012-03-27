@@ -30,7 +30,7 @@ Basically it let you do things like this very fast and very efficiently memory w
 
 ```
 import numpy as np
-from numpy import root2arry, root2rec
+from root_numpy import root2arry, root2rec
 
 a = root2rec('test/test.root','tree')
 print a.i
