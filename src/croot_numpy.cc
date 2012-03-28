@@ -68,13 +68,10 @@ void init_roottypemap(){
     root_typemap.insert(make_pair("Long64_t",TypeInfo("i8",8)));
     root_typemap.insert(make_pair("ULong64_t",TypeInfo("u8",8)));
     
-    //this one is kinda special currently need to read c-api on exacly how numpy and root store bool
-    //but int seems to work
-    root_typemap.insert(make_pair("Bool_t",TypeInfo("bool",1)));  
-    //root_typemap.insert(make_pair("Bool_t",TypeInfo("u1",1)));  
-
+    root_typemap.insert(make_pair("Bool_t",TypeInfo("bool",1)));
 }
 
+//convert roottype string to typeinfo
 TypeInfo* convert_roottype(const std::string& t){
     std::map<std::string, TypeInfo>::iterator it = root_typemap.find(t);
     if(it==root_typemap.end()){
@@ -96,6 +93,7 @@ struct LeafInfo{
         return name + "("+root_type+")";
     }
 };
+
 //return all branch name from tree
 std::vector<std::string> get_branchnames(TTree& tree){
     TObjArray* branches = (TObjArray*)tree.GetListOfBranches();
@@ -128,14 +126,17 @@ std::vector<std::string> vector_unique(const std::vector<std::string>& org){
 //get list of leafinfo from tree
 //if branches is not empty, only the branches specified in branches will be used
 //otherwise it will automatically list all the branches of the first tree in chain 
+//caller is responsible to delete each LeafInfo
 std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& branches){
     
     using namespace std;
     vector<string> branchNames;
     std::vector<LeafInfo*> ret;
+    //branch is not specified
     if(branches.size()==0) branchNames = get_branchnames(tree);
-    else branchNames = vector_unique(branches);
-
+    else branchNames = vector_unique(branches); //make sure it's unique
+    
+    //for each branch figure out the type and construct leafinfo
     for(int i=0;i<branchNames.size();i++){
         TBranch* thisBranch = dynamic_cast<TBranch*>(tree.GetBranch(branchNames[i].c_str()));
         std::string roottype("Float_t");
@@ -203,7 +204,6 @@ PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
         current = (char*)PyArray_GETPTR1(array, iEntry);
         for(int ileaf=0;ileaf<lis.size();++ileaf){
             int size = lis[ileaf]->type->size;  
-            // 
             // cout << lis[ileaf]->name << " " << lis[ileaf]->root_type << endl;
             // 
             // cout << *(int*)(lis[ileaf]->payload) << " " << *(float*)(lis[ileaf]->payload) << endl;
@@ -213,14 +213,10 @@ PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
             // cout << " size:" << size << " " ;
             // cout << array->strides[0] << endl;
             memcpy((char*)current,(char*)lis[ileaf]->payload,size);
-            
             current+=size;
             
         }
-        // if(iEntry==0 || iEntry == numEntries-1) 
-        //     RNDEBUG(PyArray_ISBEHAVED(array));
     }
-    //return Py_BuildValue("i",numEntries);
     return (PyObject*)array;
 }
 
