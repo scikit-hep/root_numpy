@@ -9,6 +9,10 @@
 #include <numpy/arrayobject.h>
 #include <cassert>
 #include <set>
+#include <iomanip>
+
+#define RNDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << s << std::endl;
+
 struct TypeInfo{
     PyObject* nptype;
     int size;//in bytes
@@ -51,13 +55,14 @@ void init_roottypemap(){
     root_typemap.insert(make_pair("Char_t",TypeInfo("i1",1)));
     root_typemap.insert(make_pair("UChar_t",TypeInfo("u1",1)));    
 
-    root_typemap.insert(make_pair("Short_t",TypeInfo("i2",1)));
-    root_typemap.insert(make_pair("UShort_t",TypeInfo("u2",1)));
+    root_typemap.insert(make_pair("Short_t",TypeInfo("i2",2)));
+    root_typemap.insert(make_pair("UShort_t",TypeInfo("u2",2)));
         
     root_typemap.insert(make_pair("Int_t",TypeInfo("i4",4)));
     root_typemap.insert(make_pair("UInt_t",TypeInfo("u4",4)));
 
     root_typemap.insert(make_pair("Float_t",TypeInfo("f4",4)));
+    
     root_typemap.insert(std::make_pair("Double_t",TypeInfo("f8",8)));
     
     root_typemap.insert(make_pair("Long64_t",TypeInfo("i8",8)));
@@ -65,7 +70,7 @@ void init_roottypemap(){
     
     //this one is kinda special currently need to read c-api on exacly how numpy and root store bool
     //but int seems to work
-    root_typemap.insert(make_pair("Bool_t",TypeInfo("i4",4)));  
+    root_typemap.insert(make_pair("Bool_t",TypeInfo("u1",1)));  
 }
 
 TypeInfo* convert_roottype(const std::string& t){
@@ -172,6 +177,7 @@ PyObject* build_numpy_descr(const std::vector<LeafInfo*>& lis){
 
 //convert all leaf specified in lis to numpy structured array
 PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
+    using namespace std;
     int numEntries = chain.GetEntries();
     PyObject* numpy_descr = build_numpy_descr(lis);
     if(numpy_descr==0){return NULL;}
@@ -188,15 +194,29 @@ PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
     
     //assume numpy array is contiguous
     char* current = (char*)PyArray_DATA(array);
+    
     //now put stuff in array
     for(int iEntry=0;iEntry<numEntries;++iEntry){
         chain.GetEntry(iEntry);
+        current = (char*)PyArray_GETPTR1(array, iEntry);
         for(int ileaf=0;ileaf<lis.size();++ileaf){
-            //cout << *(int*)(lis[ileaf]->payload) << " " << *(float*)(lis[ileaf]->payload) << endl;
-            int size = lis[ileaf]->type->size;
-            memcpy((void*)current,(void*)lis[ileaf]->payload,size);
+            int size = lis[ileaf]->type->size;  
+            // 
+            // cout << lis[ileaf]->name << " " << lis[ileaf]->root_type << endl;
+            // 
+            // cout << *(int*)(lis[ileaf]->payload) << " " << *(float*)(lis[ileaf]->payload) << endl;
+            // cout << lis[ileaf]->name << "("<< iEntry << ")";
+            // cout << " current: 0x";
+            // cout << std::hex << (long)(current) << std::dec ;
+            // cout << " size:" << size << " " ;
+            // cout << array->strides[0] << endl;
+            memcpy((char*)current,(char*)lis[ileaf]->payload,size);
+            
             current+=size;
+            
         }
+        // if(iEntry==0 || iEntry == numEntries-1) 
+        //     RNDEBUG(PyArray_ISBEHAVED(array));
     }
     //return Py_BuildValue("i",numEntries);
     return (PyObject*)array;
@@ -261,11 +281,11 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     
     vector<string> branches;
     if(!los2vos(branches_,branches)){return NULL;}
-    Py_XDECREF(branches_);
+    //Py_XDECREF(branches_);
     
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
-    Py_DECREF(fnames);
+    //Py_DECREF(fnames);
     
     int numEntries = chain->GetEntries();
     if(numEntries==0){
@@ -284,7 +304,15 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     return (PyObject*)array;
 }
 
+PyObject* test(PyObject *self, PyObject *args){
+    using namespace std;
+    cout << sizeof(Int_t) << endl;
+    cout << sizeof(Bool_t) << endl;
+    Py_INCREF(Py_None);
+    return Py_None;
+}
 static PyMethodDef methods[] = {
+    {"test",test,METH_VARARGS,""},
     {"root2array",  (PyCFunction)root2array, METH_VARARGS|METH_KEYWORDS,
     "root2array(fnames,treename,branches=None)\n"
     "convert tree treename in root files specified in fnames to numpy structured array\n"
@@ -307,11 +335,20 @@ static PyMethodDef methods[] = {
     "root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)\n\n"
     "root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root\n"
     },
+    
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
 void cleanup(){
     //do nothing
+}
+
+PyObject* list_branches(){
+    
+}
+
+PyObject* list_tree(){
+    
 }
 
 PyMODINIT_FUNC
