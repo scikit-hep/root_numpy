@@ -70,7 +70,7 @@ void init_roottypemap(){
     
     //this one is kinda special currently need to read c-api on exacly how numpy and root store bool
     //but int seems to work
-    root_typemap.insert(make_pair("Bool_t",TypeInfo("u1",1)));  
+    root_typemap.insert(make_pair("Bool_t",TypeInfo("bool",1)));  
 }
 
 TypeInfo* convert_roottype(const std::string& t){
@@ -281,11 +281,9 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     
     vector<string> branches;
     if(!los2vos(branches_,branches)){return NULL;}
-    //Py_XDECREF(branches_);
     
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
-    //Py_DECREF(fnames);
     
     int numEntries = chain->GetEntries();
     if(numEntries==0){
