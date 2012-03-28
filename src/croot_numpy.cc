@@ -10,9 +10,11 @@
 #include <cassert>
 #include <set>
 #include <iomanip>
-
+#include "capsulethunk.h"
 #define RNDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << s << std::endl;
 
+#define HAVE_COBJ ( (PY_VERSION_HEX <  0x03020000) )
+#define HAVE_CAPSULE ( ((PY_VERSION_HEX >=  0x02070000) && (PY_VERSION_HEX <  0x03000000)) || (PY_VERSION_HEX >=  0x03010000) )
 struct TypeInfo{
     PyObject* nptype;
     int size;//in bytes
@@ -231,10 +233,10 @@ int los2vos(PyObject* los, std::vector<std::string>& vos){
     else if(los==Py_None){
         //do nothing
     }
-    else if(PyString_Check(los)){
+    else if(PyString_Check(los)){//passing string put that in to vector
         char* tmp = PyString_AsString(los);
         vos.push_back(tmp);
-    }else if(PyList_Check(los)){
+    }else if(PyList_Check(los)){//an actual list of string
         int len = PyList_Size(los);
         for(int i=0;i<len;i++){
             PyObject* s = PyList_GetItem(los,i);
@@ -265,6 +267,19 @@ TTree* loadTree(PyObject* fnames, const char* treename){
     return dynamic_cast<TTree*>(chain);
 }
 
+PyObject* root2array_helper(TTree& tree, PyObject* branches_){
+    using namespace std;
+    vector<string> branches;
+    if(!los2vos(branches_,branches)){return NULL;}    
+    vector<LeafInfo*> lis =  get_leafinfo(tree,branches);
+    
+    PyObject* array = build_array(tree, lis);
+    
+    //don't switch these two lines because lis[i] contains payload
+    for(int i=0;i<lis.size();i++){delete lis[i];}
+    return array;
+}
+
 PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     using namespace std;
     PyObject* fnames=NULL;
@@ -277,9 +292,6 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
         return NULL;
     }
     
-    vector<string> branches;
-    if(!los2vos(branches_,branches)){return NULL;}
-    
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
     
@@ -288,17 +300,84 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
         PyErr_SetString(PyExc_TypeError,"Empty Tree");
         return NULL;
     }
-    
-    vector<LeafInfo*> lis =  get_leafinfo(*chain,branches);
-    
-    array = build_array(*chain, lis);
-    
-    //don't switch these two lines because lis[i] contains payload
+
+    array = root2array_helper(*chain,branches_);
     delete chain;
-    for(int i=0;i<lis.size();i++){delete lis[i];}
- 
-    return (PyObject*)array;
+    return array;
 }
+
+//calling these like this: root2array_from_*
+// if 'AsCapsule' in dir(ROOT) call the capsule one (doesn't exist yet as of this writing)
+// otherwise call the cobj one
+// capsule one is provided 
+
+//these people have cobject
+#if HAVE_COBJ
+PyObject* root2array_from_cobj(PyObject *self, PyObject *args, PyObject* keywords){
+    using namespace std;
+    TTree* tree=NULL;
+    PyObject* tree_=NULL;
+    PyObject* branches_=NULL;
+    PyObject* array=NULL;
+    static const char* keywordslist[] = {"tree","branches",NULL};
+    
+    if(!PyArg_ParseTupleAndKeywords(args,keywords,"O|O",const_cast<char **>(keywordslist),&tree_,&branches_)){
+        return NULL;
+    }
+    
+    if(!PyCObject_Check(tree_)){return NULL;}
+    //this is not safe so be sure to know what you are doing type check in python first
+    //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
+    TTree* chain = static_cast<TTree*>(PyCObject_AsVoidPtr(tree_));
+    
+    if(!chain){
+        PyErr_SetString(PyExc_TypeError,"Unable to convert tree to TTree*");
+        return NULL;
+    }
+    
+    int numEntries = chain->GetEntries();
+    if(numEntries==0){
+        PyErr_SetString(PyExc_TypeError,"Empty Tree");
+        return NULL;
+    }
+
+    return root2array_helper(*chain,branches_);
+}
+#endif
+
+//and these people have capsule
+#if HAVE_CAPSULE
+PyObject* root2array_from_capsule(PyObject *self, PyObject *args, PyObject* keywords){
+    using namespace std;
+    TTree* tree=NULL;
+    PyObject* tree_=NULL;
+    PyObject* branches_=NULL;
+    PyObject* array=NULL;
+    static const char* keywordslist[] = {"tree","branches",NULL};
+    
+    if(!PyArg_ParseTupleAndKeywords(args,keywords,"O|O",const_cast<char **>(keywordslist),&tree_,&branches_)){
+        return NULL;
+    }
+    
+    if(!PyCapsule_CheckExact(tree_)){return NULL;}
+    //this is not safe so be sure to know what you are doing type check in python first
+    //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
+    TTree* chain = static_cast<TTree*>(PyCapsule_GetPointer(tree_,NULL));
+    
+    if(!chain){
+        PyErr_SetString(PyExc_TypeError,"Unable to convert tree to TTree*");
+        return NULL;
+    }
+    
+    int numEntries = chain->GetEntries();
+    if(numEntries==0){
+        PyErr_SetString(PyExc_TypeError,"Empty Tree");
+        return NULL;
+    }
+
+    return root2array_helper(*chain,branches_);
+}
+#endif
 
 PyObject* test(PyObject *self, PyObject *args){
     using namespace std;
@@ -307,6 +386,7 @@ PyObject* test(PyObject *self, PyObject *args){
     Py_INCREF(Py_None);
     return Py_None;
 }
+
 static PyMethodDef methods[] = {
     {"test",test,METH_VARARGS,""},
     {"root2array",  (PyCFunction)root2array, METH_VARARGS|METH_KEYWORDS,
@@ -331,7 +411,18 @@ static PyMethodDef methods[] = {
     "root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)\n\n"
     "root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root\n"
     },
-    
+    #if HAVE_COBJ
+    {"root2array_from_cobj",  (PyCFunction)root2array_from_cobj, METH_VARARGS|METH_KEYWORDS,
+    "root2array_from_cobj(PyCObject tree, branches=None)\n"
+    "convert TTree in form of PyCObject to structured array. branches accept many form of arguments. See root2array for details \n"
+    },
+    #endif
+    #if HAVE_CAPSULE
+    {"root2array_from_capsule",  (PyCFunction)root2array_from_capsule, METH_VARARGS|METH_KEYWORDS,
+    "root2array_from_capsule(PyCObject tree, branches=None)\n"
+    "convert TTree in form of PyCapsule to structured array. branches accept many form of arguments. See root2array for details \n"
+    },
+    #endif
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
