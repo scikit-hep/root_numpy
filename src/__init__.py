@@ -1,5 +1,6 @@
 import croot_numpy
 import numpy as np
+import sys
 
 def root2array(fnames,treename,branches=None):
     """
@@ -36,3 +37,32 @@ def root2rec(fnames, treename, branches=None):
     see root2array for more details
     """
     return root2array(fnames,treename,branches).view(np.recarray)
+
+def pyroot2array(tree,branches=None):
+    """
+    convert PyRoot TTree to numpy structured array
+    see root2array for details on parameter branches
+    """
+    #first check if ROOT is in module so I won't have to load it
+    if 'ROOT' in sys.modules:
+        import ROOT
+
+        if isinstance(tree,ROOT.TTree):
+            if 'AsCapsule' in dir(ROOT):
+                o = ROOT.AsCapsule(tree)
+                return croot_numpy.root2array_from_capsule(o,branches)
+            else:
+                o = ROOT.AsCObject(tree)
+                return croot_numpy.root2array_from_cobj(o,branches)
+        else:
+            raise TypeError("tree must be a ROOT.TTree")
+    else:
+        raise TypeError("tree must be a ROOT.TTree and we know PyROOT is even not loaded") #user is lying ROOT is not even loaded
+
+def pyroot2rec(tree,branches=None):
+    """
+    convert PyRoot TTree to numpy structured array 
+    see root2array for details on parameter branches
+    """
+    return pyroot2array(tree,branches).view(np.recarray)
+
