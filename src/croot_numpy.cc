@@ -10,7 +10,7 @@
 #include <cassert>
 #include <set>
 #include <iomanip>
-#include "capsulethunk.h"
+
 #define RNDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << s << std::endl;
 
 #define HAVE_COBJ ( (PY_VERSION_HEX <  0x03020000) )
