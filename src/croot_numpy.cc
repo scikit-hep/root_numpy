@@ -77,8 +77,9 @@ void init_roottypemap(){
 TypeInfo* convert_roottype(const std::string& t){
     std::map<std::string, TypeInfo>::iterator it = root_typemap.find(t);
     if(it==root_typemap.end()){
-        std::string msg = "Unknown root type: "+t;
-        PyErr_SetString(PyExc_RuntimeError,msg.c_str());
+        //std::string msg = "Unknown root type: "+t;
+        //PyErr_SetString(PyExc_RuntimeError,msg.c_str());
+        std::cerr << "Warning: unknown root type: " << t << " skip " << std::endl;
         return NULL;
     }
     return &(it->second);
@@ -142,19 +143,33 @@ std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& 
     for(int i=0;i<branchNames.size();i++){
         TBranch* thisBranch = dynamic_cast<TBranch*>(tree.GetBranch(branchNames[i].c_str()));
         std::string roottype("Float_t");
+        TypeInfo* ti = NULL;
+        bool should_add_branch = true;
         if(thisBranch!=0){
             TObjArray* leaves = thisBranch->GetListOfLeaves();
             assert(leaves!=0);
             TLeaf* thisLeaf = dynamic_cast<TLeaf*>(leaves->At(0));
             assert(thisLeaf!=0);
-            roottype = thisLeaf->GetTypeName();
+            int ncount=0;
+            TLeaf* count_leaf = thisLeaf->GetLeafCounter(ncount);
+            if(!(ncount==1 and count_leaf==NULL)){//some sort of array
+                std::cerr << "Warning: skipping array branch " << branchNames[i] << std::endl;
+                should_add_branch=false;
+            }else{
+                roottype = thisLeaf->GetTypeName();
+                ti = convert_roottype(roottype);
+                if(ti==NULL) should_add_branch=false;
+            }            
         }else{    
-            std::cout << "Warning: branch not found in the first tree(assume type of Float_t)" << branchNames[i] << std::endl;
+            std::cerr << "Warning: branch not found in the first tree(assume type of Float_t)" << branchNames[i] << std::endl;
         }
         //need to set branch address at tree level because TChain will fail if branch is set at the first tree
-        LeafInfo* li = new LeafInfo(thisBranch->GetName(),roottype);
-        tree.SetBranchAddress(thisBranch->GetName(),&(li->payload));
-        ret.push_back(li);
+        if(should_add_branch){
+            LeafInfo* li = new LeafInfo(thisBranch->GetName(),roottype);
+            li->type=ti;
+            tree.SetBranchAddress(thisBranch->GetName(),&(li->payload));
+            ret.push_back(li);
+        }
     }
     return ret;
 }
@@ -165,10 +180,7 @@ PyObject* build_numpy_descr(const std::vector<LeafInfo*>& lis){
     PyObject* mylist = PyList_New(0);
     for(int i=0;i<lis.size();++i){
         PyObject* pyname = PyString_FromString(lis[i]->name.c_str());
-        TypeInfo* ti = convert_roottype(lis[i]->root_type);
-        lis[i]->type = ti;
-        if(ti==0) return NULL;
-        PyObject* pytype = ti->nptype;
+        PyObject* pytype = lis[i]->type->nptype;
 
         Py_INCREF(pytype);
         PyObject* nt_tuple = PyTuple_New(2);
