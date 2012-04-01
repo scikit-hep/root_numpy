@@ -291,7 +291,7 @@ TTree* loadTree(PyObject* fnames, const char* treename){
     TChain* chain = new TChain(treename);
     int total= 0;
     for(int i=0;i<vs.size();++i){
-        //check if it's a patter(chain->Add always return 1 (no idea what's the rationale))
+        //check if it's not pattern(chain->Add always return 1 (no idea what's the rationale))
         //if fname doesn't contain wildcard
         if(!has_wildcard(vs[i]) && !file_exists(vs[i])){//no wildcard and file doesn't exists
             PyErr_SetString(PyExc_IOError,("File "+vs[i]+" not found or not readable").c_str());
