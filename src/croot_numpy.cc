@@ -10,6 +10,7 @@
 #include <cassert>
 #include <set>
 #include <iomanip>
+#include <fstream>
 
 #define RNDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << s << std::endl;
 
@@ -268,6 +269,15 @@ int los2vos(PyObject* los, std::vector<std::string>& vos){
     return ret;
 }
 
+
+bool file_exists(std::string fname){
+    std::ifstream my_file(fname.c_str());
+    return my_file.good();
+}
+
+bool has_wildcard(std::string fname){
+    return fname.find("*") != std::string::npos;
+}
 /**
 * loadTTree from PyObject if fnames is list of string then it load every pattern in fnames
 * if fnames is just a string then it load just one
@@ -279,7 +289,26 @@ TTree* loadTree(PyObject* fnames, const char* treename){
     vector<string> vs;
     if(!los2vos(fnames,vs)){return NULL;}
     TChain* chain = new TChain(treename);
-    for(int i=0;i<vs.size();++i){chain->Add(vs[i].c_str());}
+    int total= 0;
+    for(int i=0;i<vs.size();++i){
+        //check if it's a patter(chain->Add always return 1 (no idea what's the rationale))
+        //if fname doesn't contain wildcard
+        if(!has_wildcard(vs[i]) && !file_exists(vs[i])){//no wildcard and file doesn't exists
+            PyErr_SetString(PyExc_IOError,("File "+vs[i]+" not found or not readable").c_str());
+            delete chain;
+            return NULL;
+        }
+        int fileadded = chain->Add(vs[i].c_str());
+        if(fileadded==0){
+            std::cerr << "Warning: pattern " << vs[i] << " does not match any file" << std::endl;
+        }
+        total+=fileadded;
+    }
+    if(total==0){
+        delete chain;
+        PyErr_SetString(PyExc_IOError,"None of the pattern match any file. May be a typo?");
+        return NULL;
+    }
     return dynamic_cast<TTree*>(chain);
 }
 
@@ -312,11 +341,7 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
     
-    int numEntries = chain->GetEntries();
-    if(numEntries==0){
-        PyErr_SetString(PyExc_TypeError,"Empty Tree");
-        return NULL;
-    }
+    //int numEntries = chain->GetEntries();
 
     array = root2array_helper(*chain,branches_);
     delete chain;
@@ -352,11 +377,7 @@ PyObject* root2array_from_cobj(PyObject *self, PyObject *args, PyObject* keyword
         return NULL;
     }
     
-    int numEntries = chain->GetEntries();
-    if(numEntries==0){
-        PyErr_SetString(PyExc_TypeError,"Empty Tree");
-        return NULL;
-    }
+    //int numEntries = chain->GetEntries();
 
     return root2array_helper(*chain,branches_);
 }
@@ -380,17 +401,12 @@ PyObject* root2array_from_capsule(PyObject *self, PyObject *args, PyObject* keyw
     //this is not safe so be sure to know what you are doing type check in python first
     //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
     TTree* chain = static_cast<TTree*>(PyCapsule_GetPointer(tree_,NULL));
-    
     if(!chain){
         PyErr_SetString(PyExc_TypeError,"Unable to convert tree to TTree*");
         return NULL;
     }
     
-    int numEntries = chain->GetEntries();
-    if(numEntries==0){
-        PyErr_SetString(PyExc_TypeError,"Empty Tree");
-        return NULL;
-    }
+    //int numEntries = chain->GetEntries();
 
     return root2array_helper(*chain,branches_);
 }
