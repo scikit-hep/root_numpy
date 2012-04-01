@@ -143,7 +143,7 @@ int get_leafinfo(TTree& tree,const std::vector<std::string>& branches, std::vect
     for(int i=0;i<branchNames.size();i++){
         TBranch* thisBranch = dynamic_cast<TBranch*>(tree.GetBranch(branchNames[i].c_str()));
         if(thisBranch==0){
-            PyErr_SetString(PyExc_ValueError,("Branch "+branchNames[i]+"doesn't exist.").c_str());
+            PyErr_SetString(PyExc_ValueError,("Branch "+branchNames[i]+" doesn't exist.").c_str());
             return NULL;
         }
         std::string roottype("Float_t");
