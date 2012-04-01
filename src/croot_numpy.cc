@@ -130,11 +130,11 @@ std::vector<std::string> vector_unique(const std::vector<std::string>& org){
 //if branches is not empty, only the branches specified in branches will be used
 //otherwise it will automatically list all the branches of the first tree in chain 
 //caller is responsible to delete each LeafInfo
-std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& branches){
+//return NULL when it fails
+int get_leafinfo(TTree& tree,const std::vector<std::string>& branches, std::vector<LeafInfo*>& ret){
     
     using namespace std;
     vector<string> branchNames;
-    std::vector<LeafInfo*> ret;
     //branch is not specified
     if(branches.size()==0) branchNames = get_branchnames(tree);
     else branchNames = vector_unique(branches); //make sure it's unique
@@ -142,6 +142,10 @@ std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& 
     //for each branch figure out the type and construct leafinfo
     for(int i=0;i<branchNames.size();i++){
         TBranch* thisBranch = dynamic_cast<TBranch*>(tree.GetBranch(branchNames[i].c_str()));
+        if(thisBranch==0){
+            PyErr_SetString(PyExc_ValueError,("Branch "+branchNames[i]+"doesn't exist.").c_str());
+            return NULL;
+        }
         std::string roottype("Float_t");
         TypeInfo* ti = NULL;
         bool should_add_branch = true;
@@ -171,7 +175,7 @@ std::vector<LeafInfo*> get_leafinfo(TTree& tree,const std::vector<std::string>& 
             ret.push_back(li);
         }
     }
-    return ret;
+    return 1;
 }
 //helper function for building numpy descr
 //build == transfer ref ownershp to caller
@@ -283,11 +287,12 @@ PyObject* root2array_helper(TTree& tree, PyObject* branches_){
     using namespace std;
     vector<string> branches;
     if(!los2vos(branches_,branches)){return NULL;}    
-    vector<LeafInfo*> lis =  get_leafinfo(tree,branches);
-    
-    PyObject* array = build_array(tree, lis);
-    
-    //don't switch these two lines because lis[i] contains payload
+    vector<LeafInfo*> lis;
+    int flag = get_leafinfo(tree,branches,lis);
+    PyObject* array = NULL;
+    if(flag!=0){
+        array = build_array(tree, lis);
+    }
     for(int i=0;i<lis.size();i++){delete lis[i];}
     return array;
 }
