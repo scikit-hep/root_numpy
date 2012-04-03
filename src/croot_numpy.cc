@@ -216,7 +216,8 @@ PyObject* build_array(TTree& chain, std::vector<LeafInfo*>& lis){
     
     //assume numpy array is contiguous
     char* current = (char*)PyArray_DATA(array);
-    
+    chain.SetCacheSize(10000000);
+    chain.AddBranchToCache("*");
     //now put stuff in array
     for(int iEntry=0;iEntry<numEntries;++iEntry){
         chain.GetEntry(iEntry);
@@ -420,6 +421,73 @@ PyObject* test(PyObject *self, PyObject *args){
     return Py_None;
 }
 
+PyObject* list_trees(PyObject* self, PyObject* arg){
+    char* cfname;
+    if(!PyArg_ParseTuple(arg,"s",&cfname)){
+        return NULL;
+    }
+
+    TFile f(cfname);
+    if(f.IsZombie()){
+        std::string msg;
+        msg += "Unable to open root file ";
+        msg += cfname;
+        PyErr_SetString(PyExc_IOError,msg.c_str());
+        return NULL;
+    }
+    
+    TList* list = f.GetListOfKeys();
+    TIter next(list);
+    PyObject* ret = PyList_New(0);
+    while(TObject* key = next()){
+        TObject* obj = f.Get(key->GetName());
+        if(strncmp(obj->ClassName(),"TTree",10)==0){
+            PyObject* tmp = PyString_FromString(key->GetName());
+            PyList_Append(ret,tmp);
+        }
+    }
+
+    return ret;
+}
+
+
+PyObject* list_branches(PyObject* self, PyObject* arg){
+    char* cfname;
+    char* ctname;
+    if(!PyArg_ParseTuple(arg,"ss",&cfname,&ctname)){
+        return NULL;
+    }
+    
+    TFile f(cfname);
+    if(f.IsZombie()){
+        std::string msg;
+        msg += "Unable to open file: ";
+        msg += cfname;
+        PyErr_SetString(PyExc_IOError,msg.c_str());
+        return NULL;
+    }
+    
+    TTree* tree = dynamic_cast<TTree*>(f.Get(ctname));
+    if(tree==0){
+        std::string msg;
+        msg += "Unable to open tree: ";
+        msg += ctname;
+        msg +="from ";
+        msg +=cfname;
+        PyErr_SetString(PyExc_IOError,msg.c_str());
+        return NULL;
+    }
+    PyObject* ret = PyList_New(0);
+    TObjArray* lob = tree->GetListOfBranches();
+    for(int i=0;i<lob->GetEntries();++i){
+        TObject* obj = lob->At(i);
+        TBranch* b = dynamic_cast<TBranch*>(obj);
+        PyObject* tmp = PyString_FromString(b->GetName());
+        PyList_Append(ret,tmp);
+    }
+    return ret;
+}
+
 static PyMethodDef methods[] = {
     {"test",test,METH_VARARGS,""},
     {"root2array",  (PyCFunction)root2array, METH_VARARGS|METH_KEYWORDS,
@@ -456,6 +524,8 @@ static PyMethodDef methods[] = {
     "convert TTree in form of PyCapsule to structured array. branches accept many form of arguments. See root2array for details \n"
     },
     #endif
+    {"list_branches",  (PyCFunction)list_branches, METH_VARARGS,""},
+    {"list_trees",  (PyCFunction)list_trees, METH_VARARGS,""},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -463,13 +533,8 @@ void cleanup(){
     //do nothing
 }
 
-PyObject* list_branches(){
-    
-}
 
-PyObject* list_tree(){
-    
-}
+
 
 PyMODINIT_FUNC
 initcroot_numpy(void)

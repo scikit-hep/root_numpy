@@ -2,6 +2,12 @@ import croot_numpy
 import numpy as np
 import sys
 
+def list_trees(fname):
+    return croot_numpy.list_trees(fname)
+
+def list_branches(fname,treename):
+    return croot_numpy.list_branches(fname,treename)
+
 def root2array(fnames,treename,branches=None):
     """
     root2array(fnames,treename,branches=None)
