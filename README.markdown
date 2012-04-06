@@ -5,8 +5,7 @@ Python Extension for converting root files to numpy [recarray](http://docs.scipy
 
 Written in C++ with lots of pointer+memcpy magic and it doesn't call PyRoot so it's much faster especially if you are trying to read a large file in to memory (100MB+ or even GB's of Data).
 
-Currently only support basic types like Float_t Int_t Double_t Bool_t etc. No array support yet. This should cover a large number of use cases already.
-If you are trying to convert some other type, it will throw RunTimeError Unknown root type typename.
+Currently only support basic types like Float_t Int_t Double_t Bool_t etc. and array of basic types both variable and fixed length. This should cover a large number of use cases already.
 
 Tab completion for numpy.recarray column name (yourdata.<TAB> showing the column names so you don't have to remember it) is also available with this [numpy patch](https://github.com/piti118/numpy/commit/a996292238ab98dcf53f2d48476d637eab9f1a72)
 
