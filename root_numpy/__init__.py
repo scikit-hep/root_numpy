@@ -1,6 +1,7 @@
 import croot_numpy
 import numpy as np
 import sys
+from glob import glob
 
 def list_trees(fname):
     return croot_numpy.list_trees(fname)
@@ -8,14 +9,14 @@ def list_trees(fname):
 def list_branches(fname,treename):
     return croot_numpy.list_branches(fname,treename)
 
-def root2array(fnames,treename,branches=None):
+def root2array(fnames,treename=None,branches=None):
     """
     root2array(fnames,treename,branches=None)
     convert tree treename in root files specified in fnames to numpy structured array
     ------------------
     return numpy structure array
     fnames: list of string or string. Root file name patterns. Anything that works with TChain.Add is accepted
-    treename: name of tree to convert to numpy array
+    treename: name of tree to convert to numpy array. This is optional if the file contains exactly 1 tree.
     branches(optional): list of string for branch name to be extracted from tree.
     \tIf branches is not specified or is none or is empty, all from the first treebranches are extracted
     \tIf branches contains duplicate branches, only the first one is used.
@@ -31,9 +32,20 @@ def root2array(fnames,treename,branches=None):
     root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
     root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
     """
+    if treename is None:
+        afname = None
+        if isinstance(fnames, basestring):
+            afname = glob(fnames)
+        else:
+            afname = glob(fnames[0])
+        trees=list_trees(afname[0])
+        if len(trees)!=1:
+            raise ValueError('treename need to be specified if the file contains more than 1 tree. Your choices are:'+str(trees))
+        else:
+            treename = trees[0]
     return croot_numpy.root2array(fnames,treename,branches)
 
-def root2rec(fnames, treename, branches=None):
+def root2rec(fnames, treename=None, branches=None):
     """
     root2rec(fnames, treename, branches=None)
     read branches in tree treename in file(s) given by fnames can convert it to numpy recarray
@@ -42,6 +54,17 @@ def root2rec(fnames, treename, branches=None):
     
     see root2array for more details
     """
+    if treename is None:
+        afname = None
+        if isinstance(fnames, basestring):
+            afname = glob(fnames)
+        else:
+            afname = glob(fnames[0])
+        trees=list_trees(afname[0])
+        if len(trees)!=1:
+            raise ValueError('treename need to be specified if the file contains more than 1 tree. Your choices are:'+str(trees))
+        else:
+            treename = trees[0]
     return root2array(fnames,treename,branches).view(np.recarray)
 
 def pyroot2array(tree,branches=None):
