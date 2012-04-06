@@ -55,7 +55,7 @@ convert tree treename in root files specified in fnames to numpy structured arra
 ------------------
 return numpy structure array
 fnames: list of string or string. Root file name patterns. Anything that works with TChain.Add is accepted
-treename: name of tree to convert to numpy array
+treename: name of tree to convert to numpy array. This is optional if the file contains exactly 1 tree.
 branches(optional): list of string for branch name to be extracted from tree.
 \tIf branches is not specified or is none or is empty, all from the first treebranches are extracted
 \tIf branches contains duplicate branches, only the first one is used.

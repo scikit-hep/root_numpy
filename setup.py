@@ -7,7 +7,7 @@ root_ldflags = subprocess.check_output(["root-config", "--libs"]).strip().split(
 
 module = Extension('root_numpy.croot_numpy',
                     sources = ['root_numpy/croot_numpy.cc'],
-                    include_dirs= [np.get_include(),root_inc],
+                    include_dirs= [np.get_include(),root_inc,'root_numpy'],
                     #extra_compile_args = []+root_cflags,
                     extra_link_args = []+root_ldflags)
 
