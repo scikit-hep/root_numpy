@@ -1,1 +1,0 @@
-cython -a --fast-fail --cplus root_numpy/croot_numpy.pyx
