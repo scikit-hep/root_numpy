@@ -425,7 +425,13 @@ public:
             //update childfiled for this_lencol
             this_lencol->child = childs;
         }
-        //done!!!!!
+        
+        //cache only branch that we are interested in
+        tree->SetCacheSize(10000000);
+        for(int icol=0;icol<cols.size();++icol){
+            tree->AddBranchToCache(cols[icol]->branch,kTRUE);
+        }
+        //done!!!!
         good=true;
     }
     
