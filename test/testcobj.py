@@ -1,5 +1,5 @@
 import ROOT
-from root_numpy.croot_numpy import *
+from root_numpy._librootnumpy import *
 f = ROOT.TFile('test/test.root')
 t = f.Get('tree')
 

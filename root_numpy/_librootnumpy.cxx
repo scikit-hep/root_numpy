@@ -42,7 +42,7 @@ std::vector<std::string> vector_unique(const std::vector<std::string>& org){
             ret.push_back(org[i]);
         }
     }
-    return ret; 
+    return ret;
 }
 
 //helper function for building numpy descr
@@ -58,14 +58,14 @@ PyObject* build_array(TTree& chain, TreeStructure& t){
     PyObject* numpy_descr = build_numpy_descr(t);
     if(numpy_descr==0){return NULL;}
     //build the array
-    
+
     PyArray_Descr* descr;
     int kkk = PyArray_DescrConverter(numpy_descr,&descr);
     Py_DECREF(numpy_descr);
 
     npy_intp dims[1];
     dims[0]=numEntries;
-    
+
     PyArrayObject* array = (PyArrayObject*)PyArray_SimpleNewFromDescr(1,dims,descr);
 
     //assume numpy array is contiguous
@@ -169,15 +169,15 @@ PyObject* root2array_helper(TTree& tree, PyObject* branches_){
     using namespace std;
     vector<string> branches;
     if(!los2vos(branches_,branches)){return NULL;}
-    if(branches.size()==0){branches=branch_names(&tree);}    
-    
+    if(branches.size()==0){branches=branch_names(&tree);}
+
     TreeStructure t(&tree,branches);
     PyObject* array = NULL;
     if(t.good){
         array = build_array(tree, t);
     }else{
         return NULL;
-    }    
+    }
     return array;
 }
 
@@ -188,14 +188,14 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     PyObject* branches_=NULL;
     PyObject* array=NULL;
     static const char* keywordslist[] = {"fname","treename","branches",NULL};
-    
+
     if(!PyArg_ParseTupleAndKeywords(args,keywords,"Os|O",const_cast<char **>(keywordslist),&fnames,&treename_,&branches_)){
         return NULL;
     }
-    
+
     TTree* chain = loadTree(fnames,treename_);
     if(!chain){return NULL;}
-    
+
     //int numEntries = chain->GetEntries();
 
     array = root2array_helper(*chain,branches_);
@@ -206,7 +206,7 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
 //calling these like this: root2array_from_*
 // if 'AsCapsule' in dir(ROOT) call the capsule one (doesn't exist yet as of this writing)
 // otherwise call the cobj one
-// capsule one is provided 
+// capsule one is provided
 
 //these people have cobject
 #if HAVE_COBJ
@@ -217,21 +217,21 @@ PyObject* root2array_from_cobj(PyObject *self, PyObject *args, PyObject* keyword
     PyObject* branches_=NULL;
     PyObject* array=NULL;
     static const char* keywordslist[] = {"tree","branches",NULL};
-    
+
     if(!PyArg_ParseTupleAndKeywords(args,keywords,"O|O",const_cast<char **>(keywordslist),&tree_,&branches_)){
         return NULL;
     }
-    
+
     if(!PyCObject_Check(tree_)){return NULL;}
     //this is not safe so be sure to know what you are doing type check in python first
     //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
     TTree* chain = static_cast<TTree*>(PyCObject_AsVoidPtr(tree_));
-    
+
     if(!chain){
         PyErr_SetString(PyExc_TypeError,"Unable to convert tree to TTree*");
         return NULL;
     }
-    
+
     //int numEntries = chain->GetEntries();
 
     return root2array_helper(*chain,branches_);
@@ -247,11 +247,11 @@ PyObject* root2array_from_capsule(PyObject *self, PyObject *args, PyObject* keyw
     PyObject* branches_=NULL;
     PyObject* array=NULL;
     static const char* keywordslist[] = {"tree","branches",NULL};
-    
+
     if(!PyArg_ParseTupleAndKeywords(args,keywords,"O|O",const_cast<char **>(keywordslist),&tree_,&branches_)){
         return NULL;
     }
-    
+
     if(!PyCapsule_CheckExact(tree_)){return NULL;}
     //this is not safe so be sure to know what you are doing type check in python first
     //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
@@ -260,7 +260,7 @@ PyObject* root2array_from_capsule(PyObject *self, PyObject *args, PyObject* keyw
         PyErr_SetString(PyExc_TypeError,"Unable to convert tree to TTree*");
         return NULL;
     }
-    
+
     //int numEntries = chain->GetEntries();
 
     return root2array_helper(*chain,branches_);
@@ -289,7 +289,7 @@ PyObject* list_trees(PyObject* self, PyObject* arg){
         PyErr_SetString(PyExc_IOError,msg.c_str());
         return NULL;
     }
-    
+
     TList* list = f.GetListOfKeys();
     TIter next(list);
     PyObject* ret = PyList_New(0);
@@ -311,7 +311,7 @@ PyObject* list_branches(PyObject* self, PyObject* arg){
     if(!PyArg_ParseTuple(arg,"ss",&cfname,&ctname)){
         return NULL;
     }
-    
+
     TFile f(cfname);
     if(f.IsZombie()){
         std::string msg;
@@ -320,7 +320,7 @@ PyObject* list_branches(PyObject* self, PyObject* arg){
         PyErr_SetString(PyExc_IOError,msg.c_str());
         return NULL;
     }
-    
+
     TTree* tree = dynamic_cast<TTree*>(f.Get(ctname));
     if(tree==0){
         std::string msg;
@@ -391,10 +391,10 @@ void cleanup(){
 
 
 PyMODINIT_FUNC
-initcroot_numpy(void)
+init_librootnumpy(void)
 {
     import_array();
     init_roottypemap();
-    (void) Py_InitModule("croot_numpy", methods);
+    (void) Py_InitModule("_librootnumpy", methods);
     //import_array();
 }
