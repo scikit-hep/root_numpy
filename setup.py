@@ -4,19 +4,20 @@ from distutils.core import setup, Extension
 import distutils.util
 import subprocess
 import numpy as np
-
-root_inc = subprocess.Popen(["root-config", "--incdir"], 
-                    stdout=subprocess.PIPE).communicate()[0].strip()
-
-root_ldflags = subprocess.Popen(["root-config", "--libs"], 
-                    stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
-
-# root_inc = subprocess.check_output(
-#                 ["root-config", "--incdir"]
-#                 ).strip()
-# root_ldflags = subprocess.check_output(
-#                 ["root-config", "--libs"]
-#                 ).strip().split(' ')
+import os
+root_inc = ''
+root_ldflags = []
+try:
+    root_inc = subprocess.Popen(["root-config", "--incdir"], 
+                        stdout=subprocess.PIPE).communicate()[0].strip()
+    root_ldflags = subprocess.Popen(["root-config", "--libs"], 
+                        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+except OSError as e:
+    rootsys = os.environ['ROOTSYS']
+    root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--incdir"], 
+                        stdout=subprocess.PIPE).communicate()[0].strip()
+    root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--libs"], 
+                        stdout=subprocess.PIPE).communicate()[0].strip()
 
 module = Extension('root_numpy._librootnumpy',
                    sources=['root_numpy/_librootnumpy.cxx'],
