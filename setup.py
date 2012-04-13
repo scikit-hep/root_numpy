@@ -17,7 +17,7 @@ except OSError:
     root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--incdir"], 
                         stdout=subprocess.PIPE).communicate()[0].strip()
     root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"], 
-                        stdout=subprocess.PIPE).communicate()[0].strip()
+                        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 
 module = Extension('root_numpy._librootnumpy',
                    sources=['root_numpy/_librootnumpy.cxx'],
