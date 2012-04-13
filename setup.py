@@ -5,13 +5,18 @@ import distutils.util
 import subprocess
 import numpy as np
 
+root_inc = subprocess.Popen(["root-config", "--incdir"], 
+                    stdout=subprocess.PIPE).communicate()[0].strip()
 
-root_inc = subprocess.check_output(
-                ["root-config", "--incdir"]
-                ).strip()
-root_ldflags = subprocess.check_output(
-                ["root-config", "--libs"]
-                ).strip().split(' ')
+root_ldflags = subprocess.Popen(["root-config", "--libs"], 
+                    stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+
+# root_inc = subprocess.check_output(
+#                 ["root-config", "--incdir"]
+#                 ).strip()
+# root_ldflags = subprocess.check_output(
+#                 ["root-config", "--libs"]
+#                 ).strip().split(' ')
 
 module = Extension('root_numpy._librootnumpy',
                    sources=['root_numpy/_librootnumpy.cxx'],
