@@ -15,12 +15,10 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
+#include <TObject.h>
 #define RNDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << s << std::endl;
 #define RNHEXDEBUG(s) std::cout << "DEBUG: " << __FILE__ << "(" <<__LINE__ << ") " << #s << " = " << std::hex << s << std::dec << std::endl;
 using namespace std;
-
-//missing string printf
-//this is safe and convenient but not exactly efficient
 
 struct TypeInfo{
     string nptype;
@@ -102,6 +100,8 @@ bool convertible(const string& rt){
     return it!=root_typemap.end();
 }
 
+//missing string printf
+//this is safe and convenient but not exactly efficient
 inline std::string format(const char* fmt, ...){
     int size = 512;
     char* buffer = 0;
@@ -205,7 +205,9 @@ public:
         else{
             int ret;
             if(coltype==FIXED || coltype==SINGLE){
+                assert(leaf!=NULL);
                 void* src = leaf->GetValuePointer();
+                assert(src!=NULL);
                 ret = leaf->GetLenType()*leaf->GetLen();
                 assert(ret>=0);
                 memcpy(destination,src,ret);
@@ -229,7 +231,6 @@ public:
     //convert to PyArray_Descr tuple
     PyObject* totuple(){
         //return ('col','f8')
-        RNHEXDEBUG((int)coltype);
         if(coltype==SINGLE){
             
             PyObject* pyname = PyString_FromString(colname.c_str());
@@ -275,12 +276,29 @@ public:
 
 //correct TChain implementation with cache TLeaf*
 class BetterChain{
-public:    
+public:
+    class MiniNotify:public TObject{
+    public:
+        bool notified;
+        TObject* oldnotify;
+        MiniNotify(TObject* oldnotify):TObject(),notified(false),oldnotify(oldnotify){}
+        virtual Bool_t Notify(){
+            notified=true;
+            if(oldnotify) oldnotify->Notify();
+            return true;
+        }
+    };
+    
     TTree* fChain;
     int fCurrent;
+    MiniNotify* notifier;
     BetterChain(TTree* fChain):fChain(fChain){
+        fCurrent = -1;
+        notifier = new MiniNotify(fChain->GetNotify());
+        fChain->SetNotify(notifier);
+        LoadTree(0);
         fChain->SetBranchStatus("*",0);//disable all branches
-        fChain->SetCacheSize(10000000);
+        //fChain->SetCacheSize(10000000);
     }
     ~BetterChain(){
         // if (!fChain) return;//some how i need this(copy from make class)
@@ -289,6 +307,8 @@ public:
         for(it=leafcache.begin();it!=leafcache.end();++it){
             delete it->second;
         }
+        fChain->SetNotify(notifier->oldnotify);
+        delete notifier;
     }
     typedef pair<string,string> BL;
     typedef map<BL,Column*> LeafCache;
@@ -296,18 +316,23 @@ public:
 
     int LoadTree(int entry){
         if (!fChain) return -5;
+        //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
+        //some how load tree chnage the leaf even when 
         Long64_t centry = fChain->LoadTree(entry);
+        //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
         if (centry < 0) return centry;
         if (fChain->GetTreeNumber() != fCurrent) {
            fCurrent = fChain->GetTreeNumber();
-           Notify();
         }
-        return centry;        
+        if(notifier->notified){
+            Notify();
+            notifier->notified=false;
+        }
+        return centry;
     }
     
     int GetEntry(int entry){
         // Read contents of entry.
-        
         if (!fChain) return 0;
         LoadTree(entry);
         return fChain->GetEntry(entry);
@@ -315,6 +340,7 @@ public:
     
     void Notify(){
         //taking care of all the leaves
+        //RNDEBUG("NOTIFY");
         LeafCache::iterator it;
         for(it=leafcache.begin();it!=leafcache.end();++it){
             string bname = it->first.first;
@@ -330,21 +356,25 @@ public:
                 cerr << "Warning cannot find leaf " << lname << " for branch " << bname << endl;
                 it->second->skipped = true;
                 continue;
-            }          
+            }
             it->second->SetLeaf(leaf,true); 
             it->second->skipped = false;
         }
     }
     
-    int GetEntries(){return fChain->GetEntries();}
+    int GetEntries(){
+        int ret = fChain->GetEntries();
+        return ret;
+    }
+    
     TBranch* FindBranch(const char* bname){
         return fChain->FindBranch(bname);
     }
+    
     Column* MakeColumn(const string& bname, const string& lname, const string& colname){
         //as bonus set branch status on all the active branch including the branch that define the length
-        if(!fChain){
-            fChain->LoadTree(0);
-        }
+        LoadTree(0);
+
         TBranch* branch = fChain->FindBranch(bname.c_str());
         if(branch==0){
             PyErr_SetString(PyExc_IOError,format("Cannot find branch %s",bname.c_str()).c_str());
@@ -404,7 +434,7 @@ public:
         good=false;
         init();
     }
-
+    
     void init(){
         //TODO: refractor this
         //goal here is to fil cols array
