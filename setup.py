@@ -12,7 +12,7 @@ try:
                         stdout=subprocess.PIPE).communicate()[0].strip()
     root_ldflags = subprocess.Popen(["root-config", "--libs"], 
                         stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
-except OSError as e:
+except OSError:
     rootsys = os.environ['ROOTSYS']
     root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--incdir"], 
                         stdout=subprocess.PIPE).communicate()[0].strip()
