@@ -492,7 +492,7 @@ public:
     
     int copy_to(void* destination){
         char* current = (char*)destination;
-        int total;
+        int total=0;
         for(int i=0;i<cols.size();++i){
             Column* thiscol = cols[i];
             int nbytes = thiscol->copy_to((void*)current);
