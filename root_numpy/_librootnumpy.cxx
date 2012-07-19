@@ -159,7 +159,7 @@ PyObject* root2array(PyObject *self, PyObject *args, PyObject* keywords){
     //int numEntries = chain->GetEntries();
 
     array = root2array_helper(*chain,branches_);
-    delete chain;
+    //delete chain; workaround old PyROOT bug not dealing with deleting chain properly
     return array;
 }
 

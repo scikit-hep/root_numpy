@@ -153,7 +153,7 @@ public:
             int cv;
             ColType ct;
             int ok = find_coltype(leaf,ct,cv);
-            assert(ok!=NULL);
+            assert(ok!=0);
             assert(ct==coltype);
             //if(ct==FIXED){assert(cv==countval);}
         }
@@ -176,7 +176,7 @@ public:
             string msg("Unable to understand the structure of leaf ");
             msg += leaf->GetName();
             PyErr_SetString(PyExc_IOError,msg.c_str());
-            return NULL;
+            return 0;
         }
         return 1;
     }
@@ -524,6 +524,7 @@ public:
         //now put stuff in array
         for(int iEntry=0;iEntry<numEntries;++iEntry){
             int ilocal = bc.LoadTree(iEntry);
+            assert(ilocal>=0);
             bc.GetEntry(iEntry);
             current = (char*)PyArray_GETPTR1(array, iEntry);
             int nbytes = copy_to((void*)current);
