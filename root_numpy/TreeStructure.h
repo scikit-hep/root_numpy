@@ -301,8 +301,8 @@ public:
         //fChain->SetCacheSize(10000000);
     }
     ~BetterChain(){
-        // if (!fChain) return;//some how i need this(copy from make class)
-        //         delete fChain->GetCurrentFile();
+        if (!fChain) return;//some how i need this(copy from make class)
+        delete fChain->GetCurrentFile();
         LeafCache::iterator it;
         for(it=leafcache.begin();it!=leafcache.end();++it){
             delete it->second;

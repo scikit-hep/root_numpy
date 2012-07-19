@@ -26,7 +26,7 @@ module = Extension('root_numpy._librootnumpy',
                    extra_link_args=[] + root_ldflags)
 
 setup(name='root_numpy',
-       version='1.03',
+       version='1.04',
        description='Convert root tree to numpy array',
        author='Piti Ongmongkolkul',
        author_email='piti118@gmail.com',
