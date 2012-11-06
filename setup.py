@@ -19,8 +19,8 @@ except OSError:
     root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"], 
                         stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 
-module = Extension('root_numpy._librootnumpy',
-                   sources=['root_numpy/_librootnumpy.cxx'],
+module = Extension('root_numpy.librootnumpy',
+                   sources=['root_numpy/librootnumpy.cpp'],
                    include_dirs=[np.get_include(), root_inc, 'root_numpy'],
                    #extra_compile_args = []+root_cflags,
                    extra_link_args=[] + root_ldflags)
