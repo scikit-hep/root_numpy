@@ -49,30 +49,52 @@ or tutorial.pdf if you don't have ipython notebook
 Docstring
 ---------
 <pre>
-root2array(fnames,treename,branches=None)
-convert tree treename in root files specified in fnames to numpy structured array
-------------------
-return numpy structure array
-fnames: list of string or string. Root file name patterns. Anything that works with TChain.Add is accepted
-treename: name of tree to convert to numpy array. This is optional if the file contains exactly 1 tree.
-branches(optional): list of string for branch name to be extracted from tree.
-\tIf branches is not specified or is none or is empty, all from the first treebranches are extracted
-\tIf branches contains duplicate branches, only the first one is used.
+    root2array(fnames, treename, branches=None,N=None,offset=0)
+    convert tree treename in root files specified in fnames to
+    numpy structured array
+    ------------------
+    return numpy structure array
+    fnames: list of string or string. Root file name patterns.
+    Anything that works with TChain.Add is accepted
+    treename: name of tree to convert to numpy array.
+    This is optional if the file contains exactly 1 tree.
+    branches(optional): list of string for branch name to be
+    extracted from tree.
+    * If branches is not specified or is None or is empty,
+      all from the first treebranches are extracted
+    * If branches contains duplicate branches, only the first one is used.
+    N(optional): maximum number of data that it should load
+    useful for testing out stuff
+    offset(optional): start index (first one is 0)
 
-Caveat: This should not matter for most use cases. But, due to the way TChain works, if the trees specified 
-in the input files have different structures, only the branch in the first tree will be automatically extracted. 
-You can work around this by either reordering the input file or specifying the branches manually.
-------------------
-Ex:
-root2array('a.root','mytree')#read all branches from tree named mytree from a.root
-root2array('a*.root','mytree')#read all branches from tree named mytree from a*.root
-root2array(['a*.root','b*.root'],'mytree')#read all branches from tree named mytree from a*.root and b*.root
-root2array('a.root','mytree','x')#read branch x from tree named mytree from a.root(useful if memory usage matters)
-root2array('a.root','mytree',['x','y'])#read branch x and y from tree named mytree from a.root
+    Caveat: This should not matter for most use cases. But, due to
+    the way TChain works, if the trees specified
+    in the input files have different structures, only the
+    branch in the first tree will be automatically extracted.
+    You can work around this by either reordering the input
+    file or specifying the branches manually.
+    ------------------
+    Ex:
+    # read all branches from tree named mytree from a.root
+    root2array('a.root', 'mytree')
+
+    #read all branches starting from record 5 for 10 records
+    #or the end of file.
+    root2array('a.root', 'mytree',offset=5,N=10)
+    
+    # read all branches from tree named mytree from a*.root
+    # this is done using python glob not ROOT semi-broken glob
+    root2array('a*.root', 'mytree')
+    
+    # read all branches from tree named mytree from a*.root and b*.root
+    root2array(['a*.root', 'b*.root'], 'mytree')
+    
+    #read branch x and y from tree named mytree from a.root
+    root2array('a.root', 'mytree', ['x', 'y'])
 </pre>
 
 <pre>
-root2rec(fnames, treename, branches=None)
+root2rec(fnames, treename, branches=None,N=None,offset=0)
 read branches in tree treename in file(s) given by fnames can convert it to numpy recarray
 ---------------
 This is equivalent to root2array(fnames,treename,branches).view(np.recarray)

@@ -29,9 +29,9 @@ def lb(fname, treename=None):
     return list_branches(fname,treename)
 
 
-def root2array(fnames, treename=None, branches=None, N=None,offset=0):
+def root2array(fnames, treename=None, branches=None, N=None, offset=0):
     """
-    root2array(fnames, treename, branches=None,N=None)
+    root2array(fnames, treename, branches=None,N=None,offset=0)
     convert tree treename in root files specified in fnames to
     numpy structured array
     ------------------
@@ -42,7 +42,7 @@ def root2array(fnames, treename=None, branches=None, N=None,offset=0):
     This is optional if the file contains exactly 1 tree.
     branches(optional): list of string for branch name to be
     extracted from tree.
-    * If branches is not specified or is none or is empty,
+    * If branches is not specified or is None or is empty,
       all from the first treebranches are extracted
     * If branches contains duplicate branches, only the first one is used.
     N(optional): maximum number of data that it should load
@@ -59,15 +59,17 @@ def root2array(fnames, treename=None, branches=None, N=None,offset=0):
     Ex:
     # read all branches from tree named mytree from a.root
     root2array('a.root', 'mytree')
+
+    #read all branches starting from record 5 for 10 records
+    #or the end of file.
+    root2array('a.root', 'mytree',offset=5,N=10)
+    
     # read all branches from tree named mytree from a*.root
     root2array('a*.root', 'mytree')
+    
     # read all branches from tree named mytree from a*.root and b*.root
-    # read branch x from tree named mytree from
-    # a.root(useful if memory usage matters)
     root2array(['a*.root', 'b*.root'], 'mytree')
-    # read branch x from tree named mytree from
-    # a.root(useful if memory usage matters)
-    root2array('a.root', 'mytree', 'x')
+    
     #read branch x and y from tree named mytree from a.root
     root2array('a.root', 'mytree', ['x', 'y'])
     """
@@ -99,7 +101,7 @@ def root2array(fnames, treename=None, branches=None, N=None,offset=0):
 
 def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
     """
-    root2rec(fnames, treename=None, branches=None, N=None)
+    root2rec(fnames, treename=None, branches=None, N=None, offset=0)
     read branches in tree treename in file(s) given by fnames can
     convert it to numpy recarray
 
