@@ -3,4 +3,4 @@ build
 .DS_Store
 *.pyc
 root_numpy/librootnumpy.html
-root_numpy/librootnumpy.cpp
+*.d
