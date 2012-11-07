@@ -1,6 +1,9 @@
+#ifndef __UTIL_H_
+#define __UTIL_H_
 #include <cstdio>
 #include <cstdarg>
 #include <string>
+#include <iostream>
 //missing string printf
 //this is safe and convenient but not exactly efficient
 inline std::string format(const char* fmt, ...){
@@ -20,3 +23,12 @@ inline std::string format(const char* fmt, ...){
     delete buffer;
     return ret;
 }
+//work around cython no ptr arithmatics rule
+inline void* shift(void* v, int o){
+    return (void*)((char*)v+o);
+}
+
+inline void printaddr(void* v){
+    std::cout << std::hex << v << std::dec << std::endl;
+}
+#endif

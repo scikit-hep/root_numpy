@@ -1,0 +1,284 @@
+import numpy as np
+cimport numpy as np
+from libcpp.vector cimport vector
+from libcpp.string cimport string, const_char
+from libc.string cimport memcpy
+from pprint import pprint
+from cpython cimport array
+from cython.operator cimport dereference as deref
+from collections import OrderedDict
+from cpython.ref cimport Py_INCREF, Py_XDECREF
+from cpython cimport PyObject
+from cpython.cobject cimport PyCObject_AsVoidPtr,PyCObject_Check
+from glob import glob
+include "all.pxi"
+np.import_array()
+#numpy
+
+
+def list_trees(fname):
+    fname = glob(fname)#poor man support for globbing
+    if len(fname)==0: raise IOError('File not found: %s'%fname)
+    fname = fname[0]
+
+    cdef TFile* f = new TFile(fname)
+    if f is NULL: raise IOError('Cannot read: %s'%fname)
+    
+    cdef TList* keys = f.GetListOfKeys()
+    if keys is NULL: raise IOError('Not a valid root file: %s'%fname)
+    ret = []
+    cdef int n = keys.GetEntries()
+    cdef TObject* obj
+    for i in range(n):
+        name = keys.At(i).GetName()
+        obj = f.Get(name)
+        if obj is not NULL:
+            clname = str(obj.ClassName())
+            if  clname == 'TTree':
+                ret.append(name)
+    return ret
+
+
+def list_structrues(fname, tree=None):
+    if tree is None:#support for automatically find tree
+        tree = list_trees(fname)
+        if len(tree) != 1:
+            raise ValueError('Multiple Tree Found: %s'%str(tree))
+        else:
+            tree = tree[0]
+
+    cdef TFile* f = new TFile(fname)
+    fname = glob(fname)#poor man support for globbing
+    if len(fname)==0: raise IOError('File not found: %s'%fname)
+    fname = fname[0]
+
+    cdef TTree* t = <TTree*>f.Get(tree)
+    if t is NULL: 
+        raise IOError('Tree %s not found in %s'%(tree,fname))
+
+    tmp = parse_tree_structure(t)
+    return tmp
+
+
+def list_branches(fname, tree=None):
+    return list_structrues(fname,tree).keys()
+
+
+cdef parse_tree_structure(TTree* tree):
+    cdef char* name
+    cdef TBranch* thisBranch
+    cdef TLeaf* thisLeaf
+    cdef TObjArray* branches = tree.GetListOfBranches()
+    cdef TObjArray* leaves
+    ret = OrderedDict()
+    if branches is NULL: return ret
+    for ibranch in range(branches.GetEntries()):
+        thisBranch = <TBranch*>(branches.At(ibranch))
+        leaves = thisBranch.GetListOfLeaves()
+        leaflist = []
+        if leaves is not NULL:
+            for ibranch in range(leaves.GetEntries()):
+                thisLeaf = <TLeaf*>leaves.At(ibranch)
+                leaflist.append(thisLeaf.GetName())
+        ret[thisBranch.GetName()] = leaflist
+    return ret
+
+
+cdef class Converter:
+    cdef int write(self,Column* col, void* buffer):
+        pass
+    cdef object get_nptype(self):
+        pass
+
+
+cdef class VaryArray_NumpyConverter(Converter):
+    cdef BasicNumpy_Converter conv#converter for single element
+    cdef public object nptype
+    cdef int typecode
+        
+    def __init__(self,Converter conv):
+        self.conv = conv
+        self.typecode = self.conv.get_nptypecode()
+
+    cdef int write(self,Column* col, void* buffer):
+        
+        cdef int numele = col.getLen()
+        cdef np.npy_intp dims[1]
+        dims[0]=numele;
+        cdef np.ndarray tmp = np.PyArray_EMPTY(1,dims,self.typecode,0)
+
+        cdef PyObject* tmpobj = <PyObject*>tmp #borrow ref
+        #increase one since we are putting in array directly
+        Py_INCREF(tmp)
+        
+        #copy to tmp.data
+        cdef void* src = col.GetValuePointer()
+        cdef int nbytes = col.getSize()
+        memcpy(tmp.data,src,nbytes)
+
+        #now write PyObject* to buffer
+
+        memcpy(buffer, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
+
+cdef class FixedArray_NumpyConverter(Converter):
+    cdef BasicNumpy_Converter conv#converter for single element
+    cdef int L #numele
+    def __init__(self, BasicNumpy_Converter conv, int L):
+        self.conv = conv
+        self.L = L
+    cdef int write(self,Column* col, void* buffer):
+        cdef void* src = col.GetValuePointer()
+        cdef int nbytes = col.getSize()
+        memcpy(buffer,src,nbytes)
+        return nbytes
+    cdef object get_nptype(self):
+        return (self.conv.nptype,self.L)
+    cdef int get_nptypecode(self):
+        return self.conv.nptypecode
+
+
+cdef class BasicNumpy_Converter(Converter):
+    cdef string rtype
+    cdef int size
+    cdef public object nptype
+    cdef int nptypecode
+    def __init__(self, size, nptype,nptypecode):
+        self.size = size
+        self.nptype = nptype
+        self.nptypecode = nptypecode
+    cdef int write(self, Column* col, void* buffer):
+        cdef void* src = col.GetValuePointer()
+        memcpy(buffer,src,self.size)
+        return self.size
+    cdef object get_nptype(self):
+        return self.nptype
+    cdef int get_nptypecode(self):
+        return self.nptypecode
+
+
+converters = {
+    'Char_t':       BasicNumpy_Converter(1, np.int8, np.NPY_INT8),
+    'UChar_t':      BasicNumpy_Converter(1,np.uint8, np.NPY_UINT8),
+
+    'Short_t':      BasicNumpy_Converter(2,np.int16, np.NPY_INT16),
+    'UShort_t':     BasicNumpy_Converter(2,np.uint16, np.NPY_UINT8),
+    
+    'Int_t':        BasicNumpy_Converter(4,np.int32, np.NPY_INT32),
+    'UInt_t':       BasicNumpy_Converter(4,np.uint32, np.NPY_UINT32),
+    
+    'Float_t':      BasicNumpy_Converter(4,np.float32, np.NPY_FLOAT32),
+    'Double_t':     BasicNumpy_Converter(8,np.float64, np.NPY_FLOAT64),
+    
+    'Long64_t':     BasicNumpy_Converter(8,np.int64, np.NPY_INT64),
+    'ULong64_t':    BasicNumpy_Converter(8,np.uint64, np.NPY_UINT64),
+    
+    'Bool_t':       BasicNumpy_Converter(1,np.bool, np.NPY_BOOL),
+}
+
+
+cdef Converter find_converter(Column* col):
+    cdef ColumnType ct = col.coltype
+    if ct == SINGLE:
+        return converters[col.GetTypeName()]
+    elif ct == FIXED:
+        return FixedArray_NumpyConverter(converters[col.GetTypeName()],col.countval)
+    elif ct == VARY:
+        return VaryArray_NumpyConverter(converters[col.GetTypeName()])
+
+
+cdef np.ndarray initarray(vector[Column*] columns, int numEntries, list cv):
+    cdef Column* thisCol
+    cdef Converter thisConv 
+
+    nst = []
+    for i in range(columns.size()):
+        thisCol = columns[i]
+        thisConv = find_converter(thisCol)
+        nst.append((thisCol.colname, thisConv.get_nptype()))
+        cv.append(thisConv)     
+    return np.empty(numEntries, dtype=nst)
+
+
+cdef object root2array_fromTTree(TTree* tree,branches,N,offset): #from CPP TTree
+    #this is actually vector of pointers despite how it looks
+    cdef vector[Column*] columns
+    cdef Column* thisCol
+
+    #make a better chain so we can register all columns
+    cdef BetterChain* bc = new BetterChain(tree)
+    cdef int numEntries = bc.GetEntries()
+
+    cdef list cv=[] #list of converter in the same order
+    cdef Converter thisCV
+    cdef int numcol
+    cdef int ientry
+    cdef void* dataptr
+    cdef np.ndarray arr
+    cdef int nb
+    cdef vector[Converter] cvarray
+    try:
+        #parse the tree structure to determine 
+        #whether to use shortname or long name
+        #and loop through all leaves
+        structure = parse_tree_structure(tree)
+        if branches is None: branches = structure.keys()
+        for branch in branches:
+            leaves = structure[branch]
+            shortname = len(leaves)==1
+            for leaf in leaves:
+                colname = branch if shortname else '%s_%s'%(branch,leaf)
+                thisCol = bc.MakeColumn(branch, leaf, colname)
+                columns.push_back(thisCol)
+
+        #now we got all the columns time to make an appropriate array structure
+        #first determine the correct size given tree size offset and N
+        if N is None: N = numEntries
+        numEntries = min(max(numEntries-offset,0), N)
+        #numEntries = min(N,numEntries) if N is not None else numEntries
+        
+        arr = initarray(columns,numEntries,cv)
+        numcol = columns.size()
+        ientry = 0
+        bc.GetEntry(offset)
+        #convert cv list to cvarray for speed (this PYINCREF and PYDECREF relies)
+        #on cv list this is to optimize the tight loop
+        for c in cv: cvarray.push_back(c)
+        while bc.Next()!=0 and ientry<numEntries:
+            dataptr = np.PyArray_GETPTR1(arr,ientry)
+            for icol in range(numcol):
+                thisCol = columns[icol]
+                thisCV = cvarray[icol]
+                nb = thisCV.write(thisCol,dataptr)
+                dataptr = shift(dataptr,nb) #poorman pointer magic
+            ientry+=1
+    finally:
+        del bc
+    return arr
+
+
+def root2array_fromFname(fnames, treename, branches, N, offset):
+    cdef TChain* ttree = NULL
+    try:
+        ttree = new TChain(treename)
+        for fn in fnames:
+            ttree.Add(fn)
+            ret = root2array_fromTTree(<TTree*>ttree,branches,N,offset)
+    finally:
+        del ttree
+    return ret
+
+
+def root2array_fromCObj(tree, branches, N, offset):
+    #this is not a safe method
+    #provided here for convenience only
+    #typecheck should be implemented for the wrapper
+    if not PyCObject_Check(tree):
+        raise('tree must be PyCObject')
+    cdef TTree* chain = <TTree*>PyCObject_AsVoidPtr(tree)
+    return root2array_fromTTree(chain,branches,N,offset)

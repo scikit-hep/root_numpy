@@ -77,8 +77,16 @@ public:
         int size = leaf->GetLenType()*leaf->GetLen();
         return size;
     }
+
+    void* GetValuePointer(){
+        return leaf->GetValuePointer();
+    }
     int getintVal(){
         return *(int*)(leaf->GetValuePointer());
+    }
+
+    const char* GetTypeName(){
+        return leaf->GetTypeName();
     }
 
     void Print(){

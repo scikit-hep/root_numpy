@@ -80,7 +80,7 @@ public:
         }
         return centry;
     }
-    
+
     int GetEntry(int entry){
         // Read contents of entry.
         if (!fChain) return 0;
@@ -90,8 +90,9 @@ public:
     }
     
     int Next(){
+        int ret = GetEntry(ientry);
         ientry++;
-        return GetEntry(ientry);
+        return ret;
     }
 
     void Notify(){
@@ -122,7 +123,7 @@ public:
         int ret = fChain->GetEntries();
         return ret;
     }
-    
+
     TBranch* FindBranch(const char* bname){
         return fChain->FindBranch(bname);
     }
