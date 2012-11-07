@@ -2,6 +2,7 @@ import unittest
 from root_numpy import *
 from os.path import dirname,join
 from ROOT import TChain
+import numpy as np
 class TestRootNumpy(unittest.TestCase):
 	def setUp(self):
 		self.datadir = dirname(__file__)
@@ -86,6 +87,27 @@ class TestRootNumpy(unittest.TestCase):
 	def test_specific_branch(self):
 		a  = root2rec(self.ld('single1.root'),branches=['f_float'])
 		self.assertEqual(a.dtype,[('f_float', '<f4')])
+
+	def test_vector(self):
+		a = root2rec(self.ld('hvector.root'))
+		self.assertEqual(a.dtype,[('v_i', 'O'), ('v_f', 'O'), ('v_d', 'O'), ('v_l', 'O'), ('v_c', 'O')])
+
+		self.assertEqual(a.v_i[1].dtype,np.int32)
+		self.assertEqual(a.v_f[1].dtype,np.float32)
+		self.assertEqual(a.v_d[1].dtype,np.float64)
+		self.assertEqual(a.v_l[1].dtype,np.int64)
+		self.assertEqual(a.v_c[1].dtype,np.int8)
+
+		#check couple value
+		self.assertEqual(a.v_i[1][0],1)
+		self.assertEqual(a.v_i[2][1],3)
+		self.assertEqual(a.v_i[-1][0],99)
+		self.assertEqual(a.v_i[-1][-1],107)
+
+		self.assertEqual(a.v_f[1][0],2.0)
+		self.assertEqual(a.v_f[2][1],5.0)
+		self.assertEqual(a.v_f[-1][0],198.0)
+		self.assertEqual(a.v_f[-1][-1],206.0)
 
 	def test_offset_N(self):
 		a  = root2rec(self.ld('single1.root'),N=10)

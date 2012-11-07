@@ -31,4 +31,5 @@ inline void* shift(void* v, int o){
 inline void printaddr(void* v){
     std::cout << std::hex << v << std::dec << std::endl;
 }
+
 #endif

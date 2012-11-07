@@ -88,3 +88,6 @@ cdef extern from "util.h":
     cdef void* shift(void*, int)
     void printaddr(void* v)
 
+cdef extern from "Vector2Array.h":
+    cdef cppclass Vector2Array[T]:
+        T* convert(vector[T]* v)

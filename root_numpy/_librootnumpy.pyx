@@ -105,36 +105,45 @@ cdef class Converter:
     cdef object get_nptype(self):
         pass
 
+#create numpy array of given type code with 
+#given numelement and size of each element
+#and write it to buffer 
+cdef inline int create_numpyarray(
+        void* buffer, void* src, int typecode, int numele, int elesize):
+    cdef np.npy_intp dims[1]
+    dims[0]=numele;
+    cdef np.ndarray tmp = np.PyArray_EMPTY(1,dims,typecode,0)
+
+    cdef PyObject* tmpobj = <PyObject*>tmp #borrow ref
+    #increase one since we are putting in buffer directly
+    Py_INCREF(tmp)
+    
+    #copy to tmp.data
+    cdef int nbytes = numele*elesize
+    memcpy(tmp.data,src,nbytes)
+
+    #now write PyObject* to buffer
+    memcpy(buffer, &tmpobj, sizeof(PyObject*))
+
+    return sizeof(tmpobj)
+
 
 cdef class VaryArray_NumpyConverter(Converter):
     cdef BasicNumpy_Converter conv#converter for single element
     cdef public object nptype
     cdef int typecode
-        
+    cdef int elesize
     def __init__(self,Converter conv):
         self.conv = conv
         self.typecode = self.conv.get_nptypecode()
-
-    cdef int write(self,Column* col, void* buffer):
-        
+        self.elesize = conv.size
+    cdef int write(self,Column* col, void* buffer):       
         cdef int numele = col.getLen()
-        cdef np.npy_intp dims[1]
-        dims[0]=numele;
-        cdef np.ndarray tmp = np.PyArray_EMPTY(1,dims,self.typecode,0)
-
-        cdef PyObject* tmpobj = <PyObject*>tmp #borrow ref
-        #increase one since we are putting in array directly
-        Py_INCREF(tmp)
-        
-        #copy to tmp.data
+        cdef int elesize = self.elesize
         cdef void* src = col.GetValuePointer()
-        cdef int nbytes = col.getSize()
-        memcpy(tmp.data,src,nbytes)
+        cdef int typecode = self.typecode
+        return create_numpyarray(buffer,src,typecode,numele,elesize)
 
-        #now write PyObject* to buffer
-
-        memcpy(buffer, &tmpobj, sizeof(PyObject*))
-        return sizeof(tmpobj)
     cdef object get_nptype(self):
         return np.object
     cdef object get_nptypecode(self):
@@ -160,7 +169,7 @@ cdef class FixedArray_NumpyConverter(Converter):
 
 cdef class BasicNumpy_Converter(Converter):
     cdef string rtype
-    cdef int size
+    cdef public int size
     cdef public object nptype
     cdef int nptypecode
     def __init__(self, size, nptype,nptypecode):
@@ -176,6 +185,110 @@ cdef class BasicNumpy_Converter(Converter):
     cdef int get_nptypecode(self):
         return self.nptypecode
 
+cdef class VectorFloat_Converter(Converter):
+    cdef int elesize
+    cdef int nptypecode
+    cdef Vector2Array[float] v2a
+    def __init__(self):
+        self.nptypecode = np.NPY_FLOAT32
+        self.elesize = 4
+    cdef int write(self,Column* col, void* buffer):
+        cdef int elesize = self.elesize
+        cdef int typecode = self.nptypecode
+        cdef vector[float]* tmp = <vector[float]*>col.GetValuePointer()
+        cdef int numele = tmp.size()
+        #check cython auto generate code
+        #if it really does &((*tmp)[0])
+        cdef float* fa = self.v2a.convert(tmp)
+        return create_numpyarray(buffer,fa,typecode,numele,elesize)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
+cdef class VectorDouble_Converter(Converter):
+    cdef int elesize
+    cdef int nptypecode
+    cdef Vector2Array[double] v2a
+    def __init__(self):
+        self.nptypecode = np.NPY_FLOAT64
+        self.elesize = 8
+    cdef int write(self,Column* col, void* buffer):
+        cdef int elesize = self.elesize
+        cdef int typecode = self.nptypecode
+        cdef vector[double]* tmp = <vector[double]*>col.GetValuePointer()
+        cdef int numele = tmp.size()
+        #check cython auto generate code
+        #if it really does &((*tmp)[0])
+        cdef double* fa = self.v2a.convert(tmp)
+        return create_numpyarray(buffer,fa,typecode,numele,elesize)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
+cdef class VectorInt_Converter(Converter):
+    cdef int elesize
+    cdef int nptypecode
+    cdef Vector2Array[int] v2a
+    def __init__(self):
+        self.nptypecode = np.NPY_INT32
+        self.elesize = 4
+    cdef int write(self,Column* col, void* buffer):
+        cdef int elesize = self.elesize
+        cdef int typecode = self.nptypecode
+        cdef vector[int]* tmp = <vector[int]*>col.GetValuePointer()
+        cdef int numele = tmp.size()
+        #check cython auto generate code
+        #if it really does &((*tmp)[0])
+        cdef int* fa = self.v2a.convert(tmp)
+        return create_numpyarray(buffer,fa,typecode,numele,elesize)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
+cdef class VectorLong_Converter(Converter):
+    cdef int elesize
+    cdef int nptypecode
+    cdef Vector2Array[long] v2a
+    def __init__(self):
+        self.nptypecode = np.NPY_INT64
+        self.elesize = 8
+    cdef int write(self,Column* col, void* buffer):
+        cdef int elesize = self.elesize
+        cdef int typecode = self.nptypecode
+        cdef vector[long]* tmp = <vector[long]*>col.GetValuePointer()
+        cdef int numele = tmp.size()
+        #check cython auto generate code
+        #if it really does &((*tmp)[0])
+        cdef long* fa = self.v2a.convert(tmp)
+        return create_numpyarray(buffer,fa,typecode,numele,elesize)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
+cdef class VectorChar_Converter(Converter):
+    cdef int elesize
+    cdef int nptypecode
+    cdef Vector2Array[char] v2a
+    def __init__(self):
+        self.nptypecode = np.NPY_INT8
+        self.elesize = 1
+    cdef int write(self,Column* col, void* buffer):
+        cdef int elesize = self.elesize
+        cdef int typecode = self.nptypecode
+        cdef vector[char]* tmp = <vector[char]*>col.GetValuePointer()
+        cdef int numele = tmp.size()
+        #check cython auto generate code
+        #if it really does &((*tmp)[0])
+        cdef char* fa = self.v2a.convert(tmp)
+        return create_numpyarray(buffer,fa,typecode,numele,elesize)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
 
 converters = {
     'Char_t':       BasicNumpy_Converter(1, np.int8, np.NPY_INT8),
@@ -194,6 +307,12 @@ converters = {
     'ULong64_t':    BasicNumpy_Converter(8,np.uint64, np.NPY_UINT64),
     
     'Bool_t':       BasicNumpy_Converter(1,np.bool, np.NPY_BOOL),
+    
+    'vector<float>':VectorFloat_Converter(),
+    'vector<double>':VectorDouble_Converter(),
+    'vector<int>':  VectorInt_Converter(),
+    'vector<long>': VectorLong_Converter(),
+    'vector<char>': VectorChar_Converter(),
 }
 
 
