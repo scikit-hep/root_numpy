@@ -1,3 +1,0 @@
-all:
-	g++ -Wall -Wno-sign-compare -I../root_numpy -g -O0 -I/usr/local/include/root -I/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -I/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -fno-strict-aliasing -fno-common -I/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/numpy/core/include -dynamic -arch i386 -arch x86_64 -g -DNDEBUG -g -c test_treestructure.cc -o tmp.o
-	g++ -L/usr/local/lib/root -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lpthread -lm -ldl -L/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config -ldl -framework CoreFoundation -lpython2.7 tmp.o -o a.out
