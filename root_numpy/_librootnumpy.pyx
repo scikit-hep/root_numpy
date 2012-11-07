@@ -419,6 +419,6 @@ def root2array_fromCObj(tree, branches, N, offset):
     #provided here for convenience only
     #typecheck should be implemented for the wrapper
     if not PyCObject_Check(tree):
-        raise('tree must be PyCObject')
+        raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*>PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(chain,branches,N,offset)

@@ -54,7 +54,7 @@ class TestRootNumpy(unittest.TestCase):
 		self.assertAlmostEqual(a[-1][2][-1],1514.5)
 
 	def test_vary(self):
-		f = self.ld(['vary*.root'])
+		f = self.ld(['vary1.root','vary2.root'])
 		a = root2rec(f)
 		self.assertEqual(a.dtype,
 			[('len_n', '<i4'), ('len_f', '<i4'), ('len_d', '<i4'), 
