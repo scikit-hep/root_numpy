@@ -27,11 +27,21 @@ module = Extension('root_numpy._librootnumpy',
 
 setup(name='root_numpy',
        version='2.00',
-       description='Convert root tree to numpy array',
+       description='ROOT TTree to numpy array converter',
        author='Piti Ongmongkolkul',
        author_email='piti118@gmail.com',
        url='https://github.com/piti118/root_numpy',
+       download_url='https://github.com/piti118/root_numpy/archive/v2.00.zip',
        package_dir={'root_numpy': 'root_numpy'},
        packages=['root_numpy'],
-       ext_modules=[module]
-       )
+       ext_modules=[module],
+       classifiers=[
+          "Programming Language :: Python",
+          "Topic :: Utilities",
+          "Operating System :: POSIX :: Linux",
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Science/Research",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: MIT License",
+        ]
+    )
