@@ -22,7 +22,7 @@ except OSError:
 module = Extension('root_numpy._librootnumpy',
                    sources=['root_numpy/_librootnumpy.cpp'],
                    include_dirs=[np.get_include(), root_inc, 'root_numpy'],
-                   #extra_compile_args = []+root_cflags,
+                   extra_compile_args = [],
                    extra_link_args=[] + root_ldflags)
 
 setup(name='root_numpy',

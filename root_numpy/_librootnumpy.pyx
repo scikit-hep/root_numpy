@@ -83,10 +83,21 @@ cdef parse_tree_structure(TTree* tree):
         if leaves is not NULL:
             for ibranch in range(leaves.GetEntries()):
                 thisLeaf = <TLeaf*>leaves.At(ibranch)
-                leaflist.append(thisLeaf.GetName())
+                lname = thisLeaf.GetName()
+                ltype = thisLeaf.GetTypeName()
+                leaflist.append((lname,ltype))
         ret[thisBranch.GetName()] = leaflist
     return ret
 
+def unique(seq):  
+    seen = {} 
+    result = [] 
+    for item in seq: 
+        marker = item
+        if marker in seen: continue 
+        seen[marker] = 1 
+        result.append(item) 
+    return result
 
 cdef class Converter:
     cdef int write(self,Column* col, void* buffer):
@@ -232,13 +243,19 @@ cdef object root2array_fromTTree(TTree* tree,branches,N,offset): #from CPP TTree
         #and loop through all leaves
         structure = parse_tree_structure(tree)
         if branches is None: branches = structure.keys()
+        branches = unique(branches)
+
         for branch in branches:
             leaves = structure[branch]
             shortname = len(leaves)==1
-            for leaf in leaves:
-                colname = branch if shortname else '%s_%s'%(branch,leaf)
-                thisCol = bc.MakeColumn(branch, leaf, colname)
-                columns.push_back(thisCol)
+            for leaf,ltype in leaves:
+                if ltype in converters:
+                    colname = branch if shortname else '%s_%s'%(branch,leaf)
+                    thisCol = bc.MakeColumn(branch, leaf, colname)
+                    columns.push_back(thisCol)
+                else:
+                    print 'Cannot convert branch: %s leaf: %s of type %s. Skip.'\
+                        %(branch,leaf,ltype)
 
         #now we got all the columns time to make an appropriate array structure
         #first determine the correct size given tree size offset and N

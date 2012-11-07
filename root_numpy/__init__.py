@@ -1,6 +1,8 @@
 __all__ = ['list_trees','list_branches','lt','lst','lb','root2array','root2rec','tree2array','tree2rec']
+__version__ = '2.00'
 import _librootnumpy
 from glob import glob
+import numpy as np
 def list_trees(fname):
     return _librootnumpy.list_trees(fname)
 
@@ -17,12 +19,12 @@ def lt(fname):
     return _librootnumpy.list_trees(fname)
 
 
-def lst(fname,treename):
+def lst(fname,treename=None):
     """shorthand for list_structures"""
     return _librootnumpy.list_structures(fname,treename)
 
 
-def lb(fname, treename):
+def lb(fname, treename=None):
     """shorthand for list_branches"""
     return list_branches(fname,treename)
 
@@ -92,7 +94,6 @@ def root2array(fnames, treename=None, branches=None, N=None,offset=0):
             if len(tmp)==0:
                 raise IOError('%s does not match any readble file.'%tmp)
             filenames.extend(tmp)
-    print filenames
     return _librootnumpy.root2array_fromFname(filenames, treename, branches,N,offset)
 
 
@@ -138,7 +139,7 @@ def tree2array(tree, branches=None,N=None,offset=0):
         #return _librootnumpy.root2array_from_capsule(o, branches)
     else:
         o = ROOT.AsCObject(tree)
-        return _librootnumpy.root2array_from_cobj(o, branches,N,offset)
+        return _librootnumpy.root2array_fromCObj(o, branches,N,offset)
 
 
 def tree2rec(tree, branches=None,N=None,offset=0):
