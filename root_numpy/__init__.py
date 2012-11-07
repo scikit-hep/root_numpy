@@ -110,19 +110,6 @@ def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
 
     see root2array for more details
     """
-    # if treename is None:
-    #     afname = None
-    #     if isinstance(fnames, basestring):
-    #         afname = glob(fnames)
-    #     else:
-    #         afname = glob(fnames[0])
-    #     trees = list_trees(afname[0])
-    #     if len(trees) != 1:
-    #         raise ValueError('treename need to be specified if the file '
-    #                          'contains more than 1 tree. Your choices are:'
-    #                          + str(trees))
-    #     else:
-    #         treename = trees[0]
     return root2array(fnames, treename, branches,N,offset).view(np.recarray)
 
 
