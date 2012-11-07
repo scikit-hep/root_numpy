@@ -6,7 +6,11 @@ from libc.string cimport memcpy
 from pprint import pprint
 from cpython cimport array
 from cython.operator cimport dereference as deref
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    #fall back to drop in
+    from OrderedDict import OrderedDict
 from cpython.ref cimport Py_INCREF, Py_XDECREF
 from cpython cimport PyObject
 from cpython.cobject cimport PyCObject_AsVoidPtr,PyCObject_Check

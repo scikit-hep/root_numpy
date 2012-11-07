@@ -1,3 +1,4 @@
+__all__ = ['list_trees','list_branches','lt','lst','lb','root2array','root2rec','tree2array','tree2rec']
 import _librootnumpy
 from glob import glob
 def list_trees(fname):
