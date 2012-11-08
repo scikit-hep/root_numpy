@@ -4,3 +4,4 @@ build
 *.pyc
 root_numpy/_librootnumpy.html
 *.d
+_build
