@@ -11,6 +11,20 @@ root_numpy
 .. _ROOT: http://root.cern.ch/
 .. _numpy: http://numpy.scipy.org/
 
+Download
+^^^^^^^^
+
+	V2.00 https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip
+
+	or 
+	
+	``git clone https://github.com/piti118/root_numpy``
+
+Install
+^^^^^^^
+
+	``python setup.py install``
+
 Typical Usage
 ^^^^^^^^^^^^^
 
