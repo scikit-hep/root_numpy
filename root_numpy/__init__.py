@@ -1,77 +1,107 @@
-__all__ = ['list_trees','list_branches','lt','lst','lb','root2array','root2rec','tree2array','tree2rec']
+__all__ = ['root2array','root2rec','list_trees','list_branches','lt','lst','lb','tree2array','tree2rec']
 __version__ = '2.00'
 import _librootnumpy
 from glob import glob
 import numpy as np
+
 def list_trees(fname):
+    """list trees in rootfile *fname*"""
+    return _librootnumpy.list_trees(fname)
+
+
+def lt(fname):
+    """shorthand for :func:`list_trees`"""
     return _librootnumpy.list_trees(fname)
 
 
 def list_branches(fname, treename=None):
-    """ get a list of branches for given filename and treename
-    treename is optional if fname has only one tree
+    """ 
+    get a list of branches for given *fname* and *treename*.
+    *treename* is optional if fname has only one tree
     """
     return _librootnumpy.list_branches(fname, treename)
 
 
-def lt(fname):
-    """shorthand for list_trees"""
-    return _librootnumpy.list_trees(fname)
-
-
-def lst(fname,treename=None):
-    """shorthand for list_structures"""
-    return _librootnumpy.list_structures(fname,treename)
-
-
 def lb(fname, treename=None):
-    """shorthand for list_branches"""
+    """shorthand for :func:`list_branches`"""
     return list_branches(fname,treename)
 
 
-def root2array(fnames, treename=None, branches=None, N=None, offset=0):
+def lst(fname,treename=None):
     """
-    root2array(fnames, treename, branches=None,N=None,offset=0)
-    convert tree treename in root files specified in fnames to
-    numpy structured array
-    ------------------
-    return numpy structure array
-    fnames: list of string or string. Root file name patterns.
-    Anything that works with TChain.Add is accepted
-    treename: name of tree to convert to numpy array.
-    This is optional if the file contains exactly 1 tree.
-    branches(optional): list of string for branch name to be
-    extracted from tree.
-    * If branches is not specified or is None or is empty,
-      all from the first treebranches are extracted
-    * If branches contains duplicate branches, only the first one is used.
-    N(optional): maximum number of data that it should load
-    useful for testing out stuff
-    offset(optional): start index (first one is 0)
+    return tree structures.
+    *treename* is optional if fname has only one tree 
+    """
+    return _librootnumpy.list_structures(fname,treename)
 
-    Caveat: This should not matter for most use cases. But, due to
-    the way TChain works, if the trees specified
-    in the input files have different structures, only the
-    branch in the first tree will be automatically extracted.
-    You can work around this by either reordering the input
-    file or specifying the branches manually.
-    ------------------
-    Ex:
-    # read all branches from tree named mytree from a.root
-    root2array('a.root', 'mytree')
 
-    #read all branches starting from record 5 for 10 records
-    #or the end of file.
-    root2array('a.root', 'mytree',offset=5,N=10)
+def root2array(fnames, treename=None, branches=None, N=None, offset=0):
+
+    """
+    convert tree *treename* in root files specified in *fnames* to
+    numpy structured array. Type conversion table 
+    is given :ref:`here <conversion_table>`
+
+    Arguments:
+
+        *fnames*: Root file name pattern. Wildcard is also supported by
+        Python glob (not ROOT semi-broken wildcard)
+        fnames can be string or list of string.
+
+        *treename*: name of tree to convert to numpy array.
+        This is optional if the file contains exactly 1 tree.
+        
+        *branches(optional)*: list of string for branch name to be
+        extracted from tree.
+
+        * If branches is not specified or is None or is empty,
+          all from the first treebranches are extracted  
+        * If branches contains duplicate branches, only the first one is used.
+        
+        *N(optional)*: maximum number of data that it should load
+        useful for testing out stuff
+        
+        *offset(optional)*: start index (first one is 0)
+
+    **Example**
     
-    # read all branches from tree named mytree from a*.root
-    root2array('a*.root', 'mytree')
+    ::
     
-    # read all branches from tree named mytree from a*.root and b*.root
-    root2array(['a*.root', 'b*.root'], 'mytree')
+        # read all branches from tree named mytree from a.root
+        # remember that 'mytree' is optional if a.root has 1 tree
+        root2array('a.root', 'mytree')
+
+    ::
     
-    #read branch x and y from tree named mytree from a.root
-    root2array('a.root', 'mytree', ['x', 'y'])
+        #read all branches starting from record 5 for 10 records
+        #or the end of file.
+        root2array('a.root', 'mytree',offset=5,N=10)
+    
+    ::
+
+        # read all branches from tree named mytree from a*.root
+        root2array('a*.root', 'mytree')
+    
+    ::
+
+        # read all branches from tree named mytree from a*.root and b*.root
+        root2array(['a*.root', 'b*.root'], 'mytree')
+    
+    ::
+
+        #read branch x and y from tree named mytree from a.root
+        root2array('a.root', 'mytree', ['x', 'y'])
+
+
+    .. note::
+    
+        Due to
+        the way TChain works, if the trees specified
+        in the input files have different structures, only the
+        branch in the first tree will be automatically extracted.
+        You can work around this by either reordering the input
+        file or specifying the branches manually.
+    
     """
     if treename is None:
         afname = None
@@ -101,22 +131,22 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
 
 def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
     """
-    root2rec(fnames, treename=None, branches=None, N=None, offset=0)
     read branches in tree treename in file(s) given by fnames can
     convert it to numpy recarray
 
     This is equivalent to
     root2array(fnames, treename, branches).view(np.recarray)
 
-    see root2array for more details
+    .. seealso::
+        :func:`root2array`
     """
     return root2array(fnames, treename, branches,N,offset).view(np.recarray)
 
 
 def tree2array(tree, branches=None,N=None,offset=0):
     """
-    convert PyRoot TTree to numpy structured array
-    see root2array for details on parameter branches
+    convert PyROOT TTree *tree* to numpy structured array
+    see :func:`root2array` for details on parameter
     """
     import ROOT
     if not isinstance(tree, ROOT.TTree):
@@ -133,7 +163,7 @@ def tree2array(tree, branches=None,N=None,offset=0):
 
 def tree2rec(tree, branches=None,N=None,offset=0):
     """
-    convert PyRoot TTree to numpy structured array
-    see root2array for details on parameter branches
+    convert PyROOT TTree *tree* to numpy structured array
+    see :func:`root2array` for details on parameters.
     """
     return tree2array(tree, branches,N,offset).view(np.recarray)
