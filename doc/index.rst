@@ -6,10 +6,24 @@
 root_numpy
 ==========
 
-**root_numpy** is a library to convert ROOT_  TTree to numpy_ `structure array <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_ or `record array <http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html>`_. The library is written in C++ and `Cython <http://cython.org/>`_ and is much faster than PyROOT. It supports scalar, array of scalar and vector of basic types(int float double etc.).
+**root_numpy** is a python library for converting ROOT_  TTree to numpy_ `structure array <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_ or `record array <http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html>`_. The library is written in C++ and `Cython <http://cython.org/>`_ and is much faster than PyROOT. It supports scalar, array of scalar and vector of basic types(int float double etc.).
 
 .. _ROOT: http://root.cern.ch/
 .. _numpy: http://numpy.scipy.org/
+
+Download
+^^^^^^^^
+
+	V2.00 https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip
+
+	or 
+	
+	``git clone https://github.com/piti118/root_numpy``
+
+Install
+^^^^^^^
+
+	``python setup.py install``
 
 Typical Usage
 ^^^^^^^^^^^^^
