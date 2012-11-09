@@ -8,7 +8,7 @@ from root_numpy import root2rec, root2array
 # <codecell>
 
 #root2rec
-ar = root2rec('test/test.root','tree')
+ar = root2rec('../test/test.root','tree')
 print ar.i
 print ar.f
 #ipython autocomplete columnname patch is available with this numpy patch
@@ -23,7 +23,7 @@ ar.f[ar.i>5]
 # <codecell>
 
 #root2array is available if you don't like recarray
-a=root2array('test/test.root','tree')
+a=root2array('../test/test.root','tree')
 #this tree has two column i and integer and f as float
 a #you will see that a is a structure array
 
