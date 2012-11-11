@@ -1,7 +1,7 @@
 from glob import glob
 import numpy as np
 
-from . import _librootnumpy
+import _librootnumpy
 
 __all__ = [
     'root2array',
