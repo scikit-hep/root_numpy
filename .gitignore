@@ -1,4 +1,8 @@
 build
+dist
+*.tar.gz
+*.egg
+*.egg-info
 *.so
 .DS_Store
 *.pyc

@@ -1,0 +1,4 @@
+recursive-include root_numpy *.root *.C
+recursive-include tutorial *
+include *.py
+include README.markdown
