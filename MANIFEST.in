@@ -1,1 +1,3 @@
 recursive-include root_numpy *.root *.C
+include *.py
+include README.markdown
