@@ -38,4 +38,4 @@ python setup.py install
 Documentation
 -------------
 
-See http://piti118.github.com/root_numpy/
+See http://rootpy.github.com/root_numpy/
