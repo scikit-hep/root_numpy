@@ -48,14 +48,18 @@ public:
         fChain->SetBranchStatus("*",0);//disable all branches
         //fChain->SetCacheSize(10000000);
     }
+    
     ~BetterChain(){
         if (!fChain) return;//some how i need this(copy from make class)
-        delete fChain->GetCurrentFile();
+
+        fChain->SetNotify(notifier->oldnotify);//do not switch these two lines!
+        //delete fChain->GetCurrentFile();//root does something funny
+
         LeafCache::iterator it;
         for(it=leafcache.begin();it!=leafcache.end();++it){
             delete it->second;
         }
-        fChain->SetNotify(notifier->oldnotify);
+
         delete notifier;
     }
 
