@@ -135,6 +135,12 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(len(a), 5)
         assert_equal(a.n_int[-1], 100)
 
+    def test_PyRoot(self):
+        from ROOT import TFile, TTree
+        f = TFile(self.ld('single1.root'))
+        tree = f.Get('tree')
+        tree2array(tree)
+        #make sure it doesn't crash
 
 if __name__ == '__main__':
     import nose
