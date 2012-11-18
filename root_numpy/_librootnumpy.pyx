@@ -168,7 +168,7 @@ cdef class FixedArray_NumpyConverter(Converter):
 
 
 cdef class BasicNumpy_Converter(Converter):
-    cdef string rtype
+    #cdef string rtype
     cdef public int size
     cdef public object nptype
     cdef int nptypecode
