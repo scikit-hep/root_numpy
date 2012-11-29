@@ -40,3 +40,4 @@ script:
   - make
   - make install-user
   - make doc
+
