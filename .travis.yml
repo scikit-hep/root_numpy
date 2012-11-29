@@ -1,0 +1,42 @@
+# travis-ci.org build & test configuration
+language: python
+
+python:
+  - "2.7"
+  - "3.2"
+
+env:
+  - ROOT_VERSION="5.34.03"
+  - ROOT_VERSION="5.32.04"
+
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3" fi
+
+  # Use system python, not virtualenv, because building the dependencies from source takes too long
+  - deactivate # the virtualenv
+
+  # Show which Python is used
+  - which python
+  - python --version
+  - echo $PYTHON_SUFFIX
+  - ls -lh /usr/bin/python*
+
+  # Install the dependencies we need
+  - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
+
+  # Install a ROOT binary that we custom-built in a 32-bit Ubuntu VM
+  # for the correct Python / ROOT version
+  - time wget https://github.com/downloads/cdeil/rootpy/root_v${ROOT_VERSION}_Python_${TRAVIS_PYTHON_VERSION}.tar.gz
+  - time tar zxf root_v${ROOT_VERSION}_Python_${TRAVIS_PYTHON_VERSION}.tar.gz
+  - source root_v${ROOT_VERSION}_Python_${TRAVIS_PYTHON_VERSION}/bin/thisroot.sh
+
+script:
+
+  # Check if root and PyROOT work ok
+  - time root -l -q
+  - time python -c 'import ROOT; ROOT.TBrowser()'
+
+  # Now run the actual tests (from the installed version, not the local build dir)
+  - make
+  - make install-user
+  - make doc
