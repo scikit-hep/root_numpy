@@ -3,7 +3,7 @@ language: python
 
 python:
   - "2.7"
-  - "3.2"
+#  - "3.2"
 
 env:
   - ROOT=5.34.03
