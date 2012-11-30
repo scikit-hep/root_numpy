@@ -1,6 +1,8 @@
 root_numpy
 ----------
 
+[![Build Status](https://travis-ci.org/rootpy/root_numpy.png)](https://travis-ci.org/rootpy/root_numpy)
+
 Python Extension for converting root files to numpy
 [recarray](http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html)
 or [structure array](http://docs.scipy.org/doc/numpy/user/basics.rec.html). This
