@@ -115,19 +115,6 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
         file or specifying the branches manually.
 
     """
-    if treename is None:
-        afname = None
-        if isinstance(fnames, basestring):
-            afname = glob(fnames)
-        else:
-            afname = glob(fnames[0])
-        trees = list_trees(afname[0])
-        if len(trees) != 1:
-            raise ValueError('treename need to be specified if the file '
-                             'contains more than 1 tree. Your choices are:'
-                             + str(trees))
-        else:
-            treename = trees[0]
 
     filenames = []
     if isinstance(fnames, basestring):
@@ -138,6 +125,19 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
             if len(tmp) == 0:
                 raise IOError('%s does not match any readble file.' % tmp)
             filenames.extend(tmp)
+
+    if len(filenames)==0:
+        raise IOError('Pattern given does not match any file')
+
+    if treename is None:
+        trees = list_trees(filenames[0])
+        if len(trees) != 1:
+            raise ValueError('treename need to be specified if the file '
+                             'contains more than 1 tree. Your choices are:'
+                             + str(trees))
+        else:
+            treename = trees[0]
+        
     return _librootnumpy.root2array_fromFname(
         filenames, treename, branches, N, offset)
 
