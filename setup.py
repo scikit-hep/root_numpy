@@ -16,19 +16,22 @@ root_inc = ''
 root_ldflags = []
 try:
     root_inc = subprocess.Popen(["root-config", "--incdir"],
-                        stdout=subprocess.PIPE).communicate()[0].strip()
+        stdout=subprocess.PIPE).communicate()[0].strip()
     root_ldflags = subprocess.Popen(["root-config", "--libs"],
-                        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 except OSError:
     rootsys = os.environ['ROOTSYS']
     root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--incdir"],
-                        stdout=subprocess.PIPE).communicate()[0].strip()
+        stdout=subprocess.PIPE).communicate()[0].strip()
     root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"],
-                        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 
 module = Extension('root_numpy._librootnumpy',
-                   sources=['root_numpy/_librootnumpy.cpp'],
-                   include_dirs=[np.get_include(), root_inc, 'root_numpy'],
+                   sources=['root_numpy/src/_librootnumpy.cpp'],
+                   include_dirs=[
+                       np.get_include(),
+                       root_inc,
+                       'root_numpy/src'],
                    extra_compile_args = [],
                    extra_link_args=[] + root_ldflags)
 
