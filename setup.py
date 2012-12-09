@@ -36,14 +36,17 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     extra_link_args=[] + root_ldflags)
 
 libnumpyhist = Extension('root_numpy._libnumpyhist',
-    sources=['root_numpy/_libnumpyhist.cpp'],
+    sources=['root_numpy/src/_libnumpyhist.cpp'],
     include_dirs=[np.get_include(), root_inc, 'root_numpy'],
     extra_compile_args = [],
     extra_link_args=[] + root_ldflags)
 
+
+execfile('root_numpy/info.py')
+
 setup(
     name='root_numpy',
-    version='2.01',
+    version=__version__,
     description='ROOT TTree to numpy array converter',
     author='Piti Ongmongkolkul',
     author_email='piti118@gmail.com',
