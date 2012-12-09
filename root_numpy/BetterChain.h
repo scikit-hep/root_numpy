@@ -148,10 +148,6 @@ public:
             return 0;
         }
         
-        //make sure we know how to convert this
-        const char* rt = leaf->GetTypeName();
-        assert(convertible(rt)); //we already check this
-        
         //make the branch active
         //and cache it
         fChain->SetBranchStatus(bname.c_str(),1);
