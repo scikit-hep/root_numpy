@@ -34,12 +34,11 @@ module = Extension('root_numpy._librootnumpy',
 
 setup(
     name='root_numpy',
-    version='2.00',
+    version='2.01',
     description='ROOT TTree to numpy array converter',
     author='Piti Ongmongkolkul',
     author_email='piti118@gmail.com',
-    url='https://github.com/piti118/root_numpy',
-    download_url='https://github.com/piti118/root_numpy/archive/v2.00.zip',
+    url='https://github.com/rootpy/root_numpy',
     packages=find_packages(),
     package_data={
         'root_numpy': ['tests/*.root']},
