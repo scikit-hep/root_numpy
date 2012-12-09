@@ -11,11 +11,13 @@ class TestRootNumpy(unittest.TestCase):
     def setUp(self):
         self.datadir = dirname(__file__)
 
+
     def ld(self, data):
         if isinstance(data, list):
             return [join(self.datadir, x) for x in data]
         else:
             return join(self.datadir, data)
+
 
     def check_single(self, single, n=100, id=1):
         assert_equal(
@@ -28,23 +30,28 @@ class TestRootNumpy(unittest.TestCase):
             assert_almost_equal(single[i][1], i % 100 * 2.0 + id)
             assert_almost_equal(single[i][2], i % 100 * 3.0 + id)
 
+
     def test_lt(self):
         trees = lt(self.ld('vary1.root'))
         assert_equal(trees, ['tree'])
 
+
     def test_lb(self):
         branches = lb(self.ld('single1.root'))
         assert_equal(branches, ['n_int', 'f_float', 'd_double'])
+
 
     def test_single(self):
         f = self.ld('single1.root')
         a = root2array(f)
         self.check_single(a)
 
+
     def test_singlechain(self):
         f = self.ld(['single1.root', 'single2.root'])
         a = root2array(f)
         self.check_single(a, 200)
+
 
     def test_fixed(self):
         f = self.ld(['fixed1.root', 'fixed2.root'])
@@ -58,6 +65,7 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a[0][0][0], 1)
         assert_equal(a[0][0][1], 2)
         assert_almost_equal(a[-1][2][-1], 1514.5)
+
 
     def test_vary(self):
         f = self.ld(['vary1.root', 'vary2.root'])
@@ -81,19 +89,23 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.d_double[-1][0], 380.25)
         assert_equal(a.d_double[-1][-1], 497.25)
 
+
     def test_tree2array(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
         self.check_single(tree2array(chain))
+
 
     def test_tree2rec(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
         #just make sure it doesn't crash
 
+
     def test_specific_branch(self):
         a = root2rec(self.ld('single1.root'), branches=['f_float'])
         assert_equal(a.dtype, [('f_float', '<f4')])
+
 
     def test_vector(self):
         a = root2rec(self.ld('hvector.root'))
@@ -122,6 +134,7 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.v_f[-1][0], 198.0)
         assert_equal(a.v_f[-1][-1], 206.0)
 
+
     def test_offset_N(self):
         a = root2rec(self.ld('single1.root'), N=10)
         assert_equal(len(a), 10)
@@ -135,12 +148,17 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(len(a), 5)
         assert_equal(a.n_int[-1], 100)
 
+
     def test_PyRoot(self):
-        from ROOT import TFile, TTree
-        f = TFile(self.ld('single1.root'))
-        tree = f.Get('tree')
-        tree2array(tree)
+        try:
+            from ROOT import TFile, TTree
+            f = TFile(self.ld('single1.root'))
+            tree = f.Get('tree')
+            tree2array(tree)
+        except ImportError:
+            pass
         #make sure it doesn't crash
+
 
 if __name__ == '__main__':
     import nose
