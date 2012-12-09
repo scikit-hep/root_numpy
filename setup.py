@@ -26,14 +26,20 @@ except OSError:
     root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"],
         stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 
-module = Extension('root_numpy._librootnumpy',
-                   sources=['root_numpy/src/_librootnumpy.cpp'],
-                   include_dirs=[
-                       np.get_include(),
-                       root_inc,
-                       'root_numpy/src'],
-                   extra_compile_args = [],
-                   extra_link_args=[] + root_ldflags)
+librootnumpy = Extension('root_numpy._librootnumpy',
+    sources=['root_numpy/src/_librootnumpy.cpp'],
+    include_dirs=[
+        np.get_include(),
+        root_inc,
+        'root_numpy/src'],
+    extra_compile_args = [],
+    extra_link_args=[] + root_ldflags)
+
+libnumpyhist = Extension('root_numpy._libnumpyhist',
+    sources=['root_numpy/_libnumpyhist.cpp'],
+    include_dirs=[np.get_include(), root_inc, 'root_numpy'],
+    extra_compile_args = [],
+    extra_link_args=[] + root_ldflags)
 
 setup(
     name='root_numpy',
@@ -45,7 +51,7 @@ setup(
     packages=find_packages(),
     package_data={
         'root_numpy': ['tests/*.root']},
-    ext_modules=[module],
+    ext_modules=[librootnumpy, libnumpyhist],
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Utilities",
