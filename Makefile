@@ -63,3 +63,6 @@ ctags:
 
 doc: inplace
 	make -C doc/ html
+
+cython:
+	cython -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
