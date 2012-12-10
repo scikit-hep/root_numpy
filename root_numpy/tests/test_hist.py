@@ -38,7 +38,7 @@ class TestHist2Array(unittest.TestCase):
         """Check that input we can't handle raises a proper exception"""
         inputs = []
         # Apparently THnD is not there in ROOT 5.32:
-        inputs.append(ROOT.THnD())
+        # inputs.append(ROOT.THnD())
         inputs.append(42)
         inputs.append(np.arange(10))
         for input in inputs:
