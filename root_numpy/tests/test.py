@@ -1,6 +1,6 @@
 from os.path import dirname, join
 from root_numpy import *
-from ROOT import TChain, TFile, TTree
+from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D
 import numpy as np
 import unittest
 from nose.tools import assert_equal, assert_almost_equal
@@ -162,6 +162,19 @@ class TestRootNumpy(unittest.TestCase):
         f = TFile(self.ld('single1.root'))
         tree = f.Get('tree')
         tree2array(tree)
+
+    def test_fill_array(self):
+        a = TH1D('th1d', 'test', 1000, -5, 5)
+        fill_array(a, np.random.randn(1E6))
+        assert(a.Integral() > 0)
+
+        b = TH2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
+        fill_array(b, np.random.randn(1E6, 2))
+        assert(b.Integral() > 0)
+
+        c = TH3D('th3d', 'test', 10, -5, 5, 10, -5, 5, 10, -5, 5)
+        fill_array(c, np.random.randn(1E4, 3))
+        assert(c.Integral() > 0)
 
 
 if __name__ == '__main__':
