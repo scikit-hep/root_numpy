@@ -27,14 +27,6 @@ def _add_weight_field(arr, tree,
             dtypes=weight_dtype)
 
 
-def _add_weight_column(arr, tree,
-                       weight_dtype='f4'):
-    weights = np.empty(arr.shape[0], dtype=weight_dtype)
-    weights.fill(tree.GetWeight())
-    weights = weights.reshape((arr.shape[0], 1))
-    return np.append(arr, weights, axis=1)
-
-
 def list_trees(fname):
     """list trees in rootfile *fname*"""
     return _librootnumpy.list_trees(fname)
@@ -175,8 +167,8 @@ def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
 
 
 def tree2array(tree, branches=None, N=None, offset=0,
-        dtype=np.float32,
         include_weight=False,
+        weight_name='weight',
         weight_dtype='f4'):
     """
     convert PyROOT TTree *tree* to numpy structured array
@@ -194,7 +186,7 @@ def tree2array(tree, branches=None, N=None, offset=0,
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(cobj, branches, N, offset)
     if include_weight:
-        arr = _add_weight_column(rec, tree, weight_dtype)
+        arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
 
 
@@ -206,7 +198,7 @@ def tree2rec(tree, branches=None, N=None, offset=0,
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameters.
     """
-    rec = tree2array(tree, branches, N, offset).view(np.recarray)
-    if include_weight:
-        rec = _add_weight_field(rec, tree, weight_name, weight_dtype)
-    return rec
+    return tree2array(tree, branches, N, offset,
+            include_weight=include_weight,
+            weight_name=weight_name,
+            weight_dtype=weight_dtype).view(np.recarray)

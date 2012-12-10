@@ -1,9 +1,10 @@
 from os.path import dirname, join
 from root_numpy import *
-from ROOT import TChain
+from ROOT import TChain, TFile, TTree
 import numpy as np
 import unittest
 from nose.tools import assert_equal, assert_almost_equal
+from numpy.testing import assert_array_equal
 
 
 class TestRootNumpy(unittest.TestCase):
@@ -149,15 +150,18 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.n_int[-1], 100)
 
 
+    def test_weights(self):
+        f = TFile(self.ld('test.root'))
+        tree = f.Get('tree')
+        tree.SetWeight(5.)
+        rec = tree2rec(tree, include_weight=True, weight_name='treeweight')
+        assert_array_equal(rec['treeweight'], np.ones(10) * 5)
+
+
     def test_PyRoot(self):
-        try:
-            from ROOT import TFile, TTree
-            f = TFile(self.ld('single1.root'))
-            tree = f.Get('tree')
-            tree2array(tree)
-        except ImportError:
-            pass
-        #make sure it doesn't crash
+        f = TFile(self.ld('single1.root'))
+        tree = f.Get('tree')
+        tree2array(tree)
 
 
 if __name__ == '__main__':
