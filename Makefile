@@ -66,3 +66,7 @@ doc: inplace
 
 cython:
 	cython -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
+
+check-rst:
+	python setup.py --long-description | rst2html.py > __output.html
+	rm -f __output.html
