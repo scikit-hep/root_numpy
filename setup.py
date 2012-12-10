@@ -52,6 +52,8 @@ setup(
     author='Piti Ongmongkolkul',
     author_email='piti118@gmail.com',
     url='https://github.com/rootpy/root_numpy',
+    download_url='http://pypi.python.org/packages/source/r/'
+                 'root_numpy/root_numpy-%s.tar.gz' % __version__,
     packages=find_packages(),
     package_data={
         'root_numpy': ['tests/*.root']},
