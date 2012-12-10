@@ -1,7 +1,7 @@
 .. -*- mode: rst -*-
 
-.. image:: https://travis-ci.org/rootpy/rootpy_numpy.png
-   :target: https://travis-ci.org/rootpy/rootpy_numpy
+.. image:: https://travis-ci.org/rootpy/root_numpy.png
+   :target: https://travis-ci.org/rootpy/root_numpy
 
 root_numpy
 ----------
