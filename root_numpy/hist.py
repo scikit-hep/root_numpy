@@ -11,19 +11,6 @@ def _get_hist_dtype(hist):
                     ''.format(dim, hist_dtype)):
                 return hist_dtype
 
-def _get_hist_ndim(hist):
-    """Determine the number of dimensions for a ROOT hist"""
-    # Note that the order is important here, because
-    # ROOT.TH3 is a ROOT.TH1
-    if isinstance(hist, ROOT.TH3):
-        return 3
-    elif isinstance(hist, ROOT.TH2):
-        return 2
-    elif isinstance(hist, ROOT.TH1):
-        return 1
-    else:
-        raise TypeError("Can't process type: {0}".format(type(hist)))
-    
 
 def _get_numpy_dtype(hist):
     """Determine the corresponding numpy dtype for a given ROOT hist"""
@@ -122,7 +109,7 @@ def fill_hist_from_array(hist, array, weights=None):
     If you have (x, y) separately, ypu can use array = np.vstack([x, y])
     when calling this function.
     """
-    ndim = _get_hist_ndim(hist)
+    ndim = hist.GetDimension()
 
     array = np.asarray(array, dtype='float64')
 
