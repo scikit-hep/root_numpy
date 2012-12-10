@@ -40,4 +40,4 @@ python setup.py install
 Documentation
 -------------
 
-See `http://rootpy.github.com/root_numpy/`
+See http://rootpy.github.com/root_numpy/
