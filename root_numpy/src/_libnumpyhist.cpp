@@ -27,15 +27,14 @@ fill_hist_with_ndarray(PyObject *self, PyObject *args, PyObject* keywords) {
     npy_intp weights_stride = 1;
     static const char* keywordslist[] = {
         "hist",
-        "dim",
         "array",
         "weights",
         NULL};
 
     if(!PyArg_ParseTupleAndKeywords(
-                args, keywords, "OIO|O",
+                args, keywords, "OO|O",
                 const_cast<char **>(keywordslist),
-                &hist_, &dim, &array_, &weights_)) {
+                &hist_, &array_, &weights_)) {
         return NULL;
     }
 
@@ -45,27 +44,27 @@ fill_hist_with_ndarray(PyObject *self, PyObject *args, PyObject* keywords) {
     }
     //this is not safe so be sure to know what you are doing type check in python first
     //this is a c++ limitation because void* have no vtable so dynamic cast doesn't work
-    if (dim == 1) {
-        hist = static_cast<TH1*>(PyCObject_AsVoidPtr(hist_));
-        if(!hist) {
-            PyErr_SetString(PyExc_TypeError,"Unable to convert hist to TH1*");
-            return NULL;
-        }
-    } else if (dim == 2) {
+    hist = static_cast<TH1*>(PyCObject_AsVoidPtr(hist_));
+    if (hist == NULL) {
+        PyErr_SetString(PyExc_TypeError,"Unable to convert hist to TH1*");
+        return NULL;
+    }
+    dim = hist->GetDimension();
+
+    if (dim == 2) {
         hist2d = static_cast<TH2*>(PyCObject_AsVoidPtr(hist_));
-        if(!hist2d) {
+        if (hist2d == NULL) {
             PyErr_SetString(PyExc_TypeError,"Unable to convert hist to TH2*");
             return NULL;
         }
     } else if (dim == 3) {
         hist3d = static_cast<TH3*>(PyCObject_AsVoidPtr(hist_));
-        if(!hist3d) {
+        if (hist3d == NULL) {
             PyErr_SetString(PyExc_TypeError,"Unable to convert hist to TH3*");
             return NULL;
         }
-    } else {
-        PyErr_SetString(PyExc_ValueError,
-                "dim must not be greater than 3");
+    } else if (dim > 3) {
+        PyErr_SetString(PyExc_ValueError,"dim must not be greater than 3");
         return NULL;
     }
 

@@ -210,18 +210,12 @@ def fill_array(hist, array, weights=None):
     Fill a ROOT histogram with a NumPy array
     """
     import ROOT
-    if isinstance(hist, ROOT.TH3):
-        dim = 3
-    elif isinstance(hist, ROOT.TH2):
-        dim = 2
-    elif isinstance(hist, ROOT.TH1):
-        dim = 1
-    else:
+    if not isinstance(hist, ROOT.TH1):
         raise TypeError("``hist`` must be a subclass of ROOT.TH1")
     hist = ROOT.AsCObject(hist)
     if weights is not None:
         _libnumpyhist.fill_hist_with_ndarray(
-            hist, dim, array, weights)
+            hist, array, weights)
     else:
         _libnumpyhist.fill_hist_with_ndarray(
-            hist, dim, array)
+            hist, array)
