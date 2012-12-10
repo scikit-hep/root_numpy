@@ -1,3 +1,4 @@
+import uuid
 import unittest
 import itertools
 import numpy as np
@@ -6,12 +7,13 @@ import ROOT
 from root_numpy.hist import hist2array, array2hist, fill_hist_from_array
 
 def _get_hist(dim, hist_class):
+    name = uuid.uuid4().hex
     if dim == 1:
-        return hist_class('hist', 'hist', 5, 0, 1)
+        return hist_class(name, '', 5, 0, 1)
     elif dim == 2:
-        return hist_class('hist', 'hist', 5, 0, 1, 6, 0, 2)
+        return hist_class(name, '', 5, 0, 1, 6, 0, 2)
     elif dim == 3:
-        return hist_class('hist', 'hist', 5, 0, 1, 6, 0, 2, 7, 0, 3)
+        return hist_class(name, '', 5, 0, 1, 6, 0, 2, 7, 0, 3)
 
 class TestHist2Array(unittest.TestCase):
     # List of ROOT hist types taken from
@@ -34,8 +36,13 @@ class TestHist2Array(unittest.TestCase):
 
     def test_invalid_inputs(self):
         """Check that input we can't handle raises a proper exception"""
-        input1 = ROOT.THnD()
-        assert_raises(TypeError, hist2array, input1)
+        inputs = []
+        # Apparently THnD is not there in ROOT 5.32:
+        inputs.append(ROOT.THnD())
+        inputs.append(42)
+        inputs.append(np.arange(10))
+        for input in inputs:
+            assert_raises(TypeError, hist2array, input)
 
 class TestArray2HistRountTripping(unittest.TestCase):
 
