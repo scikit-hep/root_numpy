@@ -1,8 +1,9 @@
-root_numpy
-----------
-
 .. image:: https://travis-ci.org/rootpy/rootpy_numpy.png
    :target: https://travis-ci.org/rootpy/rootpy_numpy
+
+
+root_numpy
+----------
 
 Python Extension for converting root files to numpy
 `recarray <http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html>`_

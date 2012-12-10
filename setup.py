@@ -48,7 +48,7 @@ setup(
     name='root_numpy',
     version=__version__,
     description='ROOT TTree to numpy array converter',
-    long_description=open('README.rst').read(),
+    long_description=''.join(open('README.rst').readlines()[2:]),
     author='Piti Ongmongkolkul',
     author_email='piti118@gmail.com',
     url='https://github.com/rootpy/root_numpy',
