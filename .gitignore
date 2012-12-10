@@ -9,3 +9,6 @@ dist
 root_numpy/_librootnumpy.html
 *.d
 _build
+.Rhistory
+.project
+.pydevproject
