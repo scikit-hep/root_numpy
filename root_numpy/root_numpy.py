@@ -1,5 +1,6 @@
 from glob import glob
 import numpy as np
+from numpy.lib import recfunctions
 
 import _librootnumpy
 
@@ -13,6 +14,25 @@ __all__ = [
     'lb',
     'tree2array',
     'tree2rec']
+
+
+def _add_weight_field(arr, tree,
+                      weight_name='weight',
+                      weight_dtype='f4'):
+    weights = np.empty(arr.shape[0], dtype=weight_dtype)
+    weights.fill(tree.GetWeight())
+    return recfunctions.rec_append_fields(
+            arr, names=weight_name,
+            data=weights,
+            dtypes=weight_dtype)
+
+
+def _add_weight_column(arr, tree,
+                       weight_dtype='f4'):
+    weights = np.empty(arr.shape[0], dtype=weight_dtype)
+    weights.fill(tree.GetWeight())
+    weights = weights.reshape((arr.shape[0], 1))
+    return np.append(arr, weights, axis=1)
 
 
 def list_trees(fname):
@@ -47,7 +67,6 @@ def lst(fname, treename=None):
 
 
 def root2array(fnames, treename=None, branches=None, N=None, offset=0):
-
     """
     convert tree *treename* in root files specified in *fnames* to
     numpy structured array. Type conversion table
@@ -155,7 +174,10 @@ def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
     return root2array(fnames, treename, branches, N, offset).view(np.recarray)
 
 
-def tree2array(tree, branches=None, N=None, offset=0):
+def tree2array(tree, branches=None, N=None, offset=0,
+        dtype=np.float32,
+        include_weight=False,
+        weight_dtype='f4'):
     """
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameter
@@ -169,14 +191,22 @@ def tree2array(tree, branches=None, N=None, offset=0):
         # this will cause tons of compilation issue
         raise NotImplementedError()
         #return _librootnumpy.root2array_from_capsule(o, branches)
-    else:
-        o = ROOT.AsCObject(tree)
-        return _librootnumpy.root2array_fromCObj(o, branches, N, offset)
+    cobj = ROOT.AsCObject(tree)
+    arr = _librootnumpy.root2array_fromCObj(cobj, branches, N, offset)
+    if include_weight:
+        arr = _add_weight_column(rec, tree, weight_dtype)
+    return arr
 
 
-def tree2rec(tree, branches=None, N=None, offset=0):
+def tree2rec(tree, branches=None, N=None, offset=0,
+        include_weight=False,
+        weight_name='weight',
+        weight_dtype='f4'):
     """
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameters.
     """
-    return tree2array(tree, branches, N, offset).view(np.recarray)
+    rec = tree2array(tree, branches, N, offset).view(np.recarray)
+    if include_weight:
+        rec = _add_weight_field(rec, tree, weight_name, weight_dtype)
+    return rec
