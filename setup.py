@@ -26,26 +26,38 @@ except OSError:
     root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"],
         stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
 
-module = Extension('root_numpy._librootnumpy',
-                   sources=['root_numpy/src/_librootnumpy.cpp'],
-                   include_dirs=[
-                       np.get_include(),
-                       root_inc,
-                       'root_numpy/src'],
-                   extra_compile_args = [],
-                   extra_link_args=[] + root_ldflags)
+librootnumpy = Extension('root_numpy._librootnumpy',
+    sources=['root_numpy/src/_librootnumpy.cpp'],
+    include_dirs=[
+        np.get_include(),
+        root_inc,
+        'root_numpy/src'],
+    extra_compile_args = [],
+    extra_link_args=[] + root_ldflags)
+
+libnumpyhist = Extension('root_numpy._libnumpyhist',
+    sources=['root_numpy/src/_libnumpyhist.cpp'],
+    include_dirs=[np.get_include(), root_inc, 'root_numpy'],
+    extra_compile_args = [],
+    extra_link_args=[] + root_ldflags)
+
+
+execfile('root_numpy/info.py')
 
 setup(
     name='root_numpy',
-    version='2.01',
+    version=__version__,
     description='ROOT TTree to numpy array converter',
+    long_description=''.join(open('README.rst').readlines()[2:]),
     author='Piti Ongmongkolkul',
     author_email='piti118@gmail.com',
     url='https://github.com/rootpy/root_numpy',
+    download_url='http://pypi.python.org/packages/source/r/'
+                 'root_numpy/root_numpy-%s.tar.gz' % __version__,
     packages=find_packages(),
     package_data={
         'root_numpy': ['tests/*.root']},
-    ext_modules=[module],
+    ext_modules=[librootnumpy, libnumpyhist],
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Utilities",
