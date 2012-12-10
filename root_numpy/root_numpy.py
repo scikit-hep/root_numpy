@@ -3,6 +3,7 @@ import numpy as np
 from numpy.lib import recfunctions
 
 import _librootnumpy
+import _libnumpyhist
 
 __all__ = [
     'root2array',
@@ -13,7 +14,8 @@ __all__ = [
     'lst',
     'lb',
     'tree2array',
-    'tree2rec']
+    'tree2rec',
+    'fill_array']
 
 
 def _add_weight_field(arr, tree,
@@ -125,7 +127,6 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
         file or specifying the branches manually.
 
     """
-
     filenames = []
     if isinstance(fnames, basestring):
         filenames = glob(fnames)
@@ -133,17 +134,17 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
         for fn in fnames:
             tmp = glob(fn)
             if len(tmp) == 0:
-                raise IOError('%s does not match any readble file.' % tmp)
+                raise IOError('%s does not match any readable file.' % tmp)
             filenames.extend(tmp)
 
     if len(filenames)==0:
-        raise IOError('Pattern given does not match any file')
+        raise IOError('pattern given does not match any file')
 
     if treename is None:
         trees = list_trees(filenames[0])
         if len(trees) != 1:
-            raise ValueError('treename need to be specified if the file '
-                             'contains more than 1 tree. Your choices are:'
+            raise ValueError('treename needs to be specified if the file '
+                             'contains more than one tree. Your choices are:'
                              + str(trees))
         else:
             treename = trees[0]
@@ -202,3 +203,25 @@ def tree2rec(tree, branches=None, N=None, offset=0,
             include_weight=include_weight,
             weight_name=weight_name,
             weight_dtype=weight_dtype).view(np.recarray)
+
+
+def fill_array(hist, array, weights=None):
+    """
+    Fill a ROOT histogram with a NumPy array
+    """
+    import ROOT
+    if isinstance(hist, ROOT.TH3):
+        dim = 3
+    elif isinstance(hist, ROOT.TH2):
+        dim = 2
+    elif isinstance(hist, ROOT.TH1):
+        dim = 1
+    else:
+        raise TypeError("``hist`` must be a subclass of ROOT.TH1")
+    hist = ROOT.AsCObject(hist)
+    if weights is not None:
+        _libnumpyhist.fill_hist_with_ndarray(
+            hist, dim, array, weights)
+    else:
+        _libnumpyhist.fill_hist_with_ndarray(
+            hist, dim, array)
