@@ -5,7 +5,7 @@ import numpy as np
 import unittest
 from nose.tools import assert_equal, assert_almost_equal
 from numpy.testing import assert_array_equal
-
+from collections import OrderedDict
 
 class TestRootNumpy(unittest.TestCase):
 
@@ -40,6 +40,15 @@ class TestRootNumpy(unittest.TestCase):
     def test_lb(self):
         branches = lb(self.ld('single1.root'))
         assert_equal(branches, ['n_int', 'f_float', 'd_double'])
+
+
+    def test_lst(self):
+        structure = lst(self.ld('single1.root'))
+        expected = OrderedDict([
+            ('n_int', [('n_int', 'Int_t')]),
+            ('f_float', [('f_float', 'Float_t')]),
+            ('d_double', [('d_double', 'Double_t')])])
+        assert_equal(structure, expected)
 
 
     def test_single(self):
@@ -100,7 +109,7 @@ class TestRootNumpy(unittest.TestCase):
     def test_tree2rec(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
-        #just make sure it doesn't crash
+        self.check_single(tree2array(chain))
 
 
     def test_specific_branch(self):
@@ -164,17 +173,29 @@ class TestRootNumpy(unittest.TestCase):
         tree2array(tree)
 
     def test_fill_array(self):
+        np.random.seed(0)
+        data1D = np.random.randn(1E6)
+        w1D = np.empty(1E6)
+        w1D.fill(2.)
+        data2D = np.random.randn(1E6, 2)
+        data3D = np.random.randn(1E4, 3)
+
         a = TH1D('th1d', 'test', 1000, -5, 5)
-        fill_array(a, np.random.randn(1E6))
-        assert(a.Integral() > 0)
+        fill_array(a, data1D)
+        #one of them lies beyond hist range that's why it's not 1e6
+        assert_almost_equal(a.Integral(), 999999.0)
+
+        a_w = TH1D('th1dw', 'test', 1000, -5, 5)
+        fill_array(a_w, data1D, w1D)
+        assert_almost_equal(a_w.Integral(), 999999.0*2)
 
         b = TH2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
-        fill_array(b, np.random.randn(1E6, 2))
-        assert(b.Integral() > 0)
+        fill_array(b, data2D)
+        assert_almost_equal(b.Integral(), 999999.0)
 
         c = TH3D('th3d', 'test', 10, -5, 5, 10, -5, 5, 10, -5, 5)
-        fill_array(c, np.random.randn(1E4, 3))
-        assert(c.Integral() > 0)
+        fill_array(c, data3D)
+        assert_almost_equal(c.Integral(), 10000.0)
 
 
 if __name__ == '__main__':
