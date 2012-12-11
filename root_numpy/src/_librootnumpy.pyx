@@ -43,7 +43,7 @@ def list_trees(fname):
     return ret
 
 
-def list_structrues(fname, tree=None):
+def list_structures(fname, tree=None):
     if tree is None:#support for automatically find tree
         tree = list_trees(fname)
         if len(tree) != 1:
@@ -65,7 +65,7 @@ def list_structrues(fname, tree=None):
 
 
 def list_branches(fname, tree=None):
-    return list_structrues(fname,tree).keys()
+    return list_structures(fname,tree).keys()
 
 
 cdef parse_tree_structure(TTree* tree):
