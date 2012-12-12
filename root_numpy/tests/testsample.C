@@ -68,6 +68,30 @@ void makevary(int id){
     tree.Write();
 }
 
+void make2tree(int id){
+    char buffer[255];
+    sprintf(buffer,"doubletree%d.root",id);
+    TFile file(buffer,"RECREATE");
+    TTree tree("tree","tree");
+    double x,y;
+    tree.Branch("x",&x);
+    tree.Branch("y",&y);
+    for(int i=0;i<10;++i){
+        x=i;y=2*i;
+        tree.Fill();
+    }
+    tree.Write();
+    TTree tree2("tree2","tree2");
+    double x2,y2;
+    tree2.Branch("x2",&x2);
+    tree2.Branch("y2",&y2);
+    for(int i=0;i<10;++i){
+        x2=i;y2=2*i;
+        tree2.Fill();
+    }
+    tree2.Write();
+}
+
 void testsample(){
     makesingle(1);
     makesingle(2);
@@ -75,4 +99,5 @@ void testsample(){
     makefixed(2);
     makevary(1);
     makevary(2);
+    make2tree(1);
 }

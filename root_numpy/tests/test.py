@@ -6,6 +6,7 @@ import unittest
 from nose.tools import assert_equal, assert_almost_equal
 from numpy.testing import assert_array_equal
 from collections import OrderedDict
+from nose.tools import *
 
 class TestRootNumpy(unittest.TestCase):
 
@@ -55,6 +56,24 @@ class TestRootNumpy(unittest.TestCase):
         f = self.ld('single1.root')
         a = root2array(f)
         self.check_single(a)
+
+
+    @raises(IOError)
+    def test_single_pattern_not_exist(self):
+        f = self.ld(['single1.root','does_not_exists.root'])
+        a = root2array(f)
+
+
+    @raises(IOError)
+    def test_single_filename_not_exist(self):
+        f = self.ld('does_not_exists.root')
+        a = root2array(f)
+
+
+    @raises(ValueError)
+    def test_doubel_tree_name_not_specified(self):
+        f = self.ld('doubletree1.root')
+        a = root2array(f)
 
 
     def test_singlechain(self):
@@ -110,6 +129,12 @@ class TestRootNumpy(unittest.TestCase):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
         self.check_single(tree2array(chain))
+
+
+    @raises(TypeError)
+    def test_tree2array_wrongtype(self):
+        a = list()
+        tree2array(a)
 
 
     def test_specific_branch(self):
@@ -172,6 +197,7 @@ class TestRootNumpy(unittest.TestCase):
         tree = f.Get('tree')
         tree2array(tree)
 
+
     def test_fill_array(self):
         np.random.seed(0)
         data1D = np.random.randn(1E6)
@@ -196,6 +222,13 @@ class TestRootNumpy(unittest.TestCase):
         c = TH3D('th3d', 'test', 10, -5, 5, 10, -5, 5, 10, -5, 5)
         fill_array(c, data3D)
         assert_almost_equal(c.Integral(), 10000.0)
+
+
+    @raises(TypeError)
+    def test_fill_array_wrongtype(self):
+        h = list()
+        a = np.random.randn(100)
+        fill_array(h,a)
 
 
 if __name__ == '__main__':
