@@ -47,10 +47,10 @@ execfile('root_numpy/info.py')
 setup(
     name='root_numpy',
     version=__version__,
-    description='ROOT TTree to numpy array converter',
+    description='An interface between ROOT and NumPy',
     long_description=''.join(open('README.rst').readlines()[2:]),
-    author='Piti Ongmongkolkul',
-    author_email='piti118@gmail.com',
+    author='the rootpy developers',
+    author_email='rootpy-dev@googlegroups.com',
     url='https://github.com/rootpy/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
