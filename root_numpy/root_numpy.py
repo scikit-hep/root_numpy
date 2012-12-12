@@ -134,7 +134,7 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
         for fn in fnames:
             tmp = glob(fn)
             if len(tmp) == 0:
-                raise IOError('%s does not match any readable file.' % tmp)
+                raise IOError('%s does not match any readable file.' % fn)
             filenames.extend(tmp)
 
     if len(filenames)==0:
