@@ -1,5 +1,6 @@
 build
 dist
+coverage
 *.tar.gz
 *.egg
 *.egg-info
@@ -9,3 +10,7 @@ dist
 root_numpy/_librootnumpy.html
 *.d
 _build
+.coverage
+.project
+.Rhistory
+.pydevproject
