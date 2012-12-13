@@ -1,8 +1,3 @@
-.. root_numpy documentation master file, created by
-   sphinx-quickstart on Wed Nov  7 09:39:46 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 root_numpy
 ==========
 
@@ -11,19 +6,19 @@ root_numpy
 .. _ROOT: http://root.cern.ch/
 .. _numpy: http://numpy.scipy.org/
 
-Download
-^^^^^^^^
+Download and Install
+^^^^^^^^^^^^^^^^^^^^
 
-	V2.00 https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip
+    ``pip install root_numpy``
 
-	or 
-	
-	``git clone https://github.com/piti118/root_numpy``
+Obtaining Source Code
+^^^^^^^^^^^^^^^^^^^^^
 
-Install
-^^^^^^^
+    Download it from http://pypi.python.org/pypi/root_numpy/ or
 
-	``python setup.py install``
+    Clone it from github ``git clone https://github.com/rootpy/root_numpy``.
+
+    Then do the usual ``python setup.py install``
 
 Typical Usage
 ^^^^^^^^^^^^^
@@ -41,14 +36,14 @@ Typical Usage
 Full Documentation
 ==================
 
-.. automodule:: root_numpy
-   :members:
+.. automodule:: root_numpy.root_numpy
+    :members:
 
 .. _conversion_table:
 
 Type Conversion Table
 =====================
-	
+
 List of primitive type converion is given this table:
 
 ===========  =========================
