@@ -60,7 +60,7 @@ def lst(fname, treename=None):
     return _librootnumpy.list_structures(fname, treename)
 
 
-def root2array(fnames, treename=None, branches=None, N=None, offset=0):
+def root2array(fnames, treename=None, branches=None, entries=None, offset=0):
     """
     convert tree *treename* in root files specified in *fnames* to
     numpy structured array. Type conversion table
@@ -75,17 +75,17 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
         *treename*: name of tree to convert to numpy array.
         This is optional if the file contains exactly 1 tree.
 
-        *branches(optional)*: list of string for branch name to be
+        *branches (optional)*: list of string for branch name to be
         extracted from tree.
 
         * If branches is not specified or is None or is empty,
           all from the first treebranches are extracted
         * If branches contains duplicate branches, only the first one is used.
 
-        *N(optional)*: maximum number of data that it should load
+        *entries (optional)*: maximum number of data that it should load
         useful for testing out stuff
 
-        *offset(optional)*: start index (first one is 0)
+        *offset (optional)*: start index (first one is 0)
 
     **Example**
 
@@ -97,9 +97,9 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
 
     ::
 
-        #read all branches starting from record 5 for 10 records
-        #or the end of file.
-        root2array('a.root', 'mytree',offset=5,N=10)
+        # read all branches starting from record 5 for 10 records
+        # or the end of file.
+        root2array('a.root', 'mytree', entries=10, offset=5)
 
     ::
 
@@ -113,7 +113,7 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
 
     ::
 
-        #read branch x and y from tree named mytree from a.root
+        # read branch x and y from tree named mytree from a.root
         root2array('a.root', 'mytree', ['x', 'y'])
 
 
@@ -150,10 +150,10 @@ def root2array(fnames, treename=None, branches=None, N=None, offset=0):
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        filenames, treename, branches, N, offset)
+        filenames, treename, branches, entries, offset)
 
 
-def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
+def root2rec(fnames, treename=None, branches=None, entries=None, offset=0):
     """
     read branches in tree treename in file(s) given by fnames can
     convert it to numpy recarray
@@ -164,10 +164,10 @@ def root2rec(fnames, treename=None, branches=None, N=None, offset=0):
     .. seealso::
         :func:`root2array`
     """
-    return root2array(fnames, treename, branches, N, offset).view(np.recarray)
+    return root2array(fnames, treename, branches, entries, offset).view(np.recarray)
 
 
-def tree2array(tree, branches=None, N=None, offset=0,
+def tree2array(tree, branches=None, entries=None, offset=0,
         include_weight=False,
         weight_name='weight',
         weight_dtype='f4'):
@@ -185,13 +185,13 @@ def tree2array(tree, branches=None, N=None, offset=0,
         raise NotImplementedError()
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
-    arr = _librootnumpy.root2array_fromCObj(cobj, branches, N, offset)
+    arr = _librootnumpy.root2array_fromCObj(cobj, branches, entries, offset)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
 
 
-def tree2rec(tree, branches=None, N=None, offset=0,
+def tree2rec(tree, branches=None, entries=None, offset=0,
         include_weight=False,
         weight_name='weight',
         weight_dtype='f4'):
@@ -199,7 +199,7 @@ def tree2rec(tree, branches=None, N=None, offset=0,
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameters.
     """
-    return tree2array(tree, branches, N, offset,
+    return tree2array(tree, branches, entries, offset,
             include_weight=include_weight,
             weight_name=weight_name,
             weight_dtype=weight_dtype).view(np.recarray)
