@@ -6,33 +6,38 @@
 root_numpy
 ----------
 
-Python Extension for converting root files to numpy
-`recarray <http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html>`_
-or `structure array <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_. This
-is very useful for using in interactive data exploration environment like
-`ipython <http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html>`_
-(especially notebook).
+root_numpy is a Python extension for converting
+`ROOT TTrees <http://root.cern.ch/root/html/TTree.html>`_ into NumPy
+`recarrays <http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html>`_
+or `structured arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_
+and can efficiently handle large amounts of data (limited only by the
+available memory) as the core internals are written in C++.
+With your ROOT data in NumPy form you may now make use of the many powerful
+scientific Python packages or perform quick exploratory data analysis in
+interactive environments like
+`IPython <http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html>`_
+(especially IPython's popular notebook feature).
 
-Written in C++ with lots of pointer and memcpy magic and it doesn't call PyRoot so
-it's much faster especially if you are trying to read a large file in to memory
-(100MB+ or even GB's of Data).
+root_numpy currently supports basic types like Bool_t, Int_t, Float_t,
+Double_t, etc. and arrays of basic types (both variable and fixed-length).
+Vectors of basic types are also supported.
 
-Currently only support basic types like Float_t Int_t Double_t Bool_t etc. and
-array of basic types both variable and fixed length. vector of basic type (int,
-float, double, char, long) is also supported.
-
-Tab completion for numpy.recarray column name (yourdata.<TAB> showing the column
-names so you don't have to remember it) is also available with this
+Tab completion for numpy.recarray column names (yourdata.<TAB>)
+is also available with this
 `numpy patch <https://github.com/piti118/numpy/commit/a996292238ab98dcf53f2d48476d637eab9f1a72>`_
+
+The `rootpy <http://rootpy.org>`_ package also provides a script that uses
+root_numpy and `PyTables <http://www.pytables.org>`_ to convert all TTrees
+in a ROOT file into the `HDF5 <http://www.hdfgroup.org/HDF5/>`_ format.
 
 Requirements
 ------------
 
-* `ROOT <http://root.cern.ch/>`_ installed
-* `numpy <http://numpy.scipy.org/>`_ installed
+* `ROOT <http://root.cern.ch/>`_
+* `NumPy <http://numpy.scipy.org/>`_
 
-Tested with Root 5.32, numpy 1.6.1, Python 2.7.1 but it should work in most
-places.
+root_numpy is tested with ROOT 5.32, NumPy 1.6.1, Python 2.7.1 but it should
+work in most places.
 
 Installation
 ------------
