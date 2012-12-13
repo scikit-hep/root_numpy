@@ -6,19 +6,19 @@ root_numpy
 .. _ROOT: http://root.cern.ch/
 .. _numpy: http://numpy.scipy.org/
 
-Download
-^^^^^^^^
+Download and Install
+^^^^^^^^^^^^^^^^^^^^
 
-	http://pypi.python.org/pypi/root_numpy/
+    ``pip install root_numpy``
 
-	or
-	
-	``git clone https://github.com/rootpy/root_numpy``
+Obtaining Source Code
+^^^^^^^^^^^^^^^^^^^^^
 
-Install
-^^^^^^^
+    Download it from http://pypi.python.org/pypi/root_numpy/ or
 
-	``python setup.py install``
+    Clone it from github ``git clone https://github.com/rootpy/root_numpy``.
+
+    Then do the usual ``python setup.py install``
 
 Typical Usage
 ^^^^^^^^^^^^^
@@ -36,14 +36,14 @@ Typical Usage
 Full Documentation
 ==================
 
-.. automodule:: root_numpy
-   :members:
+.. automodule:: root_numpy.root_numpy
+    :members:
 
 .. _conversion_table:
 
 Type Conversion Table
 =====================
-	
+
 List of primitive type converion is given this table:
 
 ===========  =========================
