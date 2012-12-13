@@ -51,9 +51,9 @@
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>V2.00 <a class="reference external" href="https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip">https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip</a></p>
+<div><p><a class="reference external" href="http://pypi.python.org/pypi/root_numpy/">http://pypi.python.org/pypi/root_numpy/</a></p>
 <p>or</p>
-<p><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/piti118/root_numpy</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/rootpy/root_numpy</span></tt></p>
 </div></blockquote>
 </div>
 <div class="section" id="install">
@@ -77,123 +77,6 @@
 </div>
 <div class="section" id="module-root_numpy">
 <span id="full-documentation"></span><h1>Full Documentation<a class="headerlink" href="#module-root_numpy" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="root_numpy.root2array">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">root2array</tt><big>(</big><em>fnames</em>, <em>treename=None</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#root2array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.root2array" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert tree <em>treename</em> in root files specified in <em>fnames</em> to
-numpy structured array. Type conversion table 
-is given <a class="reference internal" href="#conversion-table"><em>here</em></a></p>
-<p>Arguments:</p>
-<blockquote>
-<div><p><em>fnames</em>: Root file name pattern. Wildcard is also supported by
-Python glob (not ROOT semi-broken wildcard)
-fnames can be string or list of string.</p>
-<p><em>treename</em>: name of tree to convert to numpy array.
-This is optional if the file contains exactly 1 tree.</p>
-<p><em>branches(optional)</em>: list of string for branch name to be
-extracted from tree.</p>
-<ul class="simple">
-<li>If branches is not specified or is None or is empty,
-all from the first treebranches are extracted</li>
-<li>If branches contains duplicate branches, only the first one is used.</li>
-</ul>
-<p><em>N(optional)</em>: maximum number of data that it should load
-useful for testing out stuff</p>
-<p><em>offset(optional)</em>: start index (first one is 0)</p>
-</div></blockquote>
-<p><strong>Example</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a.root</span>
-<span class="c"># remember that &#39;mytree&#39; is optional if a.root has 1 tree</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#read all branches starting from record 5 for 10 records</span>
-<span class="c">#or the end of file.</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a*.root</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a*.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a*.root and b*.root</span>
-<span class="n">root2array</span><span class="p">([</span><span class="s">&#39;a*.root&#39;</span><span class="p">,</span> <span class="s">&#39;b*.root&#39;</span><span class="p">],</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#read branch x and y from tree named mytree from a.root</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Due to
-the way TChain works, if the trees specified
-in the input files have different structures, only the
-branch in the first tree will be automatically extracted.
-You can work around this by either reordering the input
-file or specifying the branches manually.</p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.root2rec">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">root2rec</tt><big>(</big><em>fnames</em>, <em>treename=None</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#root2rec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.root2rec" title="Permalink to this definition">¶</a></dt>
-<dd><p>read branches in tree treename in file(s) given by fnames can
-convert it to numpy recarray</p>
-<p>This is equivalent to
-root2array(fnames, treename, branches).view(np.recarray)</p>
-<div class="admonition-see-also admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a></p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.list_trees">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">list_trees</tt><big>(</big><em>fname</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#list_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.list_trees" title="Permalink to this definition">¶</a></dt>
-<dd><p>list trees in rootfile <em>fname</em></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.list_branches">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">list_branches</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#list_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.list_branches" title="Permalink to this definition">¶</a></dt>
-<dd><p>get a list of branches for given <em>fname</em> and <em>treename</em>.
-<em>treename</em> is optional if fname has only one tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lt">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lt</tt><big>(</big><em>fname</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lt" title="Permalink to this definition">¶</a></dt>
-<dd><p>shorthand for <a class="reference internal" href="#root_numpy.list_trees" title="root_numpy.list_trees"><tt class="xref py py-func docutils literal"><span class="pre">list_trees()</span></tt></a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lst">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lst</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lst" title="Permalink to this definition">¶</a></dt>
-<dd><p>return tree structures.
-<em>treename</em> is optional if fname has only one tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lb">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lb</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lb" title="Permalink to this definition">¶</a></dt>
-<dd><p>shorthand for <a class="reference internal" href="#root_numpy.list_branches" title="root_numpy.list_branches"><tt class="xref py py-func docutils literal"><span class="pre">list_branches()</span></tt></a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.tree2array">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">tree2array</tt><big>(</big><em>tree</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#tree2array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.tree2array" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert PyROOT TTree <em>tree</em> to numpy structured array
-see <a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a> for details on parameter</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.tree2rec">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">tree2rec</tt><big>(</big><em>tree</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#tree2rec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.tree2rec" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert PyROOT TTree <em>tree</em> to numpy structured array
-see <a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a> for details on parameters.</p>
-</dd></dl>
-
 </div>
 <div class="section" id="type-conversion-table">
 <span id="conversion-table"></span><h1>Type Conversion Table<a class="headerlink" href="#type-conversion-table" title="Permalink to this headline">¶</a></h1>
