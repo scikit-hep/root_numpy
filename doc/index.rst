@@ -1,8 +1,3 @@
-.. root_numpy documentation master file, created by
-   sphinx-quickstart on Wed Nov  7 09:39:46 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 root_numpy
 ==========
 
@@ -14,11 +9,11 @@ root_numpy
 Download
 ^^^^^^^^
 
-	V2.00 https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip
+	http://pypi.python.org/pypi/root_numpy/
 
-	or 
+	or
 	
-	``git clone https://github.com/piti118/root_numpy``
+	``git clone https://github.com/rootpy/root_numpy``
 
 Install
 ^^^^^^^
