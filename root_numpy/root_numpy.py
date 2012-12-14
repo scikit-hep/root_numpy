@@ -138,7 +138,7 @@ def root2array(fnames, treename=None, branches=None, entries=None, offset=0):
             filenames.extend(tmp)
 
     if len(filenames)==0:
-        raise IOError('pattern given does not match any file')
+        raise IOError('pattern given does not match any file %s'%fnames)
 
     if treename is None:
         trees = list_trees(filenames[0])
