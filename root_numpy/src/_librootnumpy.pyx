@@ -14,6 +14,8 @@ from cpython.ref cimport Py_INCREF, Py_XDECREF
 from cpython cimport PyObject
 from cpython.cobject cimport PyCObject_AsVoidPtr, PyCObject_Check
 from glob import glob
+import warnings
+from root_numpy_warnings import RootNumpyUnconvertibleWarning
 include "all.pxi"
 np.import_array()
 
@@ -25,7 +27,7 @@ def list_trees(fname):
 
     cdef TFile* f = new TFile(fname)
     if f is NULL: raise IOError('Cannot read: %s' % fname)
-    
+
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL: raise IOError('Not a valid root file: %s' % fname)
     ret = []
@@ -55,7 +57,7 @@ def list_structures(fname, tree=None):
     fname = fname[0]
 
     cdef TTree* t = <TTree*> f.Get(tree)
-    if t is NULL: 
+    if t is NULL:
         raise IOError('Tree %s not found in %s' % (tree, fname))
 
     tmp = parse_tree_structure(t)
@@ -87,14 +89,14 @@ cdef parse_tree_structure(TTree* tree):
         ret[thisBranch.GetName()] = leaflist
     return ret
 
-def unique(seq):  
-    seen = {} 
-    result = [] 
-    for item in seq: 
+def unique(seq):
+    seen = {}
+    result = []
+    for item in seq:
         marker = item
-        if marker in seen: continue 
-        seen[marker] = 1 
-        result.append(item) 
+        if marker in seen: continue
+        seen[marker] = 1
+        result.append(item)
     return result
 
 cdef class Converter:
@@ -103,9 +105,9 @@ cdef class Converter:
     cdef object get_nptype(self):
         pass
 
-# create numpy array of given type code with 
+# create numpy array of given type code with
 # given numelement and size of each element
-# and write it to buffer 
+# and write it to buffer
 cdef inline int create_numpyarray(
         void* buffer, void* src, int typecode, int numele, int elesize):
     cdef np.npy_intp dims[1]
@@ -115,7 +117,7 @@ cdef inline int create_numpyarray(
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
     # increase one since we are putting in buffer directly
     Py_INCREF(tmp)
-    
+
     # copy to tmp.data
     cdef int nbytes = numele * elesize
     memcpy(tmp.data,src,nbytes)
@@ -135,7 +137,7 @@ cdef class VaryArray_NumpyConverter(Converter):
         self.conv = conv
         self.typecode = self.conv.get_nptypecode()
         self.elesize = conv.size
-    cdef int write(self,Column* col, void* buffer):       
+    cdef int write(self,Column* col, void* buffer):
         cdef int numele = col.getLen()
         cdef int elesize = self.elesize
         cdef void* src = col.GetValuePointer()
@@ -294,18 +296,18 @@ converters = {
 
     'Short_t':      BasicNumpy_Converter(2, np.int16, np.NPY_INT16),
     'UShort_t':     BasicNumpy_Converter(2, np.uint16, np.NPY_UINT8),
-    
+
     'Int_t':        BasicNumpy_Converter(4, np.int32, np.NPY_INT32),
     'UInt_t':       BasicNumpy_Converter(4, np.uint32, np.NPY_UINT32),
-    
+
     'Float_t':      BasicNumpy_Converter(4, np.float32, np.NPY_FLOAT32),
     'Double_t':     BasicNumpy_Converter(8, np.float64, np.NPY_FLOAT64),
-    
+
     'Long64_t':     BasicNumpy_Converter(8, np.int64, np.NPY_INT64),
     'ULong64_t':    BasicNumpy_Converter(8, np.uint64, np.NPY_UINT64),
-    
+
     'Bool_t':       BasicNumpy_Converter(1, np.bool, np.NPY_BOOL),
-    
+
     'vector<float>':VectorFloat_Converter(),
     'vector<double>':VectorDouble_Converter(),
     'vector<int>':  VectorInt_Converter(),
@@ -326,18 +328,18 @@ cdef Converter find_converter(Column* col):
 
 cdef np.ndarray initarray(vector[Column*] columns, int numEntries, list cv):
     cdef Column* thisCol
-    cdef Converter thisConv 
+    cdef Converter thisConv
 
     nst = []
     for i in range(columns.size()):
         thisCol = columns[i]
         thisConv = find_converter(thisCol)
         nst.append((thisCol.colname, thisConv.get_nptype()))
-        cv.append(thisConv)     
+        cv.append(thisConv)
     return np.empty(numEntries, dtype=nst)
 
 
-cdef object root2array_fromTTree(TTree* tree, branches, entries, offset, silent):
+cdef object root2array_fromTTree(TTree* tree, branches, entries, offset):
     # this is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
@@ -355,7 +357,7 @@ cdef object root2array_fromTTree(TTree* tree, branches, entries, offset, silent)
     cdef int nb
     cdef vector[Converter] cvarray
     try:
-        # parse the tree structure to determine 
+        # parse the tree structure to determine
         # whether to use shortname or long name
         # and loop through all leaves
         structure = parse_tree_structure(tree)
@@ -370,16 +372,17 @@ cdef object root2array_fromTTree(TTree* tree, branches, entries, offset, silent)
                     colname = branch if shortname else '%s_%s' % (branch, leaf)
                     thisCol = bc.MakeColumn(branch, leaf, colname)
                     columns.push_back(thisCol)
-                elif not silent:
-                    print ('Cannot convert leaf %s of branch %s with type %s (skipping)'
-                        % (branch, leaf, ltype))
+                else:
+                    msg = 'Cannot convert leaf %s of branch %s with type %s (skipping)'\
+                        % (branch, leaf, ltype)
+                    warnings.warn(msg, RootNumpyUnconvertibleWarning)
 
         # now we got all the columns time to make an appropriate array structure
         # first determine the correct size given tree size offset and entries
         if entries is None: entries = numEntries
         numEntries = min(max(numEntries - offset, 0), entries)
         # numEntries = min(entries, numEntries) if entries is not None else numEntries
-        
+
         arr = initarray(columns, numEntries, cv)
         numcol = columns.size()
         ientry = 0
@@ -400,20 +403,20 @@ cdef object root2array_fromTTree(TTree* tree, branches, entries, offset, silent)
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, entries, offset, silent):
+def root2array_fromFname(fnames, treename, branches, entries, offset):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
         ret = root2array_fromTTree(<TTree*> ttree, branches,
-                entries, offset, silent)
+                entries, offset)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, entries, offset, silent):
+def root2array_fromCObj(tree, branches, entries, offset):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented for the wrapper
@@ -421,4 +424,4 @@ def root2array_fromCObj(tree, branches, entries, offset, silent):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(chain, branches,
-            entries, offset, silent)
+            entries, offset)
