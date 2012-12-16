@@ -60,7 +60,8 @@ def lst(fname, treename=None):
     return _librootnumpy.list_structures(fname, treename)
 
 
-def root2array(fnames, treename=None, branches=None, entries=None, offset=0):
+def root2array(fnames, treename=None, branches=None,
+        entries=None, offset=0):
     """
     convert tree *treename* in root files specified in *fnames* to
     numpy structured array. Type conversion table
@@ -153,7 +154,8 @@ def root2array(fnames, treename=None, branches=None, entries=None, offset=0):
         filenames, treename, branches, entries, offset)
 
 
-def root2rec(fnames, treename=None, branches=None, entries=None, offset=0):
+def root2rec(fnames, treename=None, branches=None,
+        entries=None, offset=0):
     """
     read branches in tree treename in file(s) given by fnames can
     convert it to numpy recarray
@@ -164,7 +166,8 @@ def root2rec(fnames, treename=None, branches=None, entries=None, offset=0):
     .. seealso::
         :func:`root2array`
     """
-    return root2array(fnames, treename, branches, entries, offset).view(np.recarray)
+    return root2array(fnames, treename, branches,
+            entries, offset).view(np.recarray)
 
 
 def tree2array(tree, branches=None, entries=None, offset=0,
@@ -185,7 +188,8 @@ def tree2array(tree, branches=None, entries=None, offset=0,
         raise NotImplementedError()
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
-    arr = _librootnumpy.root2array_fromCObj(cobj, branches, entries, offset)
+    arr = _librootnumpy.root2array_fromCObj(cobj, branches,
+            entries, offset)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
