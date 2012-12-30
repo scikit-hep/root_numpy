@@ -31,12 +31,15 @@ Typical Usage
 		a = root2array('a.root','treename')
 		#load to numpy
 		a_rec = root2rec('a.root','treename')
-		
+
 
 Full Documentation
 ==================
 
 .. automodule:: root_numpy.root_numpy
+    :members:
+
+.. automodule:: root_numpy.nputil
     :members:
 
 .. _conversion_table:

@@ -7,6 +7,7 @@ from nose.tools import assert_equal, assert_almost_equal
 from numpy.testing import assert_array_equal
 from collections import OrderedDict
 from nose.tools import *
+from root_numpy.nputil import stretch
 
 class TestRootNumpy(unittest.TestCase):
 
@@ -229,6 +230,26 @@ class TestRootNumpy(unittest.TestCase):
         h = list()
         a = np.random.randn(100)
         fill_array(h,a)
+
+
+    def test_stretch(self):
+        nrec = 5
+        arr = np.empty(nrec, dtype=[('df1', 'O'), ('df2', 'O'), ('df3', 'O')])
+        for i in range(nrec):
+            df1 = np.array(range(i+1), dtype=np.float)
+            df2 = np.array(range(i+1), dtype=np.int)*2
+            df3 = np.array(range(i+1), dtype=np.double)*3
+            arr[i] = (df1, df2, df3)
+
+        stretched =  stretch(arr,['df1','df2','df3'])
+
+        assert_equal(stretched.dtype,
+            [('df1', np.float), ('df2', np.int), ('df3', np.double)])
+        assert_equal(stretched.size, 15)
+
+        assert_almost_equal(stretched.df1[14],4.0)
+        assert_almost_equal(stretched.df2[14],8)
+        assert_almost_equal(stretched.df3[14],12.0)
 
 
 if __name__ == '__main__':
