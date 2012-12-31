@@ -11,6 +11,7 @@ root_numpy/_librootnumpy.html
 *.d
 _build
 .coverage
+cover
 .project
 .Rhistory
 .pydevproject
