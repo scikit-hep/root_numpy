@@ -9,7 +9,8 @@ def _is_array_field(arr,col):
 def stretch(arr, col_names, asrecarray=True):
     """
     Stretch array. hstack multiple array fields and preserving
-    column names and rec array structure.
+    column names and rec array structure. If scalar field is specified,
+    it's stretched along with array field.
 
     **Arguments***
 
@@ -34,7 +35,8 @@ def stretch(arr, col_names, asrecarray=True):
             has_scalar_filed = True
 
     if not has_array_field:
-        raise RuntimeError('No array column specified. What are you trying to do?')
+        raise RuntimeError('No array column specified.'
+                           ' What are you trying to do?')
 
     vl = np.vectorize(len)
     len_array = vl(arr[first_array])
@@ -47,7 +49,11 @@ def stretch(arr, col_names, asrecarray=True):
         if _is_array_field(arr,c):
             #FIXME: this is kinda stupid since it put the stack
             #some where and copy over to return value
-            ret[c] = np.hstack(arr[c])
+            stack = np.hstack(arr[c])
+            if len(stack)!= numrec:
+                raise RuntimeError('Array filed length doesn\'t match'
+                    'Expect %d found %d in %s'%(numrec, len(stack), c))
+            ret[c] = stack
         else:
             #FIXME: this is kinda stupid since it put the repeat result
             #some where and copy over to return value
