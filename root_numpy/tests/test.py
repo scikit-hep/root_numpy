@@ -234,22 +234,30 @@ class TestRootNumpy(unittest.TestCase):
 
     def test_stretch(self):
         nrec = 5
-        arr = np.empty(nrec, dtype=[('df1', 'O'), ('df2', 'O'), ('df3', 'O')])
+        arr = np.empty(nrec, dtype=[('scalar',np.int), ('df1', 'O'),
+                                    ('df2', 'O'), ('df3', 'O')])
         for i in range(nrec):
+            scalar = i
             df1 = np.array(range(i+1), dtype=np.float)
             df2 = np.array(range(i+1), dtype=np.int)*2
             df3 = np.array(range(i+1), dtype=np.double)*3
-            arr[i] = (df1, df2, df3)
+            arr[i] = (i, df1, df2, df3)
 
-        stretched =  stretch(arr,['df1','df2','df3'])
+        stretched =  stretch(arr,['scalar','df1','df2','df3'])
 
         assert_equal(stretched.dtype,
-            [('df1', np.float), ('df2', np.int), ('df3', np.double)])
+            [('scalar', np.int), ('df1', np.float), ('df2', np.int), ('df3', np.double)])
         assert_equal(stretched.size, 15)
 
         assert_almost_equal(stretched.df1[14],4.0)
         assert_almost_equal(stretched.df2[14],8)
         assert_almost_equal(stretched.df3[14],12.0)
+        assert_almost_equal(stretched.scalar[14],4)
+        assert_almost_equal(stretched.scalar[13],4)
+        assert_almost_equal(stretched.scalar[12],4)
+        assert_almost_equal(stretched.scalar[11],4)
+        assert_almost_equal(stretched.scalar[10],4)
+        assert_almost_equal(stretched.scalar[9],3)
 
 
 if __name__ == '__main__':

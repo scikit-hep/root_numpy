@@ -2,9 +2,13 @@ __all__ = ['stretch']
 
 import numpy as np
 import numpy.lib.recfunctions as nprf
+
+def _is_array_field(arr,col):
+    return arr.dtype[col]=='O'#for now
+
 def stretch(arr, col_names, asrecarray=True):
     """
-    Stretch array. hstack multiple array fileds and preserving
+    Stretch array. hstack multiple array fields and preserving
     column names and rec array structure.
 
     **Arguments***
@@ -14,24 +18,40 @@ def stretch(arr, col_names, asrecarray=True):
         - **asrecarray** optional boolean. If `True` return recarray,
           `False` returns structured array. Default `True`
     """
-    #this can be implemented in a more memory efficient way but it works for now
-    #TODO: support scalar field copying
-    hs = np.hstack
+    dt = []
+    has_array_field = False
+    has_scalar_filed = False
+    first_array = None
 
-    flat_list = [hs(arr[s]) for s in col_names]
+    #construct dtype
+    for c in col_names:
+        if _is_array_field(arr,c):
+            dt.append((c, arr[c][0].dtype))
+            has_array_field = True
+            first_array = c if first_array is None else first_array
+        else:#assume scalar
+            dt.append((c, arr[c].dtype))
+            has_scalar_filed = True
 
-    numrec = flat_list[0].size
-    for f in flat_list:
-        if f.size!=numrec:
-            raise RuntimeError('the length of given arrays does not match.'
-                ' expect: %d found %d in %r'%(numrec, f.size,f.dtype))
+    if not has_array_field:
+        raise RuntimeError('No array column specified. What are you trying to do?')
 
-    dt = [(s, f.dtype) for s, f in zip(col_names, flat_list)]
+    vl = np.vectorize(len)
+    len_array = vl(arr[first_array])
+
+    numrec = np.sum(len_array)
 
     ret = np.empty(numrec, dtype=dt)
 
-    for s,f in zip(col_names, flat_list):
-        ret[s] = f
+    for c in col_names:
+        if _is_array_field(arr,c):
+            #FIXME: this is kinda stupid since it put the stack
+            #some where and copy over to return value
+            ret[c] = np.hstack(arr[c])
+        else:
+            #FIXME: this is kinda stupid since it put the repeat result
+            #some where and copy over to return value
+            ret[c] = np.repeat(arr[c],len_array)
 
     if asrecarray:
         ret = ret.view(np.recarray)
