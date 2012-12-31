@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>root_numpy &mdash; root_numpy 2.0.1 documentation</title>
+    <title>root_numpy &mdash; root_numpy 2.0.3 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '2.0.1',
+        VERSION:     '2.0.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="root_numpy 2.0.1 documentation" href="#" /> 
+    <link rel="top" title="root_numpy 2.0.3 documentation" href="#" /> 
   </head>
   <body>
     <div class="related">
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="#">root_numpy 2.0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">root_numpy 2.0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,6 +50,9 @@
 <p><strong>root_numpy</strong> is a python library for converting <a class="reference external" href="http://root.cern.ch/">ROOT</a>  TTree to <a class="reference external" href="http://numpy.scipy.org/">numpy</a> <a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.rec.html">structure array</a> or <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html">record array</a>. The library is written in C++ and <a class="reference external" href="http://cython.org/">Cython</a> and is much faster than PyROOT. It supports scalar, array of scalar and vector of basic types(int float double etc.).</p>
 <div class="section" id="download-and-install">
 <h2>Download and Install<a class="headerlink" href="#download-and-install" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><tt class="docutils literal"><span class="pre">easy_install</span> <span class="pre">root_numpy</span></tt></div></blockquote>
+<p>or</p>
 <blockquote>
 <div><tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">root_numpy</span></tt></div></blockquote>
 </div>
@@ -200,6 +203,23 @@ see <a class="reference internal" href="#root_numpy.root_numpy.root2array" title
 <dd><p>Fill a ROOT histogram with a NumPy array</p>
 </dd></dl>
 
+<span class="target" id="module-root_numpy.nputil"></span><dl class="function">
+<dt id="root_numpy.nputil.stretch">
+<tt class="descname">stretch</tt><big>(</big><em>arr</em>, <em>col_names</em>, <em>asrecarray=True</em><big>)</big><a class="reference internal" href="_modules/root_numpy/nputil.html#stretch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.nputil.stretch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stretch array. hstack multiple array fields and preserving
+column names and rec array structure. If scalar field is specified,
+it&#8217;s stretched along with array field.</p>
+<p><strong>Arguments*</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>arr</strong> numpy structured array or recarray</li>
+<li><strong>colnames</strong> list of column names to stretch</li>
+<li><strong>asrecarray</strong> optional boolean. If <cite>True</cite> return recarray,
+<cite>False</cite> returns structured array. Default <cite>True</cite></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
 </div>
 <div class="section" id="type-conversion-table">
 <span id="conversion-table"></span><h1>Type Conversion Table<a class="headerlink" href="#type-conversion-table" title="Permalink to this headline">¶</a></h1>
@@ -311,7 +331,7 @@ see <a class="reference internal" href="#root_numpy.root_numpy.root2array" title
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="#">root_numpy 2.0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">root_numpy 2.0.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
