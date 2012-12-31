@@ -9,6 +9,10 @@ root_numpy
 Download and Install
 ^^^^^^^^^^^^^^^^^^^^
 
+    ``easy_install root_numpy``
+
+or
+
     ``pip install root_numpy``
 
 Obtaining Source Code
