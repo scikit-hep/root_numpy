@@ -9,6 +9,10 @@ root_numpy
 Download and Install
 ^^^^^^^^^^^^^^^^^^^^
 
+    ``easy_install root_numpy``
+
+or
+
     ``pip install root_numpy``
 
 Obtaining Source Code
@@ -31,12 +35,15 @@ Typical Usage
 		a = root2array('a.root','treename')
 		#load to numpy
 		a_rec = root2rec('a.root','treename')
-		
+
 
 Full Documentation
 ==================
 
 .. automodule:: root_numpy.root_numpy
+    :members:
+
+.. automodule:: root_numpy.nputil
     :members:
 
 .. _conversion_table:
@@ -65,4 +72,6 @@ x[nx]        np.object
 vector<t>    np.object
 ===========  =========================
 
-Variable length array (`particletype[nparticle]`) and vector (`vector<int>`) are converted to object of numpy array of corresponding types. Fixed length array is converted to fixed length array field in numpy.
+Variable length array (`particletype[nparticle]`) and vector (`vector<int>`)
+are converted to object of numpy array of corresponding types. Fixed length
+array is converted to fixed length array field in numpy.
