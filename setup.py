@@ -1,10 +1,4 @@
 #!/usr/bin/env python
-
-from distribute_setup import use_setuptools
-use_setuptools()
-
-from setuptools import setup, find_packages
-
 from distutils.core import setup, Extension
 import distutils.util
 import subprocess
@@ -54,7 +48,7 @@ setup(
     url='https://github.com/rootpy/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
-    packages=find_packages(),
+    packages=['root_numpy','root_numpy.tests'],
     package_data={
         'root_numpy': ['tests/*.root']},
     ext_modules=[librootnumpy, libnumpyhist],
