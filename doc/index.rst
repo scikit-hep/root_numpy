@@ -9,6 +9,10 @@ root_numpy
 Download and Install
 ^^^^^^^^^^^^^^^^^^^^
 
+    ``easy_install root_numpy``
+
+or
+
     ``pip install root_numpy``
 
 Obtaining Source Code
@@ -68,4 +72,6 @@ x[nx]        np.object
 vector<t>    np.object
 ===========  =========================
 
-Variable length array (`particletype[nparticle]`) and vector (`vector<int>`) are converted to object of numpy array of corresponding types. Fixed length array is converted to fixed length array field in numpy.
+Variable length array (`particletype[nparticle]`) and vector (`vector<int>`)
+are converted to object of numpy array of corresponding types. Fixed length
+array is converted to fixed length array field in numpy.
