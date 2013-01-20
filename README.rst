@@ -24,7 +24,7 @@ Vectors of basic types are also supported.
 
 Tab completion for numpy.recarray column names (yourdata.<TAB>)
 is also available with this
-`numpy patch <https://github.com/piti118/numpy/commit/a996292238ab98dcf53f2d48476d637eab9f1a72>`_
+`numpy extension <https://github.com/piti118/inumpy>`_.
 
 The `rootpy <http://rootpy.org>`_ package also provides a script that uses
 root_numpy and `PyTables <http://www.pytables.org>`_ to convert all TTrees
