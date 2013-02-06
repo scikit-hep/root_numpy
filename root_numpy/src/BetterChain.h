@@ -1,5 +1,6 @@
 #ifndef __BETTER_CHAIN_H
 #define __BETTER_CHAIN_H
+
 #include <Python.h>
 #include <string>
 #include <iostream>
@@ -7,21 +8,24 @@
 #include <TFile.h>
 #include <TChain.h>
 #include <TLeaf.h>
-#include <map>
+#include <TTreeFormula.h>
+#include <TObject.h>
 
+#include <map>
+#include <vector>
 #include <cassert>
 #include <set>
 #include <iomanip>
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
-#include <TObject.h>
 
 #include "Column.h"
 #include "util.h"
+
 using namespace std;
 
-//correct TChain implementation with cache TLeaf*
+// Correct TChain implementation with cache TLeaf*
 class BetterChain
 {
     public:
@@ -39,7 +43,8 @@ class BetterChain
             //fChain->SetCacheSize(10000000);
         }
 
-        ~BetterChain(){
+        ~BetterChain()
+        {
             if (!fChain)
                 return; // Somehow i need this (copy from make class)
 
@@ -47,8 +52,15 @@ class BetterChain
             //delete fChain->GetCurrentFile(); // ROOT does something funny
 
             LeafCache::iterator it;
-            for(it=leafcache.begin();it!=leafcache.end();++it){
+            for(it = leafcache.begin(); it != leafcache.end(); ++it)
+            {
                 delete it->second;
+            }
+
+            vector<TTreeFormula*>::iterator fit;
+            for (fit = formulae.begin(); fit != formulae.end(); ++fit)
+            {
+                delete *fit;
             }
 
             delete notifier;
@@ -56,19 +68,40 @@ class BetterChain
 
         int LoadTree(int entry)
         {
-            if (!fChain) return -5;
+            if (!fChain)
+                return -5;
             //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
             Long64_t centry = fChain->LoadTree(entry);
             //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
-            if (centry < 0) return centry;
-            if (fChain->GetTreeNumber() != fCurrent) {
+            if (centry < 0)
+                return centry;
+            if (fChain->GetTreeNumber() != fCurrent)
+            {
                 fCurrent = fChain->GetTreeNumber();
             }
-            if(notifier->notified){
+            if(notifier->notified)
+            {
                 Notify();
+                UpdateFormulaLeaves();
                 notifier->notified=false;
             }
             return centry;
+        }
+
+        void UpdateFormulaLeaves()
+        {
+            // Update all formula leaves
+            vector<TTreeFormula*>::iterator it;
+            for (it = formulae.begin(); it != formulae.end(); ++it)
+            {
+                (*it)->UpdateFormulaLeaves();
+            }
+        }
+
+        void AddFormula(TTreeFormula* formula)
+        {
+            // The BetterChain will take ownership of the formula
+            formulae.push_back(formula);
         }
 
         int GetEntry(int entry)
@@ -90,10 +123,11 @@ class BetterChain
 
         void Notify()
         {
-            //taking care of all the leaves
+            // Taking care of all the leaves
             //RNDEBUG("NOTIFY");
             LeafCache::iterator it;
-            for(it=leafcache.begin();it!=leafcache.end();++it){
+            for(it = leafcache.begin(); it != leafcache.end(); ++it)
+            {
                 string bname = it->first.first;
                 string lname = it->first.second;
                 TBranch* branch = fChain->FindBranch(bname.c_str());
@@ -118,8 +152,7 @@ class BetterChain
 
         int GetEntries()
         {
-            int ret = fChain->GetEntries();
-            return ret;
+            return fChain->GetEntries();
         }
 
         TBranch* FindBranch(const char* bname)
@@ -152,13 +185,12 @@ class BetterChain
                 return 0;
             }
 
-            //make the branch active
-            //and cache it
+            // Make the branch active and cache it
             fChain->SetBranchStatus(bname.c_str(), 1);
-            fChain->AddBranchToCache(branch,kTRUE);
-            //and the length leaf as well
+            fChain->AddBranchToCache(branch, kTRUE);
+            // and the length leaf as well
 
-            //TODO Does it work if user dont' want length column in the structure?
+            //TODO Does it work if user doesn't want the length column in the structure?
             TLeaf* leafCount = leaf->GetLeafCount();
             if (leafCount != 0)
             {
@@ -167,10 +199,10 @@ class BetterChain
             }
 
             BL bl = make_pair(bname,lname);
-            Column* ret = Column::build(leaf,colname);
+            Column* ret = Column::build(leaf, colname);
             if (ret == 0)
                 return 0;
-            leafcache.insert(make_pair(bl,ret));
+            leafcache.insert(make_pair(bl, ret));
             return ret;
         }
 
@@ -199,11 +231,14 @@ class BetterChain
         int fCurrent;
         int ientry;
         MiniNotify* notifier;
+        vector<TTreeFormula*> formulae;
 
-        typedef pair<string,string> BL; //branch name to leaf name conversion
-        typedef map<BL,Column*> LeafCache;
-        //column pointer cache since the leaf inside needs to be updated
-        //when new file is loaded in the chain
+        // Branch name to leaf name conversion
+        typedef pair<string, string> BL;
+        typedef map<BL, Column*> LeafCache;
+
+        // Column pointer cache since the leaf inside needs to be updated
+        // when new file is loaded in the chain
         LeafCache leafcache;
 
 };

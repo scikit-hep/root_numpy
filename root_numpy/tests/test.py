@@ -135,7 +135,9 @@ class TestRootNumpy(unittest.TestCase):
     def test_selection(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
-        a = tree2array(chain, selection="d_double > 1")
+        chain.Add(self.ld('single2.root'))
+        a = tree2rec(chain, selection="d_double > 100")
+        assert_equal((a['d_double'] <= 100).any(), False)
 
 
     @raises(TypeError)

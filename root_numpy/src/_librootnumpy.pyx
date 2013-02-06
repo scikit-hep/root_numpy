@@ -394,6 +394,9 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             if formula == NULL or formula.GetNdim() == 0:
                 del formula
                 raise ValueError("could not compile selection formula")
+            # The chain will take care of updating the formula leaves when
+            # rolling over to the next tree.
+            bc.AddFormula(formula)
     
         # Now that we have all the columns we can
         # make an appropriate array structure
@@ -418,7 +421,6 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             ientry += 1
             # Following code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
             if formula != NULL:
-                # TODO: if GetTreeNumber changes then UpdateFormulaLeaves
                 ndata = formula.GetNdata()
                 keep = False
                 for current from 0 <= current < ndata:
