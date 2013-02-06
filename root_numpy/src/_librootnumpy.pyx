@@ -416,7 +416,9 @@ cdef object root2array_fromTTree(TTree* tree, branches,
 
         while bc.Next() != 0 and ientry < numEntries:
             ientry += 1
+            # Following code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
             if formula != NULL:
+                # TODO: if GetTreeNumber changes then UpdateFormulaLeaves
                 ndata = formula.GetNdata()
                 keep = False
                 for current from 0 <= current < ndata:
@@ -434,6 +436,11 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             ientry_selected += 1
     finally:
         del bc
+    
+    # If we selected less than the numEntries entries then shrink the array
+    if ientry_selected < numEntries:
+        arr.resize(ientry_selected)
+
     return arr
 
 
