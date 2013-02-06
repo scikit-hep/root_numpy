@@ -12,7 +12,6 @@ cdef extern from "TObject.h":
         const_char* GetName()
         const_char* ClassName()
 
-
 cdef extern from "TObjArray.h":
     cdef cppclass TObjArray:
         TObject* At(int i)
@@ -60,6 +59,11 @@ cdef extern from "TList.h":
         TObject* At(int idx)
         int GetEntries()
 
+cdef extern from "TTreeFormula.h":
+    cdef cppclass TTreeFormula:
+        TTreeFormula(const_char*, const_char*, TTree*)
+        int GetNdim()
+
 cdef extern from "Column.h":
     cdef enum ColumnType:
         SINGLE, FIXED, VARY
@@ -83,6 +87,7 @@ cdef extern from "BetterChain.h":
         Column* MakeColumn(string bname, string lname, string colname)
         int GetEntries()
         int GetEntry(int i)
+        TTree* fChain
 
 cdef extern from "util.h":
     cdef void* shift(void*, int)
