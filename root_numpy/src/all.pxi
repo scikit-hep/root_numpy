@@ -63,6 +63,8 @@ cdef extern from "TTreeFormula.h":
     cdef cppclass TTreeFormula:
         TTreeFormula(const_char*, const_char*, TTree*)
         int GetNdim()
+        int GetNdata()
+        double EvalInstance(int)
 
 cdef extern from "Column.h":
     cdef enum ColumnType:

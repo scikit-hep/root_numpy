@@ -170,7 +170,7 @@ def root2rec(fnames, treename=None, branches=None,
             entries, offset).view(np.recarray)
 
 
-def tree2array(tree, branches=None, entries=None, offset=0,
+def tree2array(tree, branches=None, entries=None, offset=0, selection=None,
         include_weight=False,
         weight_name='weight',
         weight_dtype='f4'):
@@ -189,13 +189,13 @@ def tree2array(tree, branches=None, entries=None, offset=0,
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(cobj, branches,
-            entries, offset)
+            entries, offset, selection)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
 
 
-def tree2rec(tree, branches=None, entries=None, offset=0,
+def tree2rec(tree, branches=None, entries=None, offset=0, selection=None,
         include_weight=False,
         weight_name='weight',
         weight_dtype='f4'):
@@ -204,6 +204,7 @@ def tree2rec(tree, branches=None, entries=None, offset=0,
     see :func:`root2array` for details on parameters.
     """
     return tree2array(tree, branches, entries, offset,
+            selection=selection,
             include_weight=include_weight,
             weight_name=weight_name,
             weight_dtype=weight_dtype).view(np.recarray)

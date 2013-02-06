@@ -132,6 +132,12 @@ class TestRootNumpy(unittest.TestCase):
         self.check_single(tree2array(chain))
 
 
+    def test_selection(self):
+        chain = TChain('tree')
+        chain.Add(self.ld('single1.root'))
+        a = tree2array(chain, selection="d_double > 1")
+
+
     @raises(TypeError)
     def test_tree2array_wrongtype(self):
         a = list()

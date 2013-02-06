@@ -363,16 +363,6 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     cdef bytes py_select_formula
     cdef char* select_formula
 
-    # Setup the selection if we have one
-    if selection:
-        py_select_formula = str(selection)
-        select_formula = py_select_formula
-        formula = new TTreeFormula("selection", select_formula, bc.fChain)
-        if formula == NULL or formula.GetNdim() == 0:
-            del formula
-            del bc
-            raise ValueError()
-
     try:
         # Parse the tree structure to determine
         # whether to use short or long name
@@ -396,6 +386,15 @@ cdef object root2array_fromTTree(TTree* tree, branches,
                         'with type %s (skipping)' % (branch, leaf, ltype),
                         RootNumpyUnconvertibleWarning)
         
+        # Setup the selection if we have one
+        if selection:
+            py_select_formula = str(selection)
+            select_formula = py_select_formula
+            formula = new TTreeFormula("selection", select_formula, bc.fChain)
+            if formula == NULL or formula.GetNdim() == 0:
+                del formula
+                raise ValueError("could not compile selection formula")
+    
         # Now that we have all the columns we can
         # make an appropriate array structure
         # First determine the correct size given tree size, offset, and entries
@@ -406,6 +405,7 @@ cdef object root2array_fromTTree(TTree* tree, branches,
         arr = initarray(columns, numEntries, cv)
         numcol = columns.size()
         ientry = 0
+        ientry_selected = 0
         bc.GetEntry(offset)
         
         # Convert cv list to cvarray for speed
@@ -415,32 +415,44 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             cvarray.push_back(c)
 
         while bc.Next() != 0 and ientry < numEntries:
-            dataptr = np.PyArray_GETPTR1(arr, ientry)
+            ientry += 1
+            if formula != NULL:
+                ndata = formula.GetNdata()
+                keep = False
+                for current from 0 <= current < ndata:
+                    keep |= (formula.EvalInstance(current) != 0)
+                    if keep:
+                        break
+                if not keep:
+                    continue
+            dataptr = np.PyArray_GETPTR1(arr, ientry_selected)
             for icol in range(numcol):
                 thisCol = columns[icol]
                 thisCV = cvarray[icol]
                 nb = thisCV.write(thisCol, dataptr)
                 dataptr = shift(dataptr, nb) # poorman pointer magic
-            ientry += 1
+            ientry_selected += 1
     finally:
         del bc
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, entries, offset):
+def root2array_fromFname(fnames, treename, branches, entries, offset,
+                         selection=None):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
         ret = root2array_fromTTree(<TTree*> ttree, branches,
-                entries, offset)
+                entries, offset, selection)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, entries, offset):
+def root2array_fromCObj(tree, branches, entries, offset,
+                        selection=None):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented for the wrapper
@@ -448,4 +460,4 @@ def root2array_fromCObj(tree, branches, entries, offset):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(chain, branches,
-            entries, offset)
+            entries, offset, selection)

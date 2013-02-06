@@ -154,7 +154,7 @@ class BetterChain
 
             //make the branch active
             //and cache it
-            fChain->SetBranchStatus(bname.c_str(),1);
+            fChain->SetBranchStatus(bname.c_str(), 1);
             fChain->AddBranchToCache(branch,kTRUE);
             //and the length leaf as well
 
@@ -162,8 +162,8 @@ class BetterChain
             TLeaf* leafCount = leaf->GetLeafCount();
             if (leafCount != 0)
             {
-                fChain->SetBranchStatus(leafCount->GetBranch()->GetName(),1);
-                fChain->AddBranchToCache(leafCount->GetBranch(),kTRUE);
+                fChain->SetBranchStatus(leafCount->GetBranch()->GetName(), 1);
+                fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);
             }
 
             BL bl = make_pair(bname,lname);
