@@ -38,8 +38,6 @@ class BetterChain
             notifier = new MiniNotify(fChain->GetNotify());
             fChain->SetNotify(notifier);
             LoadTree(0);
-            // Disable all branches
-            fChain->SetBranchStatus("*", 0);
             //fChain->SetCacheSize(10000000);
         }
 
@@ -57,6 +55,7 @@ class BetterChain
                 delete it->second;
             }
 
+            // BetterChain owns the formulae and so we delete them here
             vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
@@ -82,26 +81,43 @@ class BetterChain
             if(notifier->notified)
             {
                 Notify();
-                UpdateFormulaLeaves();
                 notifier->notified=false;
             }
             return centry;
         }
 
-        void UpdateFormulaLeaves()
-        {
-            // Update all formula leaves
-            vector<TTreeFormula*>::iterator it;
-            for (it = formulae.begin(); it != formulae.end(); ++it)
-            {
-                (*it)->UpdateFormulaLeaves();
-            }
-        }
-
         void AddFormula(TTreeFormula* formula)
         {
             // The BetterChain will take ownership of the formula
+            if (formula == NULL)
+                return;
             formulae.push_back(formula);
+        }
+
+        void InitBranches()
+        {
+            // Call this after all formulae have been defined but before
+            // MakeColumn. The branches must be activated at the time a
+            // TTreeFormula is created.
+
+            // Disable all branches
+            fChain->SetBranchStatus("*", 0);
+
+            // Activate all branches used by the formulae
+            int ncodes;
+            TBranch* branch;
+            vector<TTreeFormula*>::iterator fit;
+            for (fit = formulae.begin(); fit != formulae.end(); ++fit)
+            {
+                ncodes = (*fit)->GetNcodes();
+                for (int n = 0; n < ncodes; ++n)
+                {
+                    branch = (*fit)->GetLeaf(n)->GetBranch();
+                    // Make the branch active and cache it
+                    fChain->SetBranchStatus(branch->GetName(), 1);
+                    fChain->AddBranchToCache(branch, kTRUE);
+                }
+            }
         }
 
         int GetEntry(int entry)
@@ -148,6 +164,13 @@ class BetterChain
                 it->second->SetLeaf(leaf, true);
                 it->second->skipped = false;
             }
+
+            // Update all formula leaves
+            vector<TTreeFormula*>::iterator fit;
+            for (fit = formulae.begin(); fit != formulae.end(); ++fit)
+            {
+                (*fit)->UpdateFormulaLeaves();
+            }
         }
 
         int GetEntries()
@@ -192,7 +215,7 @@ class BetterChain
 
             //TODO Does it work if user doesn't want the length column in the structure?
             TLeaf* leafCount = leaf->GetLeafCount();
-            if (leafCount != 0)
+            if (leafCount != NULL)
             {
                 fChain->SetBranchStatus(leafCount->GetBranch()->GetName(), 1);
                 fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);

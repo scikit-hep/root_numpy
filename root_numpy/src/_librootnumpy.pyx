@@ -364,6 +364,22 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     cdef char* select_formula
 
     try:
+        # Setup the selection if we have one
+        if selection:
+            py_select_formula = str(selection)
+            select_formula = py_select_formula
+            formula = new TTreeFormula("selection", select_formula, bc.fChain)
+            if formula == NULL or formula.GetNdim() == 0:
+                del formula
+                raise ValueError("could not compile selection formula")
+            # The chain will take care of updating the formula leaves when
+            # rolling over to the next tree.
+            bc.AddFormula(formula)
+        
+        # Activate branches used by formulae and deactivate all others
+        # MakeColumn will active the ones needed for the output array
+        bc.InitBranches()
+
         # Parse the tree structure to determine
         # whether to use short or long name
         # and loop through all leaves
@@ -386,18 +402,6 @@ cdef object root2array_fromTTree(TTree* tree, branches,
                         'with type %s (skipping)' % (branch, leaf, ltype),
                         RootNumpyUnconvertibleWarning)
         
-        # Setup the selection if we have one
-        if selection:
-            py_select_formula = str(selection)
-            select_formula = py_select_formula
-            formula = new TTreeFormula("selection", select_formula, bc.fChain)
-            if formula == NULL or formula.GetNdim() == 0:
-                del formula
-                raise ValueError("could not compile selection formula")
-            # The chain will take care of updating the formula leaves when
-            # rolling over to the next tree.
-            bc.AddFormula(formula)
-    
         # Now that we have all the columns we can
         # make an appropriate array structure
         # First determine the correct size given tree size, offset, and entries

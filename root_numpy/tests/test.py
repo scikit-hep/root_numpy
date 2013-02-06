@@ -125,6 +125,10 @@ class TestRootNumpy(unittest.TestCase):
         a = tree2rec(chain, selection="d_double > 100")
         assert_equal((a['d_double'] <= 100).any(), False)
 
+        # selection with differing variables in branches and expression
+        a = tree2array(chain, branches=['d_double'],
+                              selection="f_float < 100 && n_int%2 == 1")
+
     @raises(TypeError)
     def test_tree2array_wrongtype(self):
         a = list()

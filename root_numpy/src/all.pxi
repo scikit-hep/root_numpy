@@ -91,6 +91,7 @@ cdef extern from "BetterChain.h":
         int GetEntry(int i)
         TTree* fChain
         void AddFormula(TTreeFormula* formula)
+        void InitBranches()
 
 cdef extern from "util.h":
     cdef void* shift(void*, int)
