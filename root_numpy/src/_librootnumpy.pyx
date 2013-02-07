@@ -127,6 +127,25 @@ cdef inline int create_numpyarray(
 
     return sizeof(tmpobj)
 
+# special treatment for vector<bool>
+cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
+    cdef int numele = src.size()
+    cdef np.npy_intp dims[1]
+    dims[0] = numele;
+    cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+
+    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
+    # increase one since we are putting in buffer directly
+    Py_INCREF(tmp)
+
+    # can't use memcpy here...
+    for i from 0 <= i < numele:
+        tmp[i] = src.at(i)
+
+    # now write PyObject* to buffer
+    memcpy(buffer, &tmpobj, sizeof(PyObject*))
+
+    return sizeof(tmpobj)
 
 cdef class VaryArray_NumpyConverter(Converter):
     cdef BasicNumpy_Converter conv # converter for single element
@@ -185,6 +204,7 @@ cdef class BasicNumpy_Converter(Converter):
     cdef int get_nptypecode(self):
         return self.nptypecode
 
+
 cdef class VectorFloat_Converter(Converter):
     cdef int elesize
     cdef int nptypecode
@@ -205,6 +225,7 @@ cdef class VectorFloat_Converter(Converter):
         return np.object
     cdef object get_nptypecode(self):
         return np.NPY_OBJECT
+
 
 cdef class VectorDouble_Converter(Converter):
     cdef int elesize
@@ -227,6 +248,7 @@ cdef class VectorDouble_Converter(Converter):
     cdef object get_nptypecode(self):
         return np.NPY_OBJECT
 
+
 cdef class VectorInt_Converter(Converter):
     cdef int elesize
     cdef int nptypecode
@@ -247,6 +269,7 @@ cdef class VectorInt_Converter(Converter):
         return np.object
     cdef object get_nptypecode(self):
         return np.NPY_OBJECT
+
 
 cdef class VectorLong_Converter(Converter):
     cdef int elesize
@@ -269,6 +292,7 @@ cdef class VectorLong_Converter(Converter):
     cdef object get_nptypecode(self):
         return np.NPY_OBJECT
 
+
 cdef class VectorChar_Converter(Converter):
     cdef int elesize
     cdef int nptypecode
@@ -289,6 +313,18 @@ cdef class VectorChar_Converter(Converter):
         return np.object
     cdef object get_nptypecode(self):
         return np.NPY_OBJECT
+
+
+cdef class VectorBool_Converter(Converter):
+    # Requires special treament since vector<bool> stores contents as bits...
+    cdef int write(self,Column* col, void* buffer):
+        cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
+        return create_numpyarray_vectorbool(buffer, tmp)
+    cdef object get_nptype(self):
+        return np.object
+    cdef object get_nptypecode(self):
+        return np.NPY_OBJECT
+
 
 converters = {
     'Char_t':       BasicNumpy_Converter(1, np.int8, np.NPY_INT8),
@@ -313,6 +349,7 @@ converters = {
     'vector<int>':  VectorInt_Converter(),
     'vector<long>': VectorLong_Converter(),
     'vector<char>': VectorChar_Converter(),
+    'vector<bool>': VectorBool_Converter(),
 }
 
 

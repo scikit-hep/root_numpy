@@ -161,13 +161,15 @@ class TestRootNumpy(unittest.TestCase):
              ('v_f', 'O'),
              ('v_d', 'O'),
              ('v_l', 'O'),
-             ('v_c', 'O')])
+             ('v_c', 'O'),
+             ('v_b', 'O')])
 
         assert_equal(a.v_i[1].dtype, np.int32)
         assert_equal(a.v_f[1].dtype, np.float32)
         assert_equal(a.v_d[1].dtype, np.float64)
         assert_equal(a.v_l[1].dtype, np.int64)
         assert_equal(a.v_c[1].dtype, np.int8)
+        assert_equal(a.v_b[1].dtype, np.bool)
 
         #check couple value
         assert_equal(a.v_i[1][0], 1)
