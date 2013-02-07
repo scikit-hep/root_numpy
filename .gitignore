@@ -5,6 +5,7 @@ coverage
 *.egg
 *.egg-info
 *.so
+*.o
 .DS_Store
 *.pyc
 root_numpy/_librootnumpy.html
