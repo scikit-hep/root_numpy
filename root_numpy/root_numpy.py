@@ -61,7 +61,7 @@ def lst(fname, treename=None):
 
 
 def root2array(fnames, treename=None, branches=None,
-        entries=None, offset=0):
+               entries=None, offset=0, selection=None):
     """
     convert tree *treename* in root files specified in *fnames* to
     numpy structured array. Type conversion table
@@ -87,6 +87,8 @@ def root2array(fnames, treename=None, branches=None,
         useful for testing out stuff
 
         *offset (optional)*: start index (first one is 0)
+
+        *selection (optional)*: only include entries passing a cut expression
 
     **Example**
 
@@ -151,11 +153,11 @@ def root2array(fnames, treename=None, branches=None,
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        filenames, treename, branches, entries, offset)
+        filenames, treename, branches, entries, offset, selection)
 
 
 def root2rec(fnames, treename=None, branches=None,
-        entries=None, offset=0):
+             entries=None, offset=0, selection=None):
     """
     read branches in tree treename in file(s) given by fnames can
     convert it to numpy recarray
@@ -167,13 +169,14 @@ def root2rec(fnames, treename=None, branches=None,
         :func:`root2array`
     """
     return root2array(fnames, treename, branches,
-            entries, offset).view(np.recarray)
+                      entries, offset, selection).view(np.recarray)
 
 
-def tree2array(tree, branches=None, entries=None, offset=0, selection=None,
-        include_weight=False,
-        weight_name='weight',
-        weight_dtype='f4'):
+def tree2array(tree, branches=None,
+               entries=None, offset=0, selection=None,
+               include_weight=False,
+               weight_name='weight',
+               weight_dtype='f4'):
     """
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameter
@@ -188,23 +191,24 @@ def tree2array(tree, branches=None, entries=None, offset=0, selection=None,
         raise NotImplementedError()
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
-    arr = _librootnumpy.root2array_fromCObj(cobj, branches,
-            entries, offset, selection)
+    arr = _librootnumpy.root2array_fromCObj(
+            cobj, branches, entries, offset, selection)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
 
 
-def tree2rec(tree, branches=None, entries=None, offset=0, selection=None,
-        include_weight=False,
-        weight_name='weight',
-        weight_dtype='f4'):
+def tree2rec(tree, branches=None,
+             entries=None, offset=0, selection=None,
+             include_weight=False,
+             weight_name='weight',
+             weight_dtype='f4'):
     """
     convert PyROOT TTree *tree* to numpy structured array
     see :func:`root2array` for details on parameters.
     """
     return tree2array(tree, branches, entries, offset,
-            selection=selection,
+            selection,
             include_weight=include_weight,
             weight_name=weight_name,
             weight_dtype=weight_dtype).view(np.recarray)

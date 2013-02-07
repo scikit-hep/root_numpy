@@ -340,8 +340,7 @@ cdef np.ndarray initarray(vector[Column*] columns, int numEntries, list cv):
 
 
 cdef object root2array_fromTTree(TTree* tree, branches,
-                                 entries, offset,
-                                 selection=None):
+                                 entries, offset, selection):
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
@@ -450,27 +449,25 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, entries, offset,
-                         selection=None):
+def root2array_fromFname(fnames, treename, branches, entries, offset, selection):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
-        ret = root2array_fromTTree(<TTree*> ttree, branches,
-                entries, offset, selection)
+        ret = root2array_fromTTree(
+                <TTree*> ttree, branches, entries, offset, selection)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, entries, offset,
-                        selection=None):
+def root2array_fromCObj(tree, branches, entries, offset, selection):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented for the wrapper
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
-    return root2array_fromTTree(chain, branches,
-            entries, offset, selection)
+    return root2array_fromTTree(
+            chain, branches, entries, offset, selection)
