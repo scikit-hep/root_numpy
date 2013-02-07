@@ -38,6 +38,25 @@ class BetterChain
             notifier = new MiniNotify(fChain->GetNotify());
             fChain->SetNotify(notifier);
             LoadTree(0);
+
+            // Remember original branch status
+            TObjArray* branches = fChain->GetListOfBranches();
+            int ibranch, nbranches;
+            TBranch* branch;
+            nbranches = branches->GetEntries();
+            for (ibranch = 0; ibranch < nbranches; ++ibranch)
+            {
+                branch = (TBranch*) branches->At(ibranch);
+                original_branch_status[branch->GetName()] =
+                    branch->TestBit(kDoNotProcess) == 0;
+                // Only the required branches will be added to the cache later
+                fChain->DropBranchFromCache(branch, kTRUE);
+            }
+            // Enable all branches since we don't know yet which branches are
+            // required by the selection expression. All branches will be
+            // disabled in InitBranches() before only enabling the ones that are
+            // actually required in InitBranches() and MakeColumn()
+            fChain->SetBranchStatus("*", 1);
             //fChain->SetCacheSize(10000000);
         }
 
@@ -45,6 +64,16 @@ class BetterChain
         {
             if (!fChain)
                 return; // Somehow i need this (copy from make class)
+
+            // Revert branches to their original activated/deactivated state
+            map<string, bool>::iterator status_it;
+            for (status_it = original_branch_status.begin();
+                 status_it != original_branch_status.end();
+                 ++status_it)
+            {
+                fChain->SetBranchStatus(status_it->first.c_str(),
+                                        status_it->second);
+            }
 
             fChain->SetNotify(notifier->oldnotify); // Do not switch these two lines!
             //delete fChain->GetCurrentFile(); // ROOT does something funny
@@ -97,8 +126,8 @@ class BetterChain
         void InitBranches()
         {
             // Call this after all formulae have been defined but before
-            // MakeColumn. The branches must be activated at the time a
-            // TTreeFormula is created.
+            // MakeColumn. The branches must be activated when a
+            // TTreeFormula is initially created.
 
             // Disable all branches
             fChain->SetBranchStatus("*", 0);
@@ -247,7 +276,6 @@ class BetterChain
 
                 bool notified;
                 TObject* oldnotify;
-
         };
 
         TTree* fChain;
@@ -255,6 +283,7 @@ class BetterChain
         int ientry;
         MiniNotify* notifier;
         vector<TTreeFormula*> formulae;
+        map<string, bool> original_branch_status;
 
         // Branch name to leaf name conversion
         typedef pair<string, string> BL;
@@ -263,7 +292,6 @@ class BetterChain
         // Column pointer cache since the leaf inside needs to be updated
         // when new file is loaded in the chain
         LeafCache leafcache;
-
 };
 
 #endif
