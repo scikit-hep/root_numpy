@@ -138,6 +138,12 @@ class TestRootNumpy(unittest.TestCase):
         a = tree2rec(chain, selection="d_double > 100")
         assert_equal(chain.GetBranchStatus('d_double'), False)
 
+    @raises(ValueError)
+    def test_branch_DNE(self):
+        chain = TChain('tree')
+        chain.Add(self.ld('single1.root'))
+        tree2array(chain, branches=['my_net_worth'])
+
     @raises(TypeError)
     def test_tree2array_wrongtype(self):
         a = list()

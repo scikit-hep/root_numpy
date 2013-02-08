@@ -388,7 +388,11 @@ cdef object root2array_fromTTree(TTree* tree, branches,
         branches = unique(branches)
 
         for branch in branches:
-            leaves = structure[branch]
+            try:
+                leaves = structure[branch]
+            except KeyError:
+                raise ValueError('the branch %s is not present in the tree' %
+                                 branch)
             shortname = len(leaves) == 1
             for leaf, ltype in leaves:
                 if ltype in converters:
