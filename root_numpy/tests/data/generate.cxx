@@ -1,8 +1,60 @@
 #include <cstdio>
+#include <vector>
+
 #include "TFile.h"
 #include "TTree.h"
 
-void makesingle(int id){
+
+void hvector()
+{
+
+   TFile *f = TFile::Open("hvector.root","RECREATE");
+
+   std::vector<int> v_i;
+   std::vector<float> v_f;
+   std::vector<double> v_d;
+   std::vector<long> v_l;
+   std::vector<char> v_c;
+   std::vector<bool> v_b;
+
+   // Create a TTree
+   TTree *t = new TTree("tvec","Tree with vectors");
+   t->Branch("v_i","std::vector<int>",&v_i);
+   t->Branch("v_f","std::vector<float>",&v_f);
+   t->Branch("v_d","std::vector<double>",&v_d);
+   t->Branch("v_l","std::vector<long>",&v_l);
+   t->Branch("v_c","std::vector<char>",&v_c);
+   t->Branch("v_b","std::vector<bool>",&v_b);
+
+   for (Int_t i = 0; i < 100; i++) {
+      Int_t npx = i%10;
+
+      v_i.clear();
+      v_f.clear();
+      v_d.clear();
+      v_l.clear();
+      v_c.clear();
+      v_b.clear();
+
+      for (Int_t j = 0; j < npx; ++j) {
+
+         v_i.push_back(i+j);
+         v_f.push_back(2*i+j);
+         v_d.push_back(3*i+j);
+         v_l.push_back(4*i+j);
+         v_c.push_back(i+j);
+         v_b.push_back(j % 2 == 0);
+      }
+      t->Fill();
+   }
+   f->Write();
+   f->Close();
+
+   delete f;
+}
+
+void makesingle(int id)
+{
     char buffer[255];
     sprintf(buffer,"single%d.root",id);
     TFile file(buffer,"RECREATE");
@@ -20,12 +72,13 @@ void makesingle(int id){
     file.Close();
 }
 
-void makefixed(int id){
+void makefixed(int id)
+{
     char buffer[255];
     sprintf(buffer,"fixed%d.root",id);
     TFile file(buffer,"RECREATE");
     TTree tree("tree","tree");
-    
+
     int n[5]; tree.Branch("n_int",&n,"n_int[5]/I");
     float f[7]; tree.Branch("f_float",&f,"f_float[7]/F");
     double d[10]; tree.Branch("d_double",&d,"d_double[10]/D");
@@ -38,11 +91,12 @@ void makefixed(int id){
     tree.Write();
 }
 
-void makevary(int id){
+void makevary(int id)
+{
     int n[100];
     int len_n;
     float f[100];
-    int len_f;    
+    int len_f;
     double d[100];
     int len_d;
     char buffer[255];
@@ -55,7 +109,7 @@ void makevary(int id){
     tree.Branch("n_int",&n,"n_int[len_n]/I");
     tree.Branch("f_float",&f,"f_float[len_f]/F");
     tree.Branch("d_double",&d,"d_double[len_d]/D");
-    
+
     for(int i=0;i<20;i++){
         len_n = i*id;
         len_f = i*id+1;
@@ -68,7 +122,8 @@ void makevary(int id){
     tree.Write();
 }
 
-void make2tree(int id){
+void make2tree(int id)
+{
     char buffer[255];
     sprintf(buffer,"doubletree%d.root",id);
     TFile file(buffer,"RECREATE");
@@ -92,7 +147,8 @@ void make2tree(int id){
     tree2.Write();
 }
 
-void testsample(){
+int main(void)
+{
     makesingle(1);
     makesingle(2);
     makefixed(1);
@@ -100,4 +156,6 @@ void testsample(){
     makevary(1);
     makevary(2);
     make2tree(1);
+    hvector();
+    return 0;
 }

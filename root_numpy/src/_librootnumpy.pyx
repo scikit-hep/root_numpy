@@ -339,16 +339,19 @@ cdef np.ndarray initarray(vector[Column*] columns, int numEntries, list cv):
     return np.empty(numEntries, dtype=nst)
 
 
-cdef object root2array_fromTTree(TTree* tree, branches, entries, offset):
-    # this is actually vector of pointers despite how it looks
+cdef object root2array_fromTTree(TTree* tree, branches,
+                                 entries, offset, selection):
+    # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
 
-    # make a better chain so we can register all columns
+    # Make a better chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
+    cdef TTreeFormula* formula = NULL
     cdef int numEntries = bc.GetEntries()
 
-    cdef list cv=[] # list of converter in the same order
+    # list of converter in the same order
+    cdef list cv = []
     cdef Converter thisCV
     cdef int numcol
     cdef int ientry
@@ -356,72 +359,119 @@ cdef object root2array_fromTTree(TTree* tree, branches, entries, offset):
     cdef np.ndarray arr
     cdef int nb
     cdef vector[Converter] cvarray
+    cdef bytes py_select_formula
+    cdef char* select_formula
+
     try:
-        # parse the tree structure to determine
-        # whether to use shortname or long name
+        # Setup the selection if we have one
+        if selection:
+            py_select_formula = str(selection)
+            select_formula = py_select_formula
+            formula = new TTreeFormula("selection", select_formula, bc.fChain)
+            if formula == NULL or formula.GetNdim() == 0:
+                del formula
+                raise ValueError("could not compile selection formula")
+            # The chain will take care of updating the formula leaves when
+            # rolling over to the next tree.
+            bc.AddFormula(formula)
+        
+        # Activate branches used by formulae and deactivate all others
+        # MakeColumn will active the ones needed for the output array
+        bc.InitBranches()
+
+        # Parse the tree structure to determine
+        # whether to use short or long name
         # and loop through all leaves
         structure = parse_tree_structure(tree)
-        if branches is None: branches = structure.keys()
+        if branches is None:
+            branches = structure.keys()
         branches = unique(branches)
 
         for branch in branches:
-            leaves = structure[branch]
+            try:
+                leaves = structure[branch]
+            except KeyError:
+                raise ValueError('the branch %s is not present in the tree' %
+                                 branch)
             shortname = len(leaves) == 1
-            for leaf,ltype in leaves:
+            for leaf, ltype in leaves:
                 if ltype in converters:
                     colname = branch if shortname else '%s_%s' % (branch, leaf)
                     thisCol = bc.MakeColumn(branch, leaf, colname)
                     columns.push_back(thisCol)
                 else:
-                    msg = 'Cannot convert leaf %s of branch %s with type %s (skipping)'\
-                        % (branch, leaf, ltype)
-                    warnings.warn(msg, RootNumpyUnconvertibleWarning)
-
-        # now we got all the columns time to make an appropriate array structure
-        # first determine the correct size given tree size offset and entries
-        if entries is None: entries = numEntries
+                    warnings.warn(
+                        'Cannot convert leaf %s of branch %s '
+                        'with type %s (skipping)' % (branch, leaf, ltype),
+                        RootNumpyUnconvertibleWarning)
+        
+        # Now that we have all the columns we can
+        # make an appropriate array structure
+        # First determine the correct size given tree size, offset, and entries
+        if entries is None:
+            entries = numEntries
         numEntries = min(max(numEntries - offset, 0), entries)
-        # numEntries = min(entries, numEntries) if entries is not None else numEntries
 
         arr = initarray(columns, numEntries, cv)
         numcol = columns.size()
         ientry = 0
+        ientry_selected = 0
         bc.GetEntry(offset)
-        # convert cv list to cvarray for speed (this PYINCREF and PYDECREF relies)
+        
+        # Convert cv list to cvarray for speed
+        # (this PYINCREF and PYDECREF relies)
         # on cv list this is to optimize the tight loop
-        for c in cv: cvarray.push_back(c)
+        for c in cv:
+            cvarray.push_back(c)
+
         while bc.Next() != 0 and ientry < numEntries:
-            dataptr = np.PyArray_GETPTR1(arr, ientry)
+            ientry += 1
+            # Following code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
+            if formula != NULL:
+                ndata = formula.GetNdata()
+                keep = False
+                for current from 0 <= current < ndata:
+                    keep |= (formula.EvalInstance(current) != 0)
+                    if keep:
+                        break
+                if not keep:
+                    continue
+            dataptr = np.PyArray_GETPTR1(arr, ientry_selected)
             for icol in range(numcol):
                 thisCol = columns[icol]
                 thisCV = cvarray[icol]
                 nb = thisCV.write(thisCol, dataptr)
                 dataptr = shift(dataptr, nb) # poorman pointer magic
-            ientry += 1
+            ientry_selected += 1
     finally:
         del bc
+    
+    # If we selected less than the numEntries entries then shrink the array
+    if ientry_selected < numEntries:
+        arr.resize(ientry_selected)
+
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, entries, offset):
+def root2array_fromFname(fnames, treename, branches, entries, offset, selection):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
-        ret = root2array_fromTTree(<TTree*> ttree, branches,
-                entries, offset)
+        ret = root2array_fromTTree(
+                <TTree*> ttree, branches, entries, offset, selection)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, entries, offset):
+def root2array_fromCObj(tree, branches, entries, offset, selection):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented for the wrapper
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
-    return root2array_fromTTree(chain, branches,
-            entries, offset)
+    return root2array_fromTTree(
+            chain, branches, entries, offset, selection)
