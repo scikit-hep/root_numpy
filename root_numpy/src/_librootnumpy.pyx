@@ -139,6 +139,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     Py_INCREF(tmp)
 
     # can't use memcpy here...
+    cdef int i
     for i from 0 <= i < numele:
         tmp[i] = src.at(i)
 
