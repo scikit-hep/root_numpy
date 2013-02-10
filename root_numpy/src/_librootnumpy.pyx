@@ -89,6 +89,7 @@ cdef parse_tree_structure(TTree* tree):
         ret[thisBranch.GetName()] = leaflist
     return ret
 
+
 def unique(seq):
     seen = {}
     result = []
@@ -98,6 +99,7 @@ def unique(seq):
         seen[marker] = 1
         result.append(item)
     return result
+
 
 cdef class Converter:
     cdef int write(self,Column* col, void* buffer):
@@ -127,6 +129,7 @@ cdef inline int create_numpyarray(
 
     return sizeof(tmpobj)
 
+
 # special treatment for vector<bool>
 cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     cdef int numele = src.size()
@@ -147,6 +150,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
 
     return sizeof(tmpobj)
+
 
 cdef class VaryArray_NumpyConverter(Converter):
     cdef BasicNumpy_Converter conv # converter for single element
@@ -429,8 +433,10 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             try:
                 leaves = structure[branch]
             except KeyError:
-                raise ValueError('the branch %s is not present in the tree' %
-                                 branch)
+                raise ValueError(
+                        'the branch %s is not present in the tree. '
+                        'Call list_branches or appropriate ROOT methods '
+                        'to see a list of available branches' % branch)
             shortname = len(leaves) == 1
             for leaf, ltype in leaves:
                 if ltype in converters:
