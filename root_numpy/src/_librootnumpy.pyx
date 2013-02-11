@@ -8,7 +8,7 @@ from cython.operator cimport dereference as deref
 try:
     from collections import OrderedDict
 except ImportError:
-    # fall back to drop in
+    # Fall back on drop-in
     from OrderedDict import OrderedDict
 from cpython.ref cimport Py_INCREF, Py_XDECREF
 from cpython cimport PyObject
@@ -21,7 +21,8 @@ np.import_array()
 
 
 def list_trees(fname):
-    fname = glob(fname) # poor man support for globbing
+    # Poor man support for globbing
+    fname = glob(fname)
     if len(fname) == 0: raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
@@ -44,7 +45,8 @@ def list_trees(fname):
 
 
 def list_structures(fname, tree=None):
-    if tree is None:#support for automatically find tree
+    # Support for automatically find tree
+    if tree is None:
         tree = list_trees(fname)
         if len(tree) != 1:
             raise ValueError('Multiple Tree Found: %s' % str(tree))

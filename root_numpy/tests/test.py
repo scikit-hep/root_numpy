@@ -1,13 +1,16 @@
 from os.path import dirname, join
+import numpy as np
+from numpy.testing import assert_array_equal
 from root_numpy import *
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D
-import numpy as np
+try:
+    from collections import OrderedDict
+except ImportError:
+    # Fall back on drop-in
+    from root_numpy.OrderedDict import OrderedDict
 import unittest
-from nose.tools import assert_equal, assert_almost_equal
-from numpy.testing import assert_array_equal
-from collections import OrderedDict
 from nose.tools import *
-from root_numpy.nputil import stretch
+from nose.tools import assert_equal, assert_almost_equal
 
 
 class TestRootNumpy(unittest.TestCase):
