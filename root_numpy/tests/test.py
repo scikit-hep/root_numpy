@@ -129,6 +129,10 @@ class TestRootNumpy(unittest.TestCase):
         a = tree2array(chain, branches=['d_double'],
                               selection="f_float < 100 && n_int%2 == 1")
 
+        # selection with TMath
+        a = tree2rec(chain, selection="TMath::Erf(d_double) < 0.5")
+
+
     def test_branch_status(self):
         # test that original branch status is preserved
         chain = TChain('tree')
