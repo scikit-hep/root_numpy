@@ -13,9 +13,9 @@ def _is_array_field(arr, col):
 
 def stretch(arr, col_names, asrecarray=True):
     """
-    Stretch array. hstack multiple array fields and preserving
-    column names and rec array structure. If scalar field is specified,
-    it's stretched along with array field.
+    Stretch an array. ``hstack()`` multiple array fields while preserving
+    column names and record array structure. If a scalar field is specified,
+    it will be stretched along with array field.
 
     Parameters
     ----------
