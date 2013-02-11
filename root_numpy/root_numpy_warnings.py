@@ -1,9 +1,14 @@
-__all__ = ['RootNumpyWarning',
-           'RootNumpyUnconvertibleWarning']
 import warnings
+
+__all__ = [
+    'RootNumpyWarning',
+    'RootNumpyUnconvertibleWarning',
+]
+
 
 class RootNumpyWarning(RuntimeWarning):
     pass
+
 
 class RootNumpyUnconvertibleWarning(RootNumpyWarning):
     pass
