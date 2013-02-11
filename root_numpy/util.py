@@ -17,12 +17,12 @@ def stretch(arr, col_names, asrecarray=True):
     column names and rec array structure. If scalar field is specified,
     it's stretched along with array field.
 
-    **Arguments***
-
-        - **arr** numpy structured array or recarray
-        - **colnames** list of column names to stretch
-        - **asrecarray** optional boolean. If `True` return recarray,
-          `False` returns structured array. Default `True`
+    Parameters
+    ----------
+    arr : NumPy structured or record array
+    colnames : list of column names to stretch
+    asrecarray : bool, optional (default=True)
+        If `True`, return a record array, else return a structured array.
     """
     dt = []
     has_array_field = False
