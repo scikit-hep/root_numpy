@@ -59,7 +59,7 @@ Type Conversion Table
 List of primitive type converion is given this table:
 
 ===========  =========================
-ROOT type    numpy type
+ROOT         NumPy
 ===========  =========================
 Char_t       np.int8
 UChar_t      np.uint8
