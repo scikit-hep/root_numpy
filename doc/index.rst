@@ -77,6 +77,6 @@ x[nx]        np.object
 vector<t>    np.object
 ===========  =========================
 
-Variable length array (`particletype[nparticle]`) and vector (`vector<int>`)
-are converted to object of numpy array of corresponding types. Fixed length
-array is converted to fixed length array field in numpy.
+Variable length arrays (such as `particletype[nparticle]`) and vectors
+(such as `vector<int>`) are converted to NumPy arrays of the corresponding
+types. Fixed length arrays are converted to fixed length NumPy array fields.
