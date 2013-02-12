@@ -5,6 +5,7 @@ from numpy.lib import recfunctions
 import _librootnumpy
 import _libnumpyhist
 
+
 __all__ = [
     'root2array',
     'root2rec',
@@ -15,134 +16,157 @@ __all__ = [
     'lb',
     'tree2array',
     'tree2rec',
-    'fill_array']
+    'fill_array',
+]
 
 
-def _add_weight_field(arr, tree,
+def _add_weight_field(arr,
+                      tree,
                       weight_name='weight',
                       weight_dtype='f4'):
+    """Add a new column containing the tree weight.
+
+    """
     weights = np.empty(arr.shape[0], dtype=weight_dtype)
     weights.fill(tree.GetWeight())
     return recfunctions.rec_append_fields(
-            arr, names=weight_name,
-            data=weights,
-            dtypes=weight_dtype)
+        arr, names=weight_name,
+        data=weights,
+        dtypes=weight_dtype)
 
 
-def list_trees(fname):
-    """list trees in rootfile *fname*"""
-    return _librootnumpy.list_trees(fname)
+def list_trees(filename):
+    """List the trees in a ROOT file.
 
-
-def lt(fname):
-    """shorthand for :func:`list_trees`"""
-    return _librootnumpy.list_trees(fname)
-
-
-def list_branches(fname, treename=None):
     """
-    get a list of branches for given *fname* and *treename*.
-    *treename* is optional if fname has only one tree
+    return _librootnumpy.list_trees(filename)
+
+
+def lt(filename):
+    """Shorthand for :func:`list_trees`
+
     """
-    return _librootnumpy.list_branches(fname, treename)
+    return _librootnumpy.list_trees(filename)
 
 
-def lb(fname, treename=None):
-    """shorthand for :func:`list_branches`"""
-    return list_branches(fname, treename)
+def list_branches(filename, treename=None):
+    """Get a list of branches for trees in a ROOT file.
 
-
-def lst(fname, treename=None):
+    Parameters
+    ----------
+    filename : str
+        Path to ROOT file.
+    treename : str, optional (default=None)
+        Name of tree in the ROOT file.
+        (optional if the ROOT file has only one tree).
     """
-    return tree structures.
-    *treename* is optional if fname has only one tree
+    return _librootnumpy.list_branches(filename, treename)
+
+
+def lb(filename, treename=None):
+    """Shorthand for :func:`list_branches`
+
     """
-    return _librootnumpy.list_structures(fname, treename)
+    return list_branches(filename, treename)
 
 
-def root2array(fnames, treename=None, branches=None,
-        entries=None, offset=0):
+def lst(filename, treename=None):
+    """Return tree structures.
+
+    Parameters
+    ----------
+    filename : str
+        Path to ROOT file.
+    treename : str, optional (default=None)
+        Name of tree in the ROOT file
+        (optional if the ROOT file has only one tree).
     """
-    convert tree *treename* in root files specified in *fnames* to
-    numpy structured array. Type conversion table
-    is given :ref:`here <conversion_table>`
+    return _librootnumpy.list_structures(filename, treename)
 
-    Arguments:
 
-        *fnames*: Root file name pattern. Wildcard is also supported by
-        Python glob (not ROOT semi-broken wildcard)
-        fnames can be string or list of string.
+def root2array(filenames,
+               treename=None,
+               branches=None,
+               entries=None,
+               offset=0,
+               selection=None):
+    """
+    Convert trees in ROOT files into a numpy structured array.
+    Refer to the type conversion table :ref:`here <conversion_table>`.
 
-        *treename*: name of tree to convert to numpy array.
-        This is optional if the file contains exactly 1 tree.
+    Parameters
+    ----------
+    filenames : str or list
+        ROOT file name pattern or list of patterns. Wildcarding is
+        supported by Python globbing.
+    treename : str, optional (default=None)
+        Name of the tree to convert (optional if each file contains exactly one
+        tree).
+    branches : list of str, optional (default=None)
+        List of branch names to include as columns of the array.
+        If None or empty then include all branches than can be converted in the
+        first tree.
+        If branches contains duplicate branches, only the first one is used.
+    entries : int, optional (default=None)
+        Maximum number of entries that will be converted from the chained
+        trees. If None then convert all entries. If a selection is applied then
+        fewer entries may be converted.
+    offset : int, optional (default=0):
+        Offset from the beginning of the chained trees where conversion will
+        begin.
+    selection : str, optional (default=None)
+        Only include entries passing a cut expression.
 
-        *branches (optional)*: list of string for branch name to be
-        extracted from tree.
+    Examples
+    --------
 
-        * If branches is not specified or is None or is empty,
-          all from the first treebranches are extracted
-        * If branches contains duplicate branches, only the first one is used.
+    Read all branches from the tree named ``mytree`` in ``a.root``
+    Remember that ``mytree`` is optional if ``a.root`` has one tree::
 
-        *entries (optional)*: maximum number of data that it should load
-        useful for testing out stuff
-
-        *offset (optional)*: start index (first one is 0)
-
-    **Example**
-
-    ::
-
-        # read all branches from tree named mytree from a.root
-        # remember that 'mytree' is optional if a.root has 1 tree
         root2array('a.root', 'mytree')
 
-    ::
+    Read all branches starting from entry 5 and include 10 entries or up to the
+    end of the file::
 
-        # read all branches starting from record 5 for 10 records
-        # or the end of file.
         root2array('a.root', 'mytree', entries=10, offset=5)
 
-    ::
+    Read all branches from the tree named ``mytree`` in ``a*.root``::
 
-        # read all branches from tree named mytree from a*.root
         root2array('a*.root', 'mytree')
 
-    ::
+    Read all branches from the tree named ``mytree`` in ``a*.root`` and
+    ``b*.root``::
 
-        # read all branches from tree named mytree from a*.root and b*.root
         root2array(['a*.root', 'b*.root'], 'mytree')
 
-    ::
+    Read branch ``x`` and ``y`` from the tree named ``mytree`` in ``a.root``::
 
-        # read branch x and y from tree named mytree from a.root
         root2array('a.root', 'mytree', ['x', 'y'])
 
+    Notes
+    -----
 
-    .. note::
-
-        Due to
-        the way TChain works, if the trees specified
-        in the input files have different structures, only the
-        branch in the first tree will be automatically extracted.
-        You can work around this by either reordering the input
-        file or specifying the branches manually.
+    Due to the way TChain works, if the trees specified in the input files have
+    different structures, only the branch in the first tree will be
+    automatically extracted. You can work around this by either reordering the
+    input file or specifying the branches manually.
 
     """
-    filenames = []
-    if isinstance(fnames, basestring):
-        filenames = glob(fnames)
+    matched_filenames = []
+    if isinstance(filenames, basestring):
+        matched_filenames = glob(filenames)
     else:
-        for fn in fnames:
+        for fn in filenames:
             tmp = glob(fn)
             if len(tmp) == 0:
                 raise IOError('%s does not match any readable file.' % fn)
-            filenames.extend(tmp)
+            matched_filenames.extend(tmp)
 
-    if len(filenames)==0:
-        raise IOError('pattern given does not match any file %s'%fnames)
+    if len(matched_filenames) == 0:
+        raise IOError('pattern given does not match any file %s' % filenames)
 
     if treename is None:
-        trees = list_trees(filenames[0])
+        trees = list_trees(matched_filenames[0])
         if len(trees) != 1:
             raise ValueError('treename needs to be specified if the file '
                              'contains more than one tree. Your choices are:'
@@ -151,67 +175,125 @@ def root2array(fnames, treename=None, branches=None,
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        filenames, treename, branches, entries, offset)
+        matched_filenames, treename, branches, entries, offset, selection)
 
 
-def root2rec(fnames, treename=None, branches=None,
-        entries=None, offset=0):
+def root2rec(filenames,
+             treename=None,
+             branches=None,
+             entries=None,
+             offset=0,
+             selection=None):
     """
-    read branches in tree treename in file(s) given by fnames can
-    convert it to numpy recarray
+    View the result of :func:`root2array` as a record array.
 
-    This is equivalent to
-    root2array(fnames, treename, branches).view(np.recarray)
+    Notes
+    -----
+    This is equivalent to::
 
-    .. seealso::
-        :func:`root2array`
+        root2array(filenames, treename, branches).view(np.recarray)
+
+    See Also
+    --------
+    root2array
     """
-    return root2array(fnames, treename, branches,
-            entries, offset).view(np.recarray)
+    return root2array(filenames, treename, branches,
+                      entries, offset, selection).view(np.recarray)
 
 
-def tree2array(tree, branches=None, entries=None, offset=0,
-        include_weight=False,
-        weight_name='weight',
-        weight_dtype='f4'):
+def tree2array(tree,
+               branches=None,
+               entries=None,
+               offset=0,
+               selection=None,
+               include_weight=False,
+               weight_name='weight',
+               weight_dtype='f4'):
     """
-    convert PyROOT TTree *tree* to numpy structured array
-    see :func:`root2array` for details on parameter
+    Convert a tree into a numpy structured array.
+    Refer to the type conversion table :ref:`here <conversion_table>`.
+
+    Parameters
+    ----------
+    treename : str
+        Name of the tree to convert.
+    branches : list of str, optional (default=None)
+        List of branch names to include as columns of the array.
+        If None or empty then include all branches than can be converted in the
+        first tree.
+        If branches contains duplicate branches, only the first one is used.
+    entries : int, optional (default=None)
+        Maximum number of entries that will be converted from the chained
+        trees. If None then convert all entries. If a selection is applied then
+        fewer entries may be converted.
+    offset : int, optional (default=0):
+        Offset from the beginning of the chained trees where conversion will
+        begin.
+    selection : str, optional (default=None)
+        Only include entries passing a cut expression.
+    include_weight : bool, optional (default=False)
+        Include a column containing the tree weight.
+    weight_name : str, optional (default='weight')
+        The field name for the weight column if ``include_weight=True``.
+    weight_dtype : NumPy dtype, optional (default='f4')
+        The datatype to use for the weight column if ``include_weight=True``.
+
+    See Also
+    --------
+    root2array
+
     """
     import ROOT
     if not isinstance(tree, ROOT.TTree):
         raise TypeError("tree must be a ROOT.TTree")
-
     if hasattr(ROOT, 'AsCapsule'):
         #o = ROOT.AsCapsule(tree)
         # this will cause tons of compilation issue
         raise NotImplementedError()
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
-    arr = _librootnumpy.root2array_fromCObj(cobj, branches,
-            entries, offset)
+    arr = _librootnumpy.root2array_fromCObj(
+        cobj, branches, entries, offset, selection)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
 
 
-def tree2rec(tree, branches=None, entries=None, offset=0,
-        include_weight=False,
-        weight_name='weight',
-        weight_dtype='f4'):
+def tree2rec(tree,
+             branches=None,
+             entries=None,
+             offset=0,
+             selection=None,
+             include_weight=False,
+             weight_name='weight',
+             weight_dtype='f4'):
     """
-    convert PyROOT TTree *tree* to numpy structured array
-    see :func:`root2array` for details on parameters.
+    View the result of :func:`tree2array` as a record array.
+
+    Notes
+    -----
+    This is equivalent to::
+
+        tree2array(treename, branches).view(np.recarray)
+
+    See Also
+    --------
+    tree2array
+
     """
-    return tree2array(tree, branches, entries, offset,
-            include_weight=include_weight,
-            weight_name=weight_name,
-            weight_dtype=weight_dtype).view(np.recarray)
+    return tree2array(tree,
+                      branches,
+                      entries,
+                      offset,
+                      selection,
+                      include_weight=include_weight,
+                      weight_name=weight_name,
+                      weight_dtype=weight_dtype).view(np.recarray)
 
 
 def fill_array(hist, array, weights=None):
-    """
-    Fill a ROOT histogram with a NumPy array
+    """Fill a ROOT histogram with a NumPy array.
+
     """
     import ROOT
     if not isinstance(hist, ROOT.TH1):

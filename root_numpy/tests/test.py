@@ -1,26 +1,28 @@
 from os.path import dirname, join
+import numpy as np
+from numpy.testing import assert_array_equal
 from root_numpy import *
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D
-import numpy as np
+try:
+    from collections import OrderedDict
+except ImportError:
+    # Fall back on drop-in
+    from root_numpy.OrderedDict import OrderedDict
 import unittest
-from nose.tools import assert_equal, assert_almost_equal
-from numpy.testing import assert_array_equal
-from collections import OrderedDict
 from nose.tools import *
-from root_numpy.nputil import stretch
+from nose.tools import assert_equal, assert_almost_equal
+
 
 class TestRootNumpy(unittest.TestCase):
 
     def setUp(self):
-        self.datadir = dirname(__file__)
-
+        self.datadir = join(dirname(__file__), 'data')
 
     def ld(self, data):
         if isinstance(data, list):
             return [join(self.datadir, x) for x in data]
         else:
             return join(self.datadir, data)
-
 
     def check_single(self, single, n=100, id=1):
         assert_equal(
@@ -33,16 +35,13 @@ class TestRootNumpy(unittest.TestCase):
             assert_almost_equal(single[i][1], i % 100 * 2.0 + id)
             assert_almost_equal(single[i][2], i % 100 * 3.0 + id)
 
-
     def test_lt(self):
         trees = lt(self.ld('vary1.root'))
         assert_equal(trees, ['tree'])
 
-
     def test_lb(self):
         branches = lb(self.ld('single1.root'))
         assert_equal(branches, ['n_int', 'f_float', 'd_double'])
-
 
     def test_lst(self):
         structure = lst(self.ld('single1.root'))
@@ -52,36 +51,30 @@ class TestRootNumpy(unittest.TestCase):
             ('d_double', [('d_double', 'Double_t')])])
         assert_equal(structure, expected)
 
-
     def test_single(self):
         f = self.ld('single1.root')
         a = root2array(f)
         self.check_single(a)
-
 
     @raises(IOError)
     def test_single_pattern_not_exist(self):
         f = self.ld(['single1.root','does_not_exists.root'])
         a = root2array(f)
 
-
     @raises(IOError)
     def test_single_filename_not_exist(self):
         f = self.ld('does_not_exists.root')
         a = root2array(f)
-
 
     @raises(ValueError)
     def test_doubel_tree_name_not_specified(self):
         f = self.ld('doubletree1.root')
         a = root2array(f)
 
-
     def test_singlechain(self):
         f = self.ld(['single1.root', 'single2.root'])
         a = root2array(f)
         self.check_single(a, 200)
-
 
     def test_fixed(self):
         f = self.ld(['fixed1.root', 'fixed2.root'])
@@ -95,7 +88,6 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a[0][0][0], 1)
         assert_equal(a[0][0][1], 2)
         assert_almost_equal(a[-1][2][-1], 1514.5)
-
 
     def test_vary(self):
         f = self.ld(['vary1.root', 'vary2.root'])
@@ -119,29 +111,54 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.d_double[-1][0], 380.25)
         assert_equal(a.d_double[-1][-1], 497.25)
 
-
     def test_tree2array(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
         self.check_single(tree2array(chain))
-
 
     def test_tree2rec(self):
         chain = TChain('tree')
         chain.Add(self.ld('single1.root'))
         self.check_single(tree2array(chain))
 
+    def test_selection(self):
+        chain = TChain('tree')
+        chain.Add(self.ld('single1.root'))
+        chain.Add(self.ld('single2.root'))
+        a = tree2rec(chain, selection="d_double > 100")
+        assert_equal((a['d_double'] <= 100).any(), False)
+
+        # selection with differing variables in branches and expression
+        a = tree2array(chain, branches=['d_double'],
+                              selection="f_float < 100 && n_int%2 == 1")
+
+        # selection with TMath
+        a = tree2rec(chain, selection="TMath::Erf(d_double) < 0.5")
+
+
+    def test_branch_status(self):
+        # test that original branch status is preserved
+        chain = TChain('tree')
+        chain.Add(self.ld('single1.root'))
+        chain.Add(self.ld('single2.root'))
+        chain.SetBranchStatus('d_double', False)
+        a = tree2rec(chain, selection="d_double > 100")
+        assert_equal(chain.GetBranchStatus('d_double'), False)
+
+    @raises(ValueError)
+    def test_branch_DNE(self):
+        chain = TChain('tree')
+        chain.Add(self.ld('single1.root'))
+        tree2array(chain, branches=['my_net_worth'])
 
     @raises(TypeError)
     def test_tree2array_wrongtype(self):
         a = list()
         tree2array(a)
 
-
     def test_specific_branch(self):
         a = root2rec(self.ld('single1.root'), branches=['f_float'])
         assert_equal(a.dtype, [('f_float', '<f4')])
-
 
     def test_vector(self):
         a = root2rec(self.ld('hvector.root'))
@@ -151,13 +168,15 @@ class TestRootNumpy(unittest.TestCase):
              ('v_f', 'O'),
              ('v_d', 'O'),
              ('v_l', 'O'),
-             ('v_c', 'O')])
+             ('v_c', 'O'),
+             ('v_b', 'O')])
 
         assert_equal(a.v_i[1].dtype, np.int32)
         assert_equal(a.v_f[1].dtype, np.float32)
         assert_equal(a.v_d[1].dtype, np.float64)
         assert_equal(a.v_l[1].dtype, np.int64)
         assert_equal(a.v_c[1].dtype, np.int8)
+        assert_equal(a.v_b[1].dtype, np.bool)
 
         #check couple value
         assert_equal(a.v_i[1][0], 1)
@@ -169,7 +188,6 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.v_f[2][1], 5.0)
         assert_equal(a.v_f[-1][0], 198.0)
         assert_equal(a.v_f[-1][-1], 206.0)
-
 
     def test_offset_entries(self):
         a = root2rec(self.ld('single1.root'), entries=10)
@@ -184,7 +202,6 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(len(a), 5)
         assert_equal(a.n_int[-1], 100)
 
-
     def test_weights(self):
         f = TFile(self.ld('test.root'))
         tree = f.Get('tree')
@@ -192,12 +209,10 @@ class TestRootNumpy(unittest.TestCase):
         rec = tree2rec(tree, include_weight=True, weight_name='treeweight')
         assert_array_equal(rec['treeweight'], np.ones(10) * 5)
 
-
     def test_PyRoot(self):
         f = TFile(self.ld('single1.root'))
         tree = f.Get('tree')
         tree2array(tree)
-
 
     def test_fill_array(self):
         np.random.seed(0)
@@ -224,13 +239,11 @@ class TestRootNumpy(unittest.TestCase):
         fill_array(c, data3D)
         assert_almost_equal(c.Integral(), 10000.0)
 
-
     @raises(TypeError)
     def test_fill_array_wrongtype(self):
         h = list()
         a = np.random.randn(100)
         fill_array(h,a)
-
 
     def test_stretch(self):
         nrec = 5

@@ -27,7 +27,7 @@ librootnumpy = Extension('root_numpy._librootnumpy',
         root_inc,
         'root_numpy/src'],
     extra_compile_args = [],
-    extra_link_args=[] + root_ldflags)
+    extra_link_args=[] + root_ldflags + ['-lTreePlayer'])
 
 libnumpyhist = Extension('root_numpy._libnumpyhist',
     sources=['root_numpy/src/_libnumpyhist.cpp'],
