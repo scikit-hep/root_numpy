@@ -70,3 +70,6 @@ cython:
 check-rst:
 	python setup.py --long-description | rst2html.py > __output.html
 	rm -f __output.html
+
+gh-pages: doc
+	./ghp-import -m "update docs" -r upstream -f -p docs/_build/html/
