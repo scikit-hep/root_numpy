@@ -1,4 +1,4 @@
-# simple makefile to simplify repetetive build env management tasks under posix
+# simple makefile to simplify repetitive build env management tasks under posix
 
 PYTHON ?= python
 NOSETESTS ?= nosetests
@@ -44,7 +44,7 @@ test-code: in
 
 test-doc:
 	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
-	--doctest-extension=inc --doctest-fixtures=_fixture doc/
+	--doctest-extension=inc --doctest-fixtures=_fixture docs/
 
 test-coverage:
 	rm -rf coverage .coverage
@@ -62,7 +62,7 @@ ctags:
 	$(CTAGS) -R *
 
 doc: inplace
-	make -C doc/ html
+	make -C docs/ html
 
 cython:
 	cython -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
@@ -70,3 +70,6 @@ cython:
 check-rst:
 	python setup.py --long-description | rst2html.py > __output.html
 	rm -f __output.html
+
+gh-pages: doc
+	./ghp-import -m "update docs" -r upstream -f -p docs/_build/html/
