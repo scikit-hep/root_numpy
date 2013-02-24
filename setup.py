@@ -50,7 +50,7 @@ setup(
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
     packages=['root_numpy','root_numpy.tests'],
     package_data={
-        'root_numpy': ['tests/*.root']},
+        'root_numpy': ['tests/data/*.root']},
     ext_modules=[librootnumpy, libnumpyhist],
     classifiers=[
         "Programming Language :: Python",
