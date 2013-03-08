@@ -157,7 +157,7 @@ cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
     cdef int this_n_good_fk = 0
     
     cdef np.ndarray[np.int_t] tmp_good_fk_index
-    cdef np.ndarray[np.int_t] tmp_fk
+    cdef np.ndarray tmp_fk
     for i_data in range(ndata):
         tmp_good_fk_index = good_fk_index[i_data]
         tmp_fk = fk[i_data]
@@ -188,7 +188,7 @@ cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
     return ret
 
 
-cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray[np.int_t] fk,
+cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray fk,
                            fk_name, new_dtype, 
                            repeat_columns, stretch_columns,
                            np.ndarray[np.int_t] repeat_indices, 
@@ -227,7 +227,7 @@ cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray[np.int_t] fk,
     cdef int i_right = 0
     cdef int i_land = 0
     cdef int i_source = 0
-    
+    cdef int right_good_index=0
     for i_data in range(ndata):
         if fk_index_good[i_data]:
             
