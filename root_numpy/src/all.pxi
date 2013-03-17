@@ -96,6 +96,9 @@ cdef extern from "BetterChain.h":
 cdef extern from "util.h":
     cdef void* shift(void*, int)
     void printaddr(void* v)
+    cdef cppclass TypeName[T]:
+        TypeName()
+        const_char* name
 
 cdef extern from "Vector2Array.h":
     cdef cppclass Vector2Array[T]:
