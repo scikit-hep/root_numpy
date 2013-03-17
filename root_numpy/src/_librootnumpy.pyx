@@ -1,18 +1,27 @@
+# cython: experimental_cpp_class_def=True
 import numpy as np
 cimport numpy as np
+
 from libcpp.vector cimport vector
+from libcpp.map cimport map as cpp_map
+from libcpp.pair cimport pair
 from libcpp.string cimport string, const_char
 from libc.string cimport memcpy
+
 from cpython cimport array
-from cython.operator cimport dereference as deref
+from cpython.ref cimport Py_INCREF, Py_XDECREF
+from cpython cimport PyObject
+from cpython.cobject cimport PyCObject_AsVoidPtr, PyCObject_Check
+
+from cython.operator cimport dereference as deref, preincrement as inc
+
 try:
     from collections import OrderedDict
 except ImportError:
     # Fall back on drop-in
     from OrderedDict import OrderedDict
-from cpython.ref cimport Py_INCREF, Py_XDECREF
-from cpython cimport PyObject
-from cpython.cobject cimport PyCObject_AsVoidPtr, PyCObject_Check
+
+import atexit
 from glob import glob
 import warnings
 from root_numpy_warnings import RootNumpyUnconvertibleWarning
@@ -103,19 +112,13 @@ def unique(seq):
     return result
 
 
-cdef class Converter:
-    cdef int write(self,Column* col, void* buffer):
-        pass
-    cdef object get_nptype(self):
-        pass
-
 # create numpy array of given type code with
 # given numelement and size of each element
 # and write it to buffer
 cdef inline int create_numpyarray(
         void* buffer, void* src, int typecode, int numele, int elesize):
     cdef np.npy_intp dims[1]
-    dims[0]=numele;
+    dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, typecode, 0)
 
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
@@ -124,7 +127,7 @@ cdef inline int create_numpyarray(
 
     # copy to tmp.data
     cdef int nbytes = numele * elesize
-    memcpy(tmp.data,src,nbytes)
+    memcpy(tmp.data, src, nbytes)
 
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
@@ -154,233 +157,181 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     return sizeof(tmpobj)
 
 
-cdef class VaryArray_NumpyConverter(Converter):
-    cdef BasicNumpy_Converter conv # converter for single element
-    cdef public object nptype
-    cdef int typecode
-    cdef int elesize
-    def __init__(self,Converter conv):
-        self.conv = conv
-        self.typecode = self.conv.get_nptypecode()
-        self.elesize = conv.size
-    cdef int write(self,Column* col, void* buffer):
-        cdef int numele = col.getLen()
-        cdef int elesize = self.elesize
-        cdef void* src = col.GetValuePointer()
-        cdef int typecode = self.typecode
-        return create_numpyarray(buffer, src, typecode, numele, elesize)
+cdef cppclass Converter:
+    __init__():
+        pass
+    int write(Column* col, void* buffer):
+        pass
+    object get_nptype():
+        pass
 
-    cdef object get_nptype(self):
+
+cdef cppclass BasicConverter(Converter):
+    # cdef string rtype
+    int size
+    int nptypecode
+    string nptype
+    __init__(int size, string nptype, int nptypecode):
+        this.size = size
+        this.nptypecode = nptypecode
+        this.nptype = nptype
+    int write(Column* col, void* buffer):
+        cdef void* src = col.GetValuePointer()
+        memcpy(buffer, src, this.size)
+        return this.size
+    object get_nptype():
+        return np.dtype(this.nptype)
+    int get_nptypecode():
+        return this.nptypecode
+
+
+cdef cppclass VaryArrayConverter(Converter):
+    BasicConverter* conv # converter for single element
+    int typecode
+    int elesize
+    __init__(BasicConverter* conv):
+        this.conv = conv
+        this.typecode = conv.get_nptypecode()
+        this.elesize = conv.size
+    int write(Column* col, void* buffer):
+        cdef int numele = col.getLen()
+        cdef void* src = col.GetValuePointer()
+        return create_numpyarray(buffer, src, this.typecode, numele, this.elesize)
+    object get_nptype():
         return np.object
-    cdef object get_nptypecode(self):
+    object get_nptypecode():
         return np.NPY_OBJECT
 
 
-cdef class FixedArray_NumpyConverter(Converter):
-    cdef BasicNumpy_Converter conv # converter for single element
-    cdef int L # numele
-    def __init__(self, BasicNumpy_Converter conv, int L):
-        self.conv = conv
-        self.L = L
-    cdef int write(self,Column* col, void* buffer):
+cdef cppclass FixedArrayConverter(Converter):
+    BasicConverter* conv # converter for single element
+    int L # numele
+    __init__(BasicConverter* conv, int L):
+        this.conv = conv
+        this.L = L
+    int write(Column* col, void* buffer):
         cdef void* src = col.GetValuePointer()
         cdef int nbytes = col.getSize()
-        memcpy(buffer,src,nbytes)
+        memcpy(buffer, src, nbytes)
         return nbytes
-    cdef object get_nptype(self):
-        return (self.conv.nptype, self.L)
-    cdef int get_nptypecode(self):
-        return self.conv.nptypecode
+    object get_nptype():
+        return (np.dtype(this.conv.nptype), this.L)
+    int get_nptypecode():
+        return this.conv.nptypecode
 
 
-cdef class BasicNumpy_Converter(Converter):
-    # cdef string rtype
-    cdef public int size
-    cdef public object nptype
-    cdef int nptypecode
-    def __init__(self, size, nptype, nptypecode):
-        self.size = size
-        self.nptype = nptype
-        self.nptypecode = nptypecode
-    cdef int write(self, Column* col, void* buffer):
-        cdef void* src = col.GetValuePointer()
-        memcpy(buffer, src, self.size)
-        return self.size
-    cdef object get_nptype(self):
-        return self.nptype
-    cdef int get_nptypecode(self):
-        return self.nptypecode
-
-
-cdef class VectorFloat_Converter(Converter):
-    cdef int elesize
-    cdef int nptypecode
-    cdef Vector2Array[float] v2a
-    def __init__(self):
-        self.nptypecode = np.NPY_FLOAT32
-        self.elesize = 4
-    cdef int write(self,Column* col, void* buffer):
-        cdef int elesize = self.elesize
-        cdef int typecode = self.nptypecode
-        cdef vector[float]* tmp = <vector[float]*> col.GetValuePointer()
-        cdef int numele = tmp.size()
-        # check cython auto generate code
-        # if it really does &((*tmp)[0])
-        cdef float* fa = self.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, typecode, numele, elesize)
-    cdef object get_nptype(self):
+cdef cppclass VectorConverterBase(Converter):
+    object get_nptype():
         return np.object
-    cdef object get_nptypecode(self):
+    object get_nptypecode():
         return np.NPY_OBJECT
 
 
-cdef class VectorDouble_Converter(Converter):
-    cdef int elesize
-    cdef int nptypecode
-    cdef Vector2Array[double] v2a
-    def __init__(self):
-        self.nptypecode = np.NPY_FLOAT64
-        self.elesize = 8
-    cdef int write(self,Column* col, void* buffer):
-        cdef int elesize = self.elesize
-        cdef int typecode = self.nptypecode
-        cdef vector[double]* tmp = <vector[double]*> col.GetValuePointer()
+cdef cppclass VectorConverter[T](VectorConverterBase):
+    int elesize
+    int nptypecode
+    Vector2Array[T] v2a
+    __init__():
+        cdef TypeName[T] ast = TypeName[T]()
+        info = TYPES[ast.name]
+        this.elesize = info[2].itemsize
+        this.nptypecode = info[3]
+    int write(Column* col, void* buffer):
+        cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef int numele = tmp.size()
         # check cython auto generate code
         # if it really does &((*tmp)[0])
-        cdef double* fa = self.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, typecode, numele, elesize)
-    cdef object get_nptype(self):
-        return np.object
-    cdef object get_nptypecode(self):
-        return np.NPY_OBJECT
+        cdef T* fa = this.v2a.convert(tmp)
+        return create_numpyarray(buffer, fa, this.nptypecode, numele, this.elesize)
 
 
-cdef class VectorInt_Converter(Converter):
-    cdef int elesize
-    cdef int nptypecode
-    cdef Vector2Array[int] v2a
-    def __init__(self):
-        self.nptypecode = np.NPY_INT32
-        self.elesize = 4
-    cdef int write(self,Column* col, void* buffer):
-        cdef int elesize = self.elesize
-        cdef int typecode = self.nptypecode
-        cdef vector[int]* tmp = <vector[int]*> col.GetValuePointer()
-        cdef int numele = tmp.size()
-        # check cython auto generate code
-        # if it really does &((*tmp)[0])
-        cdef int* fa = self.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, typecode, numele, elesize)
-    cdef object get_nptype(self):
-        return np.object
-    cdef object get_nptypecode(self):
-        return np.NPY_OBJECT
-
-
-cdef class VectorLong_Converter(Converter):
-    cdef int elesize
-    cdef int nptypecode
-    cdef Vector2Array[long] v2a
-    def __init__(self):
-        self.nptypecode = np.NPY_INT64
-        self.elesize = 8
-    cdef int write(self,Column* col, void* buffer):
-        cdef int elesize = self.elesize
-        cdef int typecode = self.nptypecode
-        cdef vector[long]* tmp = <vector[long]*> col.GetValuePointer()
-        cdef int numele = tmp.size()
-        # check cython auto generate code
-        # if it really does &((*tmp)[0])
-        cdef long* fa = self.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, typecode, numele, elesize)
-    cdef object get_nptype(self):
-        return np.object
-    cdef object get_nptypecode(self):
-        return np.NPY_OBJECT
-
-
-cdef class VectorChar_Converter(Converter):
-    cdef int elesize
-    cdef int nptypecode
-    cdef Vector2Array[char] v2a
-    def __init__(self):
-        self.nptypecode = np.NPY_INT8
-        self.elesize = 1
-    cdef int write(self,Column* col, void* buffer):
-        cdef int elesize = self.elesize
-        cdef int typecode = self.nptypecode
-        cdef vector[char]* tmp = <vector[char]*> col.GetValuePointer()
-        cdef int numele = tmp.size()
-        # check cython auto generate code
-        # if it really does &((*tmp)[0])
-        cdef char* fa = self.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, typecode, numele, elesize)
-    cdef object get_nptype(self):
-        return np.object
-    cdef object get_nptypecode(self):
-        return np.NPY_OBJECT
-
-
-cdef class VectorBool_Converter(Converter):
+cdef cppclass VectorBoolConverter(VectorConverterBase):
+    __init__():
+        pass
     # Requires special treament since vector<bool> stores contents as bits...
-    cdef int write(self,Column* col, void* buffer):
+    int write(Column* col, void* buffer):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp)
-    cdef object get_nptype(self):
-        return np.object
-    cdef object get_nptypecode(self):
-        return np.NPY_OBJECT
 
+ctypedef unsigned char unsigned_char
+ctypedef unsigned short unsigned_short
+ctypedef unsigned int unsigned_int
+ctypedef unsigned long unsigned_long
 
-converters = {
-    'Char_t':       BasicNumpy_Converter(1, np.int8, np.NPY_INT8),
-    'UChar_t':      BasicNumpy_Converter(1, np.uint8, np.NPY_UINT8),
-
-    'Short_t':      BasicNumpy_Converter(2, np.int16, np.NPY_INT16),
-    'UShort_t':     BasicNumpy_Converter(2, np.uint16, np.NPY_UINT8),
-
-    'Int_t':        BasicNumpy_Converter(4, np.int32, np.NPY_INT32),
-    'UInt_t':       BasicNumpy_Converter(4, np.uint32, np.NPY_UINT32),
-
-    'Float_t':      BasicNumpy_Converter(4, np.float32, np.NPY_FLOAT32),
-    'Double_t':     BasicNumpy_Converter(8, np.float64, np.NPY_FLOAT64),
-
-    'Long64_t':     BasicNumpy_Converter(8, np.int64, np.NPY_INT64),
-    'ULong64_t':    BasicNumpy_Converter(8, np.uint64, np.NPY_UINT64),
-
-    'Bool_t':       BasicNumpy_Converter(1, np.bool, np.NPY_BOOL),
-
-    'vector<float>':VectorFloat_Converter(),
-    'vector<double>':VectorDouble_Converter(),
-    'vector<int>':  VectorInt_Converter(),
-    'vector<long>': VectorLong_Converter(),
-    'vector<char>': VectorChar_Converter(),
-    'vector<bool>': VectorBool_Converter(),
+TYPES = {
+    TypeName[bool]().name:           ('bool', 'Bool_t', np.dtype(np.bool), np.NPY_BOOL),
+    TypeName[char]().name:           ('char', 'Char_t', np.dtype(np.int8), np.NPY_INT8),
+    TypeName[unsigned_char]().name:  ('unsigned char', 'UChar_t', np.dtype(np.uint8), np.NPY_UINT8),
+    TypeName[short]().name:          ('short', 'Short_t', np.dtype(np.int16), np.NPY_INT16),
+    TypeName[unsigned_short]().name: ('unsigned short', 'UShort_t', np.dtype(np.uint16), np.NPY_UINT8),
+    TypeName[int]().name:            ('int', 'Int_t', np.dtype(np.int32), np.NPY_INT32),
+    TypeName[unsigned_int]().name:   ('unsigned int', 'UInt_t', np.dtype(np.uint32), np.NPY_UINT32),
+    TypeName[long]().name:           ('long', 'Long64_t', np.dtype(np.int64), np.NPY_INT64),
+    TypeName[unsigned_long]().name:  ('unsigned long', 'ULong64_t', np.dtype(np.uint64), np.NPY_UINT64),
+    TypeName[float]().name:          ('float', 'Float_t', np.dtype(np.float32), np.NPY_FLOAT32),
+    TypeName[double]().name:         ('double', 'Double_t', np.dtype(np.float64), np.NPY_FLOAT64),
 }
 
+cdef cpp_map[string, Converter*] CONVERTERS
+ctypedef pair[string, Converter*] CONVERTERS_ITEM
 
-cdef Converter find_converter(Column* col):
+for ctypename, (ctype, roottype, dtype, dtypecode) in TYPES.items():
+    CONVERTERS.insert(CONVERTERS_ITEM(
+        roottype, new BasicConverter(
+            dtype.itemsize, dtype.name, dtypecode)))
+
+# special case for vector<bool>
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<bool>', new VectorBoolConverter()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<char>', new VectorConverter[char]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned char>', new VectorConverter[unsigned_char]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<short>', new VectorConverter[short]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned short>', new VectorConverter[unsigned_short]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<int>', new VectorConverter[int]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned int>', new VectorConverter[unsigned_int]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<long>', new VectorConverter[long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned long>', new VectorConverter[unsigned_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<float>', new VectorConverter[float]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<double>', new VectorConverter[double]()))
+
+cdef Converter* find_converter(Column* col):
     cdef ColumnType ct = col.coltype
+    it = CONVERTERS.find(string(col.GetTypeName()))
+    if it == CONVERTERS.end():
+        return NULL
+    cdef Converter* basic_conv = deref(it).second
     if ct == SINGLE:
-        return converters[col.GetTypeName()]
+        return basic_conv
     elif ct == FIXED:
-        return FixedArray_NumpyConverter(converters[col.GetTypeName()], col.countval)
+        return new FixedArrayConverter(<BasicConverter*>basic_conv, col.countval)
     elif ct == VARY:
-        return VaryArray_NumpyConverter(converters[col.GetTypeName()])
+        return new VaryArrayConverter(<BasicConverter*>basic_conv)
+    return NULL
 
-
-cdef np.ndarray initarray(vector[Column*] columns, int numEntries, list cv):
-    cdef Column* thisCol
-    cdef Converter thisConv
-
+cdef np.ndarray initarray(vector[Column*]& columns,
+                          vector[Converter*]& cv,
+                          int entries):
+    cdef Column* this_col
+    cdef Converter* this_conv
     nst = []
     for i in range(columns.size()):
-        thisCol = columns[i]
-        thisConv = find_converter(thisCol)
-        nst.append((thisCol.colname, thisConv.get_nptype()))
-        cv.append(thisConv)
-    return np.empty(numEntries, dtype=nst)
+        this_col = columns[i]
+        this_conv = find_converter(this_col)
+        if this_conv == NULL:
+            raise ValueError("No converter for %s" % this_col.GetTypeName())
+        nst.append((this_col.colname, this_conv.get_nptype()))
+        cv.push_back(this_conv)
+    return np.empty(entries, dtype=nst)
 
 
 cdef object root2array_fromTTree(TTree* tree, branches,
@@ -392,17 +343,16 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     # Make a better chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
     cdef TTreeFormula* formula = NULL
-    cdef int numEntries = bc.GetEntries()
+    cdef int num_entries = bc.GetEntries()
 
     # list of converter in the same order
-    cdef list cv = []
-    cdef Converter thisCV
+    cdef Converter* thisCV
     cdef int numcol
     cdef int ientry
     cdef void* dataptr
     cdef np.ndarray arr
     cdef int nb
-    cdef vector[Converter] cvarray
+    cdef vector[Converter*] cvarray
     cdef bytes py_select_formula
     cdef char* select_formula
 
@@ -441,7 +391,7 @@ cdef object root2array_fromTTree(TTree* tree, branches,
                         'to see a list of available branches' % branch)
             shortname = len(leaves) == 1
             for leaf, ltype in leaves:
-                if ltype in converters:
+                if CONVERTERS.find(ltype) != CONVERTERS.end():
                     colname = branch if shortname else '%s_%s' % (branch, leaf)
                     thisCol = bc.MakeColumn(branch, leaf, colname)
                     columns.push_back(thisCol)
@@ -455,22 +405,16 @@ cdef object root2array_fromTTree(TTree* tree, branches,
         # make an appropriate array structure
         # First determine the correct size given tree size, offset, and entries
         if entries is None:
-            entries = numEntries
-        numEntries = min(max(numEntries - offset, 0), entries)
+            entries = num_entries
+        num_entries = min(max(num_entries - offset, 0), entries)
 
-        arr = initarray(columns, numEntries, cv)
+        arr = initarray(columns, cvarray, num_entries)
         numcol = columns.size()
         ientry = 0
         ientry_selected = 0
         bc.GetEntry(offset)
         
-        # Convert cv list to cvarray for speed
-        # (this PYINCREF and PYDECREF relies)
-        # on cv list this is to optimize the tight loop
-        for c in cv:
-            cvarray.push_back(c)
-
-        while bc.Next() != 0 and ientry < numEntries:
+        while bc.Next() != 0 and ientry < num_entries:
             ientry += 1
             # Following code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
             if formula != NULL:
@@ -492,8 +436,8 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     finally:
         del bc
     
-    # If we selected less than the numEntries entries then shrink the array
-    if ientry_selected < numEntries:
+    # If we selected less than the num_entries entries then shrink the array
+    if ientry_selected < num_entries:
         arr.resize(ientry_selected)
 
     return arr
@@ -521,3 +465,12 @@ def root2array_fromCObj(tree, branches, entries, offset, selection):
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(
             chain, branches, entries, offset, selection)
+
+
+@atexit.register
+def cleanup():
+    
+    it = CONVERTERS.begin()
+    while it != CONVERTERS.end():
+        del deref(it).second
+        inc(it)

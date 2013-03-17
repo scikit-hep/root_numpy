@@ -1,5 +1,6 @@
 #ifndef __UTIL_H_
 #define __UTIL_H_
+#include <typeinfo>
 #include <cstdio>
 #include <cstdarg>
 #include <string>
@@ -28,7 +29,7 @@ inline std::string format(const char* fmt, ...)
     return ret;
 }
 
-// Workaround cython no ptr arithmatics rule
+// Workaround cython no ptr arithmetics rule
 inline void* shift(void* v, int o)
 {
     return (void*)((char*)v + o);
@@ -38,5 +39,15 @@ inline void printaddr(void* v)
 {
     std::cout << std::hex << v << std::dec << std::endl;
 }
+
+template<typename T> class TypeName
+{
+    public:
+        TypeName():
+            name(typeid(T).name())
+        {}
+
+        const char* name;
+};
 
 #endif
