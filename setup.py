@@ -22,6 +22,7 @@ except OSError:
 
 librootnumpy = Extension('root_numpy._librootnumpy',
     sources=['root_numpy/src/_librootnumpy.cpp'],
+    language='c++',
     include_dirs=[
         np.get_include(),
         root_inc,
