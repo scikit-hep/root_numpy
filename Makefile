@@ -67,6 +67,7 @@ doc: inplace
 cython:
 	cython -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
 	cython -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
+	cython -a --cplus --fast-fail --line-directives root_numpy/src/_libarray2root.pyx
 
 check-rst:
 	python setup.py --long-description | rst2html.py > __output.html
