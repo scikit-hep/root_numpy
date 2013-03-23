@@ -30,7 +30,7 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     extra_compile_args = [],
     extra_link_args=[] + root_ldflags + ['-lTreePlayer'])
 
-librootnumpy = Extension('root_numpy._libarray2root',
+libarray2root = Extension('root_numpy._libarray2root',
     sources=['root_numpy/src/_libarray2root.cpp'],
     include_dirs=[
         np.get_include(),
@@ -75,6 +75,7 @@ setup(
         librootnumpy,
         libnumpyhist,
         libinnerjoin,
+        libarray2root,
     ],
     classifiers=[
         "Programming Language :: Python",
