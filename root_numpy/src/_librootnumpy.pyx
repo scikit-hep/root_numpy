@@ -106,7 +106,8 @@ def unique(seq):
     result = []
     for item in seq:
         marker = item
-        if marker in seen: continue
+        if marker in seen:
+            continue
         seen[marker] = 1
         result.append(item)
     return result
@@ -253,6 +254,7 @@ cdef cppclass VectorBoolConverter(VectorConverterBase):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp)
 
+
 ctypedef unsigned char unsigned_char
 ctypedef unsigned short unsigned_short
 ctypedef unsigned int unsigned_int
@@ -304,23 +306,50 @@ CONVERTERS.insert(CONVERTERS_ITEM(
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
 
+
 cdef Converter* find_converter(Column* col):
     cdef ColumnType ct = col.coltype
-    it = CONVERTERS.find(string(col.GetTypeName()))
-    if it == CONVERTERS.end():
-        return NULL
-    cdef Converter* basic_conv = deref(it).second
+    cdef string typename = string(col.GetTypeName())
+    cdef Converter* conv
+    cdef Converter* basic_conv
     if ct == SINGLE:
-        return basic_conv
+        return find_converter_by_typename(typename)
     elif ct == FIXED:
-        return new FixedArrayConverter(<BasicConverter*>basic_conv, col.countval)
+        conv = find_converter_by_typename(typename + '[fixed]')
+        if conv == NULL:
+            basic_conv = find_converter_by_typename(typename)
+            if basic_conv == NULL:
+                return NULL
+            conv = new FixedArrayConverter(
+                    <BasicConverter*>basic_conv,
+                    col.countval)
+            CONVERTERS.insert(CONVERTERS_ITEM(
+                typename + '[fixed]', conv))
+        return conv
     elif ct == VARY:
-        return new VaryArrayConverter(<BasicConverter*>basic_conv)
+        conv = find_converter_by_typename(typename + '[vary]')
+        if conv == NULL:
+            basic_conv = find_converter_by_typename(typename)
+            if basic_conv == NULL:
+                return NULL
+            conv = new VaryArrayConverter(
+                    <BasicConverter*>basic_conv)
+            CONVERTERS.insert(CONVERTERS_ITEM(
+                typename + '[vary]', conv))
+        return conv
     return NULL
 
-cdef np.ndarray initarray(vector[Column*]& columns,
-                          vector[Converter*]& cv,
-                          int entries):
+
+cdef Converter* find_converter_by_typename(string typename):
+    it = CONVERTERS.find(typename)
+    if it == CONVERTERS.end():
+        return NULL
+    return deref(it).second
+
+
+cdef np.ndarray init_array(vector[Column*]& columns,
+                           vector[Converter*]& cv,
+                           int entries):
     cdef Column* this_col
     cdef Converter* this_conv
     nst = []
@@ -408,7 +437,7 @@ cdef object root2array_fromTTree(TTree* tree, branches,
             entries = num_entries
         num_entries = min(max(num_entries - offset, 0), entries)
 
-        arr = initarray(columns, cvarray, num_entries)
+        arr = init_array(columns, cvarray, num_entries)
         numcol = columns.size()
         ientry = 0
         ientry_selected = 0
@@ -469,7 +498,7 @@ def root2array_fromCObj(tree, branches, entries, offset, selection):
 
 @atexit.register
 def cleanup():
-    
+    # delete all allocated converters 
     it = CONVERTERS.begin()
     while it != CONVERTERS.end():
         del deref(it).second

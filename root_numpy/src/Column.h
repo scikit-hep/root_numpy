@@ -54,8 +54,7 @@ class Column
             ret->leaf = leaf;
             ret->colname = colname;
             ret->skipped = false;
-            int ok = find_coltype(leaf, ret->coltype, ret->countval);
-            if (!ok)
+            if (!find_coltype(leaf, ret->coltype, ret->countval))
             {
                 delete ret;
                 return NULL;
@@ -64,16 +63,17 @@ class Column
             return ret;
         }
 
-        void SetLeaf(TLeaf* newleaf, bool paranoidmode=false){
+        void SetLeaf(TLeaf* newleaf, bool check=false){
             leaf = newleaf;
-            if(paranoidmode)
+            if (check)
             {
                 assert(leaf->GetTypeName() == rttype);
                 int cv;
                 ColumnType ct;
-                int ok = find_coltype(leaf, ct, cv);
-                assert(ok != 0);
-                assert(ct == coltype);
+                if (find_coltype(leaf, ct, cv) == 0)
+                    abort();
+                if (ct != coltype)
+                    abort();
                 //if(ct==FIXED){assert(cv==countval);}
             }
         }
