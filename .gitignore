@@ -8,8 +8,7 @@ coverage
 *.o
 .DS_Store
 *.pyc
-root_numpy/src/_librootnumpy.html
-root_numpy/src/_libinnerjoin.html
+root_numpy/src/*.html
 *.d
 _build
 .coverage
