@@ -272,6 +272,46 @@ class TestRootNumpy(unittest.TestCase):
         assert_almost_equal(stretched.scalar[10],4)
         assert_almost_equal(stretched.scalar[9],3)
 
+    def test_blockwise_inner_join(self):
+        test_data = np.array([
+            (1.0,np.array([11,12,13]),np.array([1,0,1]),0,np.array([1,2,3])),
+            (2.0,np.array([21,22,23]),np.array([-1,2,-1]),1,np.array([31,32,33]))
+            ],
+            dtype=[('sl',np.float),('al','O'),('fk','O'),
+                   ('s_fk',np.int),('ar','O')])
+        #vetor join
+        a1 = blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'])
+        
+        exp1 = np.array([(1.0, 11, 2, 1), 
+                      (1.0, 12, 1, 0),
+                      (1.0, 13, 2, 1),
+                      (2.0, 22, 33, 2)], 
+                    dtype=[('sl', '<f8'), ('al', '<i8'),
+                           ('ar', '<i8'), ('fk1', '<i8')])
+        assert_array_equal(a1, exp1, verbose=True)
+
+        #vector join with force repeat
+        a2 = blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'],
+                                  force_repeat=['al'])
+        exp2 = np.array([
+                        (1.0, np.array([11, 12, 13]), 2, 1),
+                        (1.0, np.array([11, 12, 13]), 1, 0),
+                        (1.0, np.array([11, 12, 13]), 2, 1),
+                        (2.0, np.array([21, 22, 23]), 33, 2)],
+                        dtype=[('sl', '<f8'), ('al', '|O8'),
+                               ('ar', '<i8'), ('fk1', '<i8')])
+        assert_equal(str(a2), str(exp2))#numpy testing doesn't like subarray
+        assert_equal(a2.dtype, exp2.dtype)
+
+        #scalar join
+        a3 = blockwise_inner_join(test_data, ['sl','al'], test_data['s_fk'], ['ar'])
+        exp3 = np.array([
+                    (1.0, [11, 12, 13], 1, 0),
+                    (2.0, [21, 22, 23], 32, 1)], 
+                    dtype=[('sl', '<f8'), ('al', '|O8'),
+                           ('ar', '<i8'), ('fk1', '<i8')])
+        assert_equal(str(a3), str(exp3))#numpy testing doesn't like subarray
+        assert_equal(a3.dtype, exp3.dtype)
 
 if __name__ == '__main__':
     import nose
