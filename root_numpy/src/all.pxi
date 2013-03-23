@@ -40,11 +40,15 @@ cdef extern from "TFile.h":
 cdef extern from "TTree.h":
     cdef cppclass TTree:
         TTree()
+        TTree(const_char*,  const_char*)
         void GetEntry(int i)
         int GetEntries()
-        void SetBranchAddress(const_char* bname,void* addr)
+        void SetBranchAddress(const_char* bname, void* addr)
         void Print()
+        TBranch* Branch(const_char* name, void* address, const_char* leaflist)
         TObjArray* GetListOfBranches()
+        int Fill()
+        int Scan()
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
@@ -106,3 +110,11 @@ cdef extern from "util.h":
 cdef extern from "Vector2Array.h":
     cdef cppclass Vector2Array[T]:
         T* convert(vector[T]* v)
+
+cdef extern from "<memory>" namespace "std": 
+    cdef cppclass auto_ptr[T]:
+        auto_ptr() 
+        auto_ptr(T* ptr) 
+        reset (T* p)
+        T* get() 
+

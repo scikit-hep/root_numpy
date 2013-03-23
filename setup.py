@@ -30,6 +30,15 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     extra_compile_args = [],
     extra_link_args=[] + root_ldflags + ['-lTreePlayer'])
 
+librootnumpy = Extension('root_numpy._libarray2root',
+    sources=['root_numpy/src/_libarray2root.cpp'],
+    include_dirs=[
+        np.get_include(),
+        root_inc,
+        'root_numpy/src'],
+    extra_compile_args = [],
+    extra_link_args=[] + root_ldflags )
+
 libnumpyhist = Extension('root_numpy._libnumpyhist',
     sources=['root_numpy/src/_libnumpyhist.cpp'],
     include_dirs=[np.get_include(), root_inc, 'root_numpy'],
