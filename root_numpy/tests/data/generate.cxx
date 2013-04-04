@@ -12,6 +12,7 @@ void hvector()
 
    std::vector<int> v_i;
    std::vector<float> v_f;
+   std::vector<Float_t> v_F;
    std::vector<double> v_d;
    std::vector<long> v_l;
    std::vector<char> v_c;
@@ -21,6 +22,7 @@ void hvector()
    TTree *t = new TTree("tvec","Tree with vectors");
    t->Branch("v_i","std::vector<int>",&v_i);
    t->Branch("v_f","std::vector<float>",&v_f);
+   t->Branch("v_F","std::vector<Float_t>",&v_F);
    t->Branch("v_d","std::vector<double>",&v_d);
    t->Branch("v_l","std::vector<long>",&v_l);
    t->Branch("v_c","std::vector<char>",&v_c);
@@ -31,6 +33,7 @@ void hvector()
 
       v_i.clear();
       v_f.clear();
+      v_F.clear();
       v_d.clear();
       v_l.clear();
       v_c.clear();
@@ -40,6 +43,7 @@ void hvector()
 
          v_i.push_back(i+j);
          v_f.push_back(2*i+j);
+         v_F.push_back(2*i+j);
          v_d.push_back(3*i+j);
          v_l.push_back(4*i+j);
          v_c.push_back(i+j);
