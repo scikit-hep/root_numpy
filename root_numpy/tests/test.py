@@ -166,6 +166,7 @@ class TestRootNumpy(unittest.TestCase):
             a.dtype,
             [('v_i', 'O'),
              ('v_f', 'O'),
+             ('v_F', 'O'),
              ('v_d', 'O'),
              ('v_l', 'O'),
              ('v_c', 'O'),
@@ -173,6 +174,7 @@ class TestRootNumpy(unittest.TestCase):
 
         assert_equal(a.v_i[1].dtype, np.int32)
         assert_equal(a.v_f[1].dtype, np.float32)
+        assert_equal(a.v_F[1].dtype, np.float32)
         assert_equal(a.v_d[1].dtype, np.float64)
         assert_equal(a.v_l[1].dtype, np.int64)
         assert_equal(a.v_c[1].dtype, np.int8)
@@ -188,6 +190,11 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.v_f[2][1], 5.0)
         assert_equal(a.v_f[-1][0], 198.0)
         assert_equal(a.v_f[-1][-1], 206.0)
+
+        assert_equal(a.v_F[1][0], 2.0)
+        assert_equal(a.v_F[2][1], 5.0)
+        assert_equal(a.v_F[-1][0], 198.0)
+        assert_equal(a.v_F[-1][-1], 206.0)
 
     def test_offset_entries(self):
         a = root2rec(self.ld('single1.root'), entries=10)
