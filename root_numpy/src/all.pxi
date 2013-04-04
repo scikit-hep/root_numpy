@@ -66,6 +66,9 @@ cdef extern from "TTreeFormula.h":
         int GetNdata()
         double EvalInstance(int)
 
+cdef extern from "TClassEdit.h" namespace "TClassEdit":
+    string ResolveTypedef(const_char*, bool)
+
 cdef extern from "Column.h":
     cdef enum ColumnType:
         SINGLE, FIXED, VARY

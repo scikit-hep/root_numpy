@@ -46,9 +46,9 @@ class TestRootNumpy(unittest.TestCase):
     def test_lst(self):
         structure = lst(self.ld('single1.root'))
         expected = OrderedDict([
-            ('n_int', [('n_int', 'Int_t')]),
-            ('f_float', [('f_float', 'Float_t')]),
-            ('d_double', [('d_double', 'Double_t')])])
+            ('n_int', [('n_int', 'int')]),
+            ('f_float', [('f_float', 'float')]),
+            ('d_double', [('d_double', 'double')])])
         assert_equal(structure, expected)
 
     def test_single(self):
@@ -281,11 +281,11 @@ class TestRootNumpy(unittest.TestCase):
                    ('s_fk',np.int),('ar','O')])
         #vetor join
         a1 = blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'])
-        
-        exp1 = np.array([(1.0, 11, 2, 1), 
+
+        exp1 = np.array([(1.0, 11, 2, 1),
                       (1.0, 12, 1, 0),
                       (1.0, 13, 2, 1),
-                      (2.0, 22, 33, 2)], 
+                      (2.0, 22, 33, 2)],
                     dtype=[('sl', '<f8'), ('al', '<i8'),
                            ('ar', '<i8'), ('fk1', '<i8')])
         assert_array_equal(a1, exp1, verbose=True)
@@ -307,7 +307,7 @@ class TestRootNumpy(unittest.TestCase):
         a3 = blockwise_inner_join(test_data, ['sl','al'], test_data['s_fk'], ['ar'])
         exp3 = np.array([
                     (1.0, [11, 12, 13], 1, 0),
-                    (2.0, [21, 22, 23], 32, 1)], 
+                    (2.0, [21, 22, 23], 32, 1)],
                     dtype=[('sl', '<f8'), ('al', '|O8'),
                            ('ar', '<i8'), ('fk1', '<i8')])
         assert_equal(str(a3), str(exp3))#numpy testing doesn't like subarray

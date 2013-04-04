@@ -95,7 +95,8 @@ cdef parse_tree_structure(TTree* tree):
             for ibranch in range(leaves.GetEntries()):
                 thisLeaf = <TLeaf*>leaves.At(ibranch)
                 lname = thisLeaf.GetName()
-                ltype = thisLeaf.GetTypeName()
+                # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
+                ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
                 leaflist.append((lname, ltype))
         ret[thisBranch.GetName()] = leaflist
     return ret
@@ -235,8 +236,8 @@ cdef cppclass VectorConverter[T](VectorConverterBase):
     __init__():
         cdef TypeName[T] ast = TypeName[T]()
         info = TYPES[ast.name]
-        this.elesize = info[2].itemsize
-        this.nptypecode = info[3]
+        this.elesize = info[1].itemsize
+        this.nptypecode = info[2]
     int write(Column* col, void* buffer):
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef int numele = tmp.size()
@@ -261,25 +262,25 @@ ctypedef unsigned int unsigned_int
 ctypedef unsigned long unsigned_long
 
 TYPES = {
-    TypeName[bool]().name:           ('bool', 'Bool_t', np.dtype(np.bool), np.NPY_BOOL),
-    TypeName[char]().name:           ('char', 'Char_t', np.dtype(np.int8), np.NPY_INT8),
-    TypeName[unsigned_char]().name:  ('unsigned char', 'UChar_t', np.dtype(np.uint8), np.NPY_UINT8),
-    TypeName[short]().name:          ('short', 'Short_t', np.dtype(np.int16), np.NPY_INT16),
-    TypeName[unsigned_short]().name: ('unsigned short', 'UShort_t', np.dtype(np.uint16), np.NPY_UINT8),
-    TypeName[int]().name:            ('int', 'Int_t', np.dtype(np.int32), np.NPY_INT32),
-    TypeName[unsigned_int]().name:   ('unsigned int', 'UInt_t', np.dtype(np.uint32), np.NPY_UINT32),
-    TypeName[long]().name:           ('long', 'Long64_t', np.dtype(np.int64), np.NPY_INT64),
-    TypeName[unsigned_long]().name:  ('unsigned long', 'ULong64_t', np.dtype(np.uint64), np.NPY_UINT64),
-    TypeName[float]().name:          ('float', 'Float_t', np.dtype(np.float32), np.NPY_FLOAT32),
-    TypeName[double]().name:         ('double', 'Double_t', np.dtype(np.float64), np.NPY_FLOAT64),
+    TypeName[bool]().name:           ('bool', np.dtype(np.bool), np.NPY_BOOL),
+    TypeName[char]().name:           ('char', np.dtype(np.int8), np.NPY_INT8),
+    TypeName[unsigned_char]().name:  ('unsigned char', np.dtype(np.uint8), np.NPY_UINT8),
+    TypeName[short]().name:          ('short', np.dtype(np.int16), np.NPY_INT16),
+    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16), np.NPY_UINT8),
+    TypeName[int]().name:            ('int', np.dtype(np.int32), np.NPY_INT32),
+    TypeName[unsigned_int]().name:   ('unsigned int', np.dtype(np.uint32), np.NPY_UINT32),
+    TypeName[long]().name:           ('long', np.dtype(np.int64), np.NPY_INT64),
+    TypeName[unsigned_long]().name:  ('unsigned long', np.dtype(np.uint64), np.NPY_UINT64),
+    TypeName[float]().name:          ('float', np.dtype(np.float32), np.NPY_FLOAT32),
+    TypeName[double]().name:         ('double', np.dtype(np.float64), np.NPY_FLOAT64),
 }
 
 cdef cpp_map[string, Converter*] CONVERTERS
 ctypedef pair[string, Converter*] CONVERTERS_ITEM
 
-for ctypename, (ctype, roottype, dtype, dtypecode) in TYPES.items():
+for ctypename, (ctype, dtype, dtypecode) in TYPES.items():
     CONVERTERS.insert(CONVERTERS_ITEM(
-        roottype, new BasicConverter(
+        ctype, new BasicConverter(
             dtype.itemsize, dtype.name, dtypecode)))
 
 # special case for vector<bool>
@@ -341,7 +342,7 @@ cdef Converter* find_converter(Column* col):
 
 
 cdef Converter* find_converter_by_typename(string typename):
-    it = CONVERTERS.find(typename)
+    it = CONVERTERS.find(ResolveTypedef(typename.c_str(), True))
     if it == CONVERTERS.end():
         return NULL
     return deref(it).second
