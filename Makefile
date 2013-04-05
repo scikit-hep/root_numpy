@@ -40,7 +40,7 @@ upload: clean
 	$(PYTHON) setup.py sdist upload
 
 test-code: in
-	$(NOSETESTS) -s root_numpy
+	$(NOSETESTS) -s -v root_numpy
 
 test-doc:
 	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
