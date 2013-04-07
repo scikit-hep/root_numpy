@@ -5,15 +5,24 @@ cdef extern from "Column.h":
     cdef enum ColumnType:
         SINGLE, FIXED, VARY
     cdef cppclass Column:
-        TLeaf* leaf
         bool skipped
         ColumnType coltype
         string colname
         int countval
         string rttype
-        int getLen()
-        int getSize()
-        void Print()
+        int GetLen()
+        int GetSize()
+        void* GetValuePointer()
+        const_char* GetTypeName()
+    cdef cppclass FormulaColumn(Column):
+        FormulaColumn(string, TTreeFormula*)
+        bool skipped
+        ColumnType coltype
+        string colname
+        int countval
+        string rttype
+        int GetLen()
+        int GetSize()
         void* GetValuePointer()
         const_char* GetTypeName()
 
