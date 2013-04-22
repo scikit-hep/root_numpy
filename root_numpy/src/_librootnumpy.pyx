@@ -90,14 +90,19 @@ cdef parse_tree_structure(TTree* tree):
     for ibranch in range(branches.GetEntries()):
         thisBranch = <TBranch*>(branches.At(ibranch))
         leaves = thisBranch.GetListOfLeaves()
+        if leaves is NULL:
+            raise RuntimeError("branch %s has no leaves" % thisBranch.GetName())
         leaflist = []
-        if leaves is not NULL:
-            for ibranch in range(leaves.GetEntries()):
-                thisLeaf = <TLeaf*>leaves.At(ibranch)
-                lname = thisLeaf.GetName()
-                # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-                ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
-                leaflist.append((lname, ltype))
+        for ibranch in range(leaves.GetEntries()):
+            thisLeaf = <TLeaf*>leaves.At(ibranch)
+            lname = thisLeaf.GetName()
+            # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
+            ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
+            leaflist.append((lname, ltype))
+        if not leaflist:
+            raise RuntimeError(
+                "the leaf list for branch %s is empty" %
+                thisBranch.GetName())
         ret[thisBranch.GetName()] = leaflist
     return ret
 
