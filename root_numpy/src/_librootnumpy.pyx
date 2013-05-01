@@ -32,14 +32,17 @@ np.import_array()
 def list_trees(fname):
     # Poor man support for globbing
     fname = glob(fname)
-    if len(fname) == 0: raise IOError('File not found: %s' % fname)
+    if len(fname) == 0:
+        raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
     cdef TFile* f = new TFile(fname)
-    if f is NULL: raise IOError('Cannot read: %s' % fname)
+    if f is NULL:
+        raise IOError('Cannot read: %s' % fname)
 
     cdef TList* keys = f.GetListOfKeys()
-    if keys is NULL: raise IOError('Not a valid root file: %s' % fname)
+    if keys is NULL:
+        raise IOError('Not a valid root file: %s' % fname)
     ret = []
     cdef int n = keys.GetEntries()
     cdef TObject* obj
@@ -64,7 +67,8 @@ def list_structures(fname, tree=None):
 
     cdef TFile* f = new TFile(fname)
     fname = glob(fname)#poor man support for globbing
-    if len(fname)==0: raise IOError('File not found: %s' % fname)
+    if len(fname) == 0:
+        raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
     cdef TTree* t = <TTree*> f.Get(tree)
@@ -86,7 +90,8 @@ cdef parse_tree_structure(TTree* tree):
     cdef TObjArray* branches = tree.GetListOfBranches()
     cdef TObjArray* leaves
     ret = OrderedDict()
-    if branches is NULL: return ret
+    if branches is NULL:
+        return ret
     for ibranch in range(branches.GetEntries()):
         thisBranch = <TBranch*>(branches.At(ibranch))
         leaves = thisBranch.GetListOfLeaves()
