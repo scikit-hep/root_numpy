@@ -19,7 +19,7 @@ try:
     from collections import OrderedDict
 except ImportError:
     # Fall back on drop-in
-    from OrderedDict import OrderedDict
+    from .extern.ordereddict import OrderedDict
 
 import atexit
 from glob import glob
