@@ -499,7 +499,7 @@ def root2array_fromFname(fnames, treename, branches, entries, offset, selection)
 def root2array_fromCObj(tree, branches, entries, offset, selection):
     # this is not a safe method
     # provided here for convenience only
-    # typecheck should be implemented for the wrapper
+    # typecheck should be implemented by the wrapper
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
