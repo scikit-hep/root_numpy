@@ -67,7 +67,6 @@ doc: clean doc-clean inplace
 cython:
 	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
 	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
-	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libarray2root.pyx
 
 check-rst:
 	@$(PYTHON) setup.py --long-description | rst2html.py > __output.html

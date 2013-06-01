@@ -328,6 +328,16 @@ class TestRootNumpy(unittest.TestCase):
                             ('branch2_intleaf', '<i4'),
                             ('branch2_floatleaf', '<f4')]))
 
+    def test_array2root(self):
+        a = np.array([(12345, 2., 2.1), (3, 4., 4.2)],
+            dtype=[
+                ('x', np.int32),
+                ('y', np.float32),
+                ('z', np.float64)])
+        tree = array2tree(a)
+        tree.Print()
+        tree.Scan()
+        tree.Delete()
 
 if __name__ == '__main__':
     import nose

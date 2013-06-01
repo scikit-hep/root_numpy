@@ -16,6 +16,7 @@ __all__ = [
     'lb',
     'tree2array',
     'tree2rec',
+    'array2tree',
     'fill_array',
 ]
 
@@ -289,6 +290,14 @@ def tree2rec(tree,
                       include_weight=include_weight,
                       weight_name=weight_name,
                       weight_dtype=weight_dtype).view(np.recarray)
+
+
+def array2tree(arr, name='tree'):
+
+    import ROOT
+    cobj = _librootnumpy.array2tree_toCObj(arr, name=name)
+    tree = ROOT.BindObject(cobj, 'TTree')
+    return tree
 
 
 def fill_array(hist, array, weights=None):

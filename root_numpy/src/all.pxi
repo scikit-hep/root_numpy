@@ -1,11 +1,6 @@
 from libcpp cimport bool
 from libcpp.string cimport string, const_char
 
-cdef extern from "stdlib.h":
-    void free(void* ptr)
-    void* malloc(size_t size)
-    void* realloc(void* ptr, size_t size)
-
 cdef extern from "TObject.h":
     cdef cppclass TObject:
         TObject()
@@ -49,6 +44,7 @@ cdef extern from "TTree.h":
         TObjArray* GetListOfBranches()
         int Fill()
         int Scan()
+        void Delete(void*)
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
