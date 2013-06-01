@@ -540,10 +540,16 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
         free(this.value)
 
     TBranch* make_branch(TTree* tree):
-        print this.name, this.roottype
-        cdef string leaflist = this.name+'/'+this.roottype
-        print leaflist
-        tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+        cdef TBranch* branch = tree.GetBranch(this.name.c_str())
+        cdef string leaflist
+        if branch == NULL:
+            leaflist = this.name + '/' + this.roottype
+            branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+        else:
+            # TODO: check type compatibility of existing branch
+            branch.SetAddress(this.value)
+        branch.SetStatus(1)
+        return branch
 
     void read(void* source):
         memcpy(this.value, source, this.nbytes)
@@ -570,11 +576,10 @@ cdef NP2CConverter* find_np2c_converter(name, dtype, peekvalue=None):
     #np.bool #this is need special case
     #np.object #this too should detect basic numpy array
     #How to detect fixed length array?
-    print dtype
     if dtype in scalarlist:
         nbytes, roottype = scalarlist[dtype]
         return new ScalarNP2CConverter(name, roottype, nbytes)
-    elif dtype==np.dtype(np.object):
+    elif dtype == np.dtype(np.object):
         #lets peek
         if type(peekvalue) == type(np.array([])):
             ndim = peekvalue.ndim
@@ -585,14 +590,13 @@ cdef NP2CConverter* find_np2c_converter(name, dtype, peekvalue=None):
     return NULL
 
 
-cdef TTree* array2tree(np.ndarray arr, name='tree') except *:
+cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     cdef vector[NP2CConverter*] cvarray # hmm how do I catch all python exception
                                         # and clean up before throwing ?
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef int icol
     cdef auto_ptr[NP2CConverter] tmp
-    cdef TTree* ret = NULL
     cdef int icv = 0
     cdef int arr_len = 0
     cdef int pos_len = 0
@@ -608,17 +612,20 @@ cdef TTree* array2tree(np.ndarray arr, name='tree') except *:
         for icol, fieldname in enumerate(fieldnames):
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname] 
-            cvt = find_np2c_converter(name, dtype, arr[0][fieldname])
+            cvt = find_np2c_converter(fieldname, dtype, arr[0][fieldname])
             if cvt is not NULL:
                 roffsetarray.push_back(roffset)
                 cvarray.push_back(cvt)
                 posarray.push_back(icol)
 
-        ret = new TTree(name, name)
+        if tree == NULL:
+            tree = new TTree(name, name)
+        else:
+            tree.SetBranchStatus('*', 0)
         
         # make branches
         for icv in range(cvarray.size()):
-            cvarray[icv].make_branch(ret)
+            cvarray[icv].make_branch(tree)
 
         # fill in data
         arr_len = len(arr)
@@ -630,7 +637,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree') except *:
                 roffset = roffsetarray[ipos]
                 source = shift(thisrow, roffset)
                 cvarray[ipos].read(source)
-            ret.Fill()
+            tree.Fill()
     
     except:
         raise
@@ -643,13 +650,22 @@ cdef TTree* array2tree(np.ndarray arr, name='tree') except *:
             tmpcv = cvarray[icv]
             del tmpcv
     
-    return ret
+    return tree
 
 
-def array2tree_toCObj(arr, name='tree'):
+def array2tree_toCObj(arr, name='tree', tree=None):
     
-    cdef TTree* tree = array2tree(arr, name=name)
-    return PyCObject_FromVoidPtr(tree, NULL)
+    cdef TTree* intree = NULL
+    cdef TTree* outtree = NULL
+    if tree is not None:
+        # this is not a safe method
+        # provided here for convenience only
+        # typecheck should be implemented by the wrapper
+        if not PyCObject_Check(tree):
+            raise ValueError('tree must be PyCObject')
+        intree = <TTree*> PyCObject_AsVoidPtr(tree)
+    outtree = array2tree(arr, name=name, tree=intree)
+    return PyCObject_FromVoidPtr(outtree, NULL)
 
 
 @atexit.register

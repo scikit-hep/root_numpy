@@ -17,6 +17,8 @@ cdef extern from "TBranch.h":
     cdef cppclass TBranch:
         const_char* GetName()
         TObjArray* GetListOfLeaves()
+        void SetAddress(void* addr)
+        void SetStatus(bool status)
 
 cdef extern from "TLeaf.h":
     cdef cppclass TLeaf:
@@ -39,8 +41,10 @@ cdef extern from "TTree.h":
         void GetEntry(int i)
         int GetEntries()
         void SetBranchAddress(const_char* bname, void* addr)
+        void SetBranchStatus(const_char* bname, bool status)
         void Print()
         TBranch* Branch(const_char* name, void* address, const_char* leaflist)
+        TBranch* GetBranch(const_char* name)
         TObjArray* GetListOfBranches()
         int Fill()
         int Scan()

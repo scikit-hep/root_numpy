@@ -329,7 +329,8 @@ class TestRootNumpy(unittest.TestCase):
                             ('branch2_floatleaf', '<f4')]))
 
     def test_array2root(self):
-        a = np.array([(12345, 2., 2.1), (3, 4., 4.2)],
+        a = np.array([(12345, 2., 2.1,),
+                      (3, 4., 4.2,),],
             dtype=[
                 ('x', np.int32),
                 ('y', np.float32),

@@ -292,12 +292,17 @@ def tree2rec(tree,
                       weight_dtype=weight_dtype).view(np.recarray)
 
 
-def array2tree(arr, name='tree'):
+def array2tree(arr, name='tree', tree=None):
 
     import ROOT
-    cobj = _librootnumpy.array2tree_toCObj(arr, name=name)
-    tree = ROOT.BindObject(cobj, 'TTree')
-    return tree
+    if tree is not None:
+        if not isinstance(tree, ROOT.TTree):
+            raise TypeError("tree must be a ROOT.TTree")
+        incobj = ROOT.AsCObject(tree)
+    else:
+        incobj = None
+    cobj = _librootnumpy.array2tree_toCObj(arr, name=name, tree=incobj)
+    return ROOT.BindObject(cobj, 'TTree')
 
 
 def fill_array(hist, array, weights=None):
