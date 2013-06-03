@@ -649,7 +649,8 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         for icv in range(cvarray.size()):
             tmpcv = cvarray[icv]
             del tmpcv
-    
+
+    tree.SetBranchStatus('*', 1) 
     return tree
 
 
