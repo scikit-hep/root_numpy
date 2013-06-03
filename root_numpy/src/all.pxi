@@ -19,6 +19,7 @@ cdef extern from "TBranch.h":
         TObjArray* GetListOfLeaves()
         void SetAddress(void* addr)
         void SetStatus(bool status)
+        int Fill()
 
 cdef extern from "TLeaf.h":
     cdef cppclass TLeaf:
@@ -49,6 +50,7 @@ cdef extern from "TTree.h":
         int Fill()
         int Scan()
         void Delete(void*)
+        long SetEntries(long)
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):

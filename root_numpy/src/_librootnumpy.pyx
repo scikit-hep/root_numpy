@@ -516,10 +516,7 @@ array -> TTree conversion follows:
 """
 
 cdef cppclass NP2CConverter:
-    TBranch* make_branch(TTree* tree):
-        return NULL
-    
-    void read(void* source):
+    void fill_from(void* source):
         pass
 
 
@@ -528,34 +525,33 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
     string roottype
     string name
     void* value
+    TBranch* branch
     # don't use copy constructor of this one since it will screw up
     # tree binding and/or ownership of value
-    __init__(string name, string roottype, int nbytes):
+    __init__(TTree* tree, string name, string roottype, int nbytes):
+        cdef string leaflist
         this.nbytes = nbytes
         this.roottype = roottype
         this.name = name
         this.value = malloc(nbytes)
-        
+        this.branch = tree.GetBranch(this.name.c_str())
+        if this.branch == NULL:
+            leaflist = this.name + '/' + this.roottype
+            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+        else:
+            # TODO: check type compatibility of existing branch
+            this.branch.SetAddress(this.value)
+        this.branch.SetStatus(1)
+
     __del__(self): # does this do what I want?
         free(this.value)
 
-    TBranch* make_branch(TTree* tree):
-        cdef TBranch* branch = tree.GetBranch(this.name.c_str())
-        cdef string leaflist
-        if branch == NULL:
-            leaflist = this.name + '/' + this.roottype
-            branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
-        else:
-            # TODO: check type compatibility of existing branch
-            branch.SetAddress(this.value)
-        branch.SetStatus(1)
-        return branch
-
-    void read(void* source):
+    void fill_from(void* source):
         memcpy(this.value, source, this.nbytes)
+        this.branch.Fill()
 
 
-cdef NP2CConverter* find_np2c_converter(name, dtype, peekvalue=None):
+cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None):
     scalarlist = {
         #np.int8 from cython means something else
         np.dtype(np.int8): (1, 'B'),
@@ -578,7 +574,7 @@ cdef NP2CConverter* find_np2c_converter(name, dtype, peekvalue=None):
     #How to detect fixed length array?
     if dtype in scalarlist:
         nbytes, roottype = scalarlist[dtype]
-        return new ScalarNP2CConverter(name, roottype, nbytes)
+        return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
         #lets peek
         if type(peekvalue) == type(np.array([])):
@@ -605,6 +601,9 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     cdef NP2CConverter* tmpcv
     
     try: 
+        if tree == NULL:
+            tree = new TTree(name, name)
+        
         fieldnames = arr.dtype.names
         fields = arr.dtype.fields
         
@@ -612,32 +611,24 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         for icol, fieldname in enumerate(fieldnames):
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname] 
-            cvt = find_np2c_converter(fieldname, dtype, arr[0][fieldname])
+            cvt = find_np2c_converter(tree, fieldname, dtype, arr[0][fieldname])
             if cvt is not NULL:
                 roffsetarray.push_back(roffset)
                 cvarray.push_back(cvt)
                 posarray.push_back(icol)
 
-        if tree == NULL:
-            tree = new TTree(name, name)
-        else:
-            tree.SetBranchStatus('*', 0)
-        
-        # make branches
-        for icv in range(cvarray.size()):
-            cvarray[icv].make_branch(tree)
-
         # fill in data
-        arr_len = len(arr)
         pos_len = posarray.size()
-
-        for idata in range(arr_len):
+        for idata in xrange(len(arr)):
             thisrow = np.PyArray_GETPTR1(arr, idata)
             for ipos in range(pos_len):
                 roffset = roffsetarray[ipos]
                 source = shift(thisrow, roffset)
-                cvarray[ipos].read(source)
-            tree.Fill()
+                cvarray[ipos].fill_from(source)
+        
+        # need to update the number of entries in the tree to match
+        # the number in the branches since each branch is filled separately.
+        tree.SetEntries(-1)
     
     except:
         raise
@@ -650,7 +641,6 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
             tmpcv = cvarray[icv]
             del tmpcv
 
-    tree.SetBranchStatus('*', 1) 
     return tree
 
 
