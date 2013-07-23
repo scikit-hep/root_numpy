@@ -320,6 +320,15 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(str(a3), str(exp3))#numpy testing doesn't like subarray
         assert_equal(a3.dtype, exp3.dtype)
 
+    def test_struct(self):
+        assert_array_equal(root2rec(self.ld('structbranches.root')),
+            np.array([(10, 15.5, 20, 781.2)],
+                     dtype=[('branch1_intleaf', '<i4'),
+                            ('branch1_floatleaf', '<f4'),
+                            ('branch2_intleaf', '<i4'),
+                            ('branch2_floatleaf', '<f4')]))
+
+
 if __name__ == '__main__':
     import nose
     nose.runmodule()
