@@ -228,7 +228,7 @@ class BetterChain
                 return 0;
             }
 
-            TLeaf* leaf = fChain->FindLeaf(lname.c_str());
+            TLeaf* leaf = branch->FindLeaf(lname.c_str());
             if (leaf==0)
             {
                 PyErr_SetString(PyExc_IOError,
