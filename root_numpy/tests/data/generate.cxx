@@ -151,6 +151,37 @@ void make2tree(int id)
     tree2.Write();
 }
 
+void makestruct()
+{
+    struct branchstruct {
+        int intleaf;
+        float floatleaf;
+    };
+
+    TFile f("structbranches.root", "RECREATE");
+    TTree t("test", "Test tree with identical leaf names in different branches");
+
+    branchstruct *br1 = new branchstruct;
+    branchstruct *br2 = new branchstruct;
+
+    br1->intleaf = 10;
+    br1->floatleaf = 15.5;
+
+    br2->intleaf = 20;
+    br2->floatleaf = 781.2;
+
+    t.Branch("branch1", br1, "intleaf/I:floatleaf/F");
+    t.Branch("branch2", br2, "intleaf/I:floatleaf/F");
+
+    t.Fill();
+
+    t.Write();
+    f.Close();
+
+    delete br1;
+    delete br2;
+}
+
 int main(void)
 {
     makesingle(1);
@@ -161,5 +192,6 @@ int main(void)
     makevary(2);
     make2tree(1);
     hvector();
+    makestruct();
     return 0;
 }
