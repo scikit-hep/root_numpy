@@ -19,7 +19,7 @@ try:
     from collections import OrderedDict
 except ImportError:
     # Fall back on drop-in
-    from OrderedDict import OrderedDict
+    from .extern.ordereddict import OrderedDict
 
 import atexit
 from glob import glob
@@ -32,14 +32,17 @@ np.import_array()
 def list_trees(fname):
     # Poor man support for globbing
     fname = glob(fname)
-    if len(fname) == 0: raise IOError('File not found: %s' % fname)
+    if len(fname) == 0:
+        raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
     cdef TFile* f = new TFile(fname)
-    if f is NULL: raise IOError('Cannot read: %s' % fname)
+    if f is NULL:
+        raise IOError('Cannot read: %s' % fname)
 
     cdef TList* keys = f.GetListOfKeys()
-    if keys is NULL: raise IOError('Not a valid root file: %s' % fname)
+    if keys is NULL:
+        raise IOError('Not a valid root file: %s' % fname)
     ret = []
     cdef int n = keys.GetEntries()
     cdef TObject* obj
@@ -64,7 +67,8 @@ def list_structures(fname, tree=None):
 
     cdef TFile* f = new TFile(fname)
     fname = glob(fname)#poor man support for globbing
-    if len(fname)==0: raise IOError('File not found: %s' % fname)
+    if len(fname) == 0:
+        raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
     cdef TTree* t = <TTree*> f.Get(tree)
@@ -86,18 +90,24 @@ cdef parse_tree_structure(TTree* tree):
     cdef TObjArray* branches = tree.GetListOfBranches()
     cdef TObjArray* leaves
     ret = OrderedDict()
-    if branches is NULL: return ret
+    if branches is NULL:
+        return ret
     for ibranch in range(branches.GetEntries()):
         thisBranch = <TBranch*>(branches.At(ibranch))
         leaves = thisBranch.GetListOfLeaves()
+        if leaves is NULL:
+            raise RuntimeError("branch %s has no leaves" % thisBranch.GetName())
         leaflist = []
-        if leaves is not NULL:
-            for ibranch in range(leaves.GetEntries()):
-                thisLeaf = <TLeaf*>leaves.At(ibranch)
-                lname = thisLeaf.GetName()
-                # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-                ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
-                leaflist.append((lname, ltype))
+        for ibranch in range(leaves.GetEntries()):
+            thisLeaf = <TLeaf*>leaves.At(ibranch)
+            lname = thisLeaf.GetName()
+            # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
+            ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
+            leaflist.append((lname, ltype))
+        if not leaflist:
+            raise RuntimeError(
+                "the leaf list for branch %s is empty" %
+                thisBranch.GetName())
         ret[thisBranch.GetName()] = leaflist
     return ret
 
@@ -489,7 +499,7 @@ def root2array_fromFname(fnames, treename, branches, entries, offset, selection)
 def root2array_fromCObj(tree, branches, entries, offset, selection):
     # this is not a safe method
     # provided here for convenience only
-    # typecheck should be implemented for the wrapper
+    # typecheck should be implemented by the wrapper
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)

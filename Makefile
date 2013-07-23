@@ -1,6 +1,7 @@
 # simple makefile to simplify repetitive build env management tasks under posix
 
-PYTHON ?= python
+PYTHON := $(shell which python)
+CYTHON := $(shell which cython)
 NOSETESTS ?= nosetests
 CTAGS ?= ctags
 
@@ -40,7 +41,7 @@ upload: clean
 	$(PYTHON) setup.py sdist upload
 
 test-code: in
-	$(NOSETESTS) -s root_numpy
+	$(NOSETESTS) -s -v root_numpy
 
 test-doc:
 	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
@@ -65,11 +66,11 @@ doc: inplace
 	make -C docs/ html
 
 cython:
-	cython -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
-	cython -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
+	$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
+	$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
 
 check-rst:
-	python setup.py --long-description | rst2html.py > __output.html
+	$(PYTHON) setup.py --long-description | rst2html.py > __output.html
 	rm -f __output.html
 
 gh-pages: doc

@@ -221,20 +221,20 @@ class BetterChain
             LoadTree(0);
 
             TBranch* branch = fChain->FindBranch(bname.c_str());
-            if (branch == 0)
+            if (branch == NULL)
             {
                 PyErr_SetString(PyExc_IOError,
                     format("Cannot find branch %s", bname.c_str()).c_str());
-                return 0;
+                return NULL;
             }
 
             TLeaf* leaf = branch->FindLeaf(lname.c_str());
-            if (leaf==0)
+            if (leaf == NULL)
             {
                 PyErr_SetString(PyExc_IOError,
                     format("Cannot find leaf %s for branch %s", lname.c_str(),
                            bname.c_str()).c_str());
-                return 0;
+                return NULL;
             }
 
             // Make the branch active and cache it
@@ -250,10 +250,10 @@ class BetterChain
                 fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);
             }
 
-            BL bl = make_pair(bname,lname);
+            BL bl = make_pair(bname, lname);
             Column* ret = Column::build(leaf, colname);
-            if (ret == 0)
-                return 0;
+            if (ret == NULL)
+                return NULL;
             leafcache.insert(make_pair(bl, ret));
             return ret;
         }
