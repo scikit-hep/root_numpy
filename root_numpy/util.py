@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.lib.recfunctions as nprf
 from _libinnerjoin import blockwise_inner_join
+
 __all__ = [
     'stretch',
     'blockwise_inner_join'
@@ -21,7 +22,9 @@ def stretch(arr, col_names, asrecarray=True):
     Parameters
     ----------
     arr : NumPy structured or record array
+
     colnames : list of column names to stretch
+
     asrecarray : bool, optional (default=True)
         If `True`, return a record array, else return a structured array.
     """
@@ -42,8 +45,9 @@ def stretch(arr, col_names, asrecarray=True):
             has_scalar_filed = True
 
     if not has_array_field:
-        raise RuntimeError('No array column specified. '
-                           'What are you trying to do?')
+        raise RuntimeError(
+            "No array column specified. "
+            "What are you trying to do?")
 
     vl = np.vectorize(len)
     len_array = vl(arr[first_array])
@@ -59,8 +63,8 @@ def stretch(arr, col_names, asrecarray=True):
             stack = np.hstack(arr[c])
             if len(stack) != numrec:
                 raise RuntimeError(
-                    'Array filed length doesn\'t match'
-                    'Expect %d found %d in %s' %
+                    "Array filed length doesn't match"
+                    "Expect %d found %d in %s" %
                     (numrec, len(stack), c))
             ret[c] = stack
         else:
