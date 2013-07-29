@@ -15,34 +15,37 @@ cpdef blockwise_inner_join(data, left, foreign_key, right, force_repeat=None,
     
     Parameters
     ----------
-    
     data: full data set
+
     left: array of left side column names.
+
     foreign_key: numpy array or string foreign_key column name. 
-                 This column can be either integer or array of int.
-                 if foreign_key is array of int column, left column will 
-                 be treated according to left column type:
-                   - Scalar columns or columns in force_repeat will be repeated
-                   - Array columns not in force_repeat will be assumed to the 
-                     same length as foreign_key and will be strecthed by index 
+        This column can be either integer or array of int.
+        if foreign_key is array of int column, left column will 
+        be treated according to left column type:
+        - Scalar columns or columns in force_repeat will be repeated
+        - Array columns not in force_repeat will be assumed to the 
+            same length as foreign_key and will be strecthed by index 
+
     right: array of right side column names. These are array columns that 
-           each index foreign_key points to.
-           These columns are assumed to have the same length.
+        each index foreign_key points to.
+        These columns are assumed to have the same length.
+
     force_repeat: array of left column names that 
-                  will be force to stretch even if it's an array(useful when
-                  you want to emulate multiple join)
+        will be force to stretch even if it's an array(useful when
+        you want to emulate multiple join)
+
     Example
     -------
-    >>>test_data = np.array([
-                    (1.0,np.array([11,12,13]),np.array([1,0,1]),0,np.array([1,2,3])),
-                    (2.0,np.array([21,22,23]),np.array([-1,2,-1]),1,np.array([31,32,33]))
-                    ],
-                    dtype=[('sl',np.float),('al','O'),('fk','O'),('s_fk',np.int),('ar','O')])
-    >>>blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'] )
+    >>> test_data = np.array([
+        (1.0, np.array([11,12,13]), np.array([1,0,1]), 0, np.array([1,2,3])),
+        (2.0, np.array([21,22,23]), np.array([-1,2,-1]), 1, np.array([31,32,33]))],
+        dtype=[('sl', np.float), ('al', 'O'), ('fk', 'O'), ('s_fk', np.int), ('ar', 'O')])
+    >>> blockwise_inner_join(test_data, ['sl', 'al'], test_data['fk'], ['ar'] )
     array([(1.0, 11, 2, 1), (1.0, 12, 1, 0), (1.0, 13, 2, 1), (2.0, 22, 33, 2)], 
       dtype=[('sl', '<f8'), ('al', '<i8'), ('ar', '<i8'), ('fk', '<i8')])
     >>>
-    >>>blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'], force_repeat=['al'] )
+    >>> blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'], force_repeat=['al'] )
     array([(1.0, [11, 12, 13], 2, 1), (1.0, [11, 12, 13], 1, 0),
        (1.0, [11, 12, 13], 2, 1), (2.0, [21, 22, 23], 33, 2)], 
       dtype=[('sl', '<f8'), ('al', '|O8'), ('ar', '<i8'), ('fk', '<i8')])
@@ -103,6 +106,7 @@ cpdef blockwise_inner_join(data, left, foreign_key, right, force_repeat=None,
                            repeat_columns, stretch_columns,
                            repeat_indices, stretch_indices, right_indices)
     return ret
+
 
 cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
                            new_dtype, 
