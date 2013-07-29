@@ -8,10 +8,10 @@ CTAGS ?= ctags
 all: clean inplace test
 
 clean-pyc:
-	find root_numpy -name "*.pyc" | xargs rm -f
+	find . -name "*.pyc" -exec rm {} \;
 
 clean-so:
-	find root_numpy -name "*.so" | xargs rm -f
+	find root_numpy -name "*.so" -exec rm {} \;
 
 clean-build:
 	rm -rf build
