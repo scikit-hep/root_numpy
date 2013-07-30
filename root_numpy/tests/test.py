@@ -329,12 +329,13 @@ class TestRootNumpy(unittest.TestCase):
                             ('branch2_floatleaf', '<f4')]))
 
     def test_array2root(self):
-        a = np.array([(12345, 2., 2.1,),
-                      (3, 4., 4.2,),],
+        a = np.array([(12345, 2., 2.1, True),
+                      (3, 4., 4.2, False),],
             dtype=[
                 ('x', np.int32),
                 ('y', np.float32),
-                ('z', np.float64)])
+                ('z', np.float64),
+                ('w', np.bool)])
         tree = array2tree(a)
         tree.Print()
         tree.Scan()

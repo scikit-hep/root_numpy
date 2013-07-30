@@ -553,6 +553,7 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
 
 cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None):
     scalarlist = {
+        np.dtype(np.bool): (1, 'O'),
         #np.int8 from cython means something else
         np.dtype(np.int8): (1, 'B'),
         np.dtype(np.int16): (2, 'S'),
@@ -569,20 +570,23 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
     }
     #TODO:
     #np.float16: #this needs special treatment root doesn't have 16 bit float?
-    #np.bool #this is need special case
     #np.object #this too should detect basic numpy array
     #How to detect fixed length array?
     if dtype in scalarlist:
         nbytes, roottype = scalarlist[dtype]
         return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
+        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        return NULL
         #lets peek
+        """
         if type(peekvalue) == type(np.array([])):
             ndim = peekvalue.ndim
             dtype = peekvalue.dtype
             #TODO finish this
+        """
     else:
-        warn('Converter for %r not implemented yet. Skip.'%dtype)
+        warn('Converter for %r not implemented yet. Skip.' % dtype)
     return NULL
 
 
