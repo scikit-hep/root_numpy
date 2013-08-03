@@ -58,7 +58,10 @@ test: test-code test-doc
 trailing-spaces:
 	@find root_numpy -name "*.py" | xargs perl -pi -e 's/[ \t]*$$//'
 
-doc: inplace
+doc-clean:
+	@make -C docs/ clean
+
+doc: clean doc-clean inplace
 	@make -C docs/ html
 
 cython:
