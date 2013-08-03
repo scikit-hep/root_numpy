@@ -16,19 +16,16 @@ clean-so:
 clean-build:
 	rm -rf build
 
-clean-ctags:
-	rm -f tags
-
-clean: clean-build clean-pyc clean-so clean-ctags
+clean: clean-build clean-pyc clean-so
 
 in: inplace # just a shortcut
 inplace:
 	$(PYTHON) setup.py build_ext -i
 
-install:
+install: clean
 	$(PYTHON) setup.py install
 
-install-user:
+install-user: clean
 	$(PYTHON) setup.py install --user
 
 sdist: clean
@@ -44,7 +41,7 @@ test-code: inplace
 	$(NOSETESTS) -s -v root_numpy
 
 test-installed:
-	(mkdir nose && cd nose && \
+	(mkdir -p nose && cd nose && \
 	$(NOSETESTS) -s -v --exe root_numpy && \
 	cd - && rm -rf nose)
 
