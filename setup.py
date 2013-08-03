@@ -54,10 +54,19 @@ setup(
     url='https://github.com/rootpy/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
-    packages=['root_numpy','root_numpy.tests'],
+    packages=[
+        'root_numpy',
+        'root_numpy.extern',
+        'root_numpy.tests',
+    ],
     package_data={
-        'root_numpy': ['tests/data/*.root']},
-    ext_modules=[librootnumpy, libnumpyhist, libinnerjoin],
+        'root_numpy': ['tests/data/*.root'],
+    },
+    ext_modules=[
+        librootnumpy,
+        libnumpyhist,
+        libinnerjoin,
+    ],
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Utilities",
