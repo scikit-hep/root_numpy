@@ -40,8 +40,13 @@ register:
 upload: clean
 	$(PYTHON) setup.py sdist upload
 
-test-code: in
+test-code: inplace
 	$(NOSETESTS) -s -v root_numpy
+
+test-installed:
+	(mkdir nose && cd nose && \
+	$(NOSETESTS) -s -v --exe root_numpy && \
+	cd - && rm -rf nose)
 
 test-doc:
 	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
