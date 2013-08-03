@@ -3,77 +3,74 @@
 PYTHON := $(shell which python)
 CYTHON := $(shell which cython)
 NOSETESTS ?= nosetests
-CTAGS ?= ctags
 
 all: clean inplace test
 
 clean-pyc:
-	find . -name "*.pyc" -exec rm {} \;
+	@find . -name "*.pyc" -exec rm {} \;
 
 clean-so:
-	find root_numpy -name "*.so" -exec rm {} \;
+	@find root_numpy -name "*.so" -exec rm {} \;
 
 clean-build:
-	rm -rf build
+	@rm -rf build
 
 clean: clean-build clean-pyc clean-so
 
 in: inplace # just a shortcut
 inplace:
-	$(PYTHON) setup.py build_ext -i
+	@$(PYTHON) setup.py build_ext -i
 
 install: clean
-	$(PYTHON) setup.py install
+	@$(PYTHON) setup.py install
 
 install-user: clean
-	$(PYTHON) setup.py install --user
+	@$(PYTHON) setup.py install --user
 
 sdist: clean
-	$(PYTHON) setup.py sdist
+	@$(PYTHON) setup.py sdist
 
 register:
-	$(PYTHON) setup.py register
+	@$(PYTHON) setup.py register
 
 upload: clean
-	$(PYTHON) setup.py sdist upload
+	@$(PYTHON) setup.py sdist upload
 
 test-code: inplace
-	$(NOSETESTS) -s -v root_numpy
+	@$(NOSETESTS) -s -v root_numpy
 
 test-installed:
-	(mkdir -p nose && cd nose && \
+	@(mkdir -p nose && cd nose && \
 	$(NOSETESTS) -s -v --exe root_numpy && \
-	cd - && rm -rf nose)
+	cd .. && rm -rf nose)
 
 test-doc:
-	$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
+	@$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
 	--doctest-extension=inc --doctest-fixtures=_fixture docs/
 
 test-coverage:
-	rm -rf coverage .coverage
-	$(NOSETESTS) -s --with-coverage --cover-html --cover-html-dir=coverage \
+	@rm -rf coverage .coverage
+	@$(NOSETESTS) -s --with-coverage --cover-html --cover-html-dir=coverage \
 	--cover-package=root_numpy root_numpy
 
 test: test-code test-doc
 
 trailing-spaces:
-	find root_numpy -name "*.py" | xargs perl -pi -e 's/[ \t]*$$//'
+	@find root_numpy -name "*.py" | xargs perl -pi -e 's/[ \t]*$$//'
 
-ctags:
-	# make tags for symbol based navigation in emacs and vim
-	# Install with: sudo apt-get install exuberant-ctags
-	$(CTAGS) -R *
+doc-clean:
+	@make -C docs/ clean
 
-doc: inplace
-	make -C docs/ html
+doc: clean doc-clean inplace
+	@make -C docs/ html
 
 cython:
-	$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
-	$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
+	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
+	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
 
 check-rst:
-	$(PYTHON) setup.py --long-description | rst2html.py > __output.html
-	rm -f __output.html
+	@$(PYTHON) setup.py --long-description | rst2html.py > __output.html
+	@rm -f __output.html
 
 gh-pages: doc
-	./ghp-import -m "update docs" -r upstream -f -p docs/_build/html/
+	@./ghp-import -m "update docs" -r upstream -f -p docs/_build/html/
