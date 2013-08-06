@@ -293,7 +293,26 @@ def tree2rec(tree,
 
 
 def array2tree(arr, name='tree', tree=None):
+    """
+    Convert a numpy structured array into a ROOT TTree.
 
+    Parameters
+    ----------
+    arr : array
+        A numpy structured array
+    name : str (optional, default='tree')
+        name of created ROOT TTree if ``tree`` is None.
+    tree : existing ROOT TTree (optional, default=None)
+        Any branch with the same name as a field in the
+        numpy array will be extended as long as the types are compatible,
+        otherwise a TypeError is raised. New branches will be created
+        and filled for all new fields.
+
+    Returns
+    -------
+    root_tree : a ROOT TTree
+
+    """
     import ROOT
     if tree is not None:
         if not isinstance(tree, ROOT.TTree):

@@ -539,7 +539,13 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
             leaflist = this.name + '/' + this.roottype
             this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
         else:
-            # TODO: check type compatibility of existing branch
+            # check type compatibility of existing branch
+            existing_type = this.branch.GetTitle().rpartition('/')[-1]
+            if str(roottype) != existing_type:
+                raise TypeError(
+                    "field `%s` of type `%s` is not compatible "
+                    "with existing branch of type `%s`" % (
+                        name, roottype, existing_type))
             this.branch.SetAddress(this.value)
         this.branch.SetStatus(1)
 
@@ -563,10 +569,9 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
         np.dtype(np.uint16): (2, 's'),
         np.dtype(np.uint32): (4, 'i'),
         np.dtype(np.uint64): (8, 'l'),
-        
         np.dtype(np.float): (8, 'D'),
         np.dtype(np.float32): (4, 'F'),
-        np.dtype(np.float64): (8, 'D')
+        np.dtype(np.float64): (8, 'D'),
     }
     #TODO:
     #np.float16: #this needs special treatment root doesn't have 16 bit float?

@@ -16,6 +16,7 @@ cdef extern from "TObjArray.h":
 cdef extern from "TBranch.h":
     cdef cppclass TBranch:
         const_char* GetName()
+        const_char* GetTitle()
         TObjArray* GetListOfLeaves()
         void SetAddress(void* addr)
         void SetStatus(bool status)
