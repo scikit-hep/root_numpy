@@ -40,7 +40,7 @@ def list_trees(fname):
         raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
-    cdef TFile* f = new TFile(fname)
+    cdef TFile* f = new TFile(fname, 'read')
     if f is NULL:
         raise IOError('Cannot read: %s' % fname)
 
@@ -69,7 +69,7 @@ def list_structures(fname, tree=None):
         else:
             tree = tree[0]
 
-    cdef TFile* f = new TFile(fname)
+    cdef TFile* f = new TFile(fname, 'read')
     fname = glob(fname)#poor man support for globbing
     if len(fname) == 0:
         raise IOError('File not found: %s' % fname)
@@ -668,17 +668,17 @@ def array2tree_toCObj(arr, name='tree', tree=None):
     return PyCObject_FromVoidPtr(outtree, NULL)
 
 
-def array2root(arr, filename, treename='tree'):
+def array2root(arr, filename, treename='tree', mode='update'):
     
-    cdef TFile* file
-    cdef TTree* tree
-    file = new TFile(filename, 'UPDATE')
-    if file == NULL:
-        raise IOError("cannot open file {0} for writing".format(filename))
-    tree = array2tree(arr, name=treename)
+    cdef TFile* file = new TFile(filename, mode)
+    if file is NULL:
+        raise IOError("cannot open file %s" % filename)
+    if not file.IsWritable():
+        raise IOError("file %s is not writable" % filename)
+    cdef TTree* tree = array2tree(arr, name=treename)
     tree.Write()
     file.Close()
-    del tree
+    # how to clean up TTree? Same question as above.
     del file
 
 

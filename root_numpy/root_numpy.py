@@ -17,6 +17,7 @@ __all__ = [
     'tree2array',
     'tree2rec',
     'array2tree',
+    'array2root',
     'fill_array',
 ]
 
@@ -328,7 +329,7 @@ def array2tree(arr, name='tree', tree=None):
     return ROOT.BindObject(cobj, 'TTree')
 
 
-def array2root(arr, filename, treename='tree'):
+def array2root(arr, filename, treename='tree', mode='update'):
     """
     Convert a numpy structured array into a ROOT TTree and save directly in a
     ROOT TFile.
@@ -342,18 +343,15 @@ def array2root(arr, filename, treename='tree'):
         doesn't already exist.
     treename : str (optional, default='tree')
         Name of the created ROOT TTree.
-    tree : existing ROOT TTree (optional, default=None)
-        Any branch with the same name as a field in the
-        numpy array will be extended as long as the types are compatible,
-        otherwise a TypeError is raised. New branches will be created
-        and filled for all new fields.
+    mode : str (optional, default='update')
+        Mode used to open the ROOT TFile.
 
     See Also
     --------
     array2tree
 
     """
-    _librootnumpy.array2root(arr, filename, treename)
+    _librootnumpy.array2root(arr, filename, treename, mode)
 
 
 def fill_array(hist, array, weights=None):

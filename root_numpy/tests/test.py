@@ -1,16 +1,17 @@
+import os
 from os.path import dirname, join
+import tempfile
+
 import numpy as np
 from numpy.testing import assert_array_equal
-from root_numpy import *
+
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D
-try:
-    from collections import OrderedDict
-except ImportError:
-    # Fall back on drop-in
-    from root_numpy.OrderedDict import OrderedDict
+
+from root_numpy import *
+from root_numpy.extern.ordereddict import OrderedDict
+
 import unittest
-from nose.tools import *
-from nose.tools import assert_equal, assert_almost_equal
+from nose.tools import raises, assert_equal, assert_almost_equal
 
 
 class TestRootNumpy(unittest.TestCase):
@@ -328,7 +329,7 @@ class TestRootNumpy(unittest.TestCase):
                             ('branch2_intleaf', '<i4'),
                             ('branch2_floatleaf', '<f4')]))
 
-    def test_array2root(self):
+    def test_array2tree(self):
         a = np.array([(12345, 2., 2.1, True),
                       (3, 4., 4.2, False),],
             dtype=[
@@ -340,6 +341,20 @@ class TestRootNumpy(unittest.TestCase):
         tree.Print()
         tree.Scan()
         tree.Delete()
+
+    def test_array2root(self):
+        a = np.array([(12345, 2., 2.1, True),
+                      (3, 4., 4.2, False),],
+            dtype=[
+                ('x', np.int32),
+                ('y', np.float32),
+                ('z', np.float64),
+                ('w', np.bool)])
+        tmp_fd, tmp_path = tempfile.mkstemp(suffix='.root')
+        array2root(a, tmp_path, mode='recreate')
+        os.close(tmp_fd)
+        os.remove(tmp_path)
+
 
 if __name__ == '__main__':
     import nose

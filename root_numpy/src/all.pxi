@@ -30,12 +30,13 @@ cdef extern from "TLeaf.h":
 
 cdef extern from "TFile.h":
     cdef cppclass TFile:
-        TFile(const_char*)
         TFile(const_char*, const_char*)
         void Print()
         TList* GetListOfKeys()
         TObject* Get(const_char*)
         void Close()
+        bool IsOpen()
+        bool IsWritable()
 
 cdef extern from "TTree.h":
     cdef cppclass TTree:
