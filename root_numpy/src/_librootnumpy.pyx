@@ -668,6 +668,20 @@ def array2tree_toCObj(arr, name='tree', tree=None):
     return PyCObject_FromVoidPtr(outtree, NULL)
 
 
+def array2root(arr, filename, treename='tree'):
+    
+    cdef TFile* file
+    cdef TTree* tree
+    file = new TFile(filename, 'UPDATE')
+    if file == NULL:
+        raise IOError("cannot open file {0} for writing".format(filename))
+    tree = array2tree(arr, name=treename)
+    tree.Write()
+    file.Close()
+    del tree
+    del file
+
+
 @atexit.register
 def cleanup():
     # delete all allocated converters 

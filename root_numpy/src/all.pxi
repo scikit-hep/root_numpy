@@ -35,6 +35,7 @@ cdef extern from "TFile.h":
         void Print()
         TList* GetListOfKeys()
         TObject* Get(const_char*)
+        void Close()
 
 cdef extern from "TTree.h":
     cdef cppclass TTree:
@@ -52,6 +53,7 @@ cdef extern from "TTree.h":
         int Scan()
         void Delete(void*)
         long SetEntries(long)
+        int Write()
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
@@ -119,5 +121,4 @@ cdef extern from "<memory>" namespace "std":
         auto_ptr() 
         auto_ptr(T* ptr) 
         reset (T* p)
-        T* get() 
-
+        T* get()

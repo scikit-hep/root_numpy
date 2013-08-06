@@ -301,7 +301,7 @@ def array2tree(arr, name='tree', tree=None):
     arr : array
         A numpy structured array
     name : str (optional, default='tree')
-        name of created ROOT TTree if ``tree`` is None.
+        Name of the created ROOT TTree if ``tree`` is None.
     tree : existing ROOT TTree (optional, default=None)
         Any branch with the same name as a field in the
         numpy array will be extended as long as the types are compatible,
@@ -311,6 +311,10 @@ def array2tree(arr, name='tree', tree=None):
     Returns
     -------
     root_tree : a ROOT TTree
+
+    See Also
+    --------
+    array2root
 
     """
     import ROOT
@@ -322,6 +326,34 @@ def array2tree(arr, name='tree', tree=None):
         incobj = None
     cobj = _librootnumpy.array2tree_toCObj(arr, name=name, tree=incobj)
     return ROOT.BindObject(cobj, 'TTree')
+
+
+def array2root(arr, filename, treename='tree'):
+    """
+    Convert a numpy structured array into a ROOT TTree and save directly in a
+    ROOT TFile.
+
+    Parameters
+    ----------
+    arr : array
+        A numpy structured array
+    filename : str
+        Name of the output ROOT TFile. A new file will be created if it
+        doesn't already exist.
+    treename : str (optional, default='tree')
+        Name of the created ROOT TTree.
+    tree : existing ROOT TTree (optional, default=None)
+        Any branch with the same name as a field in the
+        numpy array will be extended as long as the types are compatible,
+        otherwise a TypeError is raised. New branches will be created
+        and filled for all new fields.
+
+    See Also
+    --------
+    array2tree
+
+    """
+    _librootnumpy.array2root(arr, filename, treename)
 
 
 def fill_array(hist, array, weights=None):
