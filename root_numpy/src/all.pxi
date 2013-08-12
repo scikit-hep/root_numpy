@@ -1,11 +1,6 @@
 from libcpp cimport bool
 from libcpp.string cimport string, const_char
 
-cdef extern from "stdlib.h":
-    void free(void* ptr)
-    void* malloc(size_t size)
-    void* realloc(void* ptr, size_t size)
-
 cdef extern from "TObject.h":
     cdef cppclass TObject:
         TObject()
@@ -21,7 +16,11 @@ cdef extern from "TObjArray.h":
 cdef extern from "TBranch.h":
     cdef cppclass TBranch:
         const_char* GetName()
+        const_char* GetTitle()
         TObjArray* GetListOfLeaves()
+        void SetAddress(void* addr)
+        void SetStatus(bool status)
+        int Fill()
 
 cdef extern from "TLeaf.h":
     cdef cppclass TLeaf:
@@ -31,20 +30,31 @@ cdef extern from "TLeaf.h":
 
 cdef extern from "TFile.h":
     cdef cppclass TFile:
-        TFile(const_char*)
         TFile(const_char*, const_char*)
         void Print()
         TList* GetListOfKeys()
         TObject* Get(const_char*)
+        void Close()
+        bool IsOpen()
+        bool IsWritable()
 
 cdef extern from "TTree.h":
     cdef cppclass TTree:
         TTree()
+        TTree(const_char*,  const_char*)
         void GetEntry(int i)
         int GetEntries()
-        void SetBranchAddress(const_char* bname,void* addr)
+        void SetBranchAddress(const_char* bname, void* addr)
+        void SetBranchStatus(const_char* bname, bool status)
         void Print()
+        TBranch* Branch(const_char* name, void* address, const_char* leaflist)
+        TBranch* GetBranch(const_char* name)
         TObjArray* GetListOfBranches()
+        int Fill()
+        int Scan()
+        void Delete(void*)
+        long SetEntries(long)
+        int Write()
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
@@ -106,3 +116,10 @@ cdef extern from "util.h":
 cdef extern from "Vector2Array.h":
     cdef cppclass Vector2Array[T]:
         T* convert(vector[T]* v)
+
+cdef extern from "<memory>" namespace "std": 
+    cdef cppclass auto_ptr[T]:
+        auto_ptr() 
+        auto_ptr(T* ptr) 
+        reset (T* p)
+        T* get()

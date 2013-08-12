@@ -1,19 +1,22 @@
 # cython: experimental_cpp_class_def=True
 import numpy as np
 cimport numpy as np
+np.import_array()
+
+from cpython cimport array
+from cpython.ref cimport Py_INCREF, Py_XDECREF
+from cpython cimport PyObject
+from cpython.cobject cimport (PyCObject_AsVoidPtr,
+                              PyCObject_Check,
+                              PyCObject_FromVoidPtr)
+from cython.operator cimport dereference as deref, preincrement as inc
 
 from libcpp.vector cimport vector
 from libcpp.map cimport map as cpp_map
 from libcpp.pair cimport pair
 from libcpp.string cimport string, const_char
 from libc.string cimport memcpy
-
-from cpython cimport array
-from cpython.ref cimport Py_INCREF, Py_XDECREF
-from cpython cimport PyObject
-from cpython.cobject cimport PyCObject_AsVoidPtr, PyCObject_Check
-
-from cython.operator cimport dereference as deref, preincrement as inc
+from libc.stdlib cimport malloc, free, realloc
 
 try:
     from collections import OrderedDict
@@ -24,9 +27,46 @@ except ImportError:
 import atexit
 from glob import glob
 import warnings
+from warnings import warn
 from root_numpy_warnings import RootNumpyUnconvertibleWarning
+
 include "all.pxi"
-np.import_array()
+
+
+ctypedef unsigned char unsigned_char
+ctypedef unsigned short unsigned_short
+ctypedef unsigned int unsigned_int
+ctypedef unsigned long unsigned_long
+
+TYPES = {
+    TypeName[bool]().name:           ('bool',           np.dtype(np.bool),      np.NPY_BOOL),
+    TypeName[char]().name:           ('char',           np.dtype(np.int8),      np.NPY_INT8),
+    TypeName[unsigned_char]().name:  ('unsigned char',  np.dtype(np.uint8),     np.NPY_UINT8),
+    TypeName[short]().name:          ('short',          np.dtype(np.int16),     np.NPY_INT16),
+    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16),    np.NPY_UINT8),
+    TypeName[int]().name:            ('int',            np.dtype(np.int32),     np.NPY_INT32),
+    TypeName[unsigned_int]().name:   ('unsigned int',   np.dtype(np.uint32),    np.NPY_UINT32),
+    TypeName[long]().name:           ('long',           np.dtype(np.int64),     np.NPY_INT64),
+    TypeName[unsigned_long]().name:  ('unsigned long',  np.dtype(np.uint64),    np.NPY_UINT64),
+    TypeName[float]().name:          ('float',          np.dtype(np.float32),   np.NPY_FLOAT32),
+    TypeName[double]().name:         ('double',         np.dtype(np.float64),   np.NPY_FLOAT64),
+}
+
+TYPES_NUMPY2ROOT = {
+    np.dtype(np.bool):      (1, 'O'),
+    #np.int8 from cython means something else
+    np.dtype(np.int8):      (1, 'B'),
+    np.dtype(np.int16):     (2, 'S'),
+    np.dtype(np.int32):     (4, 'I'),
+    np.dtype(np.int64):     (8, 'L'),
+    np.dtype(np.uint8):     (1, 'b'),
+    np.dtype(np.uint16):    (2, 's'),
+    np.dtype(np.uint32):    (4, 'i'),
+    np.dtype(np.uint64):    (8, 'l'),
+    np.dtype(np.float):     (8, 'D'),
+    np.dtype(np.float32):   (4, 'F'),
+    np.dtype(np.float64):   (8, 'D'),
+}
 
 
 def list_trees(fname):
@@ -36,7 +76,7 @@ def list_trees(fname):
         raise IOError('File not found: %s' % fname)
     fname = fname[0]
 
-    cdef TFile* f = new TFile(fname)
+    cdef TFile* f = new TFile(fname, 'read')
     if f is NULL:
         raise IOError('Cannot read: %s' % fname)
 
@@ -65,7 +105,7 @@ def list_structures(fname, tree=None):
         else:
             tree = tree[0]
 
-    cdef TFile* f = new TFile(fname)
+    cdef TFile* f = new TFile(fname, 'read')
     fname = glob(fname)#poor man support for globbing
     if len(fname) == 0:
         raise IOError('File not found: %s' % fname)
@@ -265,25 +305,6 @@ cdef cppclass VectorBoolConverter(VectorConverterBase):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp)
 
-
-ctypedef unsigned char unsigned_char
-ctypedef unsigned short unsigned_short
-ctypedef unsigned int unsigned_int
-ctypedef unsigned long unsigned_long
-
-TYPES = {
-    TypeName[bool]().name:           ('bool', np.dtype(np.bool), np.NPY_BOOL),
-    TypeName[char]().name:           ('char', np.dtype(np.int8), np.NPY_INT8),
-    TypeName[unsigned_char]().name:  ('unsigned char', np.dtype(np.uint8), np.NPY_UINT8),
-    TypeName[short]().name:          ('short', np.dtype(np.int16), np.NPY_INT16),
-    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16), np.NPY_UINT8),
-    TypeName[int]().name:            ('int', np.dtype(np.int32), np.NPY_INT32),
-    TypeName[unsigned_int]().name:   ('unsigned int', np.dtype(np.uint32), np.NPY_UINT32),
-    TypeName[long]().name:           ('long', np.dtype(np.int64), np.NPY_INT64),
-    TypeName[unsigned_long]().name:  ('unsigned long', np.dtype(np.uint64), np.NPY_UINT64),
-    TypeName[float]().name:          ('float', np.dtype(np.float32), np.NPY_FLOAT32),
-    TypeName[double]().name:         ('double', np.dtype(np.float64), np.NPY_FLOAT64),
-}
 
 cdef cpp_map[string, Converter*] CONVERTERS
 ctypedef pair[string, Converter*] CONVERTERS_ITEM
@@ -505,6 +526,163 @@ def root2array_fromCObj(tree, branches, entries, offset, selection):
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(
             chain, branches, entries, offset, selection)
+
+
+"""
+array -> TTree conversion follows:
+"""
+
+cdef cppclass NP2CConverter:
+    void fill_from(void* source):
+        pass
+
+
+cdef cppclass ScalarNP2CConverter(NP2CConverter):
+    int nbytes
+    string roottype
+    string name
+    void* value
+    TBranch* branch
+    # don't use copy constructor of this one since it will screw up
+    # tree binding and/or ownership of value
+    __init__(TTree* tree, string name, string roottype, int nbytes):
+        cdef string leaflist
+        this.nbytes = nbytes
+        this.roottype = roottype
+        this.name = name
+        this.value = malloc(nbytes)
+        this.branch = tree.GetBranch(this.name.c_str())
+        if this.branch == NULL:
+            leaflist = this.name + '/' + this.roottype
+            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+        else:
+            # check type compatibility of existing branch
+            existing_type = this.branch.GetTitle().rpartition('/')[-1]
+            if str(roottype) != existing_type:
+                raise TypeError(
+                    "field `%s` of type `%s` is not compatible "
+                    "with existing branch of type `%s`" % (
+                        name, roottype, existing_type))
+            this.branch.SetAddress(this.value)
+        this.branch.SetStatus(1)
+
+    __del__(self): # does this do what I want?
+        free(this.value)
+
+    void fill_from(void* source):
+        memcpy(this.value, source, this.nbytes)
+        this.branch.Fill()
+
+
+cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None):
+    # TODO:
+    # np.float16: #this needs special treatment root doesn't have 16 bit float?
+    # np.object #this too should detect basic numpy array
+    # How to detect fixed length array?
+    if dtype in TYPES_NUMPY2ROOT:
+        nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
+        return new ScalarNP2CConverter(tree, name, roottype, nbytes)
+    elif dtype == np.dtype(np.object):
+        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        return NULL
+        #lets peek
+        """
+        if type(peekvalue) == type(np.array([])):
+            ndim = peekvalue.ndim
+            dtype = peekvalue.dtype
+            #TODO finish this
+        """
+    else:
+        warn('Converter for %r not implemented yet. Skip.' % dtype)
+    return NULL
+
+
+cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
+    # hmm how do I catch all python exception
+    # and clean up before throwing ?
+    cdef vector[NP2CConverter*] cvarray
+    cdef vector[int] posarray
+    cdef vector[int] roffsetarray
+    cdef int icol
+    cdef auto_ptr[NP2CConverter] tmp
+    cdef int icv = 0
+    cdef int arr_len = 0
+    cdef int pos_len = 0
+    cdef void* source = NULL
+    cdef void* thisrow = NULL
+    cdef NP2CConverter* tmpcv
+    
+    try: 
+        if tree == NULL:
+            tree = new TTree(name, name)
+        
+        fieldnames = arr.dtype.names
+        fields = arr.dtype.fields
+        
+        # figure out the structure
+        for icol, fieldname in enumerate(fieldnames):
+            # roffset is an offset of particular field in each record
+            dtype, roffset = fields[fieldname] 
+            cvt = find_np2c_converter(tree, fieldname, dtype, arr[0][fieldname])
+            if cvt is not NULL:
+                roffsetarray.push_back(roffset)
+                cvarray.push_back(cvt)
+                posarray.push_back(icol)
+
+        # fill in data
+        pos_len = posarray.size()
+        for idata in xrange(len(arr)):
+            thisrow = np.PyArray_GETPTR1(arr, idata)
+            for ipos in range(pos_len):
+                roffset = roffsetarray[ipos]
+                source = shift(thisrow, roffset)
+                cvarray[ipos].fill_from(source)
+        
+        # need to update the number of entries in the tree to match
+        # the number in the branches since each branch is filled separately.
+        tree.SetEntries(-1)
+    
+    except:
+        raise
+    
+    finally:
+        # how do I clean up TTree?
+        # root has some global funny memory management...
+        # need to make sure no double free
+        for icv in range(cvarray.size()):
+            tmpcv = cvarray[icv]
+            del tmpcv
+
+    return tree
+
+
+def array2tree_toCObj(arr, name='tree', tree=None):
+    
+    cdef TTree* intree = NULL
+    cdef TTree* outtree = NULL
+    if tree is not None:
+        # this is not a safe method
+        # provided here for convenience only
+        # typecheck should be implemented by the wrapper
+        if not PyCObject_Check(tree):
+            raise ValueError('tree must be PyCObject')
+        intree = <TTree*> PyCObject_AsVoidPtr(tree)
+    outtree = array2tree(arr, name=name, tree=intree)
+    return PyCObject_FromVoidPtr(outtree, NULL)
+
+
+def array2root(arr, filename, treename='tree', mode='update'):
+    
+    cdef TFile* file = new TFile(filename, mode)
+    if file is NULL:
+        raise IOError("cannot open file %s" % filename)
+    if not file.IsWritable():
+        raise IOError("file %s is not writable" % filename)
+    cdef TTree* tree = array2tree(arr, name=treename)
+    tree.Write()
+    file.Close()
+    # how to clean up TTree? Same question as above.
+    del file
 
 
 @atexit.register

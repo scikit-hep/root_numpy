@@ -25,7 +25,7 @@ inline std::string format(const char* fmt, ...)
     }
     std::string ret(buffer);
     va_end(vl);
-    delete buffer;
+    delete[] buffer;
     return ret;
 }
 
