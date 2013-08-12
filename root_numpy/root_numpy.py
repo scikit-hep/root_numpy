@@ -297,6 +297,10 @@ def array2tree(arr, name='tree', tree=None):
     """
     Convert a numpy structured array into a ROOT TTree.
 
+    .. warning::
+       This function is experimental. Please report problems.
+       Not all data types are supported (``np.object`` and ``np.float16``).
+
     Parameters
     ----------
     arr : array
@@ -334,6 +338,10 @@ def array2root(arr, filename, treename='tree', mode='update'):
     Convert a numpy structured array into a ROOT TTree and save directly in a
     ROOT TFile.
 
+    .. warning::
+       This function is experimental. Please report problems.
+       Not all data types are supported (``np.object`` and ``np.float16``).
+
     Parameters
     ----------
     arr : array
@@ -344,7 +352,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     treename : str (optional, default='tree')
         Name of the created ROOT TTree.
     mode : str (optional, default='update')
-        Mode used to open the ROOT TFile.
+        Mode used to open the ROOT TFile ('update' or 'recreate').
 
     See Also
     --------
