@@ -33,6 +33,42 @@ from root_numpy_warnings import RootNumpyUnconvertibleWarning
 include "all.pxi"
 
 
+ctypedef unsigned char unsigned_char
+ctypedef unsigned short unsigned_short
+ctypedef unsigned int unsigned_int
+ctypedef unsigned long unsigned_long
+
+TYPES = {
+    TypeName[bool]().name:           ('bool',           np.dtype(np.bool),      np.NPY_BOOL),
+    TypeName[char]().name:           ('char',           np.dtype(np.int8),      np.NPY_INT8),
+    TypeName[unsigned_char]().name:  ('unsigned char',  np.dtype(np.uint8),     np.NPY_UINT8),
+    TypeName[short]().name:          ('short',          np.dtype(np.int16),     np.NPY_INT16),
+    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16),    np.NPY_UINT8),
+    TypeName[int]().name:            ('int',            np.dtype(np.int32),     np.NPY_INT32),
+    TypeName[unsigned_int]().name:   ('unsigned int',   np.dtype(np.uint32),    np.NPY_UINT32),
+    TypeName[long]().name:           ('long',           np.dtype(np.int64),     np.NPY_INT64),
+    TypeName[unsigned_long]().name:  ('unsigned long',  np.dtype(np.uint64),    np.NPY_UINT64),
+    TypeName[float]().name:          ('float',          np.dtype(np.float32),   np.NPY_FLOAT32),
+    TypeName[double]().name:         ('double',         np.dtype(np.float64),   np.NPY_FLOAT64),
+}
+
+TYPES_NUMPY2ROOT = {
+    np.dtype(np.bool):      (1, 'O'),
+    #np.int8 from cython means something else
+    np.dtype(np.int8):      (1, 'B'),
+    np.dtype(np.int16):     (2, 'S'),
+    np.dtype(np.int32):     (4, 'I'),
+    np.dtype(np.int64):     (8, 'L'),
+    np.dtype(np.uint8):     (1, 'b'),
+    np.dtype(np.uint16):    (2, 's'),
+    np.dtype(np.uint32):    (4, 'i'),
+    np.dtype(np.uint64):    (8, 'l'),
+    np.dtype(np.float):     (8, 'D'),
+    np.dtype(np.float32):   (4, 'F'),
+    np.dtype(np.float64):   (8, 'D'),
+}
+
+
 def list_trees(fname):
     # Poor man support for globbing
     fname = glob(fname)
@@ -269,25 +305,6 @@ cdef cppclass VectorBoolConverter(VectorConverterBase):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp)
 
-
-ctypedef unsigned char unsigned_char
-ctypedef unsigned short unsigned_short
-ctypedef unsigned int unsigned_int
-ctypedef unsigned long unsigned_long
-
-TYPES = {
-    TypeName[bool]().name:           ('bool', np.dtype(np.bool), np.NPY_BOOL),
-    TypeName[char]().name:           ('char', np.dtype(np.int8), np.NPY_INT8),
-    TypeName[unsigned_char]().name:  ('unsigned char', np.dtype(np.uint8), np.NPY_UINT8),
-    TypeName[short]().name:          ('short', np.dtype(np.int16), np.NPY_INT16),
-    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16), np.NPY_UINT8),
-    TypeName[int]().name:            ('int', np.dtype(np.int32), np.NPY_INT32),
-    TypeName[unsigned_int]().name:   ('unsigned int', np.dtype(np.uint32), np.NPY_UINT32),
-    TypeName[long]().name:           ('long', np.dtype(np.int64), np.NPY_INT64),
-    TypeName[unsigned_long]().name:  ('unsigned long', np.dtype(np.uint64), np.NPY_UINT64),
-    TypeName[float]().name:          ('float', np.dtype(np.float32), np.NPY_FLOAT32),
-    TypeName[double]().name:         ('double', np.dtype(np.float64), np.NPY_FLOAT64),
-}
 
 cdef cpp_map[string, Converter*] CONVERTERS
 ctypedef pair[string, Converter*] CONVERTERS_ITEM
@@ -558,27 +575,12 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
 
 
 cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None):
-    scalarlist = {
-        np.dtype(np.bool): (1, 'O'),
-        #np.int8 from cython means something else
-        np.dtype(np.int8): (1, 'B'),
-        np.dtype(np.int16): (2, 'S'),
-        np.dtype(np.int32): (4, 'I'),
-        np.dtype(np.int64): (8, 'L'),
-        np.dtype(np.uint8): (1, 'b'),
-        np.dtype(np.uint16): (2, 's'),
-        np.dtype(np.uint32): (4, 'i'),
-        np.dtype(np.uint64): (8, 'l'),
-        np.dtype(np.float): (8, 'D'),
-        np.dtype(np.float32): (4, 'F'),
-        np.dtype(np.float64): (8, 'D'),
-    }
-    #TODO:
-    #np.float16: #this needs special treatment root doesn't have 16 bit float?
-    #np.object #this too should detect basic numpy array
-    #How to detect fixed length array?
-    if dtype in scalarlist:
-        nbytes, roottype = scalarlist[dtype]
+    # TODO:
+    # np.float16: #this needs special treatment root doesn't have 16 bit float?
+    # np.object #this too should detect basic numpy array
+    # How to detect fixed length array?
+    if dtype in TYPES_NUMPY2ROOT:
+        nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
         return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
         warn('Converter for %r not implemented yet. Skip.' % dtype)
@@ -596,8 +598,9 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
 
 
 cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
-    cdef vector[NP2CConverter*] cvarray # hmm how do I catch all python exception
-                                        # and clean up before throwing ?
+    # hmm how do I catch all python exception
+    # and clean up before throwing ?
+    cdef vector[NP2CConverter*] cvarray
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef int icol
