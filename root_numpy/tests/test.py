@@ -338,8 +338,8 @@ class TestRootNumpy(unittest.TestCase):
                 ('z', np.float64),
                 ('w', np.bool)])
         tree = array2tree(a)
-        tree.Print()
-        tree.Scan()
+        a_conv = tree2array(tree)
+        assert_array_equal(a, a_conv)
         tree.Delete()
 
     def test_array2root(self):
