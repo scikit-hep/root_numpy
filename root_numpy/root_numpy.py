@@ -16,6 +16,8 @@ __all__ = [
     'lb',
     'tree2array',
     'tree2rec',
+    'array2tree',
+    'array2root',
     'fill_array',
 ]
 
@@ -289,6 +291,75 @@ def tree2rec(tree,
                       include_weight=include_weight,
                       weight_name=weight_name,
                       weight_dtype=weight_dtype).view(np.recarray)
+
+
+def array2tree(arr, name='tree', tree=None):
+    """
+    Convert a numpy structured array into a ROOT TTree.
+
+    .. warning::
+       This function is experimental. Please report problems.
+       Not all data types are supported (``np.object`` and ``np.float16``).
+
+    Parameters
+    ----------
+    arr : array
+        A numpy structured array
+    name : str (optional, default='tree')
+        Name of the created ROOT TTree if ``tree`` is None.
+    tree : existing ROOT TTree (optional, default=None)
+        Any branch with the same name as a field in the
+        numpy array will be extended as long as the types are compatible,
+        otherwise a TypeError is raised. New branches will be created
+        and filled for all new fields.
+
+    Returns
+    -------
+    root_tree : a ROOT TTree
+
+    See Also
+    --------
+    array2root
+
+    """
+    import ROOT
+    if tree is not None:
+        if not isinstance(tree, ROOT.TTree):
+            raise TypeError("tree must be a ROOT.TTree")
+        incobj = ROOT.AsCObject(tree)
+    else:
+        incobj = None
+    cobj = _librootnumpy.array2tree_toCObj(arr, name=name, tree=incobj)
+    return ROOT.BindObject(cobj, 'TTree')
+
+
+def array2root(arr, filename, treename='tree', mode='update'):
+    """
+    Convert a numpy structured array into a ROOT TTree and save directly in a
+    ROOT TFile.
+
+    .. warning::
+       This function is experimental. Please report problems.
+       Not all data types are supported (``np.object`` and ``np.float16``).
+
+    Parameters
+    ----------
+    arr : array
+        A numpy structured array
+    filename : str
+        Name of the output ROOT TFile. A new file will be created if it
+        doesn't already exist.
+    treename : str (optional, default='tree')
+        Name of the created ROOT TTree.
+    mode : str (optional, default='update')
+        Mode used to open the ROOT TFile ('update' or 'recreate').
+
+    See Also
+    --------
+    array2tree
+
+    """
+    _librootnumpy.array2root(arr, filename, treename, mode)
 
 
 def fill_array(hist, array, weights=None):
