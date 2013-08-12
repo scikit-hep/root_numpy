@@ -30,7 +30,8 @@ import warnings
 from warnings import warn
 from root_numpy_warnings import RootNumpyUnconvertibleWarning
 
-include "all.pxi"
+include "ROOT.pxi"
+include "root_numpy.pxi"
 
 
 ctypedef unsigned char unsigned_char
