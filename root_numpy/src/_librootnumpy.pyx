@@ -397,7 +397,7 @@ cdef np.ndarray init_array(vector[Column*]& columns,
 
 
 cdef object root2array_fromTTree(TTree* tree, branches,
-                                 entries, offset, selection):
+                                 start, stop, step, selection):
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
@@ -406,11 +406,12 @@ cdef object root2array_fromTTree(TTree* tree, branches,
     cdef BetterChain* bc = new BetterChain(tree)
     cdef TTreeFormula* formula = NULL
     cdef int num_entries = bc.GetEntries()
+    cdef int num_entries_selected = 0
+    cdef int ientry
 
     # list of converter in the same order
     cdef Converter* thisCV
     cdef int numcol
-    cdef int ientry
     cdef void* dataptr
     cdef np.ndarray arr
     cdef int nb
@@ -465,20 +466,16 @@ cdef object root2array_fromTTree(TTree* tree, branches,
         
         # Now that we have all the columns we can
         # make an appropriate array structure
-        # First determine the correct size given tree size, offset, and entries
-        if entries is None:
-            entries = num_entries
-        num_entries = min(max(num_entries - offset, 0), entries)
-
         arr = init_array(columns, cvarray, num_entries)
         numcol = columns.size()
-        ientry = 0
-        ientry_selected = 0
-        bc.GetEntry(offset)
         
-        while bc.Next() != 0 and ientry < num_entries:
-            ientry += 1
-            # Following code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
+        indices = slice(start, stop, step).indices(num_entries)
+        for ientry in xrange(*indices):
+            if bc.GetEntry(ientry) == 0:
+                break
+
+            # Determine if this entry passes the selection,
+            # similar to the code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
             if formula != NULL:
                 ndata = formula.GetNdata()
                 keep = False
@@ -488,37 +485,42 @@ cdef object root2array_fromTTree(TTree* tree, branches,
                         break
                 if not keep:
                     continue
-            dataptr = np.PyArray_GETPTR1(arr, ientry_selected)
-            for icol in range(numcol):
+
+            # Copy the values into the array
+            dataptr = np.PyArray_GETPTR1(arr, num_entries_selected)
+            for icol in xrange(numcol):
                 thisCol = columns[icol]
                 thisCV = cvarray[icol]
                 nb = thisCV.write(thisCol, dataptr)
-                dataptr = shift(dataptr, nb) # poorman pointer magic
-            ientry_selected += 1
+                # poorman pointer magic
+                dataptr = shift(dataptr, nb)
+            
+            # Increment number of selected entries last
+            num_entries_selected += 1
     finally:
         del bc
     
-    # If we selected less than the num_entries entries then shrink the array
-    if ientry_selected < num_entries:
-        arr.resize(ientry_selected)
+    # If we selected fewer than num_entries entries then shrink the array
+    if num_entries_selected < num_entries:
+        arr.resize(num_entries_selected)
 
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, entries, offset, selection):
+def root2array_fromFname(fnames, treename, branches, start, stop, step, selection):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
         ret = root2array_fromTTree(
-                <TTree*> ttree, branches, entries, offset, selection)
+                <TTree*> ttree, branches, start, stop, step, selection)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, entries, offset, selection):
+def root2array_fromCObj(tree, branches, start, stop, step, selection):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented by the wrapper
@@ -526,7 +528,7 @@ def root2array_fromCObj(tree, branches, entries, offset, selection):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return root2array_fromTTree(
-            chain, branches, entries, offset, selection)
+            chain, branches, start, stop, step, selection)
 
 
 """

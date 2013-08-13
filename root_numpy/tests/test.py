@@ -197,16 +197,16 @@ class TestRootNumpy(unittest.TestCase):
         assert_equal(a.v_F[-1][0], 198.0)
         assert_equal(a.v_F[-1][-1], 206.0)
 
-    def test_offset_entries(self):
-        a = root2rec(self.ld('single1.root'), entries=10)
+    def test_slice(self):
+        a = root2rec(self.ld('single1.root'), stop=10)
         assert_equal(len(a), 10)
         assert_equal(a.n_int[-1], 10)
 
-        a = root2rec(self.ld('single1.root'), entries=10, offset=1)
+        a = root2rec(self.ld('single1.root'), stop=11, start=1)
         assert_equal(len(a), 10)
         assert_equal(a.n_int[-1], 11)
 
-        a = root2rec(self.ld('single1.root'), entries=10, offset=95)
+        a = root2rec(self.ld('single1.root'), stop=105, start=95)
         assert_equal(len(a), 5)
         assert_equal(a.n_int[-1], 100)
 

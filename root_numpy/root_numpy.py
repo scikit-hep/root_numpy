@@ -89,8 +89,9 @@ def lst(filename, treename=None):
 def root2array(filenames,
                treename=None,
                branches=None,
-               entries=None,
-               offset=0,
+               start=None,
+               stop=None,
+               step=None,
                selection=None):
     """
     Convert trees in ROOT files into a numpy structured array.
@@ -109,6 +110,7 @@ def root2array(filenames,
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     entries : int, optional (default=None)
         Maximum number of entries that will be converted from the chained
         trees. If None then convert all entries. If a selection is applied then
@@ -116,6 +118,7 @@ def root2array(filenames,
     offset : int, optional (default=0):
         Offset from the beginning of the chained trees where conversion will
         begin.
+
     selection : str, optional (default=None)
         Only include entries passing a cut expression.
 
@@ -177,14 +180,15 @@ def root2array(filenames,
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        matched_filenames, treename, branches, entries, offset, selection)
+        matched_filenames, treename, branches, start, stop, step, selection)
 
 
 def root2rec(filenames,
              treename=None,
              branches=None,
-             entries=None,
-             offset=0,
+             start=None,
+             stop=None,
+             step=None,
              selection=None):
     """
     View the result of :func:`root2array` as a record array.
@@ -200,13 +204,14 @@ def root2rec(filenames,
     root2array
     """
     return root2array(filenames, treename, branches,
-                      entries, offset, selection).view(np.recarray)
+                      start, stop, step, selection).view(np.recarray)
 
 
 def tree2array(tree,
                branches=None,
-               entries=None,
-               offset=0,
+               start=None,
+               stop=None,
+               step=None,
                selection=None,
                include_weight=False,
                weight_name='weight',
@@ -224,6 +229,7 @@ def tree2array(tree,
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     entries : int, optional (default=None)
         Maximum number of entries that will be converted from the chained
         trees. If None then convert all entries. If a selection is applied then
@@ -231,6 +237,7 @@ def tree2array(tree,
     offset : int, optional (default=0):
         Offset from the beginning of the chained trees where conversion will
         begin.
+
     selection : str, optional (default=None)
         Only include entries passing a cut expression.
     include_weight : bool, optional (default=False)
@@ -255,7 +262,7 @@ def tree2array(tree,
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(
-        cobj, branches, entries, offset, selection)
+        cobj, branches, start, stop, step, selection)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
@@ -263,8 +270,9 @@ def tree2array(tree,
 
 def tree2rec(tree,
              branches=None,
-             entries=None,
-             offset=0,
+             start=None,
+             stop=None,
+             step=None,
              selection=None,
              include_weight=False,
              weight_name='weight',
@@ -285,8 +293,9 @@ def tree2rec(tree,
     """
     return tree2array(tree,
                       branches,
-                      entries,
-                      offset,
+                      start,
+                      stop,
+                      step,
                       selection,
                       include_weight=include_weight,
                       weight_name=weight_name,
