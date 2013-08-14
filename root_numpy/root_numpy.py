@@ -89,9 +89,10 @@ def lst(filename, treename=None):
 def root2array(filenames,
                treename=None,
                branches=None,
-               entries=None,
-               offset=0,
-               selection=None):
+               selection=None,
+               start=None,
+               stop=None,
+               step=None):
     """
     Convert trees in ROOT files into a numpy structured array.
     Refer to the type conversion table :ref:`here <conversion_table>`.
@@ -109,15 +110,14 @@ def root2array(filenames,
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
-    entries : int, optional (default=None)
-        Maximum number of entries that will be converted from the chained
-        trees. If None then convert all entries. If a selection is applied then
-        fewer entries may be converted.
-    offset : int, optional (default=0):
-        Offset from the beginning of the chained trees where conversion will
-        begin.
     selection : str, optional (default=None)
-        Only include entries passing a cut expression.
+        Only include entries fulfilling this condition.
+    start, stop, step: int, optional (default=None)
+        The meaning of the ``start``, ``stop`` and ``step``
+        parameters is the same as for Python slices.
+        If a range is supplied (by setting some of the
+        ``start``, ``stop`` or ``step`` parameters), only the entries in that
+        range and fulfilling the ``selection`` condition (if defined) are used.
 
     Examples
     --------
@@ -130,7 +130,15 @@ def root2array(filenames,
     Read all branches starting from entry 5 and include 10 entries or up to the
     end of the file::
 
-        root2array('a.root', 'mytree', entries=10, offset=5)
+        root2array('a.root', 'mytree', start=5, stop=11)
+
+    Read all branches in reverse order::
+
+        root2array('a.root', 'mytree', step=-1)
+
+    Read every second entry::
+
+        root2array('a.root', 'mytree', step=2)
 
     Read all branches from the tree named ``mytree`` in ``a*.root``::
 
@@ -177,15 +185,16 @@ def root2array(filenames,
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        matched_filenames, treename, branches, entries, offset, selection)
+        matched_filenames, treename, branches, selection, start, stop, step)
 
 
 def root2rec(filenames,
              treename=None,
              branches=None,
-             entries=None,
-             offset=0,
-             selection=None):
+             selection=None,
+             start=None,
+             stop=None,
+             step=None):
     """
     View the result of :func:`root2array` as a record array.
 
@@ -199,15 +208,16 @@ def root2rec(filenames,
     --------
     root2array
     """
-    return root2array(filenames, treename, branches,
-                      entries, offset, selection).view(np.recarray)
+    return root2array(filenames, treename, branches, selection,
+                      start, stop, step).view(np.recarray)
 
 
 def tree2array(tree,
                branches=None,
-               entries=None,
-               offset=0,
                selection=None,
+               start=None,
+               stop=None,
+               step=None,
                include_weight=False,
                weight_name='weight',
                weight_dtype='f4'):
@@ -224,15 +234,14 @@ def tree2array(tree,
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
-    entries : int, optional (default=None)
-        Maximum number of entries that will be converted from the chained
-        trees. If None then convert all entries. If a selection is applied then
-        fewer entries may be converted.
-    offset : int, optional (default=0):
-        Offset from the beginning of the chained trees where conversion will
-        begin.
     selection : str, optional (default=None)
-        Only include entries passing a cut expression.
+        Only include entries fulfilling this condition.
+    start, stop, step: int, optional (default=None)
+        The meaning of the ``start``, ``stop`` and ``step``
+        parameters is the same as for Python slices.
+        If a range is supplied (by setting some of the
+        ``start``, ``stop`` or ``step`` parameters), only the entries in that
+        range and fulfilling the ``selection`` condition (if defined) are used.
     include_weight : bool, optional (default=False)
         Include a column containing the tree weight.
     weight_name : str, optional (default='weight')
@@ -255,7 +264,7 @@ def tree2array(tree,
         #return _librootnumpy.root2array_from_capsule(o, branches)
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(
-        cobj, branches, entries, offset, selection)
+        cobj, branches, selection, start, stop, step)
     if include_weight:
         arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
     return arr
@@ -263,9 +272,10 @@ def tree2array(tree,
 
 def tree2rec(tree,
              branches=None,
-             entries=None,
-             offset=0,
              selection=None,
+             start=None,
+             stop=None,
+             step=None,
              include_weight=False,
              weight_name='weight',
              weight_dtype='f4'):
@@ -284,10 +294,11 @@ def tree2rec(tree,
 
     """
     return tree2array(tree,
-                      branches,
-                      entries,
-                      offset,
-                      selection,
+                      branches=branches,
+                      selection=selection,
+                      start=start,
+                      stop=stop,
+                      step=step,
                       include_weight=include_weight,
                       weight_name=weight_name,
                       weight_dtype=weight_dtype).view(np.recarray)
