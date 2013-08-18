@@ -56,11 +56,11 @@ setup(
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
     packages=[
         'root_numpy',
+        'root_numpy.testdata',
         'root_numpy.extern',
-        'root_numpy.tests',
     ],
     package_data={
-        'root_numpy': ['tests/data/*.root'],
+        'root_numpy': ['testdata/*.root'],
     },
     ext_modules=[
         librootnumpy,
