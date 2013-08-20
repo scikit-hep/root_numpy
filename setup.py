@@ -1,10 +1,25 @@
 #!/usr/bin/env python
+
+import os
+import sys
 from distutils.core import setup, Extension
 import distutils.util
 import subprocess
 import numpy as np
-import os
 from glob import glob
+
+# Prevent distutils from trying to create hard links
+# which are not allowed on AFS between directories.
+# This is a hack to force copying.
+try:
+    del os.link
+except AttributeError:
+    pass
+
+local_path = os.path.dirname(os.path.abspath(__file__))
+# setup.py can be called from outside the root_numpy directory
+os.chdir(local_path)
+sys.path.insert(0, local_path)
 
 root_inc = ''
 root_ldflags = []
@@ -43,6 +58,8 @@ libinnerjoin = Extension('root_numpy._libinnerjoin',
     extra_link_args=[])
 
 execfile('root_numpy/info.py')
+if 'install' in sys.argv:
+    print __doc__
 
 setup(
     name='root_numpy',
