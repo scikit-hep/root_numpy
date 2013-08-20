@@ -8,3 +8,7 @@
 """
 __version__ = '3.0.0'
 __doc__ = __doc__.format(__version__)
+
+import sys
+if sys.argv[0].endswith('nosetests'):
+    print __doc__
