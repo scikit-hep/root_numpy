@@ -44,17 +44,17 @@ Typical Usage
 
 .. code-block:: python
 
-   import ROOT
-   from root_numpy import root2array, root2rec, tree2rec
-   # convert into a numpy structured array
-   # treename is always optional if there is only one tree in the file
-   arr = root2array('a.root', 'treename')
-   # convert into a numpy record array
-   rec = root2rec('a.root', 'treename')
-   # or directly convert a tree
-   rfile = ROOT.TFile('a.root')
-   tree = rfile.Get('treename')
-   rec = tree2rec(tree)
+   >>> import ROOT
+   >>> from root_numpy import root2array, root2rec, tree2rec
+   >>> # convert into a numpy structured array
+   >>> # treename is always optional if there is only one tree in the file
+   >>> arr = root2array('a.root', 'treename')
+   >>> # convert into a numpy record array
+   >>> rec = root2rec('a.root', 'treename')
+   >>> # or directly convert a tree
+   >>> rfile = ROOT.TFile('a.root')
+   >>> tree = rfile.Get('treename')
+   >>> rec = tree2rec(tree)
 
 Getting the Latest Source
 -------------------------
@@ -134,7 +134,6 @@ Note that neither `sudo` nor `--user` is used, because we are in a virtualenv.
 
 .. code-block:: python
 
-   python
    >>> from root_numpy import testdata, root2rec
    >>> root2rec(testdata.get_filepath())[:20]
    rec.array([(1, 1.0, 1.0), (2, 3.0, 4.0), (3, 5.0, 7.0), (4, 7.0, 10.0),
@@ -152,7 +151,7 @@ Testing requires the `nose <https://nose.readthedocs.org/en/latest/>`_ package.
 Once `root_numpy` is installed, it may be tested (from outside the source
 directory) by running::
 
-   nosetests --exe -v root_numpy
+   nosetests --exe -s -v root_numpy
 
 `root_numpy` can also be tested before installing by running this from inside
 the source directory::
