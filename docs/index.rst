@@ -1,9 +1,12 @@
+.. raw:: html
+
+   <h1 class="main">root_numpy</h1>
 
 .. include:: ../README.rst
-   :start-line: 4
+   :start-line: 10
 
-Full Documentation
-------------------
+API Documentation
+-----------------
 
 .. automodule:: root_numpy.root_numpy
     :members:
