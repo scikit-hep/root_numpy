@@ -2,11 +2,15 @@
 
 `[see full documentation] <http://rootpy.github.com/root_numpy/>`_
 
-.. |ci| image:: https://travis-ci.org/rootpy/root_numpy.png
-   :target: https://travis-ci.org/rootpy/root_numpy
+root_numpy
+==========
 
-root_numpy |ci|
-===============
+.. image:: https://travis-ci.org/rootpy/root_numpy.png
+   :target: https://travis-ci.org/rootpy/root_numpy
+.. image:: https://pypip.in/v/root_numpy/badge.png
+   :target: https://pypi.python.org/pypi/root_numpy
+.. image:: https://pypip.in/d/root_numpy/badge.png
+   :target: https://crate.io/packages/root_numpy/
 
 root_numpy is a Python extension for converting
 `ROOT TTrees <http://root.cern.ch/root/html/TTree.html>`_ into NumPy
