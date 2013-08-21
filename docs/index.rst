@@ -3,7 +3,7 @@
    <h1 class="main">root_numpy</h1>
 
 .. include:: ../README.rst
-   :start-line: 10
+   :start-line: 14
 
 API Documentation
 -----------------

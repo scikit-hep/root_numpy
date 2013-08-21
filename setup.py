@@ -61,13 +61,11 @@ execfile('root_numpy/info.py')
 if 'install' in sys.argv:
     print __doc__
 
-description = open('README.rst').readlines()
-
 setup(
     name='root_numpy',
     version=__version__,
     description='An interface between ROOT and NumPy',
-    long_description=''.join(description[2:4] + description[10:]),
+    long_description=''.join(open('README.rst').readlines()[7:]),
     author='the rootpy developers',
     author_email='rootpy-dev@googlegroups.com',
     url='https://github.com/rootpy/root_numpy',
