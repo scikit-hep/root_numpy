@@ -24,6 +24,7 @@ what they are and what they do.
    fill_array
    list_trees
    list_branches
+   list_structures
    stretch
    blockwise_inner_join
 

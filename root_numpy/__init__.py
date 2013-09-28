@@ -1,5 +1,10 @@
-from root_numpy import (root2array, root2rec, list_trees, list_branches,
-    lt, lst, lb, tree2array, tree2rec, array2tree, array2root, fill_array)
+from root_numpy import (
+    root2array, root2rec,
+    tree2array, tree2rec,
+    array2tree, array2root,
+    list_trees, list_branches, list_structures,
+    lt, lst, lb, lst,
+    fill_array)
 from root_numpy_warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
 from utils import stretch, blockwise_inner_join
 from info import __version__
@@ -14,6 +19,7 @@ __all__ = [
     'fill_array',
     'list_trees',
     'list_branches',
+    'list_structures',
     'lt', 'lb', 'lst',
     'stretch',
     'blockwise_inner_join',
