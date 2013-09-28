@@ -4,7 +4,7 @@ from _libinnerjoin import blockwise_inner_join
 
 __all__ = [
     'stretch',
-    'blockwise_inner_join'
+    'blockwise_inner_join',
 ]
 
 
