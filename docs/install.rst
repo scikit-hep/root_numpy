@@ -21,7 +21,7 @@ Clone the repository with git::
 
 or checkout with svn::
 
-   svn checkout http://svn.github.com/rootpy/root_numpy
+   svn checkout https://github.com/rootpy/root_numpy/trunk root_numpy
 
 Manual Installation
 -------------------
