@@ -22,7 +22,7 @@ amounts of data (limited only by the available memory).
 Now that your ROOT data is in NumPy form, you can make use of the many powerful
 scientific Python packages or perform quick exploratory data analysis in
 interactive environments like `IPython <http://ipython.org/>`_ (especially
-IPython's popular `notebook <http://ipython.org/ipython-doc/dev/interactive/htmlnotebook.html>`_
+IPython's popular `notebook <http://ipython.org/ipython-doc/dev/interactive/notebook.html>`_
 feature).
 
 root_numpy currently supports basic types such as bool, int, float,
