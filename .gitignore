@@ -10,7 +10,6 @@ coverage
 *.pyc
 root_numpy/src/*.html
 *.d
-_build
 .coverage
 cover
 .project
