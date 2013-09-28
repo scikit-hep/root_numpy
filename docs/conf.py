@@ -36,6 +36,7 @@ print "building docs for root_numpy {0}".format(root_numpy.__version__)
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
+    'sphinx.ext.autosummary',
     'numpydoc',
 ]
 
@@ -259,3 +260,4 @@ texinfo_documents = [
 #texinfo_show_urls = 'footnote'
 
 add_module_names = False
+autosummary_generate = True
