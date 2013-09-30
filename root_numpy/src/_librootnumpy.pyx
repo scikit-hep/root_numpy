@@ -75,19 +75,20 @@ TYPES_NUMPY2ROOT = {
 
 
 def list_trees(fname):
-    # Poor man support for globbing
+    
+    # globbing support
     fname = glob(fname)
     if len(fname) == 0:
-        raise IOError('File not found: %s' % fname)
+        raise IOError("file not found: %s" % fname)
     fname = fname[0]
 
     cdef TFile* f = new TFile(fname, 'read')
     if f is NULL:
-        raise IOError('Cannot read: %s' % fname)
+        raise IOError("cannot read: %s" % fname)
 
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
-        raise IOError('Not a valid root file: %s' % fname)
+        raise IOError("not a valid root file: %s" % fname)
     ret = []
     cdef int n = keys.GetEntries()
     cdef TObject* obj
@@ -102,26 +103,28 @@ def list_trees(fname):
 
 
 def list_structures(fname, tree=None):
-    # Support for automatically find tree
+
+    # automatically select single tree
     if tree is None:
         tree = list_trees(fname)
         if len(tree) != 1:
-            raise ValueError('Multiple Tree Found: %s' % str(tree))
+            raise ValueError("multiple trees found: %s" % (', '.join(tree)))
         else:
             tree = tree[0]
-
-    cdef TFile* f = new TFile(fname, 'read')
-    fname = glob(fname)#poor man support for globbing
+    
+    # globbing support
+    fname = glob(fname)
     if len(fname) == 0:
-        raise IOError('File not found: %s' % fname)
+        raise IOError("file not found: %s" % fname)
     fname = fname[0]
 
+    cdef TFile* f = new TFile(fname, 'read')
+    
     cdef TTree* t = <TTree*> f.Get(tree)
     if t is NULL:
-        raise IOError('Tree %s not found in %s' % (tree, fname))
+        raise IOError("tree %s not found in %s" % (tree, fname))
 
-    tmp = parse_tree_structure(t)
-    return tmp
+    return parse_tree_structure(t)
 
 
 def list_branches(fname, tree=None):
@@ -151,22 +154,10 @@ cdef parse_tree_structure(TTree* tree):
             leaflist.append((lname, ltype))
         if not leaflist:
             raise RuntimeError(
-                "the leaf list for branch %s is empty" %
-                thisBranch.GetName())
+                "leaf list for branch %s is empty" %
+                    thisBranch.GetName())
         ret[thisBranch.GetName()] = leaflist
     return ret
-
-
-def unique(seq):
-    seen = {}
-    result = []
-    for item in seq:
-        marker = item
-        if marker in seen:
-            continue
-        seen[marker] = 1
-        result.append(item)
-    return result
 
 
 # create numpy array of given type code with
@@ -400,8 +391,8 @@ cdef np.ndarray init_array(vector[Column*]& columns,
     return np.empty(entries, dtype=nst)
 
 
-cdef object root2array_fromTTree(TTree* tree, branches, selection,
-                                 start, stop, step):
+cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
+
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
@@ -446,16 +437,15 @@ cdef object root2array_fromTTree(TTree* tree, branches, selection,
         structure = parse_tree_structure(tree)
         if branches is None:
             branches = structure.keys()
-        branches = unique(branches)
+        elif len(branches) != len(set(branches)):
+            raise ValueError("duplicate branches requested")
 
         for branch in branches:
             try:
                 leaves = structure[branch]
             except KeyError:
                 raise ValueError(
-                        'the branch %s is not present in the tree. '
-                        'Call list_branches or appropriate ROOT methods '
-                        'to see a list of available branches' % branch)
+                        "branch %s is not present in the tree" % branch)
             shortname = len(leaves) == 1
             for leaf, ltype in leaves:
                 if CONVERTERS.find(ltype) != CONVERTERS.end():
@@ -464,8 +454,8 @@ cdef object root2array_fromTTree(TTree* tree, branches, selection,
                     columns.push_back(thisCol)
                 else:
                     warnings.warn(
-                        'Cannot convert leaf %s of branch %s '
-                        'with type %s (skipping)' % (branch, leaf, ltype),
+                        "cannot convert leaf %s of branch %s "
+                        "with type %s (skipping)" % (branch, leaf, ltype),
                         RootNumpyUnconvertibleWarning)
         
         # Now that we have all the columns we can
@@ -517,7 +507,7 @@ def root2array_fromFname(fnames, treename, branches, selection, start, stop, ste
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
-        ret = root2array_fromTTree(
+        ret = tree2array(
                 <TTree*> ttree, branches, selection, start, stop, step)
     finally:
         del ttree
@@ -531,7 +521,7 @@ def root2array_fromCObj(tree, branches, selection, start, stop, step):
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
-    return root2array_fromTTree(
+    return tree2array(
             chain, branches, selection, start, stop, step)
 
 
@@ -672,7 +662,7 @@ def array2tree_toCObj(arr, name='tree', tree=None):
         # provided here for convenience only
         # typecheck should be implemented by the wrapper
         if not PyCObject_Check(tree):
-            raise ValueError('tree must be PyCObject')
+            raise ValueError("tree must be PyCObject")
         intree = <TTree*> PyCObject_AsVoidPtr(tree)
     outtree = array2tree(arr, name=name, tree=intree)
     return PyCObject_FromVoidPtr(outtree, NULL)
