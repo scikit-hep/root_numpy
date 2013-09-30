@@ -178,14 +178,14 @@ class BetterChain
                 TBranch* branch = fChain->FindBranch(bname.c_str());
                 if (branch==0)
                 {
-                    cerr << "Warning cannot find branch " << bname << endl;
+                    cerr << "WARNING cannot find branch " << bname << endl;
                     it->second->skipped = true;
                     continue;
                 }
                 TLeaf* leaf = branch->FindLeaf(lname.c_str());
                 if (leaf==0)
                 {
-                    cerr << "Warning cannot find leaf " << lname
+                    cerr << "WARNING cannot find leaf " << lname
                          << " for branch " << bname << endl;
                     it->second->skipped = true;
                     continue;
@@ -219,7 +219,7 @@ class BetterChain
             if (branch == NULL)
             {
                 PyErr_SetString(PyExc_IOError,
-                    format("Cannot find branch %s", bname.c_str()).c_str());
+                    format("cannot find branch %s", bname.c_str()).c_str());
                 return NULL;
             }
 
@@ -227,7 +227,7 @@ class BetterChain
             if (leaf == NULL)
             {
                 PyErr_SetString(PyExc_IOError,
-                    format("Cannot find leaf %s for branch %s", lname.c_str(),
+                    format("cannot find leaf %s for branch %s", lname.c_str(),
                            bname.c_str()).c_str());
                 return NULL;
             }
