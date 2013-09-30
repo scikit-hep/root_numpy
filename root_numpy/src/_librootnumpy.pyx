@@ -75,7 +75,8 @@ TYPES_NUMPY2ROOT = {
 
 
 def list_trees(fname):
-    # Poor man support for globbing
+    
+    # globbing support
     fname = glob(fname)
     if len(fname) == 0:
         raise IOError("file not found: %s" % fname)
@@ -102,26 +103,28 @@ def list_trees(fname):
 
 
 def list_structures(fname, tree=None):
-    # Support for automatically find tree
+
+    # automatically select single tree
     if tree is None:
         tree = list_trees(fname)
         if len(tree) != 1:
             raise ValueError("multiple trees found: %s" % str(tree))
         else:
             tree = tree[0]
-
-    cdef TFile* f = new TFile(fname, 'read')
-    fname = glob(fname)#poor man support for globbing
+    
+    # globbing support
+    fname = glob(fname)
     if len(fname) == 0:
         raise IOError("file not found: %s" % fname)
     fname = fname[0]
 
+    cdef TFile* f = new TFile(fname, 'read')
+    
     cdef TTree* t = <TTree*> f.Get(tree)
     if t is NULL:
         raise IOError("tree %s not found in %s" % (tree, fname))
 
-    tmp = parse_tree_structure(t)
-    return tmp
+    return parse_tree_structure(t)
 
 
 def list_branches(fname, tree=None):
