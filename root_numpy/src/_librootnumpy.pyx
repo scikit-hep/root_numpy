@@ -388,8 +388,8 @@ cdef np.ndarray init_array(vector[Column*]& columns,
     return np.empty(entries, dtype=nst)
 
 
-cdef object root2array_fromTTree(TTree* tree, branches, selection,
-                                 start, stop, step):
+cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
+
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* thisCol
@@ -506,7 +506,7 @@ def root2array_fromFname(fnames, treename, branches, selection, start, stop, ste
         ttree = new TChain(treename)
         for fn in fnames:
             ttree.Add(fn)
-        ret = root2array_fromTTree(
+        ret = tree2array(
                 <TTree*> ttree, branches, selection, start, stop, step)
     finally:
         del ttree
@@ -520,7 +520,7 @@ def root2array_fromCObj(tree, branches, selection, start, stop, step):
     if not PyCObject_Check(tree):
         raise ValueError('tree must be PyCObject')
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
-    return root2array_fromTTree(
+    return tree2array(
             chain, branches, selection, start, stop, step)
 
 
