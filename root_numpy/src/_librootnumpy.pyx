@@ -38,19 +38,23 @@ ctypedef unsigned char unsigned_char
 ctypedef unsigned short unsigned_short
 ctypedef unsigned int unsigned_int
 ctypedef unsigned long unsigned_long
+ctypedef long long long_long
+ctypedef unsigned long long unsigned_long_long
 
 TYPES = {
-    TypeName[bool]().name:           ('bool',           np.dtype(np.bool),      np.NPY_BOOL),
-    TypeName[char]().name:           ('char',           np.dtype(np.int8),      np.NPY_INT8),
-    TypeName[unsigned_char]().name:  ('unsigned char',  np.dtype(np.uint8),     np.NPY_UINT8),
-    TypeName[short]().name:          ('short',          np.dtype(np.int16),     np.NPY_INT16),
-    TypeName[unsigned_short]().name: ('unsigned short', np.dtype(np.uint16),    np.NPY_UINT8),
-    TypeName[int]().name:            ('int',            np.dtype(np.int32),     np.NPY_INT32),
-    TypeName[unsigned_int]().name:   ('unsigned int',   np.dtype(np.uint32),    np.NPY_UINT32),
-    TypeName[long]().name:           ('long',           np.dtype(np.int64),     np.NPY_INT64),
-    TypeName[unsigned_long]().name:  ('unsigned long',  np.dtype(np.uint64),    np.NPY_UINT64),
-    TypeName[float]().name:          ('float',          np.dtype(np.float32),   np.NPY_FLOAT32),
-    TypeName[double]().name:         ('double',         np.dtype(np.float64),   np.NPY_FLOAT64),
+    TypeName[bool]().name:               ('bool',               np.dtype(np.bool),      np.NPY_BOOL),
+    TypeName[char]().name:               ('char',               np.dtype(np.int8),      np.NPY_INT8),
+    TypeName[unsigned_char]().name:      ('unsigned char',      np.dtype(np.uint8),     np.NPY_UINT8),
+    TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),
+    TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+    TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),
+    TypeName[unsigned_int]().name:       ('unsigned int',       np.dtype(np.uint32),    np.NPY_UINT32),
+    TypeName[long]().name:               ('long',               np.dtype(np.int64),     np.NPY_INT64),
+    TypeName[unsigned_long]().name:      ('unsigned long',      np.dtype(np.uint64),    np.NPY_UINT64),
+    TypeName[long_long]().name:          ('long long',          np.dtype(np.longlong),  np.NPY_LONGLONG),
+    TypeName[unsigned_long_long]().name: ('unsigned long long', np.dtype(np.ulonglong), np.NPY_ULONGLONG),
+    TypeName[float]().name:              ('float',              np.dtype(np.float32),   np.NPY_FLOAT32),
+    TypeName[double]().name:             ('double',             np.dtype(np.float64),   np.NPY_FLOAT64),
 }
 
 TYPES_NUMPY2ROOT = {
