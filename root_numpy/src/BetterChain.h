@@ -207,11 +207,6 @@ class BetterChain
             return fChain->GetEntries();
         }
 
-        TBranch* FindBranch(const char* bname)
-        {
-            return fChain->FindBranch(bname);
-        }
-
         Column* MakeColumn(const string& bname,
                            const string& lname,
                            const string& colname)
