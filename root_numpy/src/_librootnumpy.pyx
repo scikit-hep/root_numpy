@@ -108,7 +108,7 @@ def list_structures(fname, tree=None):
     if tree is None:
         tree = list_trees(fname)
         if len(tree) != 1:
-            raise ValueError("multiple trees found: %s" % str(tree))
+            raise ValueError("multiple trees found: %s" % (', '.join(tree)))
         else:
             tree = tree[0]
     
