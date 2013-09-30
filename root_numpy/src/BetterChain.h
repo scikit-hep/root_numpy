@@ -220,7 +220,7 @@ class BetterChain
             // including the branch that define the length
             LoadTree(0);
 
-            TBranch* branch = fChain->FindBranch(bname.c_str());
+            TBranch* branch = fChain->GetBranch(bname.c_str());
             if (branch == NULL)
             {
                 PyErr_SetString(PyExc_IOError,
