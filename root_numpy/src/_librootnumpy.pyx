@@ -150,7 +150,7 @@ cdef parse_tree_structure(TTree* tree):
             thisLeaf = <TLeaf*>leaves.At(ibranch)
             lname = thisLeaf.GetName()
             # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-            ltype = ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
+            ltype = <bytes>ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
             leaflist.append((lname, ltype))
         if not leaflist:
             raise RuntimeError(
