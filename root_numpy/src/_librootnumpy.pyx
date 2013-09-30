@@ -157,18 +157,6 @@ cdef parse_tree_structure(TTree* tree):
     return ret
 
 
-def unique(seq):
-    seen = {}
-    result = []
-    for item in seq:
-        marker = item
-        if marker in seen:
-            continue
-        seen[marker] = 1
-        result.append(item)
-    return result
-
-
 # create numpy array of given type code with
 # given numelement and size of each element
 # and write it to buffer
@@ -446,7 +434,8 @@ cdef object root2array_fromTTree(TTree* tree, branches, selection,
         structure = parse_tree_structure(tree)
         if branches is None:
             branches = structure.keys()
-        branches = unique(branches)
+        elif len(branches) != len(set(branches)):
+            raise ValueError("duplicate branches requested")
 
         for branch in branches:
             try:
