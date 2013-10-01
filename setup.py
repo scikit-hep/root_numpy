@@ -1,12 +1,19 @@
 #!/usr/bin/env python
 
+try:
+    import numpy as np
+except ImportError:
+    raise RuntimeError(
+        "numpy cannot be imported. numpy must be installed "
+        "prior to installing root_numpy")
+
 import os
 import sys
+import subprocess
+from glob import glob
+
 from distutils.core import setup, Extension
 import distutils.util
-import subprocess
-import numpy as np
-from glob import glob
 
 # Prevent distutils from trying to create hard links
 # which are not allowed on AFS between directories.
@@ -21,19 +28,29 @@ local_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(local_path)
 sys.path.insert(0, local_path)
 
-root_inc = ''
-root_ldflags = []
+
+def root_flags(root_config='root-config'):
+    root_inc = subprocess.Popen([root_config, '--incdir'],
+        stdout=subprocess.PIPE).communicate()[0].strip()
+    root_ldflags = subprocess.Popen([root_config, '--libs'],
+        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+    return root_inc, root_ldflags
+
 try:
-    root_inc = subprocess.Popen(["root-config", "--incdir"],
-        stdout=subprocess.PIPE).communicate()[0].strip()
-    root_ldflags = subprocess.Popen(["root-config", "--libs"],
-        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+    root_inc, root_ldflags = root_flags()
 except OSError:
-    rootsys = os.environ['ROOTSYS']
-    root_inc = subprocess.Popen([rootsys+"/bin/root-config", "--incdir"],
-        stdout=subprocess.PIPE).communicate()[0].strip()
-    root_ldflags = subprocess.Popen([rootsys+"/bin/root-config", "--libs"],
-        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+    rootsys = os.getenv('ROOTSYS', None)
+    if rootsys is None:
+        raise RuntimeError(
+            "root-config is not in PATH and ROOTSYS is not set. "
+            "Is ROOT installed and setup properly?")
+    try:
+        root_config = os.path.join(rootsys, 'bin', 'root-config')
+        root_inc, root_ldflags = root_flags(root_config)
+    except OSError:
+        raise RuntimeError(
+            "ROOTSYS is {0} but running {1} failed".format(
+                rootsys, root_config))
 
 librootnumpy = Extension('root_numpy._librootnumpy',
     sources=['root_numpy/src/_librootnumpy.cpp'],
