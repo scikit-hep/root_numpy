@@ -32,13 +32,13 @@ install-user: clean
 	@$(PYTHON) setup.py install --user
 
 sdist: clean
-	@$(PYTHON) setup.py sdist
+	@$(PYTHON) setup.py sdist --release
 
 register:
-	@$(PYTHON) setup.py register
+	@$(PYTHON) setup.py register --release
 
 upload: clean
-	@$(PYTHON) setup.py sdist upload
+	@$(PYTHON) setup.py sdist upload --release
 
 test-code: inplace
 	@$(NOSETESTS) -s -v root_numpy

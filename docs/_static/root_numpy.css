@@ -1,0 +1,9 @@
+#documentation ul {
+    list-style-type: none;
+    list-style: none;
+}
+
+h2.main {
+    margin: 0;
+    font-style: italic;
+}
