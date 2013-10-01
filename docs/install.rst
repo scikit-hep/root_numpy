@@ -1,3 +1,4 @@
+.. include:: references.txt
 
 ============
 Installation
@@ -6,11 +7,22 @@ Installation
 Requirements
 ============
 
-* `ROOT <http://root.cern.ch/>`_
-* `NumPy <http://numpy.scipy.org/>`_
+root_numpy requires that both ROOT_ and NumPy_ are installed
+and that ROOT is setup with the ``$ROOTSYS`` environment variable set before
+installation. root_numpy's installation script depends on ROOT's
+``root-config`` utility to determine the ROOT compiler/linker flags
+and include paths. The installation attempts to run ``root-config`` and if
+unsuccessful then ``$ROOTSYS/bin/root-config``. If ``root-config`` still cannot
+be found, the installation aborts.
 
-root_numpy is tested with ROOT 5.32, NumPy 1.6.1, Python 2.7.1 but it should
-work in most places.
+root_numpy has been tested with:
+
+* ROOT 5.32, 5.34
+* NumPy 1.6.1, 1.7.1
+* Python 2.6, 2.7
+* GNU/Linux, Mac OS
+
+but it should work in most places.
 
 Getting the Latest Source
 =========================
@@ -36,7 +48,7 @@ To install in your `home directory
 
 To install system-wide (requires root privileges)::
 
-   sudo python setup.py install
+   sudo ROOTSYS=$ROOTSYS python setup.py install
 
 Automatic Installation
 ======================
@@ -55,7 +67,7 @@ To install in your `home directory
 
 To install system-wide (requires root privileges)::
 
-   sudo pip install root_numpy
+   sudo ROOTSYS=$ROOTSYS pip install root_numpy
 
 Running the Tests
 =================
