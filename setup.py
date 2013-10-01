@@ -74,6 +74,25 @@ libinnerjoin = Extension('root_numpy._libinnerjoin',
     extra_compile_args = [],
     extra_link_args=[])
 
+# check for custom args
+filtered_args = []
+release = False
+for arg in sys.argv:
+    if arg == '--release':
+        # --release sets the version number before installing
+        release = True
+    else:
+        filtered_args.append(arg)
+sys.argv = filtered_args
+
+if release:
+    # remove dev from version in root_numpy/info.py
+    import shutil
+    shutil.move('root_numpy/info.py', 'info.tmp')
+    dev_info = ''.join(open('info.tmp', 'r').readlines())
+    open('root_numpy/info.py', 'w').write(
+        dev_info.replace('.dev', ''))
+
 execfile('root_numpy/info.py')
 if 'install' in sys.argv:
     print __doc__
@@ -85,7 +104,7 @@ setup(
     long_description=''.join(open('README.rst').readlines()[7:]),
     author='the rootpy developers',
     author_email='rootpy-dev@googlegroups.com',
-    url='https://github.com/rootpy/root_numpy',
+    url='http://rootpy.github.io/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
     packages=[
@@ -111,3 +130,7 @@ setup(
         "License :: OSI Approved :: MIT License",
     ]
 )
+
+if release:
+    # revert root_numpy/info.py
+    shutil.move('info.tmp', 'root_numpy/info.py')

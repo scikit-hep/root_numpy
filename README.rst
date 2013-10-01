@@ -34,9 +34,6 @@ package that uses root_numpy and `PyTables <http://www.pytables.org>`_ to
 convert all TTrees in a ROOT file into the
 `HDF5 <http://www.hdfgroup.org/HDF5/>`_ format.
 
-Typical Usage
--------------
-
 .. code-block:: python
 
    import ROOT
