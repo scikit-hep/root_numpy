@@ -2,9 +2,13 @@
 
 PYTHON := $(shell which python)
 CYTHON := $(shell which cython)
+
 NOSETESTS ?= nosetests
 
-all: clean inplace test
+CYTHON_PYX := $(wildcard root_numpy/src/*.pyx)
+CYTHON_CPP := $(patsubst %.pyx,%.cpp,$(CYTHON_PYX))
+
+all: $(CYTHON_CPP) clean inplace test
 
 clean-pyc:
 	@find . -name "*.pyc" -exec rm {} \;
@@ -64,9 +68,16 @@ doc-clean:
 doc: clean doc-clean inplace
 	@make -C docs/ html
 
+$(CYTHON_CPP): %.cpp: %.pyx
+ifneq ($(shell git diff --name-only $< ),)
+	@echo "compiling $< ..."
+	@$(CYTHON) -a --cplus --fast-fail --line-directives $<
+endif
+
 cython:
-	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_librootnumpy.pyx
-	@$(CYTHON) -a --cplus --fast-fail --line-directives root_numpy/src/_libinnerjoin.pyx
+	@$(foreach pyx,$(CYTHON_PYX), \
+		echo "compiling $(pyx) ..."; \
+		$(CYTHON) -a --cplus --fast-fail --line-directives $(pyx);)
 
 check-rst:
 	@$(PYTHON) setup.py --long-description | rst2html.py > __output.html
