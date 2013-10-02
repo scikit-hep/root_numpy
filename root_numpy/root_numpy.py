@@ -58,11 +58,14 @@ def list_branches(filename, treename=None):
 
     Parameters
     ----------
+
     filename : str
         Path to ROOT file.
+
     treename : str, optional (default=None)
         Name of tree in the ROOT file.
         (optional if the ROOT file has only one tree).
+
     """
     return _librootnumpy.list_branches(filename, treename)
 
@@ -79,11 +82,14 @@ def list_structures(filename, treename=None):
 
     Parameters
     ----------
+
     filename : str
         Path to ROOT file.
+
     treename : str, optional (default=None)
         Name of tree in the ROOT file
         (optional if the ROOT file has only one tree).
+
     """
     return _librootnumpy.list_structures(filename, treename)
 
@@ -108,19 +114,24 @@ def root2array(filenames,
 
     Parameters
     ----------
+
     filenames : str or list
         ROOT file name pattern or list of patterns. Wildcarding is
         supported by Python globbing.
+
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
+
     branches : list of str, optional (default=None)
         List of branch names to include as columns of the array.
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step``
         parameters is the same as for Python slices.
@@ -236,25 +247,32 @@ def tree2array(tree,
 
     Parameters
     ----------
+
     treename : str
         Name of the tree to convert.
+
     branches : list of str, optional (default=None)
         List of branch names to include as columns of the array.
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step``
         parameters is the same as for Python slices.
         If a range is supplied (by setting some of the
         ``start``, ``stop`` or ``step`` parameters), only the entries in that
         range and fulfilling the ``selection`` condition (if defined) are used.
+
     include_weight : bool, optional (default=False)
         Include a column containing the tree weight.
+
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
+
     weight_dtype : NumPy dtype, optional (default='f4')
         The datatype to use for the weight column if ``include_weight=True``.
 
@@ -323,10 +341,13 @@ def array2tree(arr, name='tree', tree=None):
 
     Parameters
     ----------
+
     arr : array
         A numpy structured array
+
     name : str (optional, default='tree')
         Name of the created ROOT TTree if ``tree`` is None.
+
     tree : existing ROOT TTree (optional, default=None)
         Any branch with the same name as a field in the
         numpy array will be extended as long as the types are compatible,
@@ -364,13 +385,17 @@ def array2root(arr, filename, treename='tree', mode='update'):
 
     Parameters
     ----------
+
     arr : array
         A numpy structured array
+
     filename : str
         Name of the output ROOT TFile. A new file will be created if it
         doesn't already exist.
+
     treename : str (optional, default='tree')
         Name of the created ROOT TTree.
+
     mode : str (optional, default='update')
         Mode used to open the ROOT TFile ('update' or 'recreate').
 
@@ -385,6 +410,21 @@ def array2root(arr, filename, treename='tree', mode='update'):
 def fill_array(hist, array, weights=None):
     """
     Fill a ROOT histogram with a NumPy array.
+
+    Parameters
+    ----------
+
+    hist : a ROOT TH1, TH2, or TH3
+        The ROOT histogram to fill.
+
+    array : numpy array of shape [n_samples, n_dimensions]
+        The values to fill the histogram with. The number of columns
+        must match the dimensionality of the histogram. Supply a flat
+        numpy array when filling a 1D histogram.
+
+    weights : numpy array
+        A flat numpy array of weights for each sample in ``array``.
+
     """
     import ROOT
     if not isinstance(hist, ROOT.TH1):
@@ -402,6 +442,50 @@ def fill_array(hist, array, weights=None):
 def random_sample(func, n_samples):
     """
     Construct a NumPy array from a random sampling of a ROOT function.
+
+    Parameters
+    ----------
+
+    func : a ROOT TF1, TF2, or TF3
+        The ROOT function to sample.
+
+    n_samples : int
+        The number of random samples to generate.
+
+    Returns
+    -------
+
+    array : a numpy array
+        A numpy array with a shape corresponding to the dimensionality
+        of the function. A flat array is returned when sampling TF1.
+        An array with shape [n_samples, n_dimensions] is returned when
+        sampling TF2 or TF3.
+
+    Examples
+    --------
+
+    >>> from root_numpy import random_sample
+    >>> from ROOT import TF1, TF2, TF3
+    >>> random_sample(TF1("f1", "TMath::DiLog(x)"), 10000)
+    array([ 0.99989852,  0.43970852,  0.5705115 , ...,  0.76644511,
+            0.57712561,  0.99453755])
+    >>> random_sample(TF2("f2", "sin(x)*sin(y)/(x*y)"), 10000)
+    array([[ 0.82546291,  0.89052123],
+           [ 0.99849559,  0.175143  ],
+           [ 0.01066793,  0.56227858],
+           ...,
+           [ 0.9717297 ,  0.32888917],
+           [ 0.07574692,  0.23760245],
+           [ 0.58331683,  0.42593687]])
+    >>> random_sample(TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)"), 10000)
+    array([[  4.08825739e-01,   5.29644626e-02,   9.44930468e-02],
+           [  1.36657898e-01,   8.06204008e-01,   4.62176733e-01],
+           [  4.07551758e-01,   1.74937939e-01,   4.54898638e-01],
+           ...,
+           [  4.67710629e-01,   3.36476975e-01,   5.08900918e-01],
+           [  3.67303658e-04,   1.99492895e-01,   6.25048016e-02],
+           [  2.35600911e-01,   8.33069892e-02,   5.75918953e-03]])
+
     """
     import ROOT
     if isinstance(func, ROOT.TF3):
