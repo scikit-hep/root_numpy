@@ -695,24 +695,24 @@ def cleanup():
 Sampling TF1, TF2, and TF3
 """
 
-def sample_f1(f1, int n_samples):
+def sample_f1(f1, unsigned int n_samples):
     
     if not PyCObject_Check(f1):
         raise ValueError('func must be PyCObject')
     cdef TF1* f1_ = <TF1*> PyCObject_AsVoidPtr(f1)
-    cdef int i
+    cdef unsigned int i
     cdef np.ndarray[np.double_t, ndim=1] arr = np.empty(n_samples, dtype=np.double)
     for i from 0 <= i < n_samples:
         arr[i] = f1_.GetRandom()
     return arr
 
 
-def sample_f2(f2, int n_samples):
+def sample_f2(f2, unsigned int n_samples):
     
     if not PyCObject_Check(f2):
         raise ValueError('func must be PyCObject')
     cdef TF2* f2_ = <TF2*> PyCObject_AsVoidPtr(f2)
-    cdef int i
+    cdef unsigned int i
     cdef double x = 0
     cdef double y = 0
     cdef np.ndarray[np.double_t, ndim=2] arr = np.empty((n_samples, 2), dtype=np.double)
@@ -723,12 +723,12 @@ def sample_f2(f2, int n_samples):
     return arr
 
 
-def sample_f3(f3, int n_samples):
+def sample_f3(f3, unsigned int n_samples):
     
     if not PyCObject_Check(f3):
         raise ValueError('func must be PyCObject')
     cdef TF3* f3_ = <TF3*> PyCObject_AsVoidPtr(f3)
-    cdef int i
+    cdef unsigned int i
     cdef double x = 0
     cdef double y = 0
     cdef double z = 0

@@ -439,7 +439,7 @@ def fill_array(hist, array, weights=None):
             hist, array)
 
 
-def random_sample(func, n_samples):
+def random_sample(func, n_samples, seed=None):
     """
     Construct a NumPy array from a random sampling of a ROOT function.
 
@@ -449,8 +449,14 @@ def random_sample(func, n_samples):
     func : a ROOT TF1, TF2, or TF3
         The ROOT function to sample.
 
-    n_samples : int
+    n_samples : positive int
         The number of random samples to generate.
+
+    seed : None, positive int or 0, optional (default=None)
+        The random seed, set via ROOT.gRandom.SetSeed(seed):
+        http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed
+        If 0, the seed will be random. If None (the default),
+        ROOT.gRandom will not be touched and the current seed will be used.
 
     Returns
     -------
@@ -488,6 +494,12 @@ def random_sample(func, n_samples):
 
     """
     import ROOT
+    if n_samples <= 0:
+        raise ValueError("n_samples must be greater than 0")
+    if seed is not None:
+        if seed < 0:
+            raise ValueError("seed must be positive or 0")
+        ROOT.gRandom.SetSeed(seed)
     if isinstance(func, ROOT.TF3):
         return _librootnumpy.sample_f3(ROOT.AsCObject(func), n_samples)
     elif isinstance(func, ROOT.TF2):
