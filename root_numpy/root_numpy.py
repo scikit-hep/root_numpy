@@ -20,6 +20,7 @@ __all__ = [
     'array2tree',
     'array2root',
     'fill_array',
+    'random_sample',
 ]
 
 
@@ -382,12 +383,13 @@ def array2root(arr, filename, treename='tree', mode='update'):
 
 
 def fill_array(hist, array, weights=None):
-    """Fill a ROOT histogram with a NumPy array.
-
+    """
+    Fill a ROOT histogram with a NumPy array.
     """
     import ROOT
     if not isinstance(hist, ROOT.TH1):
-        raise TypeError("``hist`` must be a subclass of ROOT.TH1")
+        raise TypeError(
+            "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
     hist = ROOT.AsCObject(hist)
     if weights is not None:
         _libnumpyhist.fill_hist_with_ndarray(
@@ -395,3 +397,19 @@ def fill_array(hist, array, weights=None):
     else:
         _libnumpyhist.fill_hist_with_ndarray(
             hist, array)
+
+
+def random_sample(func, n_samples):
+    """
+    Construct a NumPy array from a random sampling of a ROOT function.
+    """
+    import ROOT
+    if isinstance(func, ROOT.TF3):
+        return _librootnumpy.sample_f3(ROOT.AsCObject(func), n_samples)
+    elif isinstance(func, ROOT.TF2):
+        return _librootnumpy.sample_f2(ROOT.AsCObject(func), n_samples)
+    elif isinstance(func, ROOT.TF1):
+        return _librootnumpy.sample_f1(ROOT.AsCObject(func), n_samples)
+    else:
+        raise TypeError(
+            "func must be an instance of ROOT.TF1, ROOT.TF2 or ROOT.TF3")
