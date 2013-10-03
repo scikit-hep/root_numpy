@@ -20,6 +20,7 @@ __all__ = [
     'array2tree',
     'array2root',
     'fill_array',
+    'random_sample',
 ]
 
 
@@ -57,11 +58,14 @@ def list_branches(filename, treename=None):
 
     Parameters
     ----------
+
     filename : str
         Path to ROOT file.
+
     treename : str, optional (default=None)
         Name of tree in the ROOT file.
         (optional if the ROOT file has only one tree).
+
     """
     return _librootnumpy.list_branches(filename, treename)
 
@@ -78,11 +82,14 @@ def list_structures(filename, treename=None):
 
     Parameters
     ----------
+
     filename : str
         Path to ROOT file.
+
     treename : str, optional (default=None)
         Name of tree in the ROOT file
         (optional if the ROOT file has only one tree).
+
     """
     return _librootnumpy.list_structures(filename, treename)
 
@@ -107,19 +114,24 @@ def root2array(filenames,
 
     Parameters
     ----------
+
     filenames : str or list
         ROOT file name pattern or list of patterns. Wildcarding is
         supported by Python globbing.
+
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
+
     branches : list of str, optional (default=None)
         List of branch names to include as columns of the array.
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step``
         parameters is the same as for Python slices.
@@ -235,25 +247,32 @@ def tree2array(tree,
 
     Parameters
     ----------
+
     treename : str
         Name of the tree to convert.
+
     branches : list of str, optional (default=None)
         List of branch names to include as columns of the array.
         If None or empty then include all branches than can be converted in the
         first tree.
         If branches contains duplicate branches, only the first one is used.
+
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step``
         parameters is the same as for Python slices.
         If a range is supplied (by setting some of the
         ``start``, ``stop`` or ``step`` parameters), only the entries in that
         range and fulfilling the ``selection`` condition (if defined) are used.
+
     include_weight : bool, optional (default=False)
         Include a column containing the tree weight.
+
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
+
     weight_dtype : NumPy dtype, optional (default='f4')
         The datatype to use for the weight column if ``include_weight=True``.
 
@@ -322,10 +341,13 @@ def array2tree(arr, name='tree', tree=None):
 
     Parameters
     ----------
+
     arr : array
         A numpy structured array
+
     name : str (optional, default='tree')
         Name of the created ROOT TTree if ``tree`` is None.
+
     tree : existing ROOT TTree (optional, default=None)
         Any branch with the same name as a field in the
         numpy array will be extended as long as the types are compatible,
@@ -363,13 +385,17 @@ def array2root(arr, filename, treename='tree', mode='update'):
 
     Parameters
     ----------
+
     arr : array
         A numpy structured array
+
     filename : str
         Name of the output ROOT TFile. A new file will be created if it
         doesn't already exist.
+
     treename : str (optional, default='tree')
         Name of the created ROOT TTree.
+
     mode : str (optional, default='update')
         Mode used to open the ROOT TFile ('update' or 'recreate').
 
@@ -382,12 +408,28 @@ def array2root(arr, filename, treename='tree', mode='update'):
 
 
 def fill_array(hist, array, weights=None):
-    """Fill a ROOT histogram with a NumPy array.
+    """
+    Fill a ROOT histogram with a NumPy array.
+
+    Parameters
+    ----------
+
+    hist : a ROOT TH1, TH2, or TH3
+        The ROOT histogram to fill.
+
+    array : numpy array of shape [n_samples, n_dimensions]
+        The values to fill the histogram with. The number of columns
+        must match the dimensionality of the histogram. Supply a flat
+        numpy array when filling a 1D histogram.
+
+    weights : numpy array
+        A flat numpy array of weights for each sample in ``array``.
 
     """
     import ROOT
     if not isinstance(hist, ROOT.TH1):
-        raise TypeError("``hist`` must be a subclass of ROOT.TH1")
+        raise TypeError(
+            "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
     hist = ROOT.AsCObject(hist)
     if weights is not None:
         _libnumpyhist.fill_hist_with_ndarray(
@@ -395,3 +437,75 @@ def fill_array(hist, array, weights=None):
     else:
         _libnumpyhist.fill_hist_with_ndarray(
             hist, array)
+
+
+def random_sample(func, n_samples, seed=None):
+    """
+    Construct a NumPy array from a random sampling of a ROOT function.
+
+    Parameters
+    ----------
+
+    func : a ROOT TF1, TF2, or TF3
+        The ROOT function to sample.
+
+    n_samples : positive int
+        The number of random samples to generate.
+
+    seed : None, positive int or 0, optional (default=None)
+        The random seed, set via ROOT.gRandom.SetSeed(seed):
+        http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed
+        If 0, the seed will be random. If None (the default),
+        ROOT.gRandom will not be touched and the current seed will be used.
+
+    Returns
+    -------
+
+    array : a numpy array
+        A numpy array with a shape corresponding to the dimensionality
+        of the function. A flat array is returned when sampling TF1.
+        An array with shape [n_samples, n_dimensions] is returned when
+        sampling TF2 or TF3.
+
+    Examples
+    --------
+
+    >>> from root_numpy import random_sample
+    >>> from ROOT import TF1, TF2, TF3
+    >>> random_sample(TF1("f1", "TMath::DiLog(x)"), 1E4, seed=1)
+    array([ 0.68307934,  0.9988919 ,  0.87198158, ...,  0.50331049,
+            0.53895257,  0.57576984])
+    >>> random_sample(TF2("f2", "sin(x)*sin(y)/(x*y)"), 1E4, seed=1)
+    array([[ 0.93425084,  0.39990616],
+           [ 0.00819315,  0.73108525],
+           [ 0.00307176,  0.00427081],
+           ...,
+           [ 0.66931215,  0.0421913 ],
+           [ 0.06469985,  0.10253632],
+           [ 0.31059832,  0.75892702]])
+    >>> random_sample(TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)"), 1E4, seed=1)
+    array([[ 0.03323949,  0.95734415,  0.39775191],
+           [ 0.07093748,  0.01007775,  0.03330135],
+           [ 0.80786963,  0.13641129,  0.14655269],
+           ...,
+           [ 0.96223632,  0.43916482,  0.05542078],
+           [ 0.06631163,  0.0015063 ,  0.46550416],
+           [ 0.88154752,  0.24332142,  0.66746564]])
+
+    """
+    import ROOT
+    if n_samples <= 0:
+        raise ValueError("n_samples must be greater than 0")
+    if seed is not None:
+        if seed < 0:
+            raise ValueError("seed must be positive or 0")
+        ROOT.gRandom.SetSeed(seed)
+    if isinstance(func, ROOT.TF3):
+        return _librootnumpy.sample_f3(ROOT.AsCObject(func), n_samples)
+    elif isinstance(func, ROOT.TF2):
+        return _librootnumpy.sample_f2(ROOT.AsCObject(func), n_samples)
+    elif isinstance(func, ROOT.TF1):
+        return _librootnumpy.sample_f1(ROOT.AsCObject(func), n_samples)
+    else:
+        raise TypeError(
+            "func must be an instance of ROOT.TF1, ROOT.TF2 or ROOT.TF3")

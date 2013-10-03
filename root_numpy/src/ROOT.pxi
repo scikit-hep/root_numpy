@@ -78,3 +78,15 @@ cdef extern from "TTreeFormula.h":
 
 cdef extern from "TClassEdit.h" namespace "TClassEdit":
     string ResolveTypedef(const_char*, bool)
+
+cdef extern from "TF1.h":
+    cdef cppclass TF1:
+        double GetRandom()
+
+cdef extern from "TF2.h":
+    cdef cppclass TF2:
+        double GetRandom2(double& x, double& y)
+
+cdef extern from "TF3.h":
+    cdef cppclass TF3:
+        double GetRandom3(double& x, double& y, double& z)

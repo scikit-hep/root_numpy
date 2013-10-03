@@ -5,7 +5,7 @@ import tempfile
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D
+from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D, TF1, TF2, TF3
 
 from . import *
 from .testdata import get_filepath
@@ -377,3 +377,21 @@ def test_array2root():
     array2root(a, tmp_path, mode='recreate')
     os.close(tmp_fd)
     os.remove(tmp_path)
+
+
+def test_random_sample_f1():
+
+    func = TF1("f1", "TMath::DiLog(x)")
+    sample = random_sample(func, 100)
+
+
+def test_random_sample_f2():
+
+    func = TF2("f2", "sin(x)*sin(y)/(x*y)")
+    sample = random_sample(func, 100)
+
+
+def test_random_sample_f3():
+
+    func = TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)")
+    sample = random_sample(func, 100)
