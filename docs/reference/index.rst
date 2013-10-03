@@ -22,6 +22,7 @@ what they are and what they do.
    array2tree
    array2root
    fill_array
+   random_sample
    list_trees
    list_branches
    list_structures
