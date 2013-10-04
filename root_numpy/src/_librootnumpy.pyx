@@ -316,6 +316,10 @@ CONVERTERS.insert(CONVERTERS_ITEM(
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<long long>', new VectorConverter[long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<float>', new VectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
