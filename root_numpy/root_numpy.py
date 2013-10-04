@@ -36,6 +36,24 @@ def _add_weight_field(arr,
         dtypes=weight_dtype)
 
 
+def _glob(filenames):
+    """Glob a filename or list of filenames but always return the original
+    string if the glob didn't match anything so URLs for remote file access
+    are not clobbered.
+    """
+    if isinstance(filenames, basestring):
+        filenames = [filenames]
+    matches = []
+    for name in filenames:
+        matched_names = glob(name)
+        if not matched_names:
+            # use the original string
+            matches.append(name)
+        else:
+            matches.extend(matched_names)
+    return matches
+
+
 def list_trees(filename):
     """Get list of the tree names in a ROOT file.
 
@@ -182,30 +200,25 @@ def root2array(filenames,
     input file or specifying the branches manually.
 
     """
-    matched_filenames = []
-    if isinstance(filenames, basestring):
-        matched_filenames = glob(filenames)
-    else:
-        for fn in filenames:
-            tmp = glob(fn)
-            if len(tmp) == 0:
-                raise IOError('%s does not match any readable file.' % fn)
-            matched_filenames.extend(tmp)
+    filenames = _glob(filenames)
 
-    if len(matched_filenames) == 0:
-        raise IOError('pattern given does not match any file %s' % filenames)
+    if not filenames:
+        raise ValueError("specify at least one filename")
 
     if treename is None:
-        trees = list_trees(matched_filenames[0])
-        if len(trees) != 1:
-            raise ValueError('treename needs to be specified if the file '
-                             'contains more than one tree. Your choices are:'
-                             + str(trees))
+        trees = list_trees(filenames[0])
+        if len(trees) > 1:
+            raise ValueError(
+                "treename must be specified if the file "
+                "contains more than one tree")
+        elif not trees:
+            raise IOError(
+                "no trees present in {0}".format(filenames[0]))
         else:
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        matched_filenames, treename, branches, selection, start, stop, step)
+        filenames, treename, branches, selection, start, stop, step)
 
 
 def root2rec(filenames,
