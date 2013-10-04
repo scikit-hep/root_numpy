@@ -37,14 +37,26 @@ def _add_weight_field(arr,
 
 
 def list_trees(filename):
-    """List the trees in a ROOT file.
+    """Get list of the tree names in a ROOT file.
+
+    Parameters
+    ----------
+
+    filename : str
+        Path to ROOT file.
+
+    Returns
+    -------
+
+    trees : list
+        List of tree names
 
     """
     return _librootnumpy.list_trees(filename)
 
 
 def list_branches(filename, treename=None):
-    """Get a list of branches for trees in a ROOT file.
+    """Get a list of the branch names of a tree in a ROOT file.
 
     Parameters
     ----------
@@ -56,12 +68,18 @@ def list_branches(filename, treename=None):
         Name of tree in the ROOT file.
         (optional if the ROOT file has only one tree).
 
+    Returns
+    -------
+
+    branches : list
+        List of branch names
+
     """
     return _librootnumpy.list_branches(filename, treename)
 
 
 def list_structures(filename, treename=None):
-    """Return tree structures.
+    """Get a dictionary mapping branch names to leaf structures.
 
     Parameters
     ----------
@@ -72,6 +90,12 @@ def list_structures(filename, treename=None):
     treename : str, optional (default=None)
         Name of tree in the ROOT file
         (optional if the ROOT file has only one tree).
+
+    Returns
+    -------
+
+    structures : OrderedDict
+        An ordered dictionary mapping branch names to leaf structures.
 
     """
     return _librootnumpy.list_structures(filename, treename)
