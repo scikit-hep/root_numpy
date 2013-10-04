@@ -25,9 +25,7 @@ except ImportError:
     from .extern.ordereddict import OrderedDict
 
 import atexit
-from glob import glob
 import warnings
-from warnings import warn
 from root_numpy_warnings import RootNumpyUnconvertibleWarning
 
 include "ROOT.pxi"
@@ -76,12 +74,6 @@ TYPES_NUMPY2ROOT = {
 
 def list_trees(fname):
     
-    # globbing support
-    fname = glob(fname)
-    if len(fname) == 0:
-        raise IOError("file not found: %s" % fname)
-    fname = fname[0]
-
     cdef TFile* f = new TFile(fname, 'read')
     if f is NULL:
         raise IOError("cannot read: %s" % fname)
@@ -112,12 +104,6 @@ def list_structures(fname, tree=None):
         else:
             tree = tree[0]
     
-    # globbing support
-    fname = glob(fname)
-    if len(fname) == 0:
-        raise IOError("file not found: %s" % fname)
-    fname = fname[0]
-
     cdef TFile* f = new TFile(fname, 'read')
     
     cdef TTree* t = <TTree*> f.Get(tree)
@@ -580,7 +566,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
         nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
         return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
-        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
         return NULL
         #lets peek
         """
@@ -590,7 +576,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
             #TODO finish this
         """
     else:
-        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
     return NULL
 
 
