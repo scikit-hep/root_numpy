@@ -3,7 +3,6 @@ from root_numpy import (
     tree2array, tree2rec,
     array2tree, array2root,
     list_trees, list_branches, list_structures,
-    lt, lst, lb, lst,
     fill_array,
     random_sample)
 from root_numpy_warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
@@ -22,7 +21,6 @@ __all__ = [
     'list_trees',
     'list_branches',
     'list_structures',
-    'lt', 'lb', 'lst',
     'stretch',
     'blockwise_inner_join',
     'RootNumpyWarning',

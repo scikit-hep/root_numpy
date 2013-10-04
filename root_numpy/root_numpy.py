@@ -12,9 +12,6 @@ __all__ = [
     'list_trees',
     'list_branches',
     'list_structures',
-    'lt',
-    'lb',
-    'lst',
     'tree2array',
     'tree2rec',
     'array2tree',
@@ -46,13 +43,6 @@ def list_trees(filename):
     return _librootnumpy.list_trees(filename)
 
 
-def lt(filename):
-    """Shorthand for :func:`list_trees`
-
-    """
-    return _librootnumpy.list_trees(filename)
-
-
 def list_branches(filename, treename=None):
     """Get a list of branches for trees in a ROOT file.
 
@@ -70,13 +60,6 @@ def list_branches(filename, treename=None):
     return _librootnumpy.list_branches(filename, treename)
 
 
-def lb(filename, treename=None):
-    """Shorthand for :func:`list_branches`
-
-    """
-    return list_branches(filename, treename)
-
-
 def list_structures(filename, treename=None):
     """Return tree structures.
 
@@ -89,13 +72,6 @@ def list_structures(filename, treename=None):
     treename : str, optional (default=None)
         Name of tree in the ROOT file
         (optional if the ROOT file has only one tree).
-
-    """
-    return _librootnumpy.list_structures(filename, treename)
-
-
-def lst(filename, treename=None):
-    """Shorthand for :func:`list_structures`
 
     """
     return _librootnumpy.list_structures(filename, treename)
