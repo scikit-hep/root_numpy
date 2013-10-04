@@ -14,7 +14,7 @@ from .extern.ordereddict import OrderedDict
 from nose.tools import raises, assert_equal, assert_almost_equal
 
 
-def ld(data):
+def load(data):
     if isinstance(data, list):
         return [get_filepath(x) for x in data]
     else:
@@ -33,18 +33,18 @@ def check_single(single, n=100, id=1):
         assert_almost_equal(single[i][2], i % 100 * 3.0 + id)
 
 
-def test_lt():
-    trees = lt(ld('vary1.root'))
+def test_list_trees():
+    trees = list_trees(load('vary1.root'))
     assert_equal(trees, ['tree'])
 
 
-def test_lb():
-    branches = lb(ld('single1.root'))
+def test_list_branches():
+    branches = list_branches(load('single1.root'))
     assert_equal(branches, ['n_int', 'f_float', 'd_double'])
 
 
-def test_lst():
-    structure = lst(ld('single1.root'))
+def test_list_structures():
+    structure = list_structures(load('single1.root'))
     expected = OrderedDict([
         ('n_int', [('n_int', 'int')]),
         ('f_float', [('f_float', 'float')]),
@@ -53,37 +53,37 @@ def test_lst():
 
 
 def test_single():
-    f = ld('single1.root')
+    f = load('single1.root')
     a = root2array(f)
     check_single(a)
 
 
 @raises(IOError)
 def test_single_pattern_not_exist():
-    f = ld(['single1.root','does_not_exists.root'])
+    f = load(['single1.root','does_not_exists.root'])
     a = root2array(f)
 
 
 @raises(IOError)
 def test_single_filename_not_exist():
-    f = ld('does_not_exists.root')
+    f = load('does_not_exists.root')
     a = root2array(f)
 
 
 @raises(ValueError)
 def test_doubel_tree_name_not_specified():
-    f = ld('doubletree1.root')
+    f = load('doubletree1.root')
     a = root2array(f)
 
 
 def test_singlechain():
-    f = ld(['single1.root', 'single2.root'])
+    f = load(['single1.root', 'single2.root'])
     a = root2array(f)
     check_single(a, 200)
 
 
 def test_fixed():
-    f = ld(['fixed1.root', 'fixed2.root'])
+    f = load(['fixed1.root', 'fixed2.root'])
     a = root2array(f)
     assert_equal(
         a.dtype,
@@ -97,7 +97,7 @@ def test_fixed():
 
 
 def test_vary():
-    f = ld(['vary1.root', 'vary2.root'])
+    f = load(['vary1.root', 'vary2.root'])
     a = root2rec(f)
     assert_equal(
         a.dtype,
@@ -121,20 +121,20 @@ def test_vary():
 
 def test_tree2array():
     chain = TChain('tree')
-    chain.Add(ld('single1.root'))
+    chain.Add(load('single1.root'))
     check_single(tree2array(chain))
 
 
 def test_tree2rec():
     chain = TChain('tree')
-    chain.Add(ld('single1.root'))
+    chain.Add(load('single1.root'))
     check_single(tree2array(chain))
 
 
 def test_selection():
     chain = TChain('tree')
-    chain.Add(ld('single1.root'))
-    chain.Add(ld('single2.root'))
+    chain.Add(load('single1.root'))
+    chain.Add(load('single2.root'))
     a = tree2rec(chain, selection="d_double > 100")
     assert_equal((a['d_double'] <= 100).any(), False)
 
@@ -149,8 +149,8 @@ def test_selection():
 def test_branch_status():
     # test that original branch status is preserved
     chain = TChain('tree')
-    chain.Add(ld('single1.root'))
-    chain.Add(ld('single2.root'))
+    chain.Add(load('single1.root'))
+    chain.Add(load('single2.root'))
     chain.SetBranchStatus('d_double', False)
     a = tree2rec(chain, selection="d_double > 100")
     assert_equal(chain.GetBranchStatus('d_double'), False)
@@ -159,7 +159,7 @@ def test_branch_status():
 @raises(ValueError)
 def test_branch_DNE():
     chain = TChain('tree')
-    chain.Add(ld('single1.root'))
+    chain.Add(load('single1.root'))
     tree2array(chain, branches=['my_net_worth'])
 
 
@@ -170,12 +170,12 @@ def test_tree2array_wrongtype():
 
 
 def test_specific_branch():
-    a = root2rec(ld('single1.root'), branches=['f_float'])
+    a = root2rec(load('single1.root'), branches=['f_float'])
     assert_equal(a.dtype, [('f_float', '<f4')])
 
 
 def test_vector():
-    a = root2rec(ld('hvector.root'))
+    a = root2rec(load('hvector.root'))
     assert_equal(
         a.dtype,
         [('v_i', 'O'),
@@ -212,21 +212,21 @@ def test_vector():
 
 
 def test_slice():
-    a = root2rec(ld('single1.root'), stop=10)
+    a = root2rec(load('single1.root'), stop=10)
     assert_equal(len(a), 10)
     assert_equal(a.n_int[-1], 10)
 
-    a = root2rec(ld('single1.root'), stop=11, start=1)
+    a = root2rec(load('single1.root'), stop=11, start=1)
     assert_equal(len(a), 10)
     assert_equal(a.n_int[-1], 11)
 
-    a = root2rec(ld('single1.root'), stop=105, start=95)
+    a = root2rec(load('single1.root'), stop=105, start=95)
     assert_equal(len(a), 5)
     assert_equal(a.n_int[-1], 100)
 
 
 def test_weights():
-    f = TFile(ld('test.root'))
+    f = TFile(load('test.root'))
     tree = f.Get('tree')
     tree.SetWeight(5.)
     rec = tree2rec(tree, include_weight=True, weight_name='treeweight')
@@ -234,7 +234,7 @@ def test_weights():
 
 
 def test_PyRoot():
-    f = TFile(ld('single1.root'))
+    f = TFile(load('single1.root'))
     tree = f.Get('tree')
     tree2array(tree)
 
@@ -343,7 +343,7 @@ def test_blockwise_inner_join():
 
 
 def test_struct():
-    assert_array_equal(root2rec(ld('structbranches.root')),
+    assert_array_equal(root2rec(load('structbranches.root')),
         np.array([(10, 15.5, 20, 781.2)],
                     dtype=[('branch1_intleaf', '<i4'),
                         ('branch1_floatleaf', '<f4'),

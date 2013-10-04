@@ -12,9 +12,6 @@ __all__ = [
     'list_trees',
     'list_branches',
     'list_structures',
-    'lt',
-    'lb',
-    'lst',
     'tree2array',
     'tree2rec',
     'array2tree',
@@ -40,21 +37,26 @@ def _add_weight_field(arr,
 
 
 def list_trees(filename):
-    """List the trees in a ROOT file.
+    """Get list of the tree names in a ROOT file.
 
-    """
-    return _librootnumpy.list_trees(filename)
+    Parameters
+    ----------
 
+    filename : str
+        Path to ROOT file.
 
-def lt(filename):
-    """Shorthand for :func:`list_trees`
+    Returns
+    -------
+
+    trees : list
+        List of tree names
 
     """
     return _librootnumpy.list_trees(filename)
 
 
 def list_branches(filename, treename=None):
-    """Get a list of branches for trees in a ROOT file.
+    """Get a list of the branch names of a tree in a ROOT file.
 
     Parameters
     ----------
@@ -66,19 +68,18 @@ def list_branches(filename, treename=None):
         Name of tree in the ROOT file.
         (optional if the ROOT file has only one tree).
 
+    Returns
+    -------
+
+    branches : list
+        List of branch names
+
     """
     return _librootnumpy.list_branches(filename, treename)
 
 
-def lb(filename, treename=None):
-    """Shorthand for :func:`list_branches`
-
-    """
-    return list_branches(filename, treename)
-
-
 def list_structures(filename, treename=None):
-    """Return tree structures.
+    """Get a dictionary mapping branch names to leaf structures.
 
     Parameters
     ----------
@@ -90,12 +91,11 @@ def list_structures(filename, treename=None):
         Name of tree in the ROOT file
         (optional if the ROOT file has only one tree).
 
-    """
-    return _librootnumpy.list_structures(filename, treename)
+    Returns
+    -------
 
-
-def lst(filename, treename=None):
-    """Shorthand for :func:`list_structures`
+    structures : OrderedDict
+        An ordered dictionary mapping branch names to leaf structures.
 
     """
     return _librootnumpy.list_structures(filename, treename)
