@@ -25,9 +25,7 @@ except ImportError:
     from .extern.ordereddict import OrderedDict
 
 import atexit
-from glob import glob
 import warnings
-from warnings import warn
 from root_numpy_warnings import RootNumpyUnconvertibleWarning
 
 include "ROOT.pxi"
@@ -76,19 +74,14 @@ TYPES_NUMPY2ROOT = {
 
 def list_trees(fname):
     
-    # globbing support
-    fname = glob(fname)
-    if len(fname) == 0:
-        raise IOError("file not found: %s" % fname)
-    fname = fname[0]
-
-    cdef TFile* f = new TFile(fname, 'read')
+    cdef TFile* f = Open(fname, 'read')
     if f is NULL:
-        raise IOError("cannot read: %s" % fname)
+        raise IOError("cannot read %s" % fname)
 
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
-        raise IOError("not a valid root file: %s" % fname)
+        raise IOError("unable to get keys in %s" % fname)
+
     ret = []
     cdef int n = keys.GetEntries()
     cdef TObject* obj
@@ -104,21 +97,17 @@ def list_trees(fname):
 
 def list_structures(fname, tree=None):
 
-    # automatically select single tree
     if tree is None:
+        # automatically select single tree
         tree = list_trees(fname)
         if len(tree) != 1:
             raise ValueError("multiple trees found: %s" % (', '.join(tree)))
         else:
             tree = tree[0]
     
-    # globbing support
-    fname = glob(fname)
-    if len(fname) == 0:
-        raise IOError("file not found: %s" % fname)
-    fname = fname[0]
-
-    cdef TFile* f = new TFile(fname, 'read')
+    cdef TFile* f = Open(fname, 'read')
+    if f is NULL:
+        raise IOError("cannot read %s" % fname)
     
     cdef TTree* t = <TTree*> f.Get(tree)
     if t is NULL:
@@ -330,6 +319,10 @@ CONVERTERS.insert(CONVERTERS_ITEM(
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<long long>', new VectorConverter[long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<float>', new VectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
@@ -391,6 +384,20 @@ cdef np.ndarray init_array(vector[Column*]& columns,
     return np.empty(entries, dtype=nst)
 
 
+cdef handle_load(int load):
+    if load >= 0:
+        return
+    if load == -1:
+        raise ValueError("chain is empty")
+    elif load == -2:
+        raise IndexError("tree index in chain is out of bounds")
+    elif load == -3:
+        raise IOError("cannot open current file")
+    elif load == -4:
+        raise IOError("cannot access tree in current file")
+    raise RuntimeError("the chain is not initialized")
+
+
 cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
 
     # This is actually vector of pointers despite how it looks
@@ -399,6 +406,8 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
 
     # Make a better chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
+    handle_load(bc.Prepare())
+
     cdef TTreeFormula* formula = NULL
     cdef int num_entries = bc.GetEntries()
     cdef int num_entries_selected = 0
@@ -413,6 +422,7 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
     cdef vector[Converter*] cvarray
     cdef bytes py_select_formula
     cdef char* select_formula
+    cdef int entry_size
 
     try:
         # Setup the selection if we have one
@@ -465,8 +475,10 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
         
         indices = slice(start, stop, step).indices(num_entries)
         for ientry in xrange(*indices):
-            if bc.GetEntry(ientry) == 0:
-                break
+            entry_size = bc.GetEntry(ientry)
+            handle_load(entry_size)
+            if entry_size == 0:
+                raise IOError("read failure in current tree")
 
             # Determine if this entry passes the selection,
             # similar to the code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
@@ -506,7 +518,9 @@ def root2array_fromFname(fnames, treename, branches, selection, start, stop, ste
     try:
         ttree = new TChain(treename)
         for fn in fnames:
-            ttree.Add(fn)
+            if ttree.Add(fn, -1) == 0:
+                raise IOError("unable to access tree '{0}' in {1}".format(
+                    treename, fn))
         ret = tree2array(
                 <TTree*> ttree, branches, selection, start, stop, step)
     finally:
@@ -580,7 +594,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
         nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
         return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
-        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
         return NULL
         #lets peek
         """
@@ -590,7 +604,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
             #TODO finish this
         """
     else:
-        warn('Converter for %r not implemented yet. Skip.' % dtype)
+        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
     return NULL
 
 
@@ -670,7 +684,7 @@ def array2tree_toCObj(arr, name='tree', tree=None):
 
 def array2root(arr, filename, treename='tree', mode='update'):
     
-    cdef TFile* file = new TFile(filename, mode)
+    cdef TFile* file = Open(filename, mode)
     if file is NULL:
         raise IOError("cannot open file %s" % filename)
     if not file.IsWritable():

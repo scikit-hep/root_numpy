@@ -1,7 +1,7 @@
 #ifndef __BETTER_CHAIN_H
 #define __BETTER_CHAIN_H
 
-#include <Python.h>
+//#include <Python.h>
 #include <string>
 #include <iostream>
 #include <TTree.h>
@@ -37,33 +37,14 @@ class BetterChain
             fCurrent = -1;
             notifier = new MiniNotify(fChain->GetNotify());
             fChain->SetNotify(notifier);
-            LoadTree(0);
-
-            // Remember original branch status
-            TObjArray* branches = fChain->GetListOfBranches();
-            int ibranch, nbranches;
-            TBranch* branch;
-            nbranches = branches->GetEntries();
-            for (ibranch = 0; ibranch < nbranches; ++ibranch)
-            {
-                branch = (TBranch*) branches->At(ibranch);
-                original_branch_status[branch->GetName()] =
-                    branch->TestBit(kDoNotProcess) == 0;
-                // Only the required branches will be added to the cache later
-                fChain->DropBranchFromCache(branch, kTRUE);
-            }
-            // Enable all branches since we don't know yet which branches are
-            // required by the selection expression. All branches will be
-            // disabled in InitBranches() before only enabling the ones that are
-            // actually required in InitBranches() and MakeColumn()
-            fChain->SetBranchStatus("*", 1);
-            //fChain->SetCacheSize(10000000);
         }
 
         ~BetterChain()
         {
             if (!fChain)
+            {
                 return; // Somehow i need this (copy from make class)
+            }
 
             // Revert branches to their original activated/deactivated state
             map<string, bool>::iterator status_it;
@@ -94,15 +75,46 @@ class BetterChain
             delete notifier;
         }
 
-        int LoadTree(int entry)
+        long Prepare()
+        {
+            long load = LoadTree(0);
+            if (load < 0)
+            {
+                return load;
+            }
+            // Remember original branch status
+            TObjArray* branches = fChain->GetListOfBranches();
+            int ibranch, nbranches;
+            TBranch* branch;
+            nbranches = branches->GetEntries();
+            for (ibranch = 0; ibranch < nbranches; ++ibranch)
+            {
+                branch = (TBranch*) branches->At(ibranch);
+                original_branch_status[branch->GetName()] =
+                    branch->TestBit(kDoNotProcess) == 0;
+                // Only the required branches will be added to the cache later
+                fChain->DropBranchFromCache(branch, kTRUE);
+            }
+            // Enable all branches since we don't know yet which branches are
+            // required by the selection expression. All branches will be
+            // disabled in InitBranches() before only enabling the ones that are
+            // actually required in InitBranches() and MakeColumn()
+            fChain->SetBranchStatus("*", 1);
+            //fChain->SetCacheSize(10000000);
+            return load;
+        }
+
+        long LoadTree(long entry)
         {
             if (!fChain)
+            {
                 return -5;
-            //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
-            Long64_t centry = fChain->LoadTree(entry);
-            //RNHEXDEBUG(fChain->FindBranch("mcLen")->FindLeaf("mcLen"));
-            if (centry < 0)
-                return centry;
+            }
+            long load = fChain->LoadTree(entry);
+            if (load < 0)
+            {
+                return load;
+            }
             if (fChain->GetTreeNumber() != fCurrent)
             {
                 fCurrent = fChain->GetTreeNumber();
@@ -110,16 +122,18 @@ class BetterChain
             if(notifier->notified)
             {
                 Notify();
-                notifier->notified=false;
+                notifier->notified = false;
             }
-            return centry;
+            return load;
         }
 
         void AddFormula(TTreeFormula* formula)
         {
             // The BetterChain will take ownership of the formula
             if (formula == NULL)
+            {
                 return;
+            }
             formulae.push_back(formula);
         }
 
@@ -149,12 +163,19 @@ class BetterChain
             }
         }
 
-        int GetEntry(int entry)
+        int GetEntry(long entry)
         {
+            long load;
             // Read contents of entry.
             if (!fChain)
+            {
                 return 0;
-            LoadTree(entry);
+            }
+            load = LoadTree(entry);
+            if (load < 0)
+            {
+                return (int)load;
+            }
             ientry = entry;
             return fChain->GetEntry(ientry);
         }
@@ -211,10 +232,6 @@ class BetterChain
                            const string& lname,
                            const string& colname)
         {
-            // As a bonus set branch status on all the active branch
-            // including the branch that define the length
-            LoadTree(0);
-
             TBranch* branch = fChain->GetBranch(bname.c_str());
             if (branch == NULL)
             {
@@ -248,7 +265,9 @@ class BetterChain
             BL bl = make_pair(bname, lname);
             Column* ret = Column::build(leaf, colname);
             if (ret == NULL)
+            {
                 return NULL;
+            }
             leafcache.insert(make_pair(bl, ret));
             return ret;
         }
@@ -265,7 +284,9 @@ class BetterChain
                 {
                     notified = true;
                     if (oldnotify)
+                    {
                         oldnotify->Notify();
+                    }
                     return true;
                 }
 

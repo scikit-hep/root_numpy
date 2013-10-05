@@ -38,6 +38,9 @@ cdef extern from "TFile.h":
         bool IsOpen()
         bool IsWritable()
 
+cdef extern from "TFile.h" namespace "TFile":
+    TFile* Open(const_char*, const_char*)
+
 cdef extern from "TTree.h":
     cdef cppclass TTree:
         TTree()
@@ -60,7 +63,7 @@ cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
         TChain()
         TChain(const_char*)
-        int Add(const_char*)
+        int Add(const_char*, long)
         void Print()
 
 cdef extern from "TList.h":
