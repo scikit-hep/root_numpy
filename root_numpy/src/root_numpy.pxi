@@ -20,6 +20,7 @@ cdef extern from "Column.h":
 cdef extern from "BetterChain.h":
     cdef cppclass BetterChain:
         BetterChain(TTree*)
+        long Prepare()
         int Next()
         Column* MakeColumn(string bname, string lname, string colname)
         int GetEntries()
