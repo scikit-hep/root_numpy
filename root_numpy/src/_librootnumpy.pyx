@@ -684,7 +684,7 @@ def array2tree_toCObj(arr, name='tree', tree=None):
 
 def array2root(arr, filename, treename='tree', mode='update'):
     
-    cdef TFile* file = new TFile(filename, mode)
+    cdef TFile* file = Open(filename, mode)
     if file is NULL:
         raise IOError("cannot open file %s" % filename)
     if not file.IsWritable():
