@@ -248,28 +248,32 @@ def test_fill_array():
     data3D = np.random.randn(1E4, 3)
 
     a = TH1D('th1d', 'test', 1000, -5, 5)
-    fill_array(a, data1D)
+    fill_hist(a, data1D)
     #one of them lies beyond hist range that's why it's not 1e6
     assert_almost_equal(a.Integral(), 999999.0)
 
     a_w = TH1D('th1dw', 'test', 1000, -5, 5)
-    fill_array(a_w, data1D, w1D)
+    fill_hist(a_w, data1D, w1D)
     assert_almost_equal(a_w.Integral(), 999999.0*2)
 
     b = TH2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
-    fill_array(b, data2D)
+    fill_hist(b, data2D)
     assert_almost_equal(b.Integral(), 999999.0)
 
     c = TH3D('th3d', 'test', 10, -5, 5, 10, -5, 5, 10, -5, 5)
-    fill_array(c, data3D)
+    fill_hist(c, data3D)
     assert_almost_equal(c.Integral(), 10000.0)
+
+    # test deprecated call
+    fill_array(c, data3D)
+    assert_almost_equal(c.Integral(), 20000.0)
 
 
 @raises(TypeError)
 def test_fill_array_wrongtype():
     h = list()
     a = np.random.randn(100)
-    fill_array(h,a)
+    fill_hist(h,a)
 
 
 def test_stretch():
