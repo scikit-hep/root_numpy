@@ -230,7 +230,7 @@ def test_weights():
     tree = f.Get('tree')
     tree.SetWeight(5.)
     rec = tree2rec(tree, include_weight=True, weight_name='treeweight')
-    assert_array_equal(rec['treeweight'], np.ones(10) * 5)
+    assert_array_equal(rec['treeweight'], np.ones(100) * 5)
 
 
 def test_PyRoot():

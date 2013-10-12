@@ -3,6 +3,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
+#include "TRandom.h"
 
 
 void hvector()
@@ -182,6 +183,25 @@ void makestruct()
     delete br2;
 }
 
+void makerandom()
+{
+    TFile file("test.root","RECREATE");
+    TTree tree("tree","tree");
+    int i;   tree.Branch("i",&i,"i/I");
+    float x; tree.Branch("x",&x,"x/F");
+    float y; tree.Branch("y",&y,"y/F");
+    float z; tree.Branch("z",&z,"z/F");
+
+    for(i=0;i<100;++i){
+        x = gRandom->Gaus();
+        y = gRandom->Gaus();
+        z = gRandom->Gaus();
+        tree.Fill();
+    }
+    tree.Write();
+    file.Close();
+}
+
 int main(void)
 {
     makesingle(1);
@@ -193,5 +213,6 @@ int main(void)
     make2tree(1);
     hvector();
     makestruct();
+    makerandom();
     return 0;
 }
