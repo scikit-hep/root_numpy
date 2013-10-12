@@ -21,7 +21,7 @@ what they are and what they do.
    tree2rec
    array2tree
    array2root
-   fill_array
+   fill_hist
    random_sample
    list_trees
    list_branches

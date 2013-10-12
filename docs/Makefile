@@ -53,6 +53,7 @@ show:
 
 clean:
 	rm -rf $(BUILDDIR)/*
+	rm -rf reference/generated/*
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
