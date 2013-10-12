@@ -106,7 +106,7 @@ array:
    import numpy as np
 
    hist = TH2D('name', 'title', 20, -3, 3, 20, -3, 3)
-   fill_hist(hist, np.random.randn(1000000, 2))
+   fill_hist(hist, np.random.randn(1E6, 2))
    canvas = TCanvas()
    hist.Draw('LEGO2')
 
@@ -117,7 +117,7 @@ and a function for creating a random NumPy array by sampling a ROOT function:
    from ROOT import TF2
    from root_numpy import random_sample
 
-   func = TF2('f2', 'sin(x)*sin(y)/(x*y)')
+   func = TF2('func', 'sin(x)*sin(y)/(x*y)')
    arr = random_sample(func, 1E6)
 
 Also see the `root2hdf5 <http://www.rootpy.org/commands/root2hdf5.html>`_
