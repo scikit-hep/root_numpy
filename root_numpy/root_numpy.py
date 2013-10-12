@@ -301,11 +301,7 @@ def tree2array(tree,
     import ROOT
     if not isinstance(tree, ROOT.TTree):
         raise TypeError("tree must be a ROOT.TTree")
-    if hasattr(ROOT, 'AsCapsule'):
-        #o = ROOT.AsCapsule(tree)
-        # this will cause tons of compilation issue
-        raise NotImplementedError()
-        #return _librootnumpy.root2array_from_capsule(o, branches)
+    # will need AsCapsule for Python 3
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(
         cobj, branches, selection, start, stop, step)
