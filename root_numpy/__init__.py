@@ -3,7 +3,7 @@ from root_numpy import (
     tree2array, tree2rec,
     array2tree, array2root,
     list_trees, list_branches, list_structures,
-    fill_array,
+    fill_array, fill_hist,
     random_sample)
 from root_numpy_warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
 from utils import stretch, blockwise_inner_join
@@ -17,6 +17,7 @@ __all__ = [
     'array2tree',
     'array2root',
     'fill_array',
+    'fill_hist',
     'random_sample',
     'list_trees',
     'list_branches',

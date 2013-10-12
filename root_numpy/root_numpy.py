@@ -1,3 +1,4 @@
+import warnings
 from glob import glob
 import numpy as np
 from numpy.lib import recfunctions
@@ -5,6 +6,8 @@ from numpy.lib import recfunctions
 import _librootnumpy
 import _libnumpyhist
 
+# re-enable display of DeprecationWarning messages
+warnings.simplefilter('default')
 
 __all__ = [
     'root2array',
@@ -16,6 +19,7 @@ __all__ = [
     'tree2rec',
     'array2tree',
     'array2root',
+    'fill_hist',
     'fill_array',
     'random_sample',
 ]
@@ -420,7 +424,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     _librootnumpy.array2root(arr, filename, treename, mode)
 
 
-def fill_array(hist, array, weights=None):
+def fill_hist(hist, array, weights=None):
     """
     Fill a ROOT histogram with a NumPy array.
 
@@ -450,6 +454,16 @@ def fill_array(hist, array, weights=None):
     else:
         _libnumpyhist.fill_hist_with_ndarray(
             hist, array)
+
+
+def fill_array(hist, array, weights=None):
+    """
+    This function is deprecated. Use fill_hist.
+    """
+    warnings.warn(
+        "fill_array is deprecated and will be removed. "
+        "Please use fill_hist instead", DeprecationWarning)
+    return fill_hist(hist, array, weights=weights)
 
 
 def random_sample(func, n_samples, seed=None):
