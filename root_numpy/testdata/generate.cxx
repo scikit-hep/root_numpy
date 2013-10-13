@@ -58,12 +58,13 @@ void hvector()
    delete f;
 }
 
-void makesingle(int id)
+void makesingle(int id, double weight)
 {
     char buffer[255];
     sprintf(buffer,"single%d.root",id);
     TFile file(buffer,"RECREATE");
     TTree tree("tree","tree");
+    tree.SetWeight(weight);
     int n; tree.Branch("n_int",&n,"n_int/I");
     float f; tree.Branch("f_float",&f,"f_float/F");
     double d; tree.Branch("d_double",&d,"d_double/D");
@@ -83,7 +84,6 @@ void makefixed(int id)
     sprintf(buffer,"fixed%d.root",id);
     TFile file(buffer,"RECREATE");
     TTree tree("tree","tree");
-
     int n[5]; tree.Branch("n_int",&n,"n_int[5]/I");
     float f[7]; tree.Branch("f_float",&f,"f_float[7]/F");
     double d[10]; tree.Branch("d_double",&d,"d_double[10]/D");
@@ -204,8 +204,8 @@ void makerandom()
 
 int main(void)
 {
-    makesingle(1);
-    makesingle(2);
+    makesingle(1, 2.);
+    makesingle(2, 3.);
     makefixed(1);
     makefixed(2);
     makevary(1);
