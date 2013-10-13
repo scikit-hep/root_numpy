@@ -5,7 +5,7 @@
 ARCH_LOC_1 := $(wildcard $(shell root-config --prefix)/test/Makefile.arch)
 ARCH_LOC_2 := $(wildcard $(shell root-config --prefix)/share/root/test/Makefile.arch)
 ARCH_LOC_3 := $(wildcard $(shell root-config --prefix)/share/doc/root/test/Makefile.arch)
-ARCH_LOC_4 := $(wildcard $(shell root-config --prefix)/etc/Makefile.arch)
+ARCH_LOC_4 := $(wildcard $(shell root-config --etcdir)/Makefile.arch)
 ifneq ($(strip $(ARCH_LOC_1)),)
   $(info Using $(ARCH_LOC_1))
   include $(ARCH_LOC_1)

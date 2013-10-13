@@ -1,7 +1,6 @@
 #ifndef __BETTER_CHAIN_H
 #define __BETTER_CHAIN_H
 
-//#include <Python.h>
 #include <string>
 #include <iostream>
 #include <TTree.h>
@@ -43,7 +42,8 @@ class BetterChain
         {
             if (!fChain)
             {
-                return; // Somehow i need this (copy from make class)
+                // This is somehow needed (copied from MakeClass)
+                return;
             }
 
             // Revert branches to their original activated/deactivated state
@@ -190,7 +190,6 @@ class BetterChain
         void Notify()
         {
             // Taking care of all the leaves
-            //RNDEBUG("NOTIFY");
             LeafCache::iterator it;
             for(it = leafcache.begin(); it != leafcache.end(); ++it)
             {
@@ -226,6 +225,11 @@ class BetterChain
         int GetEntries()
         {
             return fChain->GetEntries();
+        }
+
+        double GetWeight()
+        {
+            return fChain->GetWeight();
         }
 
         Column* MakeColumn(const string& bname,

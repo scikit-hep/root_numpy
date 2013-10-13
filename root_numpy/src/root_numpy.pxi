@@ -25,6 +25,7 @@ cdef extern from "BetterChain.h":
         Column* MakeColumn(string bname, string lname, string colname)
         int GetEntries()
         int GetEntry(int i)
+        double GetWeight()
         TTree* fChain
         void AddFormula(TTreeFormula* formula)
         void InitBranches()
