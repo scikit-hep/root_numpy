@@ -25,21 +25,6 @@ __all__ = [
 ]
 
 
-def _add_weight_field(arr,
-                      tree,
-                      weight_name='weight',
-                      weight_dtype='f4'):
-    """Add a new column containing the tree weight.
-
-    """
-    weights = np.empty(arr.shape[0], dtype=weight_dtype)
-    weights.fill(tree.GetWeight())
-    return recfunctions.rec_append_fields(
-        arr, names=weight_name,
-        data=weights,
-        dtypes=weight_dtype)
-
-
 def _glob(filenames):
     """Glob a filename or list of filenames but always return the original
     string if the glob didn't match anything so URLs for remote file access
@@ -129,7 +114,9 @@ def root2array(filenames,
                selection=None,
                start=None,
                stop=None,
-               step=None):
+               step=None,
+               include_weight=False,
+               weight_name='weight'):
     """
     Convert trees in ROOT files into a numpy structured array.
     Refer to the type conversion table :ref:`here <conversion_table>`.
@@ -160,6 +147,12 @@ def root2array(filenames,
         If a range is supplied (by setting some of the
         ``start``, ``stop`` or ``step`` parameters), only the entries in that
         range and fulfilling the ``selection`` condition (if defined) are used.
+
+    include_weight : bool, optional (default=False)
+        Include a column containing the tree weight.
+
+    weight_name : str, optional (default='weight')
+        The field name for the weight column if ``include_weight=True``.
 
     Examples
     --------
@@ -222,7 +215,11 @@ def root2array(filenames,
             treename = trees[0]
 
     return _librootnumpy.root2array_fromFname(
-        filenames, treename, branches, selection, start, stop, step)
+        filenames, treename, branches,
+        selection,
+        start, stop, step,
+        include_weight,
+        weight_name)
 
 
 def root2rec(filenames,
@@ -231,7 +228,9 @@ def root2rec(filenames,
              selection=None,
              start=None,
              stop=None,
-             step=None):
+             step=None,
+             include_weight=False,
+             weight_name='weight'):
     """
     View the result of :func:`root2array` as a record array.
 
@@ -245,8 +244,11 @@ def root2rec(filenames,
     --------
     root2array
     """
-    return root2array(filenames, treename, branches, selection,
-                      start, stop, step).view(np.recarray)
+    return root2array(filenames, treename,
+                      branches, selection,
+                      start, stop, step,
+                      include_weight,
+                      weight_name).view(np.recarray)
 
 
 def tree2array(tree,
@@ -256,8 +258,7 @@ def tree2array(tree,
                stop=None,
                step=None,
                include_weight=False,
-               weight_name='weight',
-               weight_dtype='f4'):
+               weight_name='weight'):
     """
     Convert a tree into a numpy structured array.
     Refer to the type conversion table :ref:`here <conversion_table>`.
@@ -290,9 +291,6 @@ def tree2array(tree,
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
 
-    weight_dtype : NumPy dtype, optional (default='f4')
-        The datatype to use for the weight column if ``include_weight=True``.
-
     See Also
     --------
     root2array
@@ -301,16 +299,13 @@ def tree2array(tree,
     import ROOT
     if not isinstance(tree, ROOT.TTree):
         raise TypeError("tree must be a ROOT.TTree")
-    if hasattr(ROOT, 'AsCapsule'):
-        #o = ROOT.AsCapsule(tree)
-        # this will cause tons of compilation issue
-        raise NotImplementedError()
-        #return _librootnumpy.root2array_from_capsule(o, branches)
+    # will need AsCapsule for Python 3
     cobj = ROOT.AsCObject(tree)
     arr = _librootnumpy.root2array_fromCObj(
-        cobj, branches, selection, start, stop, step)
-    if include_weight:
-        arr = _add_weight_field(arr, tree, weight_name, weight_dtype)
+        cobj, branches, selection,
+        start, stop, step,
+        include_weight,
+        weight_name)
     return arr
 
 
@@ -321,8 +316,7 @@ def tree2rec(tree,
              stop=None,
              step=None,
              include_weight=False,
-             weight_name='weight',
-             weight_dtype='f4'):
+             weight_name='weight'):
     """
     View the result of :func:`tree2array` as a record array.
 
@@ -344,8 +338,7 @@ def tree2rec(tree,
                       stop=stop,
                       step=step,
                       include_weight=include_weight,
-                      weight_name=weight_name,
-                      weight_dtype=weight_dtype).view(np.recarray)
+                      weight_name=weight_name).view(np.recarray)
 
 
 def array2tree(arr, name='tree', tree=None):

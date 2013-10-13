@@ -370,7 +370,9 @@ cdef Converter* find_converter_by_typename(string typename):
 
 cdef np.ndarray init_array(vector[Column*]& columns,
                            vector[Converter*]& cv,
-                           int entries):
+                           int entries,
+                           include_weight,
+                           weight_name):
     cdef Column* this_col
     cdef Converter* this_conv
     nst = []
@@ -381,6 +383,8 @@ cdef np.ndarray init_array(vector[Column*]& columns,
             raise ValueError("No converter for %s" % this_col.GetTypeName())
         nst.append((this_col.colname, this_conv.get_nptype()))
         cv.push_back(this_conv)
+    if include_weight:
+        nst.append((weight_name, np.dtype('d')))
     return np.empty(entries, dtype=nst)
 
 
@@ -398,7 +402,9 @@ cdef handle_load(int load):
     raise RuntimeError("the chain is not initialized")
 
 
-cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
+cdef object tree2array(TTree* tree, branches, selection,
+                       start, stop, step,
+                       include_weight, weight_name):
 
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
@@ -470,7 +476,9 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
         
         # Now that we have all the columns we can
         # make an appropriate array structure
-        arr = init_array(columns, cvarray, num_entries)
+        arr = init_array(columns, cvarray, num_entries,
+                         include_weight, weight_name)
+        # exclude weight column
         numcol = columns.size()
         
         indices = slice(start, stop, step).indices(num_entries)
@@ -500,7 +508,9 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
                 nb = thisCV.write(thisCol, dataptr)
                 # poorman pointer magic
                 dataptr = shift(dataptr, nb)
-            
+            if include_weight:
+                (<double*> dataptr)[0] = bc.GetWeight() 
+
             # Increment number of selected entries last
             num_entries_selected += 1
     finally:
@@ -513,7 +523,9 @@ cdef object tree2array(TTree* tree, branches, selection, start, stop, step):
     return arr
 
 
-def root2array_fromFname(fnames, treename, branches, selection, start, stop, step):
+def root2array_fromFname(fnames, treename, branches,
+                         selection, start, stop, step,
+                         include_weight, weight_name):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename)
@@ -522,21 +534,27 @@ def root2array_fromFname(fnames, treename, branches, selection, start, stop, ste
                 raise IOError("unable to access tree '{0}' in {1}".format(
                     treename, fn))
         ret = tree2array(
-                <TTree*> ttree, branches, selection, start, stop, step)
+            <TTree*> ttree, branches,
+            selection, start, stop, step,
+            include_weight, weight_name)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, selection, start, stop, step):
+def root2array_fromCObj(tree, branches, selection,
+                        start, stop, step,
+                        include_weight, weight_name):
     # this is not a safe method
     # provided here for convenience only
     # typecheck should be implemented by the wrapper
     if not PyCObject_Check(tree):
-        raise ValueError('tree must be PyCObject')
+        raise ValueError("tree must be PyCObject")
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return tree2array(
-            chain, branches, selection, start, stop, step)
+            chain, branches, selection,
+            start, stop, step,
+            include_weight, weight_name)
 
 
 """

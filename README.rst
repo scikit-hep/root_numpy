@@ -14,7 +14,7 @@ root_numpy
 
 root_numpy is a Python extension module that provides an efficient interface
 between `ROOT <http://root.cern.ch/>`_ and `NumPy <http://www.numpy.org/>`_.
-root_numpy's internals are written in compiled C++ and can therefore handle
+root_numpy's internals are compiled C++ and can therefore handle
 large amounts of data much faster than equivalent pure Python implementations.
 
 With your ROOT data in NumPy form, make use of NumPy's
@@ -83,7 +83,7 @@ Include only certain branches and entries:
 
 The above conversion creates an array with two columns from the branches
 x and y where z is greater than zero and only looping on the first ten entries
-in the original tree while skipping every second entry.
+in the tree while skipping every second entry.
 
 Now convert our array back into a TTree:
 
