@@ -231,7 +231,7 @@ cdef cppclass VaryArrayConverter(Converter):
         this.typecode = conv.get_nptypecode()
         this.elesize = conv.size
     int write(Column* col, void* buffer):
-        cdef int numele = col.getLen()
+        cdef int numele = col.GetLen()
         cdef void* src = col.GetValuePointer()
         return create_numpyarray(buffer, src, this.typecode, numele, this.elesize)
     object get_nptype():
@@ -248,7 +248,7 @@ cdef cppclass FixedArrayConverter(Converter):
         this.L = L
     int write(Column* col, void* buffer):
         cdef void* src = col.GetValuePointer()
-        cdef int nbytes = col.getSize()
+        cdef int nbytes = col.GetSize()
         memcpy(buffer, src, nbytes)
         return nbytes
     object get_nptype():
@@ -408,7 +408,7 @@ cdef object tree2array(TTree* tree, branches, selection,
 
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
-    cdef Column* thisCol
+    cdef Column* col
 
     # Make a better chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
@@ -420,22 +420,22 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef int ientry
 
     # list of converter in the same order
-    cdef Converter* thisCV
+    cdef Converter* conv
     cdef int numcol
     cdef void* dataptr
     cdef np.ndarray arr
     cdef int nb
-    cdef vector[Converter*] cvarray
-    cdef bytes py_select_formula
-    cdef char* select_formula
     cdef int entry_size
+    cdef vector[Converter*] conv_array
+    cdef bytes py_string
+    cdef char* c_string
 
     try:
         # Setup the selection if we have one
         if selection:
-            py_select_formula = str(selection)
-            select_formula = py_select_formula
-            formula = new TTreeFormula("selection", select_formula, bc.fChain)
+            py_string = str(selection)
+            c_string = py_string
+            formula = new TTreeFormula("selection", c_string, bc.fChain)
             if formula == NULL or formula.GetNdim() == 0:
                 del formula
                 raise ValueError("could not compile selection formula")
@@ -443,13 +443,7 @@ cdef object tree2array(TTree* tree, branches, selection,
             # rolling over to the next tree.
             bc.AddFormula(formula)
         
-        # Activate branches used by formulae and deactivate all others
-        # MakeColumn will active the ones needed for the output array
-        bc.InitBranches()
-
-        # Parse the tree structure to determine
-        # whether to use short or long name
-        # and loop through all leaves
+        # Parse the tree structure to determine branches and leaves
         structure = parse_tree_structure(tree)
         if branches is None:
             branches = structure.keys()
@@ -457,26 +451,43 @@ cdef object tree2array(TTree* tree, branches, selection,
             raise ValueError("duplicate branches requested")
 
         for branch in branches:
-            try:
+            if branch in structure:
                 leaves = structure[branch]
-            except KeyError:
-                raise ValueError(
-                        "branch %s is not present in the tree" % branch)
-            shortname = len(leaves) == 1
-            for leaf, ltype in leaves:
-                if CONVERTERS.find(ltype) != CONVERTERS.end():
-                    colname = branch if shortname else '%s_%s' % (branch, leaf)
-                    thisCol = bc.MakeColumn(branch, leaf, colname)
-                    columns.push_back(thisCol)
-                else:
-                    warnings.warn(
-                        "cannot convert leaf %s of branch %s "
-                        "with type %s (skipping)" % (branch, leaf, ltype),
-                        RootNumpyUnconvertibleWarning)
+                shortname = len(leaves) == 1
+                for leaf, ltype in leaves:
+                    if CONVERTERS.find(ltype) != CONVERTERS.end():
+                        colname = branch if shortname else '%s_%s' % (branch, leaf)
+                        col = bc.MakeColumn(branch, leaf, colname)
+                        columns.push_back(col)
+                    else:
+                        warnings.warn(
+                            "cannot convert leaf %s of branch %s "
+                            "with type %s (skipping)" % (branch, leaf, ltype),
+                            RootNumpyUnconvertibleWarning)
+            else:
+                # attempt to interpret as an expression
+                py_string = str(branch)
+                c_string = py_string
+                formula = new TTreeFormula(c_string, c_string, bc.fChain)
+                if formula == NULL or formula.GetNdim() == 0:
+                    del formula
+                    raise ValueError(
+                        "The branch or expression %s is not present or valid. "
+                        "Call list_branches or appropriate ROOT methods "
+                        "to see a list of available branches" % branch)
+                # The chain will take care of updating the formula leaves when
+                # rolling over to the next tree.
+                bc.AddFormula(formula)
+                col = new FormulaColumn(branch, formula)
+                columns.push_back(col)
         
+        # Activate branches used by formulae and columns
+        # and deactivate all others
+        bc.InitBranches()
+
         # Now that we have all the columns we can
         # make an appropriate array structure
-        arr = init_array(columns, cvarray, num_entries,
+        arr = init_array(columns, conv_array, num_entries,
                          include_weight, weight_name)
         # exclude weight column
         numcol = columns.size()
@@ -503,9 +514,9 @@ cdef object tree2array(TTree* tree, branches, selection,
             # Copy the values into the array
             dataptr = np.PyArray_GETPTR1(arr, num_entries_selected)
             for icol in xrange(numcol):
-                thisCol = columns[icol]
-                thisCV = cvarray[icol]
-                nb = thisCV.write(thisCol, dataptr)
+                col = columns[icol]
+                conv = conv_array[icol]
+                nb = conv.write(col, dataptr)
                 # poorman pointer magic
                 dataptr = shift(dataptr, nb)
             if include_weight:
@@ -629,7 +640,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
 cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     # hmm how do I catch all python exception
     # and clean up before throwing ?
-    cdef vector[NP2CConverter*] cvarray
+    cdef vector[NP2CConverter*] conv_array
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef int icol
@@ -655,7 +666,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
             cvt = find_np2c_converter(tree, fieldname, dtype, arr[0][fieldname])
             if cvt is not NULL:
                 roffsetarray.push_back(roffset)
-                cvarray.push_back(cvt)
+                conv_array.push_back(cvt)
                 posarray.push_back(icol)
 
         # fill in data
@@ -665,7 +676,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
             for ipos in range(pos_len):
                 roffset = roffsetarray[ipos]
                 source = shift(thisrow, roffset)
-                cvarray[ipos].fill_from(source)
+                conv_array[ipos].fill_from(source)
         
         # need to update the number of entries in the tree to match
         # the number in the branches since each branch is filled separately.
@@ -678,8 +689,8 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         # how do I clean up TTree?
         # root has some global funny memory management...
         # need to make sure no double free
-        for icv in range(cvarray.size()):
-            tmpcv = cvarray[icv]
+        for icv in range(conv_array.size()):
+            tmpcv = conv_array[icv]
             del tmpcv
 
     return tree

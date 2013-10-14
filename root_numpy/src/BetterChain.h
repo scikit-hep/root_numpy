@@ -96,9 +96,10 @@ class BetterChain
                 fChain->DropBranchFromCache(branch, kTRUE);
             }
             // Enable all branches since we don't know yet which branches are
-            // required by the selection expression. All branches will be
+            // required by the formulae. The branches must be activated when a
+            // TTreeFormula is initially created. All branches will be
             // disabled in InitBranches() before only enabling the ones that are
-            // actually required in InitBranches() and MakeColumn()
+            // actually required
             fChain->SetBranchStatus("*", 1);
             //fChain->SetCacheSize(10000000);
             return load;
@@ -139,16 +140,38 @@ class BetterChain
 
         void InitBranches()
         {
-            // Call this after all formulae have been defined but before
-            // MakeColumn. The branches must be activated when a
-            // TTreeFormula is initially created.
+            // The branches must be activated when a TTreeFormula is initially created.
+            TBranch* branch;
+            TLeaf* leaf;
+            string bname, lname;
+            LeafCache::iterator it;
 
             // Disable all branches
             fChain->SetBranchStatus("*", 0);
 
+            for (it=leafcache.begin(); it!=leafcache.end(); ++it)
+            {
+                bname = it->first.first;
+                lname = it->first.second;
+                branch = fChain->GetBranch(bname.c_str());
+                leaf = branch->FindLeaf(lname.c_str());
+
+                // Make the branch active and cache it
+                fChain->SetBranchStatus(bname.c_str(), 1);
+                fChain->AddBranchToCache(branch, kTRUE);
+                // and the length leaf as well
+
+                // TODO Does it work if user doesn't want the length column in the structure?
+                TLeaf* leafCount = leaf->GetLeafCount();
+                if (leafCount != NULL)
+                {
+                    fChain->SetBranchStatus(leafCount->GetBranch()->GetName(), 1);
+                    fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);
+                }
+            }
+
             // Activate all branches used by the formulae
             int ncodes;
-            TBranch* branch;
             vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
@@ -253,21 +276,8 @@ class BetterChain
                 return NULL;
             }
 
-            // Make the branch active and cache it
-            fChain->SetBranchStatus(bname.c_str(), 1);
-            fChain->AddBranchToCache(branch, kTRUE);
-            // and the length leaf as well
-
-            //TODO Does it work if user doesn't want the length column in the structure?
-            TLeaf* leafCount = leaf->GetLeafCount();
-            if (leafCount != NULL)
-            {
-                fChain->SetBranchStatus(leafCount->GetBranch()->GetName(), 1);
-                fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);
-            }
-
             BL bl = make_pair(bname, lname);
-            Column* ret = Column::build(leaf, colname);
+            BranchColumn* ret = BranchColumn::build(leaf, colname);
             if (ret == NULL)
             {
                 return NULL;
@@ -307,7 +317,7 @@ class BetterChain
 
         // Branch name to leaf name conversion
         typedef pair<string, string> BL;
-        typedef map<BL, Column*> LeafCache;
+        typedef map<BL, BranchColumn*> LeafCache;
 
         // Column pointer cache since the leaf inside needs to be updated
         // when new file is loaded in the chain
