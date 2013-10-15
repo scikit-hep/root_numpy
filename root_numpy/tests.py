@@ -146,6 +146,12 @@ def test_selection():
     a = tree2rec(chain, selection="TMath::Erf(d_double) < 0.5")
 
 
+def test_expression():
+    rec = root2rec(load('single*.root'))
+    rec2 = root2rec(load('single*.root'), branches=['f_float*2'])
+    assert_array_equal(rec['f_float'] * 2, rec2['f_float*2'])
+
+
 def test_branch_status():
     # test that original branch status is preserved
     chain = TChain('tree')
