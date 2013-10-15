@@ -1,10 +1,12 @@
 import os
 from os.path import dirname, join
 import tempfile
+import warnings
 
 import numpy as np
 from numpy.testing import assert_array_equal
 
+import ROOT
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D, TF1, TF2, TF3
 
 from . import *
@@ -12,6 +14,10 @@ from .testdata import get_filepath
 from .extern.ordereddict import OrderedDict
 
 from nose.tools import raises, assert_equal, assert_almost_equal
+
+
+ROOT.gErrorIgnoreLevel = ROOT.kFatal
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 
 def load(data):
@@ -60,13 +66,13 @@ def test_single():
 
 @raises(IOError)
 def test_single_pattern_not_exist():
-    f = load(['single1.root','does_not_exists.root'])
+    f = load(['single1.root','does_not_exist.root'])
     a = root2array(f)
 
 
 @raises(IOError)
 def test_single_filename_not_exist():
-    f = load('does_not_exists.root')
+    f = load('does_not_exist.root')
     a = root2array(f)
 
 
