@@ -403,15 +403,39 @@ def test_random_sample_f1():
 
     func = TF1("f1", "TMath::DiLog(x)")
     sample = random_sample(func, 100)
+    assert_equal(sample.shape, (100,))
 
 
 def test_random_sample_f2():
 
     func = TF2("f2", "sin(x)*sin(y)/(x*y)")
     sample = random_sample(func, 100)
+    assert_equal(sample.shape, (100, 2))
 
 
 def test_random_sample_f3():
 
     func = TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)")
     sample = random_sample(func, 100)
+    assert_equal(sample.shape, (100, 3))
+
+
+def test_random_sample_h1():
+
+    hist = TH1D("h1", "h1", 10, -3, 3)
+    sample = random_sample(hist, 100)
+    assert_equal(sample.shape, (100,))
+
+
+def test_random_sample_h2():
+
+    hist = TH2D("h2", "h2", 10, -3, 3, 10, -3, 3)
+    sample = random_sample(hist, 100)
+    assert_equal(sample.shape, (100, 2))
+
+
+def test_random_sample_h3():
+
+    hist = TH3D("h3", "h3", 10, -3, 3, 10, -3, 3, 10, -3, 3)
+    sample = random_sample(hist, 100)
+    assert_equal(sample.shape, (100, 3))
