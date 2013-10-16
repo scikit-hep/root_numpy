@@ -93,3 +93,15 @@ cdef extern from "TF2.h":
 cdef extern from "TF3.h":
     cdef cppclass TF3:
         double GetRandom3(double& x, double& y, double& z)
+
+cdef extern from "TH1.h":
+    cdef cppclass TH1:
+        double GetRandom()
+
+cdef extern from "TH2.h":
+    cdef cppclass TH2:
+        double GetRandom2(double& x, double& y)
+
+cdef extern from "TH3.h":
+    cdef cppclass TH3:
+        double GetRandom3(double& x, double& y, double& z)
