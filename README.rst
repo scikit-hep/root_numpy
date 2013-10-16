@@ -110,15 +110,20 @@ array:
    canvas = TCanvas()
    hist.Draw('LEGO2')
 
-and a function for creating a random NumPy array by sampling a ROOT function:
+and a function for creating a random NumPy array by sampling a ROOT function
+or histogram:
 
 .. code-block:: python
 
-   from ROOT import TF2
+   from ROOT import TF2, TH1D
    from root_numpy import random_sample
 
    func = TF2('func', 'sin(x)*sin(y)/(x*y)')
    arr = random_sample(func, 1E6)
+
+   hist = TH1D('hist', 'hist', 10, -3, 3)
+   hist.FillRandom('gaus')
+   arr = random_sample(hist, 1E6)
 
 Also see the `root2hdf5 <http://www.rootpy.org/commands/root2hdf5.html>`_
 script in the `rootpy <https://github.com/rootpy/rootpy>`_
