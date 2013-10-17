@@ -25,7 +25,7 @@ See this introductory
 `tutorial <http://wiki.scipy.org/Tentative_NumPy_Tutorial>`_ to get started.
 NumPy is the fundamental library of the scientific Python ecosystem.
 Using NumPy arrays opens up many new possibilities beyond what ROOT
-offers. For example, convert your TTrees into NumPy arrays and use
+offers. Convert your TTrees into NumPy arrays and use
 `SciPy <http://www.scipy.org/>`_ for numerical integration and optimization,
 `matplotlib <http://matplotlib.org/>`_ for plotting,
 `pandas <http://pandas.pydata.org/>`_ for data analysis,
@@ -42,8 +42,8 @@ At the core of root_numpy are powerful and flexible functions for converting
 or `structured arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_
 as well as converting NumPy arrays back into ROOT TTrees.
 root_numpy can convert branches of basic types such as bool, int, float,
-double, etc. as well as variable and fixed-length arrays of basic types.
-``std::vector`` of basic types are also supported.
+double, etc. as well as variable and fixed-length 1D arrays and ``std::vector``
+of basic types.
 
 For example, get a structured or record array from a TTree in a ROOT file
 (you should be able to copy and paste the following examples into a Python
