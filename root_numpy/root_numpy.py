@@ -22,6 +22,7 @@ __all__ = [
     'fill_hist',
     'fill_array',
     'random_sample',
+    'array',
 ]
 
 
@@ -541,3 +542,54 @@ def random_sample(root_object, n_samples, seed=None):
         return _librootnumpy.sample_h1(ROOT.AsCObject(root_object), n_samples)
     raise TypeError(
         "root_object must be a ROOT function or histogram")
+
+
+def array(arr, copy=True):
+    """
+    Convert a ROOT TArray into a NumPy array.
+
+    Parameters
+    ----------
+
+    arr : ROOT TArray
+        A ROOT TArrayD, TArrayF, TArrayL, TArrayI or TArrayS
+
+    copy : bool, optional (default=True)
+        If True (the default) then copy the underlying array, otherwise
+        the NumPy array will view the same memory as the ROOT array.
+
+    Returns
+    -------
+    arr : NumPy array
+        A NumPy array
+
+    """
+    import ROOT
+    if isinstance(arr, ROOT.TArrayD):
+        dtype = np.float64
+    elif isinstance(arr, ROOT.TArrayF):
+        dtype = np.float32
+    elif isinstance(arr, ROOT.TArrayL):
+        dtype = np.long
+    elif isinstance(arr, ROOT.TArrayI):
+        dtype = np.int
+    elif isinstance(arr, ROOT.TArrayS):
+        dtype = np.short
+    # cannot convert char since PyROOT converts char* to python
+    # string from GetArray()
+    #elif isinstance(arr, ROOT.TArrayC):
+    #    dtype = np.byte
+    else:
+        raise TypeError(
+            "unable to convert object of type {0} "
+            "into a numpy array".format(type(arr)))
+    # copy is needed here otherwise arrays will share the buffer
+    # and if the ROOT array is deleted then the numpy array will point
+    # to invalid memory
+    arr = np.ndarray(
+        shape=(arr.GetSize(),),
+        buffer=arr.GetArray(),
+        dtype=dtype)
+    if copy:
+        return np.copy(arr)
+    return arr
