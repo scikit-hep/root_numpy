@@ -42,7 +42,7 @@ At the core of root_numpy are powerful and flexible functions for converting
 or `structured arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_
 as well as converting NumPy arrays back into ROOT TTrees.
 root_numpy can convert branches of basic types such as bool, int, float,
-double, etc. as well as variable and fixed-length 1D arrays and ``std::vector``
+double, etc. as well as variable and fixed-length 1D arrays and vectors
 of basic types.
 
 For example, get a structured or record array from a TTree in a ROOT file
