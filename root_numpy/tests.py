@@ -2,7 +2,6 @@ import os
 from os.path import dirname, join
 import tempfile
 import warnings
-from array import array
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -10,9 +9,9 @@ from numpy.testing import assert_array_equal
 import ROOT
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D, TF1, TF2, TF3
 
-from . import *
-from .testdata import get_filepath
-from .extern.ordereddict import OrderedDict
+from root_numpy import *
+from root_numpy.testdata import get_filepath
+from root_numpy.extern.ordereddict import OrderedDict
 
 from nose.tools import raises, assert_equal, assert_almost_equal
 
@@ -373,6 +372,7 @@ def test_struct():
 
 
 def test_empty_tree():
+    from array import array
     tree = TTree('tree', 'tree')
     d = array('d', [0.])
     tree.Branch('double', d, 'double/D')

@@ -26,7 +26,7 @@ except ImportError:
 
 import atexit
 import warnings
-from root_numpy_warnings import RootNumpyUnconvertibleWarning
+from _warnings import RootNumpyUnconvertibleWarning
 
 include "ROOT.pxi"
 include "root_numpy.pxi"
