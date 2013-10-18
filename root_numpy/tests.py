@@ -468,3 +468,20 @@ def test_random_sample_h3():
     hist = TH3D("h3", "h3", 10, -3, 3, 10, -3, 3, 10, -3, 3)
     sample = rnp.random_sample(hist, 100)
     assert_equal(sample.shape, (100, 3))
+
+
+def test_array():
+
+    for cls in (getattr(ROOT, 'TArray{0}'.format(atype)) for atype in 'DFLIS'):
+        a = cls(10)
+        a[2] = 2
+        b = rnp.array(a)
+        assert_equal(b[2], 2)
+
+def test_matrix():
+
+    for cls in (getattr(ROOT, 'TMatrix{0}'.format(atype)) for atype in 'DF'):
+        m = cls(5, 5)
+        m[1][2] = 2
+        n = rnp.matrix(m)
+        assert_equal(n[1, 2], 2)

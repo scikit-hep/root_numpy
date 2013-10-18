@@ -583,7 +583,7 @@ def array(arr, copy=True):
     elif isinstance(arr, ROOT.TArrayL):
         dtype = np.long
     elif isinstance(arr, ROOT.TArrayI):
-        dtype = np.int
+        dtype = np.int32
     elif isinstance(arr, ROOT.TArrayS):
         dtype = np.short
     # cannot convert char since PyROOT converts char* to python
