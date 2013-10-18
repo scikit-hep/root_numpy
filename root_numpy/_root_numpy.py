@@ -564,6 +564,16 @@ def array(arr, copy=True):
     arr : NumPy array
         A NumPy array
 
+    Examples
+    --------
+
+    >>> from root_numpy import array
+    >>> from ROOT import TArrayD
+    >>> a = TArrayD(5)
+    >>> a[3] = 3.141
+    >>> array(a)
+    array([ 0.   ,  0.   ,  0.   ,  3.141,  0.   ])
+
     """
     import ROOT
     if isinstance(arr, ROOT.TArrayD):
