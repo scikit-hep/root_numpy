@@ -15,6 +15,8 @@ what they are and what they do.
 .. autosummary::
    :toctree: generated
 
+   array
+   matrix
    root2array
    root2rec
    tree2array
