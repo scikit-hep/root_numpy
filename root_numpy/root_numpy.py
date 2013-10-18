@@ -23,6 +23,7 @@ __all__ = [
     'fill_array',
     'random_sample',
     'array',
+    'matrix',
 ]
 
 
@@ -593,3 +594,49 @@ def array(arr, copy=True):
     if copy:
         return np.copy(arr)
     return arr
+
+
+def matrix(mat):
+    """
+    Convert a ROOT TMatrix into a NumPy matrix.
+
+    Parameters
+    ----------
+
+    mat : ROOT TMatrixT
+        A ROOT TMatrixD or TMatrixF
+
+    Returns
+    -------
+
+    mat : numpy.matrix
+        A NumPy matrix
+
+    Examples
+    --------
+
+    >>> from root_numpy import matrix
+    >>> from ROOT import TMatrixD
+    >>> a = TMatrixD(4, 4)
+    >>> a[1][2] = 2
+    >>> matrix(a)
+    matrix([[ 0.,  0.,  0.,  0.],
+            [ 0.,  0.,  2.,  0.],
+            [ 0.,  0.,  0.,  0.],
+            [ 0.,  0.,  0.,  0.]])
+
+    """
+    import ROOT
+    if isinstance(mat, ROOT.TMatrixD):
+        dtype = np.float64
+    elif isinstance(mat, ROOT.TMatrixF):
+        dtype = np.float32
+    else:
+        raise TypeError(
+            "unable to convert object of type {0} "
+            "into a numpy matrix".format(type(mat)))
+    cols, rows = mat.GetNcols(), mat.GetNrows()
+    return np.matrix([[mat(i, j)
+        for j in xrange(cols)]
+        for i in xrange(rows)],
+        dtype=dtype)

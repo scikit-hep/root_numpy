@@ -4,7 +4,7 @@ from root_numpy import (
     array2tree, array2root,
     list_trees, list_branches, list_structures,
     fill_array, fill_hist,
-    random_sample, array)
+    random_sample, array, matrix)
 from root_numpy_warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
 from utils import stretch, blockwise_inner_join
 from info import __version__
@@ -20,6 +20,7 @@ __all__ = [
     'fill_hist',
     'random_sample',
     'array',
+    'matrix',
     'list_trees',
     'list_branches',
     'list_structures',
