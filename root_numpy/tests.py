@@ -2,6 +2,7 @@ import os
 from os.path import dirname, join
 import tempfile
 import warnings
+from array import array
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -369,6 +370,13 @@ def test_struct():
                         ('branch1_floatleaf', '<f4'),
                         ('branch2_intleaf', '<i4'),
                         ('branch2_floatleaf', '<f4')]))
+
+
+def test_empty_tree():
+    tree = TTree('tree', 'tree')
+    d = array('d', [0.])
+    tree.Branch('double', d, 'double/D')
+    tree2array(tree)
 
 
 def test_array2tree():

@@ -388,12 +388,14 @@ cdef np.ndarray init_array(vector[Column*]& columns,
     return np.empty(entries, dtype=nst)
 
 
-cdef handle_load(int load):
+cdef handle_load(int load, bool ignore_index=False):
     if load >= 0:
         return
     if load == -1:
         raise ValueError("chain is empty")
     elif load == -2:
+        if ignore_index:
+            return
         raise IndexError("tree index in chain is out of bounds")
     elif load == -3:
         raise IOError("cannot open current file")
@@ -412,7 +414,7 @@ cdef object tree2array(TTree* tree, branches, selection,
 
     # Make a better chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
-    handle_load(bc.Prepare())
+    handle_load(bc.Prepare(), True)
 
     cdef TTreeFormula* formula = NULL
     cdef int num_entries = bc.GetEntries()
