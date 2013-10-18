@@ -637,9 +637,9 @@ def matrix(mat):
 
     """
     import ROOT
-    if isinstance(mat, ROOT.TMatrixD):
+    if isinstance(mat, (ROOT.TMatrixD, ROOT.TMatrixDSym)):
         dtype = np.float64
-    elif isinstance(mat, ROOT.TMatrixF):
+    elif isinstance(mat, (ROOT.TMatrixF, ROOT.TMatrixFSym)):
         dtype = np.float32
     else:
         raise TypeError(

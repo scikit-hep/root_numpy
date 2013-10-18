@@ -485,3 +485,9 @@ def test_matrix():
         m[1][2] = 2
         n = rnp.matrix(m)
         assert_equal(n[1, 2], 2)
+
+    for cls in (getattr(ROOT, 'TMatrix{0}Sym'.format(atype)) for atype in 'DF'):
+        m = cls(5)
+        m[2][2] = 2
+        n = rnp.matrix(m)
+        assert_equal(n[2, 2], 2)
