@@ -742,8 +742,6 @@ Sampling T[F|H]1, T[F|H]2, and T[F|H]3
 
 def sample_f1(f1, unsigned int n_samples):
     
-    if not PyCObject_Check(f1):
-        raise ValueError('func must be PyCObject')
     cdef TF1* f1_ = <TF1*> PyCObject_AsVoidPtr(f1)
     cdef unsigned int i
     cdef np.ndarray[np.double_t, ndim=1] arr = np.empty(n_samples, dtype=np.double)
@@ -754,8 +752,6 @@ def sample_f1(f1, unsigned int n_samples):
 
 def sample_h1(h1, unsigned int n_samples):
     
-    if not PyCObject_Check(h1):
-        raise ValueError('hist must be PyCObject')
     cdef TH1* h1_ = <TH1*> PyCObject_AsVoidPtr(h1)
     cdef unsigned int i
     cdef np.ndarray[np.double_t, ndim=1] arr = np.empty(n_samples, dtype=np.double)
@@ -766,8 +762,6 @@ def sample_h1(h1, unsigned int n_samples):
 
 def sample_f2(f2, unsigned int n_samples):
     
-    if not PyCObject_Check(f2):
-        raise ValueError('func must be PyCObject')
     cdef TF2* f2_ = <TF2*> PyCObject_AsVoidPtr(f2)
     cdef unsigned int i
     cdef double x = 0
@@ -782,8 +776,6 @@ def sample_f2(f2, unsigned int n_samples):
 
 def sample_h2(h2, unsigned int n_samples):
     
-    if not PyCObject_Check(h2):
-        raise ValueError('hist must be PyCObject')
     cdef TH2* h2_ = <TH2*> PyCObject_AsVoidPtr(h2)
     cdef unsigned int i
     cdef double x = 0
@@ -798,8 +790,6 @@ def sample_h2(h2, unsigned int n_samples):
 
 def sample_f3(f3, unsigned int n_samples):
     
-    if not PyCObject_Check(f3):
-        raise ValueError('func must be PyCObject')
     cdef TF3* f3_ = <TF3*> PyCObject_AsVoidPtr(f3)
     cdef unsigned int i
     cdef double x = 0
@@ -816,8 +806,6 @@ def sample_f3(f3, unsigned int n_samples):
 
 def sample_h3(h3, unsigned int n_samples):
     
-    if not PyCObject_Check(h3):
-        raise ValueError('hist must be PyCObject')
     cdef TH3* h3_ = <TH3*> PyCObject_AsVoidPtr(h3)
     cdef unsigned int i
     cdef double x = 0
