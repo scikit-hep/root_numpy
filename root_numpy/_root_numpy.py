@@ -577,30 +577,21 @@ def array(arr, copy=True):
     """
     import ROOT
     if isinstance(arr, ROOT.TArrayD):
-        dtype = np.float64
+        arr = _librootnumpy.array_d(ROOT.AsCObject(arr))
     elif isinstance(arr, ROOT.TArrayF):
-        dtype = np.float32
+        arr = _librootnumpy.array_f(ROOT.AsCObject(arr))
     elif isinstance(arr, ROOT.TArrayL):
-        dtype = np.long
+        arr = _librootnumpy.array_l(ROOT.AsCObject(arr))
     elif isinstance(arr, ROOT.TArrayI):
-        dtype = np.int32
+        arr = _librootnumpy.array_i(ROOT.AsCObject(arr))
     elif isinstance(arr, ROOT.TArrayS):
-        dtype = np.short
-    # cannot convert char since PyROOT converts char* to python
-    # string from GetArray()
-    #elif isinstance(arr, ROOT.TArrayC):
-    #    dtype = np.byte
+        arr = _librootnumpy.array_s(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayC):
+        arr = _librootnumpy.array_c(ROOT.AsCObject(arr))
     else:
         raise TypeError(
             "unable to convert object of type {0} "
             "into a numpy array".format(type(arr)))
-    # copy is needed here otherwise arrays will share the buffer
-    # and if the ROOT array is deleted then the numpy array will point
-    # to invalid memory
-    arr = np.ndarray(
-        shape=(arr.GetSize(),),
-        buffer=arr.GetArray(),
-        dtype=dtype)
     if copy:
         return np.copy(arr)
     return arr

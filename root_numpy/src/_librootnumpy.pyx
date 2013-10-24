@@ -73,7 +73,6 @@ TYPES_NUMPY2ROOT = {
 
 
 def list_trees(fname):
-    
     cdef TFile* f = Open(fname, 'read')
     if f is NULL:
         raise IOError("cannot read %s" % fname)
@@ -96,7 +95,6 @@ def list_trees(fname):
 
 
 def list_structures(fname, tree=None):
-
     if tree is None:
         # automatically select single tree
         tree = list_trees(fname)
@@ -407,7 +405,6 @@ cdef handle_load(int load, bool ignore_index=False):
 cdef object tree2array(TTree* tree, branches, selection,
                        start, stop, step,
                        include_weight, weight_name):
-
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* col
@@ -699,7 +696,6 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
 
 
 def array2tree_toCObj(arr, name='tree', tree=None):
-    
     cdef TTree* intree = NULL
     cdef TTree* outtree = NULL
     if tree is not None:
@@ -714,7 +710,6 @@ def array2tree_toCObj(arr, name='tree', tree=None):
 
 
 def array2root(arr, filename, treename='tree', mode='update'):
-    
     cdef TFile* file = Open(filename, mode)
     if file is NULL:
         raise IOError("cannot open file %s" % filename)
@@ -741,7 +736,6 @@ Sampling T[F|H]1, T[F|H]2, and T[F|H]3
 """
 
 def sample_f1(f1, unsigned int n_samples):
-    
     cdef TF1* f1_ = <TF1*> PyCObject_AsVoidPtr(f1)
     cdef unsigned int i
     cdef np.ndarray[np.double_t, ndim=1] arr = np.empty(n_samples, dtype=np.double)
@@ -751,7 +745,6 @@ def sample_f1(f1, unsigned int n_samples):
 
 
 def sample_h1(h1, unsigned int n_samples):
-    
     cdef TH1* h1_ = <TH1*> PyCObject_AsVoidPtr(h1)
     cdef unsigned int i
     cdef np.ndarray[np.double_t, ndim=1] arr = np.empty(n_samples, dtype=np.double)
@@ -761,7 +754,6 @@ def sample_h1(h1, unsigned int n_samples):
 
 
 def sample_f2(f2, unsigned int n_samples):
-    
     cdef TF2* f2_ = <TF2*> PyCObject_AsVoidPtr(f2)
     cdef unsigned int i
     cdef double x = 0
@@ -775,7 +767,6 @@ def sample_f2(f2, unsigned int n_samples):
 
 
 def sample_h2(h2, unsigned int n_samples):
-    
     cdef TH2* h2_ = <TH2*> PyCObject_AsVoidPtr(h2)
     cdef unsigned int i
     cdef double x = 0
@@ -789,7 +780,6 @@ def sample_h2(h2, unsigned int n_samples):
 
 
 def sample_f3(f3, unsigned int n_samples):
-    
     cdef TF3* f3_ = <TF3*> PyCObject_AsVoidPtr(f3)
     cdef unsigned int i
     cdef double x = 0
@@ -805,7 +795,6 @@ def sample_f3(f3, unsigned int n_samples):
 
 
 def sample_h3(h3, unsigned int n_samples):
-    
     cdef TH3* h3_ = <TH3*> PyCObject_AsVoidPtr(h3)
     cdef unsigned int i
     cdef double x = 0
@@ -818,3 +807,37 @@ def sample_h3(h3, unsigned int n_samples):
         arr[i, 1] = y
         arr[i, 2] = z
     return arr
+
+
+"""
+ROOT TArray -> NumPy array conversion
+"""
+
+cdef inline np.ndarray tonumpyarray(void* data, int size, dtype) with gil:
+    cdef np.npy_intp dims = size
+    #NOTE: it doesn't take ownership of `data`. You must free `data` yourself
+    return np.PyArray_SimpleNewFromData(1, &dims, dtype, data)
+
+def array_d(root_arr):
+    cdef TArrayD* _arr = <TArrayD*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_DOUBLE)
+
+def array_f(root_arr):
+    cdef TArrayF* _arr = <TArrayF*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_FLOAT32)
+
+def array_l(root_arr):
+    cdef TArrayL* _arr = <TArrayL*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_LONG)
+
+def array_i(root_arr):
+    cdef TArrayI* _arr = <TArrayI*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_INT)
+
+def array_s(root_arr):
+    cdef TArrayS* _arr = <TArrayS*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_SHORT)
+
+def array_c(root_arr):
+    cdef TArrayC* _arr = <TArrayC*> PyCObject_AsVoidPtr(root_arr)
+    return tonumpyarray(_arr.GetArray(), _arr.GetSize(), np.NPY_BYTE)

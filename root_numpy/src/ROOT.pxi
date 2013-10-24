@@ -105,3 +105,33 @@ cdef extern from "TH2.h":
 cdef extern from "TH3.h":
     cdef cppclass TH3:
         double GetRandom3(double& x, double& y, double& z)
+
+cdef extern from "TArrayD.h":
+    cdef cppclass TArrayD:
+        int GetSize()
+        double* GetArray()
+
+cdef extern from "TArrayF.h":
+    cdef cppclass TArrayF:
+        int GetSize()
+        float* GetArray()
+
+cdef extern from "TArrayL.h":
+    cdef cppclass TArrayL:
+        int GetSize()
+        long* GetArray()
+
+cdef extern from "TArrayI.h":
+    cdef cppclass TArrayI:
+        int GetSize()
+        int* GetArray()
+
+cdef extern from "TArrayS.h":
+    cdef cppclass TArrayS:
+        int GetSize()
+        short* GetArray()
+
+cdef extern from "TArrayC.h":
+    cdef cppclass TArrayC:
+        int GetSize()
+        char* GetArray()
