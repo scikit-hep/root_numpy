@@ -135,3 +135,13 @@ cdef extern from "TArrayC.h":
     cdef cppclass TArrayC:
         int GetSize()
         char* GetArray()
+
+cdef extern from "TMatrixTBase.h":
+    cdef cppclass TMatrixDBase:
+        int GetNrows()
+        int GetNcols()
+        double get "operator()"(int rown, int coln)
+    cdef cppclass TMatrixFBase:
+        int GetNrows()
+        int GetNcols()
+        float get "operator()"(int rown, int coln)

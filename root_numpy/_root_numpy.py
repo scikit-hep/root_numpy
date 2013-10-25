@@ -629,15 +629,9 @@ def matrix(mat):
     """
     import ROOT
     if isinstance(mat, (ROOT.TMatrixD, ROOT.TMatrixDSym)):
-        dtype = np.float64
+        return _librootnumpy.matrix_d(ROOT.AsCObject(mat))
     elif isinstance(mat, (ROOT.TMatrixF, ROOT.TMatrixFSym)):
-        dtype = np.float32
-    else:
-        raise TypeError(
-            "unable to convert object of type {0} "
-            "into a numpy matrix".format(type(mat)))
-    cols, rows = mat.GetNcols(), mat.GetNrows()
-    return np.matrix([[mat(i, j)
-        for j in xrange(cols)]
-        for i in xrange(rows)],
-        dtype=dtype)
+        return _librootnumpy.matrix_f(ROOT.AsCObject(mat))
+    raise TypeError(
+        "unable to convert object of type {0} "
+        "into a numpy matrix".format(type(mat)))
