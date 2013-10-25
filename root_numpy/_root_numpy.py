@@ -22,6 +22,8 @@ __all__ = [
     'fill_hist',
     'fill_array',
     'random_sample',
+    'array',
+    'matrix',
 ]
 
 
@@ -541,3 +543,95 @@ def random_sample(root_object, n_samples, seed=None):
         return _librootnumpy.sample_h1(ROOT.AsCObject(root_object), n_samples)
     raise TypeError(
         "root_object must be a ROOT function or histogram")
+
+
+def array(arr, copy=True):
+    """
+    Convert a ROOT TArray into a NumPy array.
+
+    Parameters
+    ----------
+
+    arr : ROOT TArray
+        A ROOT TArrayD, TArrayF, TArrayL, TArrayI or TArrayS
+
+    copy : bool, optional (default=True)
+        If True (the default) then copy the underlying array, otherwise
+        the NumPy array will view the same memory as the ROOT array.
+
+    Returns
+    -------
+    arr : NumPy array
+        A NumPy array
+
+    Examples
+    --------
+
+    >>> from root_numpy import array
+    >>> from ROOT import TArrayD
+    >>> a = TArrayD(5)
+    >>> a[3] = 3.141
+    >>> array(a)
+    array([ 0.   ,  0.   ,  0.   ,  3.141,  0.   ])
+
+    """
+    import ROOT
+    if isinstance(arr, ROOT.TArrayD):
+        arr = _librootnumpy.array_d(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayF):
+        arr = _librootnumpy.array_f(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayL):
+        arr = _librootnumpy.array_l(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayI):
+        arr = _librootnumpy.array_i(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayS):
+        arr = _librootnumpy.array_s(ROOT.AsCObject(arr))
+    elif isinstance(arr, ROOT.TArrayC):
+        arr = _librootnumpy.array_c(ROOT.AsCObject(arr))
+    else:
+        raise TypeError(
+            "unable to convert object of type {0} "
+            "into a numpy array".format(type(arr)))
+    if copy:
+        return np.copy(arr)
+    return arr
+
+
+def matrix(mat):
+    """
+    Convert a ROOT TMatrix into a NumPy matrix.
+
+    Parameters
+    ----------
+
+    mat : ROOT TMatrixT
+        A ROOT TMatrixD or TMatrixF
+
+    Returns
+    -------
+
+    mat : numpy.matrix
+        A NumPy matrix
+
+    Examples
+    --------
+
+    >>> from root_numpy import matrix
+    >>> from ROOT import TMatrixD
+    >>> a = TMatrixD(4, 4)
+    >>> a[1][2] = 2
+    >>> matrix(a)
+    matrix([[ 0.,  0.,  0.,  0.],
+            [ 0.,  0.,  2.,  0.],
+            [ 0.,  0.,  0.,  0.],
+            [ 0.,  0.,  0.,  0.]])
+
+    """
+    import ROOT
+    if isinstance(mat, (ROOT.TMatrixD, ROOT.TMatrixDSym)):
+        return _librootnumpy.matrix_d(ROOT.AsCObject(mat))
+    elif isinstance(mat, (ROOT.TMatrixF, ROOT.TMatrixFSym)):
+        return _librootnumpy.matrix_f(ROOT.AsCObject(mat))
+    raise TypeError(
+        "unable to convert object of type {0} "
+        "into a numpy matrix".format(type(mat)))
