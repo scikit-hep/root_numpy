@@ -195,6 +195,8 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
 cdef cppclass Converter:
     __init__():
         pass
+    __dealloc__():
+        pass
     int write(Column* col, void* buffer):
         pass
     object get_nptype():
@@ -574,6 +576,8 @@ array -> TTree conversion follows:
 cdef cppclass NP2CConverter:
     void fill_from(void* source):
         pass
+    __dealloc__():
+        pass
 
 
 cdef cppclass ScalarNP2CConverter(NP2CConverter):
@@ -642,10 +646,12 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     cdef vector[NP2CConverter*] conv_array
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
-    cdef int icol
     cdef auto_ptr[NP2CConverter] tmp
-    cdef int icv = 0
-    cdef int arr_len = 0
+    cdef unsigned int icv = 0
+    cdef int icol
+    cdef int idata
+    cdef int ipos
+    cdef int arr_len = arr.shape[0]
     cdef int pos_len = 0
     cdef void* source = NULL
     cdef void* thisrow = NULL
@@ -659,7 +665,8 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         fields = arr.dtype.fields
         
         # figure out the structure
-        for icol, fieldname in enumerate(fieldnames):
+        for icol from 0 <= icol < len(fieldnames):
+            fieldname = fieldnames[icol]
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname] 
             cvt = find_np2c_converter(tree, fieldname, dtype, arr[0][fieldname])
@@ -670,9 +677,9 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
 
         # fill in data
         pos_len = posarray.size()
-        for idata in xrange(len(arr)):
+        for idata from 0 <= idata < arr_len:
             thisrow = np.PyArray_GETPTR1(arr, idata)
-            for ipos in range(pos_len):
+            for ipos from 0 <= ipos < pos_len:
                 roffset = roffsetarray[ipos]
                 source = shift(thisrow, roffset)
                 conv_array[ipos].fill_from(source)
@@ -688,7 +695,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         # how do I clean up TTree?
         # root has some global funny memory management...
         # need to make sure no double free
-        for icv in range(conv_array.size()):
+        for icv from 0 <= icv < conv_array.size():
             tmpcv = conv_array[icv]
             del tmpcv
 
@@ -850,8 +857,8 @@ ROOT TMatrixT -> numpy matrix conversion
 def matrix_d(root_mat):
     cdef TMatrixDBase* _mat = <TMatrixDBase*> PyCObject_AsVoidPtr(root_mat)
     cdef np.ndarray[np.double_t, ndim=2] arr = np.empty((_mat.GetNrows(), _mat.GetNcols()), dtype=np.double)
-    cdef unsigned int i
-    cdef unsigned int j
+    cdef int i
+    cdef int j
     for i from 0 <= i < _mat.GetNrows():
         for j from 0 <= j < _mat.GetNcols():
             arr[i, j] = _mat.get(i, j)
@@ -860,8 +867,8 @@ def matrix_d(root_mat):
 def matrix_f(root_mat):
     cdef TMatrixFBase* _mat = <TMatrixFBase*> PyCObject_AsVoidPtr(root_mat)
     cdef np.ndarray[np.float32_t, ndim=2] arr = np.empty((_mat.GetNrows(), _mat.GetNcols()), dtype=np.float32)
-    cdef unsigned int i
-    cdef unsigned int j
+    cdef int i
+    cdef int j
     for i from 0 <= i < _mat.GetNrows():
         for j from 0 <= j < _mat.GetNcols():
             arr[i, j] = _mat.get(i, j)

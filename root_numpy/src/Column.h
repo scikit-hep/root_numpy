@@ -18,6 +18,7 @@ enum ColumnType{
 class Column
 {
     public:
+        virtual ~Column() {}
         virtual int GetLen() = 0;
         virtual int GetSize() = 0;
         virtual void* GetValuePointer() = 0;
