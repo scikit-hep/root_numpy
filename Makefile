@@ -5,8 +5,8 @@ CYTHON := $(shell which cython)
 
 NOSETESTS ?= nosetests
 
-CYTHON_PYX := $(wildcard root_numpy/src/*.pyx)
-CYTHON_CPP := $(patsubst %.pyx,%.cpp,$(CYTHON_PYX))
+CYTHON_PYX := root_numpy/src/_librootnumpy.pyx
+CYTHON_CPP := root_numpy/src/_librootnumpy.cpp
 
 all: $(CYTHON_CPP) clean inplace test
 
@@ -75,9 +75,8 @@ ifneq ($(shell git diff --name-only $< ),)
 endif
 
 cython:
-	@$(foreach pyx,$(CYTHON_PYX), \
-		echo "compiling $(pyx) ..."; \
-		$(CYTHON) -a --cplus --fast-fail --line-directives $(pyx);)
+	echo "compiling $(CYTHON_PYX) ..."; \
+	$(CYTHON) -a --cplus --fast-fail --line-directives $(CYTHON_PYX);)
 
 check-rst:
 	@$(PYTHON) setup.py --long-description | rst2html.py > __output.html

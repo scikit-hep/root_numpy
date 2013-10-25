@@ -5,13 +5,10 @@
 #include <TH3.h>
 
 
-static PyObject *
-fill_hist_with_ndarray(PyObject *self, PyObject *args, PyObject* keywords) {
+static PyObject* fill_hist(PyObject* hist_, PyObject* array_, PyObject* weights_)
+{
 
     using namespace std;
-    PyObject *hist_ = NULL;
-    PyObject *array_ = NULL;
-    PyObject *weights_ = NULL;
     PyArrayObject *array = NULL;
     PyArrayObject *weights = NULL;
     TH1* hist = NULL;
@@ -25,18 +22,6 @@ fill_hist_with_ndarray(PyObject *self, PyObject *args, PyObject* keywords) {
     npy_intp array_stride_n;
     npy_intp array_stride_k = 1;
     npy_intp weights_stride = 1;
-    static const char* keywordslist[] = {
-        "hist",
-        "array",
-        "weights",
-        NULL};
-
-    if(!PyArg_ParseTupleAndKeywords(
-                args, keywords, "OO|O",
-                const_cast<char **>(keywordslist),
-                &hist_, &array_, &weights_)) {
-        return NULL;
-    }
 
     if(!PyCObject_Check(hist_)) {
         PyErr_SetString(PyExc_TypeError,"Unable to convert hist to PyCObject");
@@ -169,23 +154,4 @@ fill_hist_with_ndarray(PyObject *self, PyObject *args, PyObject* keywords) {
         Py_DECREF(weights);
     Py_DECREF(array);
     Py_RETURN_NONE;
-}
-
-
-static PyMethodDef methods[] = {
-    {"fill_hist_with_ndarray",  (PyCFunction)fill_hist_with_ndarray,
-     METH_VARARGS|METH_KEYWORDS,
-     ""},
-    {NULL, NULL, 0, NULL}        /* Sentinel */
-};
-
-void cleanup(){
-    //do nothing
-}
-
-PyMODINIT_FUNC
-init_libnumpyhist(void)
-{
-    import_array();
-    (void) Py_InitModule("_libnumpyhist", methods);
 }

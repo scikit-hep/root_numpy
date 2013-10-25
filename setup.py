@@ -53,26 +53,16 @@ except OSError:
                 rootsys, root_config))
 
 librootnumpy = Extension('root_numpy._librootnumpy',
-    sources=['root_numpy/src/_librootnumpy.cpp'],
+    sources=[
+        'root_numpy/src/_librootnumpy.cpp',
+    ],
     language='c++',
     include_dirs=[
         np.get_include(),
         root_inc,
         'root_numpy/src'],
     extra_compile_args = [],
-    extra_link_args=[] + root_ldflags + ['-lTreePlayer'])
-
-libnumpyhist = Extension('root_numpy._libnumpyhist',
-    sources=['root_numpy/src/_libnumpyhist.cpp'],
-    include_dirs=[np.get_include(), root_inc, 'root_numpy'],
-    extra_compile_args = [],
-    extra_link_args=[] + root_ldflags)
-
-libinnerjoin = Extension('root_numpy._libinnerjoin',
-    sources=['root_numpy/src/_libinnerjoin.cpp'],
-    include_dirs=[np.get_include(), 'root_numpy'],
-    extra_compile_args = [],
-    extra_link_args=[])
+    extra_link_args=root_ldflags + ['-lTreePlayer'])
 
 # check for custom args
 filtered_args = []
@@ -117,8 +107,6 @@ setup(
     },
     ext_modules=[
         librootnumpy,
-        libnumpyhist,
-        libinnerjoin,
     ],
     classifiers=[
         "Programming Language :: Python",

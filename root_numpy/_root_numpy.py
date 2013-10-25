@@ -4,7 +4,6 @@ import numpy as np
 from numpy.lib import recfunctions
 
 import _librootnumpy
-import _libnumpyhist
 
 # re-enable display of DeprecationWarning messages
 warnings.simplefilter('default')
@@ -444,10 +443,10 @@ def fill_hist(hist, array, weights=None):
             "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
     hist = ROOT.AsCObject(hist)
     if weights is not None:
-        _libnumpyhist.fill_hist_with_ndarray(
+        _librootnumpy.fill_hist_with_ndarray(
             hist, array, weights)
     else:
-        _libnumpyhist.fill_hist_with_ndarray(
+        _librootnumpy.fill_hist_with_ndarray(
             hist, array)
 
 
