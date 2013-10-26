@@ -443,7 +443,7 @@ def fill_hist(hist, array, weights=None, return_indices=False):
     Returns
     -------
 
-    index : numpy array or None
+    indices : numpy array or None
         If ``return_indices`` is True, then return an array of the bin indices
         filled for each element in ``array`` otherwise return None.
 
