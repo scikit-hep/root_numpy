@@ -1,3 +1,4 @@
+# cython: experimental_cpp_class_def=True
 
 TYPES = {
     TypeName[bool]().name:               ('bool',               np.dtype(np.bool),      np.NPY_BOOL),
