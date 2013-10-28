@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.lib.recfunctions as nprf
-from _libinnerjoin import blockwise_inner_join
+from _librootnumpy import blockwise_inner_join
 
 __all__ = [
     'stretch',

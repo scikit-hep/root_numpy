@@ -4,7 +4,6 @@ import numpy as np
 from numpy.lib import recfunctions
 
 import _librootnumpy
-import _libnumpyhist
 
 # re-enable display of DeprecationWarning messages
 warnings.simplefilter('default')
@@ -419,7 +418,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     _librootnumpy.array2root(arr, filename, treename, mode)
 
 
-def fill_hist(hist, array, weights=None):
+def fill_hist(hist, array, weights=None, return_indices=False):
     """
     Fill a ROOT histogram with a NumPy array.
 
@@ -437,18 +436,52 @@ def fill_hist(hist, array, weights=None):
     weights : numpy array
         A flat numpy array of weights for each sample in ``array``.
 
+    return_indices : bool, optional (default=False)
+        If True then return an array of the bin indices filled for each element
+        in ``array``.
+
+    Returns
+    -------
+
+    indices : numpy array or None
+        If ``return_indices`` is True, then return an array of the bin indices
+        filled for each element in ``array`` otherwise return None.
+
     """
     import ROOT
-    if not isinstance(hist, ROOT.TH1):
+    array = np.asarray(array, dtype=np.double)
+    if weights is not None:
+        weights = np.asarray(weights, dtype=np.double)
+        if weights.shape[0] != array.shape[0]:
+            raise ValueError("array and weights must have the same length")
+        if weights.ndim != 1:
+            raise ValueError("weight must be 1-dimensional")
+    if isinstance(hist, ROOT.TH3):
+        if array.ndim != 2:
+            raise ValueError("array must be 2-dimensional")
+        if array.shape[1] != 3:
+            raise ValueError(
+                "length of the second dimension must equal "
+                "the dimension of the histogram")
+        return _librootnumpy.fill_h3(
+            ROOT.AsCObject(hist), array, weights, return_indices)
+    elif isinstance(hist, ROOT.TH2):
+        if array.ndim != 2:
+            raise ValueError("array must be 2-dimensional")
+        if array.shape[1] != 2:
+            raise ValueError(
+                "length of the second dimension must equal "
+                "the dimension of the histogram")
+        return _librootnumpy.fill_h2(
+            ROOT.AsCObject(hist), array, weights, return_indices)
+    elif isinstance(hist, ROOT.TH1):
+        if array.ndim != 1:
+            raise ValueError("array must be 1-dimensional")
+        return _librootnumpy.fill_h1(
+            ROOT.AsCObject(hist), array, weights, return_indices)
+    else:
         raise TypeError(
             "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
-    hist = ROOT.AsCObject(hist)
-    if weights is not None:
-        _libnumpyhist.fill_hist_with_ndarray(
-            hist, array, weights)
-    else:
-        _libnumpyhist.fill_hist_with_ndarray(
-            hist, array)
 
 
 def fill_array(hist, array, weights=None):
