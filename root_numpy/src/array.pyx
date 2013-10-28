@@ -2,7 +2,7 @@
 ROOT TArray -> NumPy array conversion
 """
 
-cdef inline np.ndarray tonumpyarray(void* data, int size, dtype) with gil:
+cdef inline np.ndarray tonumpyarray(void* data, int size, int dtype) with gil:
     cdef np.npy_intp dims = size
     #NOTE: it doesn't take ownership of `data`. You must free `data` yourself
     return np.PyArray_SimpleNewFromData(1, &dims, dtype, data)
