@@ -1,0 +1,9 @@
+# .coveragerc to control coverage.py
+# based on http://nedbatchelder.com/code/coverage/config.html
+[run]
+branch = True
+source = root_numpy
+include = */root_numpy/*
+omit =
+    */root_numpy/extern/*
+    */setup.py
