@@ -70,6 +70,18 @@ def test_single_pattern_not_exist():
     a = rnp.root2array(f)
 
 
+@raises(ValueError)
+def test_no_filename():
+    rnp.root2array([])
+
+
+def test_no_trees_in_file():
+    f = ROOT.TFile.Open('temp_file.root', 'recreate')
+    f.Close()
+    assert_raises(IOError, rnp.root2array, ['temp_file.root'], treename=None)
+    os.remove('temp_file.root')
+
+
 @raises(IOError)
 def test_single_filename_not_exist():
     f = load('does_not_exist.root')
