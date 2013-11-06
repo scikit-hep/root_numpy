@@ -456,10 +456,18 @@ def test_array2tree():
             ('y', np.float32),
             ('z', np.float64),
             ('w', np.bool)])
+    tmp = ROOT.TFile.Open('test_array2tree_temp_file.root', 'recreate')
     tree = rnp.array2tree(a)
     a_conv = rnp.tree2array(tree)
     assert_array_equal(a, a_conv)
-    tree.Delete()
+    # extend the tree
+    tree2 = rnp.array2tree(a, tree=tree)
+    assert_equal(tree2.GetEntries(), len(a) * 2)
+    a_conv2 = rnp.tree2array(tree2)
+    assert_array_equal(np.hstack([a, a]), a_conv2)
+    tmp.Close()
+    os.remove(tmp.GetName())
+    assert_raises(TypeError, rnp.array2tree, a, tree=object)
 
 
 def test_array2root():
