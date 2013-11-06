@@ -94,7 +94,7 @@ def test_doubel_tree_name_not_specified():
     a = rnp.root2array(f)
 
 
-def test_singlechain():
+def test_single_chain():
     f = load(['single1.root', 'single2.root'])
     a = rnp.root2array(f)
     check_single(a, 200)
@@ -263,13 +263,13 @@ def test_weights():
         np.concatenate((np.ones(100) * 2., np.ones(100) * 3.)))
 
 
-def test_PyRoot():
+def test_PyROOT():
     f = TFile(load('single1.root'))
     tree = f.Get('tree')
     rnp.tree2array(tree)
 
 
-def test_fill_array():
+def test_fill_hist():
     np.random.seed(0)
     data1D = np.random.randn(1E6)
     w1D = np.empty(1E6)
@@ -298,12 +298,9 @@ def test_fill_array():
     rnp.fill_array(c, data3D)
     assert_almost_equal(c.Integral(), 20000.0)
 
-
-@raises(TypeError)
-def test_fill_array_wrongtype():
     h = list()
     a = np.random.randn(100)
-    rnp.fill_hist(h,a)
+    assert_raises(TypeError, rnp.fill_hist, h, a)
 
 
 def test_stretch():
