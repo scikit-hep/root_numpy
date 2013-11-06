@@ -522,12 +522,18 @@ def test_random_sample_h3():
 
 
 def test_array():
-    for cls in (getattr(ROOT, 'TArray{0}'.format(atype)) for atype in 'DFLIS'):
-        a = cls(10)
-        a[2] = 2
-        b = rnp.array(a)
-        assert_equal(b[2], 2)
+    for copy in (True, False):
+        for cls in (getattr(ROOT, 'TArray{0}'.format(atype))
+                for atype in 'DFLIS'):
+            a = cls(10)
+            a[2] = 2
+            b = rnp.array(a, copy=copy)
+            assert_equal(b[2], 2)
+            assert_equal(b.shape[0], 10)
+        a = ROOT.TArrayC(10)
+        b = rnp.array(a, copy=copy)
         assert_equal(b.shape[0], 10)
+    assert_raises(TypeError, rnp.array, object)
 
 
 def test_matrix():
