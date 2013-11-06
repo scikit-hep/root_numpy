@@ -193,9 +193,8 @@ def test_branch_DNE():
 
 
 @raises(TypeError)
-def test_tree2array_wrongtype():
-    a = list()
-    rnp.tree2array(a)
+def test_tree2array_wrong_type():
+    rnp.tree2array(list())
 
 
 def test_specific_branch():
