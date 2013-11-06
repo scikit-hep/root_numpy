@@ -7,6 +7,8 @@ __all__ = [
     'blockwise_inner_join',
 ]
 
+VLEN = np.vectorize(len)
+
 
 def _is_array_field(arr, col):
     # For now:
@@ -48,11 +50,8 @@ def stretch(arr, col_names, asrecarray=True):
     if not has_array_field:
         raise RuntimeError("No array column specified")
 
-    vl = np.vectorize(len)
-    len_array = vl(arr[first_array])
-
+    len_array = VLEN(arr[first_array])
     numrec = np.sum(len_array)
-
     ret = np.empty(numrec, dtype=dt)
 
     for c in col_names:

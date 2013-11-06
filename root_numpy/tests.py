@@ -13,7 +13,7 @@ import root_numpy as rnp
 from root_numpy.testdata import get_filepath
 from root_numpy.extern.ordereddict import OrderedDict
 
-from nose.tools import raises, assert_equal, assert_almost_equal
+from nose.tools import raises, assert_raises, assert_equal, assert_almost_equal
 
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
@@ -304,30 +304,60 @@ def test_stretch():
             ('df3', 'O')])
 
     for i in xrange(nrec):
-        scalar = i
         df1 = np.array(range(i + 1), dtype=np.float)
         df2 = np.array(range(i + 1), dtype=np.int) * 2
         df3 = np.array(range(i + 1), dtype=np.double) * 3
         arr[i] = (i, df1, df2, df3)
 
-    stretched = rnp.stretch(arr, ['scalar', 'df1', 'df2', 'df3'])
+    for asrec in (True, False):
+        stretched = rnp.stretch(
+            arr, ['scalar', 'df1', 'df2', 'df3'],
+            asrecarray=asrec)
 
-    assert_equal(stretched.dtype,
-        [('scalar', np.int),
-         ('df1', np.float),
-         ('df2', np.int),
-         ('df3', np.double)])
-    assert_equal(stretched.size, 15)
+        assert_equal(stretched.dtype,
+            [('scalar', np.int),
+             ('df1', np.float),
+             ('df2', np.int),
+             ('df3', np.double)])
+        assert_equal(stretched.size, 15)
 
-    assert_almost_equal(stretched.df1[14], 4.0)
-    assert_almost_equal(stretched.df2[14], 8)
-    assert_almost_equal(stretched.df3[14], 12.0)
-    assert_almost_equal(stretched.scalar[14], 4)
-    assert_almost_equal(stretched.scalar[13], 4)
-    assert_almost_equal(stretched.scalar[12], 4)
-    assert_almost_equal(stretched.scalar[11], 4)
-    assert_almost_equal(stretched.scalar[10], 4)
-    assert_almost_equal(stretched.scalar[9], 3)
+        if asrec:
+            assert_almost_equal(stretched.df1[14], 4.0)
+            assert_almost_equal(stretched.df2[14], 8)
+            assert_almost_equal(stretched.df3[14], 12.0)
+            assert_almost_equal(stretched.scalar[14], 4)
+            assert_almost_equal(stretched.scalar[13], 4)
+            assert_almost_equal(stretched.scalar[12], 4)
+            assert_almost_equal(stretched.scalar[11], 4)
+            assert_almost_equal(stretched.scalar[10], 4)
+            assert_almost_equal(stretched.scalar[9], 3)
+        else:
+            assert_almost_equal(stretched['df1'][14], 4.0)
+            assert_almost_equal(stretched['df2'][14], 8)
+            assert_almost_equal(stretched['df3'][14], 12.0)
+            assert_almost_equal(stretched['scalar'][14], 4)
+            assert_almost_equal(stretched['scalar'][13], 4)
+            assert_almost_equal(stretched['scalar'][12], 4)
+            assert_almost_equal(stretched['scalar'][11], 4)
+            assert_almost_equal(stretched['scalar'][10], 4)
+            assert_almost_equal(stretched['scalar'][9], 3)
+
+    arr = np.empty(1, dtype=[('scalar', np.int),])
+    arr[0] = (1,)
+    assert_raises(RuntimeError, rnp.stretch, arr, ['scalar',])
+
+    nrec = 5
+    arr = np.empty(nrec,
+        dtype=[
+            ('scalar', np.int),
+            ('df1', 'O'),
+            ('df2', 'O')])
+
+    for i in xrange(nrec):
+        df1 = np.array(range(i + 1), dtype=np.float)
+        df2 = np.array(range(i + 2), dtype=np.int) * 2
+        arr[i] = (i, df1, df2)
+    assert_raises(ValueError, rnp.stretch, arr, ['scalar', 'df1', 'df2'])
 
 
 def test_blockwise_inner_join():
