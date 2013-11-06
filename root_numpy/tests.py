@@ -489,6 +489,7 @@ def test_random_sample_f1():
     func = TF1("f1", "TMath::DiLog(x)")
     sample = rnp.random_sample(func, 100)
     assert_equal(sample.shape, (100,))
+    rnp.random_sample(func, 100, seed=1)
 
 
 def test_random_sample_f2():
@@ -519,6 +520,13 @@ def test_random_sample_h3():
     hist = TH3D("h3", "h3", 10, -3, 3, 10, -3, 3, 10, -3, 3)
     sample = rnp.random_sample(hist, 100)
     assert_equal(sample.shape, (100, 3))
+
+
+def test_random_sample_bad_input():
+    func = TF1("f1", "TMath::DiLog(x)")
+    assert_raises(ValueError, rnp.random_sample, func, 0)
+    assert_raises(ValueError, rnp.random_sample, func, 10, seed=-1)
+    assert_raises(TypeError, rnp.random_sample, object, 10)
 
 
 def test_array():
