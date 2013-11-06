@@ -2,8 +2,7 @@
 
 PYTHON := $(shell which python)
 CYTHON := $(shell which cython)
-
-NOSETESTS ?= nosetests
+NOSETESTS := $(shell which nosetests)
 
 CYTHON_PYX := root_numpy/src/_librootnumpy.pyx
 CYTHON_CPP := root_numpy/src/_librootnumpy.cpp
@@ -82,10 +81,12 @@ test-doc:
 	@$(NOSETESTS) -s --with-doctest --doctest-tests --doctest-extension=rst \
 	--doctest-extension=inc --doctest-fixtures=_fixture docs/
 
-test-coverage:
+test-coverage: in
 	@rm -rf coverage .coverage
-	@$(NOSETESTS) -s --with-coverage --cover-html --cover-html-dir=coverage \
-	--cover-package=root_numpy root_numpy
+	@$(NOSETESTS) -s -v -a '!slow' --with-coverage \
+		--cover-erase --cover-branches \
+		--cover-html --cover-html-dir=coverage root_numpy
+	@xdg-open coverage/index.html
 
 test: test-code test-doc
 

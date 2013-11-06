@@ -13,7 +13,7 @@ import root_numpy as rnp
 from root_numpy.testdata import get_filepath
 from root_numpy.extern.ordereddict import OrderedDict
 
-from nose.tools import raises, assert_equal, assert_almost_equal
+from nose.tools import raises, assert_raises, assert_equal, assert_almost_equal
 
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
@@ -62,12 +62,27 @@ def test_single():
     f = load('single1.root')
     a = rnp.root2array(f)
     check_single(a)
+    # specify tree name
+    a = rnp.root2array(f, treename='tree')
+    check_single(a)
 
 
 @raises(IOError)
 def test_single_pattern_not_exist():
     f = load(['single1.root','does_not_exist.root'])
     a = rnp.root2array(f)
+
+
+@raises(ValueError)
+def test_no_filename():
+    rnp.root2array([])
+
+
+def test_no_trees_in_file():
+    f = ROOT.TFile.Open('temp_file.root', 'recreate')
+    f.Close()
+    assert_raises(IOError, rnp.root2array, ['temp_file.root'], treename=None)
+    os.remove('temp_file.root')
 
 
 @raises(IOError)
@@ -82,7 +97,7 @@ def test_doubel_tree_name_not_specified():
     a = rnp.root2array(f)
 
 
-def test_singlechain():
+def test_single_chain():
     f = load(['single1.root', 'single2.root'])
     a = rnp.root2array(f)
     check_single(a, 200)
@@ -178,9 +193,8 @@ def test_branch_DNE():
 
 
 @raises(TypeError)
-def test_tree2array_wrongtype():
-    a = list()
-    rnp.tree2array(a)
+def test_tree2array_wrong_type():
+    rnp.tree2array(list())
 
 
 def test_specific_branch():
@@ -251,13 +265,13 @@ def test_weights():
         np.concatenate((np.ones(100) * 2., np.ones(100) * 3.)))
 
 
-def test_PyRoot():
+def test_PyROOT():
     f = TFile(load('single1.root'))
     tree = f.Get('tree')
     rnp.tree2array(tree)
 
 
-def test_fill_array():
+def test_fill_hist():
     np.random.seed(0)
     data1D = np.random.randn(1E6)
     w1D = np.empty(1E6)
@@ -267,12 +281,12 @@ def test_fill_array():
 
     a = TH1D('th1d', 'test', 1000, -5, 5)
     rnp.fill_hist(a, data1D)
-    #one of them lies beyond hist range that's why it's not 1e6
+    # one element lies beyond hist range; that's why it's not 1e6
     assert_almost_equal(a.Integral(), 999999.0)
 
     a_w = TH1D('th1dw', 'test', 1000, -5, 5)
     rnp.fill_hist(a_w, data1D, w1D)
-    assert_almost_equal(a_w.Integral(), 999999.0*2)
+    assert_almost_equal(a_w.Integral(), 999999.0 * 2)
 
     b = TH2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
     rnp.fill_hist(b, data2D)
@@ -286,44 +300,91 @@ def test_fill_array():
     rnp.fill_array(c, data3D)
     assert_almost_equal(c.Integral(), 20000.0)
 
+    # array and weighte lengths do not match
+    assert_raises(ValueError, rnp.fill_array, c, data3D, np.ones(10))
 
-@raises(TypeError)
-def test_fill_array_wrongtype():
+    # weights is not 1D
+    assert_raises(ValueError, rnp.fill_array, c, data3D,
+        np.ones((data3D.shape[0], 1)))
+
+    # array not 2-d when filling 2D/3D histogram
+    for h in (b, c):
+        assert_raises(ValueError, rnp.fill_hist, h, np.random.randn(1E4))
+
+    # length of second axis does not match dimensionality of histogram
+    for h in (a, b, c):
+        assert_raises(ValueError, rnp.fill_hist, h, np.random.randn(1E4, 4))
+
+    # wrong type
     h = list()
     a = np.random.randn(100)
-    rnp.fill_hist(h,a)
+    assert_raises(TypeError, rnp.fill_hist, h, a)
 
 
 def test_stretch():
     nrec = 5
-    arr = np.empty(nrec, dtype=[('scalar',np.int), ('df1', 'O'),
-                                ('df2', 'O'), ('df3', 'O')])
-    for i in range(nrec):
-        scalar = i
-        df1 = np.array(range(i+1), dtype=np.float)
-        df2 = np.array(range(i+1), dtype=np.int)*2
-        df3 = np.array(range(i+1), dtype=np.double)*3
+    arr = np.empty(nrec,
+        dtype=[
+            ('scalar', np.int),
+            ('df1', 'O'),
+            ('df2', 'O'),
+            ('df3', 'O')])
+
+    for i in xrange(nrec):
+        df1 = np.array(range(i + 1), dtype=np.float)
+        df2 = np.array(range(i + 1), dtype=np.int) * 2
+        df3 = np.array(range(i + 1), dtype=np.double) * 3
         arr[i] = (i, df1, df2, df3)
 
-    stretched = rnp.stretch(
-        arr, ['scalar','df1','df2','df3'])
+    for asrec in (True, False):
+        stretched = rnp.stretch(
+            arr, ['scalar', 'df1', 'df2', 'df3'],
+            asrecarray=asrec)
 
-    assert_equal(stretched.dtype,
-        [('scalar', np.int),
-         ('df1', np.float),
-         ('df2', np.int),
-         ('df3', np.double)])
-    assert_equal(stretched.size, 15)
+        assert_equal(stretched.dtype,
+            [('scalar', np.int),
+             ('df1', np.float),
+             ('df2', np.int),
+             ('df3', np.double)])
+        assert_equal(stretched.size, 15)
 
-    assert_almost_equal(stretched.df1[14],4.0)
-    assert_almost_equal(stretched.df2[14],8)
-    assert_almost_equal(stretched.df3[14],12.0)
-    assert_almost_equal(stretched.scalar[14],4)
-    assert_almost_equal(stretched.scalar[13],4)
-    assert_almost_equal(stretched.scalar[12],4)
-    assert_almost_equal(stretched.scalar[11],4)
-    assert_almost_equal(stretched.scalar[10],4)
-    assert_almost_equal(stretched.scalar[9],3)
+        if asrec:
+            assert_almost_equal(stretched.df1[14], 4.0)
+            assert_almost_equal(stretched.df2[14], 8)
+            assert_almost_equal(stretched.df3[14], 12.0)
+            assert_almost_equal(stretched.scalar[14], 4)
+            assert_almost_equal(stretched.scalar[13], 4)
+            assert_almost_equal(stretched.scalar[12], 4)
+            assert_almost_equal(stretched.scalar[11], 4)
+            assert_almost_equal(stretched.scalar[10], 4)
+            assert_almost_equal(stretched.scalar[9], 3)
+        else:
+            assert_almost_equal(stretched['df1'][14], 4.0)
+            assert_almost_equal(stretched['df2'][14], 8)
+            assert_almost_equal(stretched['df3'][14], 12.0)
+            assert_almost_equal(stretched['scalar'][14], 4)
+            assert_almost_equal(stretched['scalar'][13], 4)
+            assert_almost_equal(stretched['scalar'][12], 4)
+            assert_almost_equal(stretched['scalar'][11], 4)
+            assert_almost_equal(stretched['scalar'][10], 4)
+            assert_almost_equal(stretched['scalar'][9], 3)
+
+    arr = np.empty(1, dtype=[('scalar', np.int),])
+    arr[0] = (1,)
+    assert_raises(RuntimeError, rnp.stretch, arr, ['scalar',])
+
+    nrec = 5
+    arr = np.empty(nrec,
+        dtype=[
+            ('scalar', np.int),
+            ('df1', 'O'),
+            ('df2', 'O')])
+
+    for i in xrange(nrec):
+        df1 = np.array(range(i + 1), dtype=np.float)
+        df2 = np.array(range(i + 2), dtype=np.int) * 2
+        arr[i] = (i, df1, df2)
+    assert_raises(ValueError, rnp.stretch, arr, ['scalar', 'df1', 'df2'])
 
 
 def test_blockwise_inner_join():
@@ -331,13 +392,14 @@ def test_blockwise_inner_join():
         (1.0, np.array([11,12,13]), np.array([1,0,1]), 0, np.array([1,2,3])),
         (2.0, np.array([21,22,23]), np.array([-1,2,-1]), 1, np.array([31,32,33]))],
         dtype=[
-            ('sl',np.float),
-            ('al','O'),
-            ('fk','O'),
-            ('s_fk',np.int),
-            ('ar','O')])
+            ('sl', np.float),
+            ('al', 'O'),
+            ('fk', 'O'),
+            ('s_fk', np.int),
+            ('ar', 'O')])
     # vector join
-    a1 = rnp.blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'])
+    a1 = rnp.blockwise_inner_join(
+        test_data, ['sl', 'al'], test_data['fk'], ['ar'])
 
     exp1 = np.array([
         (1.0, 11, 2, 1),
@@ -353,9 +415,7 @@ def test_blockwise_inner_join():
 
     # vector join with force repeat
     a2 = rnp.blockwise_inner_join(
-        test_data, ['sl','al'],
-        test_data['fk'], ['ar'],
-        force_repeat=['al'])
+        test_data, ['sl','al'], test_data['fk'], ['ar'], force_repeat=['al'])
     exp2 = np.array([
         (1.0, np.array([11, 12, 13]), 2, 1),
         (1.0, np.array([11, 12, 13]), 1, 0),
@@ -370,12 +430,16 @@ def test_blockwise_inner_join():
     assert_equal(a2.dtype, exp2.dtype)
 
     # scalar join
-    a3 = rnp.blockwise_inner_join(test_data, ['sl','al'], test_data['s_fk'], ['ar'])
+    a3 = rnp.blockwise_inner_join(
+        test_data, ['sl', 'al'], test_data['s_fk'], ['ar'])
     exp3 = np.array([
         (1.0, [11, 12, 13], 1, 0),
         (2.0, [21, 22, 23], 32, 1)],
-        dtype=[('sl', '<f8'), ('al', '|O8'),
-                ('ar', '<i8'), ('fk1', '<i8')])
+        dtype=[
+            ('sl', '<f8'),
+            ('al', '|O8'),
+            ('ar', '<i8'),
+            ('fk1', '<i8')])
     assert_equal(str(a3), str(exp3)) # numpy testing doesn't like subarray
     assert_equal(a3.dtype, exp3.dtype)
 
@@ -407,10 +471,18 @@ def test_array2tree():
             ('y', np.float32),
             ('z', np.float64),
             ('w', np.bool)])
+    tmp = ROOT.TFile.Open('test_array2tree_temp_file.root', 'recreate')
     tree = rnp.array2tree(a)
     a_conv = rnp.tree2array(tree)
     assert_array_equal(a, a_conv)
-    tree.Delete()
+    # extend the tree
+    tree2 = rnp.array2tree(a, tree=tree)
+    assert_equal(tree2.GetEntries(), len(a) * 2)
+    a_conv2 = rnp.tree2array(tree2)
+    assert_array_equal(np.hstack([a, a]), a_conv2)
+    tmp.Close()
+    os.remove(tmp.GetName())
+    assert_raises(TypeError, rnp.array2tree, a, tree=object)
 
 
 def test_array2root():
@@ -432,6 +504,7 @@ def test_random_sample_f1():
     func = TF1("f1", "TMath::DiLog(x)")
     sample = rnp.random_sample(func, 100)
     assert_equal(sample.shape, (100,))
+    rnp.random_sample(func, 100, seed=1)
 
 
 def test_random_sample_f2():
@@ -464,13 +537,26 @@ def test_random_sample_h3():
     assert_equal(sample.shape, (100, 3))
 
 
+def test_random_sample_bad_input():
+    func = TF1("f1", "TMath::DiLog(x)")
+    assert_raises(ValueError, rnp.random_sample, func, 0)
+    assert_raises(ValueError, rnp.random_sample, func, 10, seed=-1)
+    assert_raises(TypeError, rnp.random_sample, object, 10)
+
+
 def test_array():
-    for cls in (getattr(ROOT, 'TArray{0}'.format(atype)) for atype in 'DFLIS'):
-        a = cls(10)
-        a[2] = 2
-        b = rnp.array(a)
-        assert_equal(b[2], 2)
+    for copy in (True, False):
+        for cls in (getattr(ROOT, 'TArray{0}'.format(atype))
+                for atype in 'DFLIS'):
+            a = cls(10)
+            a[2] = 2
+            b = rnp.array(a, copy=copy)
+            assert_equal(b[2], 2)
+            assert_equal(b.shape[0], 10)
+        a = ROOT.TArrayC(10)
+        b = rnp.array(a, copy=copy)
         assert_equal(b.shape[0], 10)
+    assert_raises(TypeError, rnp.array, object)
 
 
 def test_matrix():
@@ -485,3 +571,5 @@ def test_matrix():
         m[2][2] = 2
         n = rnp.matrix(m)
         assert_equal(n[2, 2], 2)
+
+    assert_raises(TypeError, rnp.matrix, object)
