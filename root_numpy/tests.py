@@ -296,17 +296,21 @@ def test_fill_array_wrongtype():
 
 def test_stretch():
     nrec = 5
-    arr = np.empty(nrec, dtype=[('scalar',np.int), ('df1', 'O'),
-                                ('df2', 'O'), ('df3', 'O')])
-    for i in range(nrec):
+    arr = np.empty(nrec,
+        dtype=[
+            ('scalar', np.int),
+            ('df1', 'O'),
+            ('df2', 'O'),
+            ('df3', 'O')])
+
+    for i in xrange(nrec):
         scalar = i
-        df1 = np.array(range(i+1), dtype=np.float)
-        df2 = np.array(range(i+1), dtype=np.int)*2
-        df3 = np.array(range(i+1), dtype=np.double)*3
+        df1 = np.array(range(i + 1), dtype=np.float)
+        df2 = np.array(range(i + 1), dtype=np.int) * 2
+        df3 = np.array(range(i + 1), dtype=np.double) * 3
         arr[i] = (i, df1, df2, df3)
 
-    stretched = rnp.stretch(
-        arr, ['scalar','df1','df2','df3'])
+    stretched = rnp.stretch(arr, ['scalar', 'df1', 'df2', 'df3'])
 
     assert_equal(stretched.dtype,
         [('scalar', np.int),
@@ -315,15 +319,15 @@ def test_stretch():
          ('df3', np.double)])
     assert_equal(stretched.size, 15)
 
-    assert_almost_equal(stretched.df1[14],4.0)
-    assert_almost_equal(stretched.df2[14],8)
-    assert_almost_equal(stretched.df3[14],12.0)
-    assert_almost_equal(stretched.scalar[14],4)
-    assert_almost_equal(stretched.scalar[13],4)
-    assert_almost_equal(stretched.scalar[12],4)
-    assert_almost_equal(stretched.scalar[11],4)
-    assert_almost_equal(stretched.scalar[10],4)
-    assert_almost_equal(stretched.scalar[9],3)
+    assert_almost_equal(stretched.df1[14], 4.0)
+    assert_almost_equal(stretched.df2[14], 8)
+    assert_almost_equal(stretched.df3[14], 12.0)
+    assert_almost_equal(stretched.scalar[14], 4)
+    assert_almost_equal(stretched.scalar[13], 4)
+    assert_almost_equal(stretched.scalar[12], 4)
+    assert_almost_equal(stretched.scalar[11], 4)
+    assert_almost_equal(stretched.scalar[10], 4)
+    assert_almost_equal(stretched.scalar[9], 3)
 
 
 def test_blockwise_inner_join():
@@ -331,13 +335,14 @@ def test_blockwise_inner_join():
         (1.0, np.array([11,12,13]), np.array([1,0,1]), 0, np.array([1,2,3])),
         (2.0, np.array([21,22,23]), np.array([-1,2,-1]), 1, np.array([31,32,33]))],
         dtype=[
-            ('sl',np.float),
-            ('al','O'),
-            ('fk','O'),
-            ('s_fk',np.int),
-            ('ar','O')])
+            ('sl', np.float),
+            ('al', 'O'),
+            ('fk', 'O'),
+            ('s_fk', np.int),
+            ('ar', 'O')])
     # vector join
-    a1 = rnp.blockwise_inner_join(test_data, ['sl','al'], test_data['fk'], ['ar'])
+    a1 = rnp.blockwise_inner_join(
+        test_data, ['sl', 'al'], test_data['fk'], ['ar'])
 
     exp1 = np.array([
         (1.0, 11, 2, 1),
@@ -353,9 +358,7 @@ def test_blockwise_inner_join():
 
     # vector join with force repeat
     a2 = rnp.blockwise_inner_join(
-        test_data, ['sl','al'],
-        test_data['fk'], ['ar'],
-        force_repeat=['al'])
+        test_data, ['sl','al'], test_data['fk'], ['ar'], force_repeat=['al'])
     exp2 = np.array([
         (1.0, np.array([11, 12, 13]), 2, 1),
         (1.0, np.array([11, 12, 13]), 1, 0),
@@ -370,12 +373,16 @@ def test_blockwise_inner_join():
     assert_equal(a2.dtype, exp2.dtype)
 
     # scalar join
-    a3 = rnp.blockwise_inner_join(test_data, ['sl','al'], test_data['s_fk'], ['ar'])
+    a3 = rnp.blockwise_inner_join(
+        test_data, ['sl', 'al'], test_data['s_fk'], ['ar'])
     exp3 = np.array([
         (1.0, [11, 12, 13], 1, 0),
         (2.0, [21, 22, 23], 32, 1)],
-        dtype=[('sl', '<f8'), ('al', '|O8'),
-                ('ar', '<i8'), ('fk1', '<i8')])
+        dtype=[
+            ('sl', '<f8'),
+            ('al', '|O8'),
+            ('ar', '<i8'),
+            ('fk1', '<i8')])
     assert_equal(str(a3), str(exp3)) # numpy testing doesn't like subarray
     assert_equal(a3.dtype, exp3.dtype)
 
