@@ -62,6 +62,9 @@ def test_single():
     f = load('single1.root')
     a = rnp.root2array(f)
     check_single(a)
+    # specify tree name
+    a = rnp.root2array(f, treename='tree')
+    check_single(a)
 
 
 @raises(IOError)
