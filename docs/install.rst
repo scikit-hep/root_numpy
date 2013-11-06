@@ -18,11 +18,19 @@ be found, the installation aborts.
 root_numpy has been tested with:
 
 * ROOT 5.32, 5.34
-* NumPy 1.6.1, 1.7.1
+* NumPy 1.6, 1.7, 1.8
 * Python 2.6, 2.7
 * GNU/Linux, Mac OS
 
-but it should work in most places.
+.. warning:: **Mac OS:** if you're compiling root_numpy with Clang and
+   linking against libc++, you will also need to compile ROOT with Clang and
+   libc++, because libstdc++ and libc++ are not ABI compatible.
+
+   ROOT compiles with Clang and libc++ since version 5.34/11, but PyROOT has a
+   bug which was fixed after that, so it is best to compile from the
+   v5-34-00-patches branch of ROOT. You can do this easily with Homebrew via::
+
+      brew install --HEAD root
 
 Getting the Latest Source
 =========================
