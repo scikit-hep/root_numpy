@@ -542,3 +542,5 @@ def test_matrix():
         m[2][2] = 2
         n = rnp.matrix(m)
         assert_equal(n[2, 2], 2)
+
+    assert_raises(TypeError, rnp.matrix, object)
