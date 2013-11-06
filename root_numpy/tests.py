@@ -279,12 +279,12 @@ def test_fill_hist():
 
     a = TH1D('th1d', 'test', 1000, -5, 5)
     rnp.fill_hist(a, data1D)
-    #one of them lies beyond hist range that's why it's not 1e6
+    # one element lies beyond hist range; that's why it's not 1e6
     assert_almost_equal(a.Integral(), 999999.0)
 
     a_w = TH1D('th1dw', 'test', 1000, -5, 5)
     rnp.fill_hist(a_w, data1D, w1D)
-    assert_almost_equal(a_w.Integral(), 999999.0*2)
+    assert_almost_equal(a_w.Integral(), 999999.0 * 2)
 
     b = TH2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
     rnp.fill_hist(b, data2D)
@@ -298,6 +298,22 @@ def test_fill_hist():
     rnp.fill_array(c, data3D)
     assert_almost_equal(c.Integral(), 20000.0)
 
+    # array and weighte lengths do not match
+    assert_raises(ValueError, rnp.fill_array, c, data3D, np.ones(10))
+
+    # weights is not 1D
+    assert_raises(ValueError, rnp.fill_array, c, data3D,
+        np.ones((data3D.shape[0], 1)))
+
+    # array not 2-d when filling 2D/3D histogram
+    for h in (b, c):
+        assert_raises(ValueError, rnp.fill_hist, h, np.random.randn(1E4))
+
+    # length of second axis does not match dimensionality of histogram
+    for h in (a, b, c):
+        assert_raises(ValueError, rnp.fill_hist, h, np.random.randn(1E4, 4))
+
+    # wrong type
     h = list()
     a = np.random.randn(100)
     assert_raises(TypeError, rnp.fill_hist, h, a)
