@@ -4,9 +4,7 @@
 #include <TLeaf.h>
 #include <TTreeFormula.h>
 #include <string>
-#include <iostream>
 
-using namespace std;
 
 enum ColumnType{
     SINGLE = 1,
@@ -28,11 +26,11 @@ class Column
         // single fixed vary?
         ColumnType coltype;
         // column name
-        string colname;
+        std::string colname;
         // useful in case of fixed element
         int countval;
         // name of the roottype
-        string rttype;
+        std::string rttype;
 };
 
 
@@ -40,7 +38,7 @@ class FormulaColumn: public Column
 {
     public:
 
-        FormulaColumn(string _colname, TTreeFormula* _formula)
+        FormulaColumn(std::string _colname, TTreeFormula* _formula)
         {
             colname = _colname;
             formula = _formula;
@@ -122,7 +120,7 @@ class BranchColumn: public Column
             else
             {
                 // negative
-                string msg("Unable to understand the structure of leaf ");
+                std::string msg("Unable to understand the structure of leaf ");
                 msg += leaf->GetName();
                 PyErr_SetString(PyExc_IOError, msg.c_str());
                 return 0;
@@ -130,7 +128,7 @@ class BranchColumn: public Column
             return 1;
         }
 
-        static BranchColumn* build(TLeaf* leaf, const string& colname)
+        static BranchColumn* build(TLeaf* leaf, const std::string& colname)
         {
             BranchColumn* ret = new BranchColumn();
             ret->leaf = leaf;

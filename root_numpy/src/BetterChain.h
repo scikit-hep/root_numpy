@@ -22,7 +22,6 @@
 #include "Column.h"
 #include "util.h"
 
-using namespace std;
 
 // Correct TChain implementation with cache TLeaf*
 class BetterChain
@@ -47,7 +46,7 @@ class BetterChain
             }
 
             // Revert branches to their original activated/deactivated state
-            map<string, bool>::iterator status_it;
+            std::map<std::string, bool>::iterator status_it;
             for (status_it = original_branch_status.begin();
                  status_it != original_branch_status.end();
                  ++status_it)
@@ -66,7 +65,7 @@ class BetterChain
             }
 
             // BetterChain owns the formulae and so we delete them here
-            vector<TTreeFormula*>::iterator fit;
+            std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
                 delete *fit;
@@ -143,7 +142,7 @@ class BetterChain
             // The branches must be activated when a TTreeFormula is initially created.
             TBranch* branch;
             TLeaf* leaf;
-            string bname, lname;
+            std::string bname, lname;
             LeafCache::iterator it;
 
             // Disable all branches
@@ -172,7 +171,7 @@ class BetterChain
 
             // Activate all branches used by the formulae
             int ncodes;
-            vector<TTreeFormula*>::iterator fit;
+            std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
                 ncodes = (*fit)->GetNcodes();
@@ -216,20 +215,21 @@ class BetterChain
             LeafCache::iterator it;
             for(it = leafcache.begin(); it != leafcache.end(); ++it)
             {
-                string bname = it->first.first;
-                string lname = it->first.second;
+                std::string bname = it->first.first;
+                std::string lname = it->first.second;
                 TBranch* branch = fChain->FindBranch(bname.c_str());
                 if (branch==0)
                 {
-                    cerr << "WARNING cannot find branch " << bname << endl;
+                    std::cerr << "WARNING cannot find branch " << bname
+                              << std::endl;
                     it->second->skipped = true;
                     continue;
                 }
                 TLeaf* leaf = branch->FindLeaf(lname.c_str());
                 if (leaf==0)
                 {
-                    cerr << "WARNING cannot find leaf " << lname
-                         << " for branch " << bname << endl;
+                    std::cerr << "WARNING cannot find leaf " << lname
+                              << " for branch " << bname << std::endl;
                     it->second->skipped = true;
                     continue;
                 }
@@ -238,7 +238,7 @@ class BetterChain
             }
 
             // Update all formula leaves
-            vector<TTreeFormula*>::iterator fit;
+            std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
                 (*fit)->UpdateFormulaLeaves();
@@ -255,9 +255,9 @@ class BetterChain
             return fChain->GetWeight();
         }
 
-        Column* MakeColumn(const string& bname,
-                           const string& lname,
-                           const string& colname)
+        Column* MakeColumn(const std::string& bname,
+                           const std::string& lname,
+                           const std::string& colname)
         {
             TBranch* branch = fChain->GetBranch(bname.c_str());
             if (branch == NULL)
@@ -312,12 +312,12 @@ class BetterChain
         int fCurrent;
         int ientry;
         MiniNotify* notifier;
-        vector<TTreeFormula*> formulae;
-        map<string, bool> original_branch_status;
+        std::vector<TTreeFormula*> formulae;
+        std::map<std::string, bool> original_branch_status;
 
         // Branch name to leaf name conversion
-        typedef pair<string, string> BL;
-        typedef map<BL, BranchColumn*> LeafCache;
+        typedef std::pair<std::string, std::string> BL;
+        typedef std::map<BL, BranchColumn*> LeafCache;
 
         // Column pointer cache since the leaf inside needs to be updated
         // when new file is loaded in the chain
