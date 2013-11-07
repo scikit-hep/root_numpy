@@ -3,7 +3,6 @@ language: python
 
 python:
     - "2.7"
-    #- "3.2"
 
 env:
     #- ROOT=5-32-00
@@ -27,17 +26,15 @@ before_install:
 
     # Needed because sometimes travis' repositories get out of date
     - time sudo apt-get update -qq
+
+    # Install the dependencies we need
+    - time sudo apt-get install -qq python-numpy python-sphinx
     - time sudo apt-get install python-pip
     - time sudo pip install coverage
     - time sudo pip install coveralls
+    - time sudo pip install nose
 
 install:
-    # Check if we are running Python 2 or 3. This is needed for the apt-get package names
-    - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3"; fi
-
-    # Install the dependencies we need
-    - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
-
     # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM
     # for the correct Python / ROOT version
     - time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
