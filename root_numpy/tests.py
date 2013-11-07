@@ -10,7 +10,7 @@ import ROOT
 from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D, TF1, TF2, TF3
 
 import root_numpy as rnp
-from root_numpy.testdata import get_filepath
+from root_numpy.testdata import get_filepath, get_file
 from root_numpy.extern.ordereddict import OrderedDict
 
 from nose.tools import raises, assert_raises, assert_equal, assert_almost_equal
@@ -144,6 +144,10 @@ def test_tree2array():
     chain = TChain('tree')
     chain.Add(load('single1.root'))
     check_single(rnp.tree2array(chain))
+
+    f = get_file('single1.root')
+    tree = f.Get('tree')
+    check_single(rnp.tree2array(tree))
 
 
 def test_tree2rec():
