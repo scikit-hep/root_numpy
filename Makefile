@@ -9,6 +9,8 @@ CYTHON_CPP := root_numpy/src/_librootnumpy.cpp
 CYTHON_SRC := $(filter-out $(CYTHON_PYX),$(filter-out $(CYTHON_CPP),$(wildcard root_numpy/src/*)))
 CYTHON_PYX_SRC := $(filter-out $(CYTHON_PYX),$(wildcard root_numpy/src/*.pyx))
 
+INTERACTIVE := $(shell ([ -t 0 ] && echo 1) || echo 0)
+
 all: $(CYTHON_CPP) clean inplace test
 
 clean-pyc:
@@ -45,10 +47,12 @@ show-cython: clean-html
 	done; \
 	mv $$tmp/*.html root_numpy/src/; \
 	rm -rf $$tmp; \
-	for html in root_numpy/src/*.html; do \
-		echo "opening $$html ..."; \
-		xdg-open $$html; \
-	done
+	if [ "$(INTERACTIVE)" -eq "1" ]; then \
+		for html in root_numpy/src/*.html; do \
+			echo "opening $$html ..."; \
+			xdg-open $$html; \
+		done; \
+	fi;
 
 in: inplace # just a shortcut
 inplace:
@@ -86,7 +90,9 @@ test-coverage: in
 	@$(NOSETESTS) -s -v -a '!slow' --with-coverage \
 		--cover-erase --cover-branches \
 		--cover-html --cover-html-dir=coverage root_numpy
-	@xdg-open coverage/index.html
+	@if [ "$(INTERACTIVE)" -eq "1" ]; then \
+		xdg-open coverage/index.html; \
+	fi;
 
 test: test-code test-doc
 
