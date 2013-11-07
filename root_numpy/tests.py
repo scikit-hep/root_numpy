@@ -149,6 +149,8 @@ def test_tree2array():
     tree = f.Get('tree')
     check_single(rnp.tree2array(tree))
 
+    assert_raises(ValueError, get_file, 'file_does_not_exist.root')
+
 
 def test_tree2rec():
     chain = TChain('tree')
