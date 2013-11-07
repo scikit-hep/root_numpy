@@ -53,7 +53,7 @@ script:
     - time make doc
 
     # run tests with coverage
-    - time make test-coverage
+    - time make test-coverage </dev/null
 
 after_success:
     - time coveralls
