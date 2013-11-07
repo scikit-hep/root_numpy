@@ -11,6 +11,13 @@ CYTHON_PYX_SRC := $(filter-out $(CYTHON_PYX),$(wildcard root_numpy/src/*.pyx))
 
 INTERACTIVE := $(shell ([ -t 0 ] && echo 1) || echo 0)
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	OPEN := open
+else
+	OPEN := xdg-open
+endif
+
 all: $(CYTHON_CPP) clean inplace test
 
 clean-pyc:
@@ -50,7 +57,7 @@ show-cython: clean-html
 	if [ "$(INTERACTIVE)" -eq "1" ]; then \
 		for html in root_numpy/src/*.html; do \
 			echo "opening $$html ..."; \
-			xdg-open $$html; \
+			$(OPEN) $$html; \
 		done; \
 	fi;
 
@@ -91,7 +98,7 @@ test-coverage: in
 		--cover-erase --cover-branches \
 		--cover-html --cover-html-dir=coverage root_numpy
 	@if [ "$(INTERACTIVE)" -eq "1" ]; then \
-		xdg-open coverage/index.html; \
+		$(OPEN) coverage/index.html; \
 	fi;
 
 test: test-code test-doc
