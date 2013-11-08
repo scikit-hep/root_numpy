@@ -47,43 +47,41 @@ root_numpy can convert branches of basic types such as bool, int, float,
 double, etc. as well as variable and fixed-length 1D arrays and vectors
 of basic types.
 
-For example, get a structured or record array from a TTree in a ROOT file
-(you should be able to copy and paste the following examples into a Python
-session):
-
-.. code-block:: python
-
-   from root_numpy import root2array, root2rec
-   from root_numpy.testdata import get_filepath
-
-   filename = get_filepath('test.root')
-
-   # Convert a tree into a numpy structured array
-   arr = root2array(filename, 'tree')
-   # The tree name is always optional if there is only one tree in the file
-
-   # Convert a tree into a numpy record array
-   rec = root2rec(filename, 'tree')
-
-or directly from a TTree:
+For example, get a NumPy structured or record array from a TTree
+(copy and paste the following examples into your Python prompt):
 
 .. code-block:: python
 
    import ROOT
-   from root_numpy import tree2rec
+   from root_numpy import root2array, root2rec, tree2rec
+   from root_numpy.testdata import get_filepath
 
-   file = ROOT.TFile(filename)
-   intree = file.Get('tree')
+   filename = get_filepath('test.root')
+
+   # Convert a TTree in a ROOT file into a NumPy structured array
+   arr = root2array(filename, 'tree')
+   # The TTree name is always optional if there is only one TTree in the file
+
+   # Convert a TTree in a ROOT file into a NumPy record array
+   rec = root2rec(filename, 'tree')
+
+   # Get the TTree from the ROOT file
+   rfile = ROOT.TFile(filename)
+   intree = rfile.Get('tree')
+
+   # Convert the TTree into a NumPy record array
    rec = tree2rec(intree)
 
-Include only certain branches and entries:
+Include specific branches or expressions and only entries passing a selection:
 
 .. code-block:: python
 
-   rec = tree2rec(intree, branches=['x', 'y'], selection='z > 0',
-                  start=0, stop=10, step=2)
+   rec = tree2rec(intree,
+       branches=['x', 'y', 'sqrt(y)', 'TMath::Landau(x)', 'cos(x)*sin(y)'],
+       selection='z > 0',
+       start=0, stop=10, step=2)
 
-The above conversion creates an array with two columns from the branches
+The above conversion creates an array with five columns from the branches
 x and y where z is greater than zero and only looping on the first ten entries
 in the tree while skipping every second entry.
 
@@ -93,9 +91,13 @@ Now convert our array back into a TTree:
 
    from root_numpy import array2tree, array2root
 
+   # Rename the fields
+   rec.dtype.names = ('x', 'y', 'sqrt_y', 'landau_x', 'cos_x_sin_y')
+
+   # Convert the NumPy record array into a TTree
    tree = array2tree(rec, name='tree')
 
-   # or dump directly into a ROOT file without using PyROOT
+   # Dump directly into a ROOT file without using PyROOT
    array2root(rec, 'selected_tree.root', 'tree')
 
 root_numpy also provides a function for filling a ROOT histogram from a NumPy
@@ -107,10 +109,10 @@ array:
    from root_numpy import fill_hist
    import numpy as np
 
+   # Fill a ROOT histogram from a NumPy array
    hist = TH2D('name', 'title', 20, -3, 3, 20, -3, 3)
    fill_hist(hist, np.random.randn(1E6, 2))
-   canvas = TCanvas()
-   hist.Draw('LEGO2')
+   canvas = TCanvas(); hist.Draw('LEGO2')
 
 and a function for creating a random NumPy array by sampling a ROOT function
 or histogram:
@@ -120,9 +122,11 @@ or histogram:
    from ROOT import TF2, TH1D
    from root_numpy import random_sample
 
+   # Sample a ROOT function
    func = TF2('func', 'sin(x)*sin(y)/(x*y)')
    arr = random_sample(func, 1E6)
 
+   # Sample a ROOT histogram
    hist = TH1D('hist', 'hist', 10, -3, 3)
    hist.FillRandom('gaus')
    arr = random_sample(hist, 1E6)
