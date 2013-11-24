@@ -181,6 +181,20 @@ def test_expression():
     assert_array_equal(rec['f_float'] * 2, rec2['f_float*2'])
 
 
+def test_selection_and_expression():
+    ref = len(rnp.root2rec(
+        load('test.root'), branches=['x', 'y'], selection='z>0'))
+    assert_equal(ref,
+        len(rnp.root2rec(
+            load('test.root'), branches=['x', 'y', 'z'], selection='z>0')))
+    assert_equal(ref,
+        len(rnp.root2rec(
+            load('test.root'), branches=['x', 'x*y'], selection='z>0')))
+    assert_equal(ref,
+        len(rnp.root2rec(
+            load('test.root'), branches=['x', 'x*z'], selection='z>0')))
+
+
 def test_branch_status():
     # test that original branch status is preserved
     chain = TChain('tree')

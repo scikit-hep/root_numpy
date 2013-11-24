@@ -56,6 +56,7 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     sources=[
         'root_numpy/src/_librootnumpy.cpp',
     ],
+    depends=glob('root_numpy/src/*.h'),
     language='c++',
     include_dirs=[
         np.get_include(),

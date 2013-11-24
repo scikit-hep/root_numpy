@@ -6,7 +6,8 @@
 #include <string>
 
 
-enum ColumnType{
+enum ColumnType
+{
     SINGLE = 1,
     FIXED = 2,
     VARY = 3
@@ -41,18 +42,10 @@ class FormulaColumn: public Column
         FormulaColumn(std::string _colname, TTreeFormula* _formula)
         {
             colname = _colname;
+            coltype = SINGLE;
             formula = _formula;
             rttype = "Double_t";
-            countval = formula->GetNdata();
-            if (countval > 1)
-            {
-                coltype = FIXED;
-            }
-            else
-            {
-                coltype = SINGLE;
-            }
-            value = new double[countval];
+            value = new double[1];
         }
 
         ~FormulaColumn()
@@ -62,7 +55,7 @@ class FormulaColumn: public Column
 
         int GetLen()
         {
-            return countval;
+            return 1;
         }
 
         int GetSize()
@@ -72,10 +65,9 @@ class FormulaColumn: public Column
 
         void* GetValuePointer()
         {
-            for (int i(0); i < formula->GetNdata(); ++i)
-            {
-                value[i] = formula->EvalInstance(i);
-            }
+            // required, as in TTreePlayer
+            formula->GetNdata();
+            value[0] = formula->EvalInstance(0);
             return value;
         }
 
@@ -89,8 +81,8 @@ class FormulaColumn: public Column
 };
 
 
-//This describe the structure of the tree
-//Converter should take this and make appropriate data structure
+// This describes the structure of the tree
+// Converter should take this and make the appropriate data structure
 class BranchColumn: public Column
 {
     public:
@@ -143,7 +135,8 @@ class BranchColumn: public Column
             return ret;
         }
 
-        void SetLeaf(TLeaf* newleaf, bool check=false){
+        void SetLeaf(TLeaf* newleaf, bool check=false)
+        {
             leaf = newleaf;
             if (check)
             {
@@ -160,7 +153,7 @@ class BranchColumn: public Column
 
         int GetLen()
         {
-            // get len of this block(in unit of element)
+            // get len of this block (in unit of element)
             return leaf->GetLen();
         }
 
