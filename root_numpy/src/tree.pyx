@@ -376,6 +376,7 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef BetterChain* bc = new BetterChain(tree)
     handle_load(bc.Prepare(), True)
 
+    cdef TTreeFormula* selection_formula = NULL
     cdef TTreeFormula* formula = NULL
     cdef int num_entries = bc.GetEntries()
     cdef int num_entries_selected = 0
@@ -397,13 +398,13 @@ cdef object tree2array(TTree* tree, branches, selection,
         if selection:
             py_string = str(selection)
             c_string = py_string
-            formula = new TTreeFormula("selection", c_string, bc.fChain)
-            if formula == NULL or formula.GetNdim() == 0:
-                del formula
+            selection_formula = new TTreeFormula("selection", c_string, bc.fChain)
+            if selection_formula == NULL or selection_formula.GetNdim() == 0:
+                del selection_formula
                 raise ValueError("could not compile selection formula")
             # The chain will take care of updating the formula leaves when
             # rolling over to the next tree.
-            bc.AddFormula(formula)
+            bc.AddFormula(selection_formula)
         
         # Parse the tree structure to determine branches and leaves
         structure = parse_tree_structure(tree)
@@ -463,14 +464,9 @@ cdef object tree2array(TTree* tree, branches, selection,
 
             # Determine if this entry passes the selection,
             # similar to the code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
-            if formula != NULL:
-                ndata = formula.GetNdata()
-                keep = False
-                for current from 0 <= current < ndata:
-                    keep |= (formula.EvalInstance(current) != 0)
-                    if keep:
-                        break
-                if not keep:
+            if selection_formula != NULL:
+                selection_formula.GetNdata() # required, as in TTreePlayer
+                if selection_formula.EvalInstance(0) == 0:
                     continue
 
             # Copy the values into the array
