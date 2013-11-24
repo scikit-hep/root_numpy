@@ -1,5 +1,4 @@
-recursive-include root_numpy *.root *.C *.h *.cpp *.pyx *.pxi
-recursive-include tutorial *
+recursive-include root_numpy *.root *.h *.cpp *.pyx *.pxi
 include *.py
 include README.rst
 include LICENSE
