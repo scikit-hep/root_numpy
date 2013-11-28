@@ -604,17 +604,17 @@ def test_rec2array():
     assert_equal(arr.shape, (a.shape[0],))
 
 
-def test_rec_stack():
+def test_stack():
     rec = rnp.root2rec(load('test.root'))
-    s = rnp.rec_stack([rec, rec])
+    s = rnp.stack([rec, rec])
     assert_equal(s.shape[0], 2 * rec.shape[0])
     assert_equal(s.dtype.names, rec.dtype.names)
-    s = rnp.rec_stack([rec, rec], fields=['x', 'y'])
+    s = rnp.stack([rec, rec], fields=['x', 'y'])
     assert_equal(s.shape[0], 2 * rec.shape[0])
     assert_equal(s.dtype.names, ('x', 'y'))
     # recs don't have identical fields
     rec2 = recfunctions.drop_fields(rec, ['i', 'x'])
-    s = rnp.rec_stack([rec, rec2])
+    s = rnp.stack([rec, rec2])
     assert_equal(set(s.dtype.names), set(['y', 'z']))
 
 

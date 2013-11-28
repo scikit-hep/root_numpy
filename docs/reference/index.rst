@@ -29,7 +29,7 @@ what they are and what they do.
    list_branches
    list_structures
    rec2array
-   rec_stack
+   stack
    stretch
    dup_idx
    blockwise_inner_join

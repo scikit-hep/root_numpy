@@ -5,7 +5,7 @@ from _librootnumpy import blockwise_inner_join
 
 __all__ = [
     'rec2array',
-    'rec_stack',
+    'stack',
     'stretch',
     'dup_idx',
     'blockwise_inner_join',
@@ -48,7 +48,7 @@ def rec2array(rec, fields=None):
     return np.vstack([rec[field] for field in fields]).T
 
 
-def rec_stack(recs, fields=None):
+def stack(recs, fields=None):
     """
     Stack common fields in multiple record arrays (concatenate them).
 

@@ -10,7 +10,7 @@ from _matrix import matrix
 from _warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
 from _utils import (
     stretch, blockwise_inner_join,
-    rec2array, rec_stack, dup_idx)
+    rec2array, stack, dup_idx)
 from info import __version__
 
 __all__ = [
@@ -29,7 +29,7 @@ __all__ = [
     'list_branches',
     'list_structures',
     'rec2array',
-    'rec_stack',
+    'stack',
     'stretch',
     'dup_idx',
     'blockwise_inner_join',
