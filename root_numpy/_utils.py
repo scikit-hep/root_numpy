@@ -105,7 +105,6 @@ def stretch(arr, fields):
     >>> arr = np.empty(2, dtype=[('scalar', np.int), ('array', 'O')])
     >>> arr[0] = (0, np.array([1, 2, 3], dtype=np.float))
     >>> arr[1] = (1, np.array([4, 5, 6], dtype=np.float))
-    >>>
     >>> stretch(arr, ['scalar', 'array'])
     array([(0, 1.0), (0, 2.0), (0, 3.0), (1, 4.0), (1, 5.0), (1, 6.0)],
         dtype=[('scalar', '<i8'), ('array', '<f8')])
