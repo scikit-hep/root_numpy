@@ -316,15 +316,11 @@ def test_fill_hist():
     rnp.fill_hist(c, data3D)
     assert_almost_equal(c.Integral(), 10000.0)
 
-    # test deprecated call
-    rnp.fill_array(c, data3D)
-    assert_almost_equal(c.Integral(), 20000.0)
-
-    # array and weighte lengths do not match
-    assert_raises(ValueError, rnp.fill_array, c, data3D, np.ones(10))
+    # array and weights lengths do not match
+    assert_raises(ValueError, rnp.fill_hist, c, data3D, np.ones(10))
 
     # weights is not 1D
-    assert_raises(ValueError, rnp.fill_array, c, data3D,
+    assert_raises(ValueError, rnp.fill_hist, c, data3D,
         np.ones((data3D.shape[0], 1)))
 
     # array not 2-d when filling 2D/3D histogram
