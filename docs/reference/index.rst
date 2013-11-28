@@ -28,7 +28,10 @@ what they are and what they do.
    list_trees
    list_branches
    list_structures
+   rec2array
+   stack
    stretch
+   dup_idx
    blockwise_inner_join
 
 .. _conversion_table:

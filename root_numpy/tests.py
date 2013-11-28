@@ -4,6 +4,7 @@ import tempfile
 import warnings
 
 import numpy as np
+from numpy.lib import recfunctions
 from numpy.testing import assert_array_equal
 
 import ROOT
@@ -316,15 +317,11 @@ def test_fill_hist():
     rnp.fill_hist(c, data3D)
     assert_almost_equal(c.Integral(), 10000.0)
 
-    # test deprecated call
-    rnp.fill_array(c, data3D)
-    assert_almost_equal(c.Integral(), 20000.0)
-
-    # array and weighte lengths do not match
-    assert_raises(ValueError, rnp.fill_array, c, data3D, np.ones(10))
+    # array and weights lengths do not match
+    assert_raises(ValueError, rnp.fill_hist, c, data3D, np.ones(10))
 
     # weights is not 1D
-    assert_raises(ValueError, rnp.fill_array, c, data3D,
+    assert_raises(ValueError, rnp.fill_hist, c, data3D,
         np.ones((data3D.shape[0], 1)))
 
     # array not 2-d when filling 2D/3D histogram
@@ -356,38 +353,25 @@ def test_stretch():
         df3 = np.array(range(i + 1), dtype=np.double) * 3
         arr[i] = (i, df1, df2, df3)
 
-    for asrec in (True, False):
-        stretched = rnp.stretch(
-            arr, ['scalar', 'df1', 'df2', 'df3'],
-            asrecarray=asrec)
+    stretched = rnp.stretch(
+        arr, ['scalar', 'df1', 'df2', 'df3'])
 
-        assert_equal(stretched.dtype,
-            [('scalar', np.int),
-             ('df1', np.float),
-             ('df2', np.int),
-             ('df3', np.double)])
-        assert_equal(stretched.size, 15)
+    assert_equal(stretched.dtype,
+        [('scalar', np.int),
+         ('df1', np.float),
+         ('df2', np.int),
+         ('df3', np.double)])
+    assert_equal(stretched.size, 15)
 
-        if asrec:
-            assert_almost_equal(stretched.df1[14], 4.0)
-            assert_almost_equal(stretched.df2[14], 8)
-            assert_almost_equal(stretched.df3[14], 12.0)
-            assert_almost_equal(stretched.scalar[14], 4)
-            assert_almost_equal(stretched.scalar[13], 4)
-            assert_almost_equal(stretched.scalar[12], 4)
-            assert_almost_equal(stretched.scalar[11], 4)
-            assert_almost_equal(stretched.scalar[10], 4)
-            assert_almost_equal(stretched.scalar[9], 3)
-        else:
-            assert_almost_equal(stretched['df1'][14], 4.0)
-            assert_almost_equal(stretched['df2'][14], 8)
-            assert_almost_equal(stretched['df3'][14], 12.0)
-            assert_almost_equal(stretched['scalar'][14], 4)
-            assert_almost_equal(stretched['scalar'][13], 4)
-            assert_almost_equal(stretched['scalar'][12], 4)
-            assert_almost_equal(stretched['scalar'][11], 4)
-            assert_almost_equal(stretched['scalar'][10], 4)
-            assert_almost_equal(stretched['scalar'][9], 3)
+    assert_almost_equal(stretched['df1'][14], 4.0)
+    assert_almost_equal(stretched['df2'][14], 8)
+    assert_almost_equal(stretched['df3'][14], 12.0)
+    assert_almost_equal(stretched['scalar'][14], 4)
+    assert_almost_equal(stretched['scalar'][13], 4)
+    assert_almost_equal(stretched['scalar'][12], 4)
+    assert_almost_equal(stretched['scalar'][11], 4)
+    assert_almost_equal(stretched['scalar'][10], 4)
+    assert_almost_equal(stretched['scalar'][9], 3)
 
     arr = np.empty(1, dtype=[('scalar', np.int),])
     arr[0] = (1,)
@@ -593,3 +577,47 @@ def test_matrix():
         assert_equal(n[2, 2], 2)
 
     assert_raises(TypeError, rnp.matrix, object)
+
+
+def test_rec2array():
+    a = np.array([
+        (12345, 2., 2.1, True),
+        (3, 4., 4.2, False),],
+        dtype=[
+            ('x', np.int32),
+            ('y', np.float32),
+            ('z', np.float64),
+            ('w', np.bool)])
+    arr = rnp.rec2array(a)
+    assert_array_equal(arr,
+        np.array([
+            [12345, 2, 2.1, 1],
+            [3, 4, 4.2, 0]]))
+    arr = rnp.rec2array(a, fields=['x', 'y'])
+    assert_array_equal(arr,
+        np.array([
+            [12345, 2],
+            [3, 4]]))
+    # single field
+    arr = rnp.rec2array(a, fields=['x'])
+    assert_equal(arr.ndim, 1)
+    assert_equal(arr.shape, (a.shape[0],))
+
+
+def test_stack():
+    rec = rnp.root2rec(load('test.root'))
+    s = rnp.stack([rec, rec])
+    assert_equal(s.shape[0], 2 * rec.shape[0])
+    assert_equal(s.dtype.names, rec.dtype.names)
+    s = rnp.stack([rec, rec], fields=['x', 'y'])
+    assert_equal(s.shape[0], 2 * rec.shape[0])
+    assert_equal(s.dtype.names, ('x', 'y'))
+    # recs don't have identical fields
+    rec2 = recfunctions.drop_fields(rec, ['i', 'x'])
+    s = rnp.stack([rec, rec2])
+    assert_equal(set(s.dtype.names), set(['y', 'z']))
+
+
+def test_dup_idx():
+    a = [1, 2, 3, 4, 3, 2]
+    assert_array_equal(rnp.dup_idx(a), [1, 2, 4, 5])
