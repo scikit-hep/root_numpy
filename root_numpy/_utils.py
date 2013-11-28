@@ -1,17 +1,76 @@
 import numpy as np
+import operator
 from _librootnumpy import blockwise_inner_join
 
+
 __all__ = [
+    'rec2array',
+    'rec_stack',
     'stretch',
     'blockwise_inner_join',
 ]
 
+
 VLEN = np.vectorize(len)
 
 
-def _is_array_field(arr, col):
-    # For now:
+def _is_object_field(arr, col):
     return arr.dtype[col] == 'O'
+
+
+def rec2array(rec, fields=None):
+    """
+    Convert a record array into a ndarray with a homogeneous data type.
+
+    Paramaters
+    ----------
+
+    rec : NumPy record/structured array
+        A NumPy structured array that will be cast into a homogenous data type.
+
+    fields : list of strings, optional (default=None)
+        The fields to include as columns in the output array.
+        If None, then all columns will be included.
+
+    Returns
+    -------
+
+    array : NumPy ndarray
+        A new NumPy ndarray with homogeneous data types for all columns.
+
+    """
+    if fields is None:
+        fields = rec.dtype.names
+    if len(fields) == 1:
+        return rec[fields[0]]
+    # Creates a copy and recasts data to a consistent datatype
+    return np.vstack([rec[field] for field in fields]).T
+
+
+def rec_stack(recs, fields=None):
+    """
+    Stack common fields in multiple record arrays (concatenate them).
+
+    Parameters
+    ----------
+
+    recs : list of NumPy record arrays
+
+    fields : list of strings, optional (default=None)
+        The list of fields to include in the stacked array.
+        If None, then include the fields in common to all the record arrays.
+
+    Returns
+    -------
+
+    rec : NumPy record array
+        The stacked array.
+
+    """
+    if fields is None:
+        fields = list(reduce(operator.and_,
+            [set(rec.dtype.names) for rec in recs]))
+    return np.hstack([rec[fields] for rec in recs])
 
 
 def stretch(arr, fields):
@@ -55,7 +114,7 @@ def stretch(arr, fields):
 
     # Construct dtype
     for c in fields:
-        if _is_array_field(arr, c):
+        if _is_object_field(arr, c):
             dt.append((c, arr[c][0].dtype))
             has_array_field = True
             first_array = c if first_array is None else first_array
@@ -72,7 +131,7 @@ def stretch(arr, fields):
     ret = np.empty(numrec, dtype=dt)
 
     for c in fields:
-        if _is_array_field(arr, c):
+        if _is_object_field(arr, c):
             # FIXME: this is rather inefficient since the stack
             # is copied over to the return value
             stack = np.hstack(arr[c])

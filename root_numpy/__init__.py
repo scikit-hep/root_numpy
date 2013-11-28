@@ -8,7 +8,9 @@ from _sample import random_sample
 from _array import array
 from _matrix import matrix
 from _warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
-from _utils import stretch, blockwise_inner_join
+from _utils import (
+    stretch, blockwise_inner_join,
+    rec2array, rec_stack)
 from info import __version__
 
 __all__ = [
@@ -26,6 +28,8 @@ __all__ = [
     'list_trees',
     'list_branches',
     'list_structures',
+    'rec2array',
+    'rec_stack',
     'stretch',
     'blockwise_inner_join',
     'RootNumpyWarning',
