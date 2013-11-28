@@ -70,6 +70,9 @@ def rec_stack(recs, fields=None):
     if fields is None:
         fields = list(reduce(operator.and_,
             [set(rec.dtype.names) for rec in recs]))
+        # preserve order of fields wrt first record array
+        if set(fields) == set(recs[0].dtype.names):
+            fields = list(recs[0].dtype.names)
     return np.hstack([rec[fields] for rec in recs])
 
 

@@ -28,6 +28,8 @@ what they are and what they do.
    list_trees
    list_branches
    list_structures
+   rec2array
+   rec_stack
    stretch
    blockwise_inner_join
 

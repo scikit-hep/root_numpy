@@ -4,6 +4,7 @@ import tempfile
 import warnings
 
 import numpy as np
+from numpy.lib import recfunctions
 from numpy.testing import assert_array_equal
 
 import ROOT
@@ -576,3 +577,42 @@ def test_matrix():
         assert_equal(n[2, 2], 2)
 
     assert_raises(TypeError, rnp.matrix, object)
+
+
+def test_rec2array():
+    a = np.array([
+        (12345, 2., 2.1, True),
+        (3, 4., 4.2, False),],
+        dtype=[
+            ('x', np.int32),
+            ('y', np.float32),
+            ('z', np.float64),
+            ('w', np.bool)])
+    arr = rnp.rec2array(a)
+    assert_array_equal(arr,
+        np.array([
+            [12345, 2, 2.1, 1],
+            [3, 4, 4.2, 0]]))
+    arr = rnp.rec2array(a, fields=['x', 'y'])
+    assert_array_equal(arr,
+        np.array([
+            [12345, 2],
+            [3, 4]]))
+    # single field
+    arr = rnp.rec2array(a, fields=['x'])
+    assert_equal(arr.ndim, 1)
+    assert_equal(arr.shape, (a.shape[0],))
+
+
+def test_rec_stack():
+    rec = rnp.root2rec(load('test.root'))
+    s = rnp.rec_stack([rec, rec])
+    assert_equal(s.shape[0], 2 * rec.shape[0])
+    assert_equal(s.dtype.names, rec.dtype.names)
+    s = rnp.rec_stack([rec, rec], fields=['x', 'y'])
+    assert_equal(s.shape[0], 2 * rec.shape[0])
+    assert_equal(s.dtype.names, ('x', 'y'))
+    # recs don't have identical fields
+    rec2 = recfunctions.drop_fields(rec, ['i', 'x'])
+    s = rnp.rec_stack([rec, rec2])
+    assert_equal(set(s.dtype.names), set(['y', 'z']))
