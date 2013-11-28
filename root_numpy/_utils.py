@@ -15,20 +15,38 @@ def _is_array_field(arr, col):
     return arr.dtype[col] == 'O'
 
 
-def stretch(arr, col_names, asrecarray=True):
+def stretch(arr, fields):
     """
-    Stretch an array. ``hstack()`` multiple array fields while preserving
-    column names and record array structure. If a scalar field is specified,
-    it will be stretched along with array fields.
+    Stretch an array by ``hstack()``-ing  multiple array fields while
+    preserving column names and record array structure. If a scalar field
+    is specified, it will be stretched along with array fields.
 
     Parameters
     ----------
     arr : NumPy structured or record array
+        The array to be stretched.
 
-    colnames : list of column names to stretch
+    fields : list of strings
+        A list of column names to stretch.
 
-    asrecarray : bool, optional (default=True)
-        If `True`, return a record array, else return a structured array.
+    Returns
+    -------
+
+    ret : A NumPy structured array
+        The stretched array.
+
+    Examples
+    --------
+
+    >>> import numpy as np
+    >>> from root_numpy import stretch
+    >>> arr = np.empty(2, dtype=[('scalar', np.int), ('array', 'O')])
+    >>> arr[0] = (0, np.array([1, 2, 3], dtype=np.float))
+    >>> arr[1] = (1, np.array([4, 5, 6], dtype=np.float))
+    >>>
+    >>> stretch(arr, ['scalar', 'array'])
+    array([(0, 1.0), (0, 2.0), (0, 3.0), (1, 4.0), (1, 5.0), (1, 6.0)],
+        dtype=[('scalar', '<i8'), ('array', '<f8')])
 
     """
     dt = []
@@ -37,7 +55,7 @@ def stretch(arr, col_names, asrecarray=True):
     first_array = None
 
     # Construct dtype
-    for c in col_names:
+    for c in fields:
         if _is_array_field(arr, c):
             dt.append((c, arr[c][0].dtype))
             has_array_field = True
@@ -54,7 +72,7 @@ def stretch(arr, col_names, asrecarray=True):
     numrec = np.sum(len_array)
     ret = np.empty(numrec, dtype=dt)
 
-    for c in col_names:
+    for c in fields:
         if _is_array_field(arr, c):
             # FIXME: this is rather inefficient since the stack
             # is copied over to the return value
@@ -69,8 +87,5 @@ def stretch(arr, col_names, asrecarray=True):
             # FIXME: this is rather inefficient since the repeat result
             # is copied over to the return value
             ret[c] = np.repeat(arr[c], len_array)
-
-    if asrecarray:
-        ret = ret.view(np.recarray)
 
     return ret
