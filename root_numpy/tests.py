@@ -616,3 +616,8 @@ def test_rec_stack():
     rec2 = recfunctions.drop_fields(rec, ['i', 'x'])
     s = rnp.rec_stack([rec, rec2])
     assert_equal(set(s.dtype.names), set(['y', 'z']))
+
+
+def test_dup_idx():
+    a = [1, 2, 3, 4, 3, 2]
+    assert_array_equal(rnp.dup_idx(a), [1, 2, 4, 5])

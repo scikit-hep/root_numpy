@@ -7,6 +7,7 @@ __all__ = [
     'rec2array',
     'rec_stack',
     'stretch',
+    'dup_idx',
     'blockwise_inner_join',
 ]
 
@@ -150,3 +151,36 @@ def stretch(arr, fields):
             ret[c] = np.repeat(arr[c], len_array)
 
     return ret
+
+
+def dup_idx(arr):
+    """
+    Return the indices of all duplicated array elements.
+
+    Parameters
+    ----------
+
+    arr : array-like object
+
+    Returns
+    -------
+
+    idx : NumPy array
+        An array containing the indices of the duplicated elements
+
+    Examples
+    --------
+
+    >>> from root_numpy import dup_idx
+    >>> dup_idx([1, 2, 3, 4, 5])
+    array([], dtype=int64)
+    >>> dup_idx([1, 2, 3, 4, 5, 5])
+    array([4, 5])
+    >>> dup_idx([1, 2, 3, 4, 5, 5, 1])
+    array([0, 4, 5, 6])
+
+    """
+    _, b = np.unique(arr, return_inverse=True)
+    return np.nonzero(np.logical_or.reduce(
+        b[:, np.newaxis] == np.nonzero(np.bincount(b) > 1),
+        axis=1))[0]

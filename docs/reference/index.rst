@@ -31,6 +31,7 @@ what they are and what they do.
    rec2array
    rec_stack
    stretch
+   dup_idx
    blockwise_inner_join
 
 .. _conversion_table:
