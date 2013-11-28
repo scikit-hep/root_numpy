@@ -1,5 +1,4 @@
 import numpy as np
-import numpy.lib.recfunctions as nprf
 from _librootnumpy import blockwise_inner_join
 
 __all__ = [
