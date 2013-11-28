@@ -23,7 +23,7 @@ def rec2array(rec, fields=None):
     """
     Convert a record array into a ndarray with a homogeneous data type.
 
-    Paramaters
+    Parameters
     ----------
 
     rec : NumPy record/structured array
