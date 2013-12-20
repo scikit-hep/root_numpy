@@ -4,6 +4,7 @@ from _tree import (
     array2tree, array2root,
     list_trees, list_branches, list_structures)
 from _hist import fill_hist
+from _graph import fill_graph
 from _sample import random_sample
 from _array import array
 from _matrix import matrix
@@ -20,8 +21,8 @@ __all__ = [
     'tree2rec',
     'array2tree',
     'array2root',
-    'fill_array',
     'fill_hist',
+    'fill_graph',
     'random_sample',
     'array',
     'matrix',

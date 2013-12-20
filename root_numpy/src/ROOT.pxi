@@ -112,6 +112,16 @@ cdef extern from "TH3.h":
         int Fill(double x, double y, double z)
         int Fill(double x, double y, double z, double w)
 
+cdef extern from "TGraph.h":
+    cdef cppclass TGraph:
+        void Set(int n)
+        void SetPoint(int i, double x, double y)
+
+cdef extern from "TGraph2D.h":
+    cdef cppclass TGraph2D:
+        void Set(int n)
+        void SetPoint(int i, double x, double y, double z)
+
 cdef extern from "TArrayD.h":
     cdef cppclass TArrayD:
         int GetSize()

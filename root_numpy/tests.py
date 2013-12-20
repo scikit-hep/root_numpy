@@ -8,7 +8,11 @@ from numpy.lib import recfunctions
 from numpy.testing import assert_array_equal
 
 import ROOT
-from ROOT import TChain, TFile, TTree, TH1D, TH2D, TH3D, TF1, TF2, TF3
+from ROOT import (
+    TChain, TFile, TTree,
+    TH1D, TH2D, TH3D,
+    TGraph, TGraph2D,
+    TF1, TF2, TF3)
 
 import root_numpy as rnp
 from root_numpy.testdata import get_filepath, get_file
@@ -336,6 +340,31 @@ def test_fill_hist():
     h = list()
     a = np.random.randn(100)
     assert_raises(TypeError, rnp.fill_hist, h, a)
+
+
+def test_fill_graph():
+    np.random.seed(0)
+    data2D = np.random.randn(1E6, 2)
+    data3D = np.random.randn(1E4, 3)
+
+    graph = TGraph()
+    rnp.fill_graph(graph, data2D)
+
+    graph2d = TGraph2D()
+    rnp.fill_graph(graph2d, data3D)
+
+    # array not 2-d
+    for g in (graph, graph2d):
+        assert_raises(ValueError, rnp.fill_graph, g, np.random.randn(1E4))
+
+    # length of second axis does not match dimensionality of histogram
+    for g in (graph, graph2d):
+        assert_raises(ValueError, rnp.fill_graph, g, np.random.randn(1E4, 4))
+
+    # wrong type
+    h = list()
+    a = np.random.randn(100)
+    assert_raises(TypeError, rnp.fill_graph, h, a)
 
 
 def test_stretch():
