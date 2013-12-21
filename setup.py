@@ -95,6 +95,7 @@ setup(
     long_description=''.join(open('README.rst').readlines()[7:]),
     author='the rootpy developers',
     author_email='rootpy-dev@googlegroups.com',
+    license='MIT',
     url='http://rootpy.github.io/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-%s.tar.gz' % __version__,
