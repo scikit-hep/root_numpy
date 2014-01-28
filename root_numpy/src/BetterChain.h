@@ -104,13 +104,13 @@ class BetterChain
             return load;
         }
 
-        long LoadTree(long entry)
+        long long LoadTree(long entry)
         {
             if (!fChain)
             {
                 return -5;
             }
-            long load = fChain->LoadTree(entry);
+            long long load = fChain->LoadTree(entry);
             if (load < 0)
             {
                 return load;
@@ -245,7 +245,7 @@ class BetterChain
             }
         }
 
-        int GetEntries()
+        long long GetEntries()
         {
             return fChain->GetEntries();
         }
@@ -310,7 +310,7 @@ class BetterChain
 
         TTree* fChain;
         int fCurrent;
-        int ientry;
+        long ientry;
         MiniNotify* notifier;
         std::vector<TTreeFormula*> formulae;
         std::map<std::string, bool> original_branch_status;
