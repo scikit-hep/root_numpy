@@ -112,7 +112,7 @@ cdef parse_tree_structure(TTree* tree):
 # given numelement and size of each element
 # and write it to buffer
 cdef inline int create_numpyarray(
-        void* buffer, void* src, int typecode, int numele, int elesize):
+        void* buffer, void* src, int typecode, unsigned long numele, int elesize):
     cdef np.npy_intp dims[1]
     dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, typecode, 0)
@@ -122,7 +122,7 @@ cdef inline int create_numpyarray(
     Py_INCREF(tmp)
 
     # copy to tmp.data
-    cdef int nbytes = numele * elesize
+    cdef unsigned long nbytes = numele * elesize
     memcpy(tmp.data, src, nbytes)
 
     # now write PyObject* to buffer
@@ -133,7 +133,7 @@ cdef inline int create_numpyarray(
 
 # special treatment for vector<bool>
 cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
-    cdef int numele = src.size()
+    cdef unsigned long numele = src.size()
     cdef np.npy_intp dims[1]
     dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
@@ -143,7 +143,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     Py_INCREF(tmp)
 
     # can't use memcpy here...
-    cdef int i
+    cdef unsigned long i
     for i from 0 <= i < numele:
         tmp[i] = src.at(i)
 
@@ -236,7 +236,7 @@ cdef cppclass VectorConverter[T](VectorConverterBase):
         this.nptypecode = info[2]
     int write(Column* col, void* buffer):
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
-        cdef int numele = tmp.size()
+        cdef unsigned long numele = tmp.size()
         # check cython auto generate code
         # if it really does &((*tmp)[0])
         cdef T* fa = this.v2a.convert(tmp)
@@ -331,7 +331,7 @@ cdef Converter* find_converter_by_typename(string typename):
 
 cdef np.ndarray init_array(vector[Column*]& columns,
                            vector[Converter*]& cv,
-                           int entries,
+                           unsigned long entries,
                            include_weight,
                            weight_name):
     cdef Column* this_col
@@ -384,7 +384,7 @@ cdef object tree2array(TTree* tree, branches, selection,
 
     # list of converter in the same order
     cdef Converter* conv
-    cdef int numcol
+    cdef unsigned long numcol
     cdef void* dataptr
     cdef np.ndarray arr
     cdef int nb
@@ -606,10 +606,10 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     cdef auto_ptr[NP2CConverter] tmp
     cdef unsigned int icv = 0
     cdef int icol
-    cdef int idata
-    cdef int ipos
-    cdef int arr_len = arr.shape[0]
-    cdef int pos_len = 0
+    cdef long arr_len = arr.shape[0]
+    cdef long idata
+    cdef unsigned long pos_len = 0
+    cdef unsigned long ipos
     cdef void* source = NULL
     cdef void* thisrow = NULL
     cdef NP2CConverter* tmpcv

@@ -123,19 +123,19 @@ cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
                            np.ndarray[np.int_t] repeat_indices,
                            np.ndarray[np.int_t] stretch_indices,
                            np.ndarray[np.int_t] right_indices):
-    cdef int ndata = len(data)
+    cdef long ndata = len(data)
     cdef np.ndarray first_right = data[right[0]]
-    cdef np.ndarray good_fk_index = np.empty(ndata,'O')
+    cdef np.ndarray good_fk_index = np.empty(ndata, 'O')
     
-    cdef int nresult = 0
-    cdef int i_data = 0
-    cdef int max_fks
+    cdef long nresult = 0
+    cdef long i_data = 0
+    cdef long max_fks
     cdef np.ndarray[np.int_t] good_index
     
     for i_data in range(ndata):
         max_fks = len(first_right[i_data])
         fks = fk[i_data]
-        good_index = np.flatnonzero((fks>=0) & (fks<max_fks))
+        good_index = np.flatnonzero((fks >= 0) & (fks < max_fks))
         nresult += len(good_index)
         good_fk_index[i_data] = good_index
     
@@ -150,24 +150,24 @@ cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
             np.array(map(ret.dtype.names.index, right) , np.int)
     cdef int fk_result_index = ret.dtype.names.index(fk_name)
     
-    cdef int nrepeat = len(repeat_indices)
-    cdef int nstretch = len(stretch_indices)
-    cdef int nright = len(right_indices)
+    cdef long nrepeat = len(repeat_indices)
+    cdef long nstretch = len(stretch_indices)
+    cdef long nright = len(right_indices)
     
-    cdef int left_good_index = 0
-    cdef int right_good_index = 0
+    cdef long left_good_index = 0
+    cdef long right_good_index = 0
     
-    cdef int i_land = 0
-    cdef int i_source = 0
+    cdef long i_land = 0
+    cdef long i_source = 0
     
-    cdef int i_repeat = 0
-    cdef int i_stretch = 0
-    cdef int i_right = 0
+    cdef long i_repeat = 0
+    cdef long i_stretch = 0
+    cdef long i_right = 0
     #let's do the real join
-    cdef int i_ret = 0
-    cdef int i_fk = 0
+    cdef long i_ret = 0
+    cdef long i_fk = 0
     
-    cdef int this_n_good_fk = 0
+    cdef long this_n_good_fk = 0
     
     cdef np.ndarray[np.int_t] tmp_good_fk_index
     cdef np.ndarray tmp_fk
@@ -197,7 +197,7 @@ cdef _vector_fk_inner_join(np.ndarray data, right,  np.ndarray fk, fk_name,
                 ret[i_ret][i_land] = data[i_data][i_source][right_good_index] #<< make this faster
             
             ret[i_ret][fk_result_index] = right_good_index
-            i_ret+=1
+            i_ret += 1
     return ret
 
 
@@ -207,16 +207,17 @@ cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray fk,
                            np.ndarray[np.int_t] repeat_indices, 
                            np.ndarray[np.int_t] stretch_indices, 
                            np.ndarray[np.int_t] right_indices):
-    cdef int ndata = len(data)
+    cdef long ndata = len(data)
     cdef np.ndarray first_right = data[right[0]]
     cdef np.ndarray[np.int8_t, ndim=1] fk_index_good = np.empty(ndata,np.int8)
+    cdef long max_fks
     cdef int fks = 0
     
     nresult = 0
     for i_data in range(ndata):
         max_fks = len(first_right[i_data])
         fks = fk[i_data]
-        fk_index_good[i_data] = (fks>=0) and (fks<max_fks)
+        fk_index_good[i_data] = (fks >= 0) and (fks < max_fks)
     
     nresult = np.count_nonzero(fk_index_good)
     
@@ -233,14 +234,14 @@ cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray fk,
     
     #let's do the real join
     i_ret = 0
-    cdef int nrepeat = len(repeat_indices)
-    cdef int nright = len(right_indices)
-    
-    cdef int i_repeat = 0
-    cdef int i_right = 0
-    cdef int i_land = 0
-    cdef int i_source = 0
-    cdef int right_good_index=0
+    cdef long nrepeat = len(repeat_indices)
+    cdef long nright = len(right_indices)
+    cdef long i_repeat = 0
+    cdef long i_right = 0
+    cdef long i_land = 0
+    cdef long i_source = 0
+    cdef long right_good_index=0
+
     for i_data in range(ndata):
         if fk_index_good[i_data]:
             
@@ -257,5 +258,5 @@ cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray fk,
                 ret[i_ret][i_land] = data[i_data][i_source][right_good_index]
             
             ret[i_ret][fk_result_index] = right_good_index
-            i_ret+=1
+            i_ret += 1
     return ret
