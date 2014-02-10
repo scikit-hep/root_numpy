@@ -7,15 +7,23 @@ except ImportError:
         "numpy cannot be imported. numpy must be installed "
         "prior to installing root_numpy")
 
+try:
+    # try to use setuptools if installed
+    from pkg_resources import parse_version, get_distribution
+    from setuptools import setup, Extension
+    if get_distribution('setuptools').parsed_version < parse_version('0.7'):
+        # before merge with distribute
+        raise ImportError
+except ImportError:
+    # fall back on distutils
+    from distutils.core import setup, Extension
+
 import os
 import sys
 import subprocess
 from glob import glob
 
-from distutils.core import setup, Extension
-import distutils.util
-
-# Prevent distutils from trying to create hard links
+# Prevent setup from trying to create hard links
 # which are not allowed on AFS between directories.
 # This is a hack to force copying.
 try:
@@ -110,6 +118,7 @@ setup(
     ext_modules=[
         librootnumpy,
     ],
+    zip_safe=False,
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Utilities",
