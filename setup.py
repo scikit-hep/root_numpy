@@ -118,6 +118,7 @@ setup(
     ext_modules=[
         librootnumpy,
     ],
+    zip_safe=False,
     classifiers=[
         "Programming Language :: Python",
         "Topic :: Utilities",
