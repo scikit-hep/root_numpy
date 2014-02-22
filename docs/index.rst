@@ -4,7 +4,7 @@
    <h2 class="main">An interface between ROOT and NumPy</h2>
 
 .. include:: ../README.rst
-   :start-line: 17
+   :start-line: 16
 
 Documentation
 -------------
