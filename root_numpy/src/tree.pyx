@@ -14,6 +14,7 @@ TYPES = {
     TypeName[unsigned_long_long]().name: ('unsigned long long', np.dtype(np.ulonglong), np.NPY_ULONGLONG),
     TypeName[float]().name:              ('float',              np.dtype(np.float32),   np.NPY_FLOAT32),
     TypeName[double]().name:             ('double',             np.dtype(np.float64),   np.NPY_FLOAT64),
+    TypeName[string]().name:             ('string',             np.dtype(np.string_),   np.NPY_STRING),
 }
 
 TYPES_NUMPY2ROOT = {
@@ -30,6 +31,7 @@ TYPES_NUMPY2ROOT = {
     np.dtype(np.float):     (8, 'D'),
     np.dtype(np.float32):   (4, 'F'),
     np.dtype(np.float64):   (8, 'D'),
+#    np.dtype(np.string_):   (18, 'S'),
 }
 
 
@@ -242,6 +244,52 @@ cdef cppclass VectorConverter[T](VectorConverterBase):
         cdef T* fa = this.v2a.convert(tmp)
         return create_numpyarray(buffer, fa, this.nptypecode, numele, this.elesize)
 
+# added by Giordon Stark, <gstark@cern.ch>
+#       special thanks to @pingemi
+cdef cppclass VectorVectorConverter[T](VectorConverterBase):
+    int elesize
+    int nptypecode
+    Vector2Array[T] v2a
+    __init__():
+        cdef TypeName[T] ast = TypeName[T]()
+        info = TYPES[ast.name]
+        this.elesize = info[1].itemsize
+        this.nptypecode = info[2]
+    int write(Column* col, void* buffer):
+        cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
+        #this will hold number of subvectors
+        cdef unsigned long numele
+
+        cdef T* fa
+
+        #these are defined solely for the outer array wrapper
+        cdef int objsize = np.dtype('O').itemsize
+        cdef int objtypecode = np.NPY_OBJECT
+        # it seems *tmp is exposed via tmp[0]
+        # we want to create an outer array container that dataptr points to, containing pointers
+        #    from create_numpyarray()
+        numele = tmp[0].size()
+
+        #define an (numele)-dimensional outer array to hold our subvectors fa
+        cdef np.npy_intp dims[1]
+        dims[0] = numele
+        cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
+        cdef PyObject* outerobj = <PyObject*> outer # borrow ref
+        # increase one since we are putting in buffer directly
+        Py_INCREF(outer)
+        # now write PyObject* to buffer
+        memcpy(buffer, &outerobj, sizeof(PyObject*))
+
+        # build a dataptr pointing to outer, so we can shift and write each of the subvectors
+        cdef char* dataptr = <char*> outer.data
+
+        # loop through all subvectors
+        for i in xrange(numele):
+          fa = this.v2a.convert(&tmp[0][i])
+          # for some reason, shift isn't working, so we're directly shifting it ourselves
+          #dataptr = shift(&dataptr, objsize)
+          create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode, tmp[0][i].size(), this.elesize)
+        return sizeof(outerobj)
 
 cdef cppclass VectorBoolConverter(VectorConverterBase):
     __init__():
@@ -287,7 +335,16 @@ CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<float>', new VectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
-
+#adding in pieces for vector<vector<T>> where T in [int, float, double]
+#    vector<vector<string> > doesn't work -- just returns blanks, so it's with type-casting
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<int> >', new VectorVectorConverter[int]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<float> >', new VectorVectorConverter[float]()))
+#CONVERTERS.insert(CONVERTERS_ITEM(
+#    'vector<vector<string> >', new VectorVectorConverter[string]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<double> >', new VectorVectorConverter[double]()))
 
 cdef Converter* find_converter(Column* col):
     cdef ColumnType ct = col.coltype
