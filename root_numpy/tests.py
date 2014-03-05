@@ -228,8 +228,7 @@ def test_specific_branch():
 
 
 def test_vector():
-    #a = rnp.root2rec(load('hvector.root'))
-    a = rnp.root2rec('testdata/hvector.root')
+    a = rnp.root2rec(load('hvector.root'))
     types = [('v_i', 'O'),\
              ('v_f', 'O'),\
              ('v_F', 'O'),\
