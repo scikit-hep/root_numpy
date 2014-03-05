@@ -44,8 +44,8 @@ At the core of root_numpy are powerful and flexible functions for converting
 or `structured arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_
 as well as converting NumPy arrays back into ROOT TTrees.
 root_numpy can convert branches of basic types such as bool, int, float,
-double, etc. as well as variable and fixed-length 1D arrays and vectors
-of basic types.
+double, etc. as well as variable and fixed-length 1D arrays and 1D or 2D vectors
+of basic types. It does not parse strings yet.
 
 For example, get a NumPy structured or record array from a TTree
 (copy and paste the following examples into your Python prompt):
