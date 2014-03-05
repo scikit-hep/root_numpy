@@ -18,6 +18,13 @@ void hvector()
    std::vector<long> v_l;
    std::vector<char> v_c;
    std::vector<bool> v_b;
+   //add in vector<vector<obj>>
+   std::vector<std::vector<int> > vv_i;
+   std::vector<std::vector<float> > vv_f;
+   std::vector<std::vector<Float_t> > vv_F;
+   std::vector<std::vector<double> > vv_d;
+   std::vector<std::vector<long> > vv_l;
+   std::vector<std::vector<char> > vv_c;
 
    // Create a TTree
    TTree *t = new TTree("tvec","Tree with vectors");
@@ -28,8 +35,16 @@ void hvector()
    t->Branch("v_l","std::vector<long>",&v_l);
    t->Branch("v_c","std::vector<char>",&v_c);
    t->Branch("v_b","std::vector<bool>",&v_b);
+   //add in vector<vector<>>
+   t->Branch("vv_i","std::vector<std::vector<int> >",&vv_i);
+   t->Branch("vv_f","std::vector<std::vector<float> >",&vv_f);
+   t->Branch("vv_F","std::vector<std::vector<Float_t> >",&vv_F);
+   t->Branch("vv_d","std::vector<std::vector<double> >",&vv_d);
+   t->Branch("vv_l","std::vector<std::vector<long> >",&vv_l);
+   t->Branch("vv_c","std::vector<std::vector<char> >",&vv_c);
 
-   for (Int_t i = 0; i < 100; i++) {
+
+   for (Int_t i = 1; i <= 100; i++) {
       Int_t npx = i%10;
 
       v_i.clear();
@@ -39,6 +54,13 @@ void hvector()
       v_l.clear();
       v_c.clear();
       v_b.clear();
+      //Add in vector<vector<>>
+      vv_i.clear();
+      vv_f.clear();
+      vv_F.clear();
+      vv_d.clear();
+      vv_l.clear();
+      vv_c.clear();
 
       for (Int_t j = 0; j < npx; ++j) {
 
@@ -49,6 +71,14 @@ void hvector()
          v_l.push_back(4*i+j);
          v_c.push_back(i+j);
          v_b.push_back(j % 2 == 0);
+
+         //push back vectors, not values
+         vv_i.push_back(v_i);
+         vv_f.push_back(v_f);
+         vv_F.push_back(v_F);
+         vv_d.push_back(v_d);
+         vv_l.push_back(v_l);
+         vv_c.push_back(v_c);
       }
       t->Fill();
    }
