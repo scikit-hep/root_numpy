@@ -255,19 +255,20 @@ cdef cppclass VectorVectorConverter[T](VectorConverterBase):
         this.nptypecode = info[2]
     int write(Column* col, void* buffer):
         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
+
         #this will hold number of subvectors
         cdef unsigned long numele
-
         cdef T* fa
 
         #these are defined solely for the outer array wrapper
         cdef int objsize = np.dtype('O').itemsize
         cdef int objtypecode = np.NPY_OBJECT
+
         # it seems *tmp is exposed via tmp[0]
-        # we want to create an outer array container that dataptr points to, containing pointers
-        #    from create_numpyarray()
         numele = tmp[0].size()
 
+        # we want to create an outer array container that dataptr points to, containing pointers
+        #    from create_numpyarray()
         #define an (numele)-dimensional outer array to hold our subvectors fa
         cdef np.npy_intp dims[1]
         dims[0] = numele
@@ -283,10 +284,10 @@ cdef cppclass VectorVectorConverter[T](VectorConverterBase):
 
         # loop through all subvectors
         for i in xrange(numele):
-          fa = this.v2a.convert(&tmp[0][i])
-          # for some reason, shift isn't working, so we're directly shifting it ourselves
-          #dataptr = shift(&dataptr, objsize)
-          create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode, tmp[0][i].size(), this.elesize)
+            fa = this.v2a.convert(&tmp[0][i])
+            # for some reason, shift isn't working, so we're directly shifting it ourselves
+            #dataptr = shift(&dataptr, objsize)
+            create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode, tmp[0][i].size(), this.elesize)
         return sizeof(outerobj)
 
 cdef cppclass VectorBoolConverter(VectorConverterBase):
