@@ -244,8 +244,6 @@ cdef cppclass VectorConverter[T](VectorConverterBase):
         cdef T* fa = this.v2a.convert(tmp)
         return create_numpyarray(buffer, fa, this.nptypecode, numele, this.elesize)
 
-# added by Giordon Stark, <gstark@cern.ch>
-#       special thanks to @pingemi
 cdef cppclass VectorVectorConverter[T](VectorConverterBase):
     int elesize
     int nptypecode
@@ -335,14 +333,29 @@ CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<float>', new VectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
-#adding in pieces for vector<vector<T>> where T in [int, float, double]
 #    vector<vector<string> > doesn't work -- just returns blanks, so it's with type-casting
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<char> >', new VectorVectorConverter[char]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<short> >', new VectorVectorConverter[short]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<int> >', new VectorVectorConverter[int]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<long> >', new VectorVectorConverter[long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<float> >', new VectorVectorConverter[float]()))
-#CONVERTERS.insert(CONVERTERS_ITEM(
-#    'vector<vector<string> >', new VectorVectorConverter[string]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<double> >', new VectorVectorConverter[double]()))
 
