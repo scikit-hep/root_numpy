@@ -68,6 +68,5 @@ def fill_hist(hist, array, weights=None, return_indices=False):
             raise ValueError("array must be 1-dimensional")
         return _librootnumpy.fill_h1(
             ROOT.AsCObject(hist), array, weights, return_indices)
-    else:
-        raise TypeError(
-            "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
+    raise TypeError(
+        "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")

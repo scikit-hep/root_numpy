@@ -85,42 +85,56 @@ cdef extern from "TClassEdit.h" namespace "TClassEdit":
 cdef extern from "TF1.h":
     cdef cppclass TF1:
         double GetRandom()
+        double Eval(double x)
 
 cdef extern from "TF2.h":
     cdef cppclass TF2:
         double GetRandom2(double& x, double& y)
+        double Eval(double x, double y)
 
 cdef extern from "TF3.h":
     cdef cppclass TF3:
         double GetRandom3(double& x, double& y, double& z)
+        double Eval(double x, double y, double z)
 
 cdef extern from "TH1.h":
     cdef cppclass TH1:
         double GetRandom()
         int Fill(double x)
         int Fill(double x, double w)
+        int FindBin(double x)
+        double GetBinContent(int bin)
 
 cdef extern from "TH2.h":
     cdef cppclass TH2:
         double GetRandom2(double& x, double& y)
         int Fill(double x, double y)
         int Fill(double x, double y, double w)
+        int FindBin(double x, double y)
+        double GetBinContent(int bin)
 
 cdef extern from "TH3.h":
     cdef cppclass TH3:
         double GetRandom3(double& x, double& y, double& z)
         int Fill(double x, double y, double z)
         int Fill(double x, double y, double z, double w)
+        int FindBin(double x, double y, double z)
+        double GetBinContent(int bin)
 
 cdef extern from "TGraph.h":
     cdef cppclass TGraph:
         void Set(int n)
         void SetPoint(int i, double x, double y)
+        double Eval(double x)
 
 cdef extern from "TGraph2D.h":
     cdef cppclass TGraph2D:
         void Set(int n)
         void SetPoint(int i, double x, double y, double z)
+
+cdef extern from "TSpline.h":
+    cdef cppclass TSpline:
+        double Eval(double x)
 
 cdef extern from "TArrayD.h":
     cdef cppclass TArrayD:

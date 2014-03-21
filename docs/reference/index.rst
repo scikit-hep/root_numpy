@@ -26,6 +26,7 @@ what they are and what they do.
    fill_hist
    fill_graph
    random_sample
+   evaluate
    list_trees
    list_branches
    list_structures
