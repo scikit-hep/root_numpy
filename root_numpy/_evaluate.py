@@ -33,6 +33,17 @@ def evaluate(root_object, array):
     ValueError
         If the shape of the array is not compatible with the dimensionality
         of the ROOT object being evaluated.
+
+    Examples
+    --------
+    >>> from root_numpy import evaluate
+    >>> from ROOT import TF1, TF2
+    >>> func = TF1("f1", "x*x")
+    >>> evaluate(func, [1, 2, 3, 4])
+    array([  1.,   4.,   9.,  16.])
+    >>> func = TF2("f2", "x*y")
+    >>> evaluate(func, [[1, 1], [1, 2], [3, 1]])
+    array([ 1.,  2.,  3.])
     """
     import ROOT
     array = np.asarray(array, dtype=np.double)
