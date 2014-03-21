@@ -688,3 +688,55 @@ def test_stack():
 def test_dup_idx():
     a = [1, 2, 3, 4, 3, 2]
     assert_array_equal(rnp.dup_idx(a), [1, 2, 4, 5])
+
+
+def test_evaluate():
+    # create functions and histograms
+    f1 = TF1("f1", "x")
+    f2 = TF2("f2", "x*y")
+    f3 = TF3("f3", "x*y*z")
+    h1 = TH1D("h1", "", 10, 0, 1)
+    h1.FillRandom("f1")
+    h2 = TH2D("h2", "", 10, 0, 1, 10, 0, 1)
+    h2.FillRandom("f2")
+    h3 = TH3D("h3", "", 10, 0, 1, 10, 0, 1, 10, 0, 1)
+    h3.FillRandom("f3")
+    # generate random arrays
+    arr_1d = np.random.rand(5)
+    arr_2d = np.random.rand(5, 2)
+    arr_3d = np.random.rand(5, 3)
+    # evaluate the functions
+    assert_array_equal(rnp.evaluate(f1, arr_1d), map(f1.Eval, arr_1d))
+    assert_array_equal(rnp.evaluate(f2, arr_2d),
+                       [f2.Eval(*x) for x in arr_2d])
+    assert_array_equal(rnp.evaluate(f3, arr_3d),
+                       [f3.Eval(*x) for x in arr_3d])
+    # evaluate the histograms
+    assert_array_equal(rnp.evaluate(h1, arr_1d),
+                       [h1.GetBinContent(h1.FindBin(x)) for x in arr_1d])
+    assert_array_equal(rnp.evaluate(h2, arr_2d),
+                       [h2.GetBinContent(h2.FindBin(*x)) for x in arr_2d])
+    assert_array_equal(rnp.evaluate(h3, arr_3d),
+                       [h3.GetBinContent(h3.FindBin(*x)) for x in arr_3d])
+    # create a graph
+    g = TGraph(2)
+    g.SetPoint(0, 0, 1)
+    g.SetPoint(1, 1, 2)
+    assert_array_equal(rnp.evaluate(g, [0, .5, 1]), [1, 1.5, 2])
+    from ROOT import TSpline3
+    s = TSpline3("spline", g)
+    assert_array_equal(rnp.evaluate(s, [0, .5, 1]), map(s.Eval, [0, .5, 1]))
+    # test exceptions
+    assert_raises(TypeError, rnp.evaluate, object(), [1, 2, 3])
+    assert_raises(ValueError, rnp.evaluate, h1, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, h2, arr_3d)
+    assert_raises(ValueError, rnp.evaluate, h2, arr_1d)
+    assert_raises(ValueError, rnp.evaluate, h3, arr_1d)
+    assert_raises(ValueError, rnp.evaluate, h3, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, f1, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, f2, arr_3d)
+    assert_raises(ValueError, rnp.evaluate, f2, arr_1d)
+    assert_raises(ValueError, rnp.evaluate, f3, arr_1d)
+    assert_raises(ValueError, rnp.evaluate, f3, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, g, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, s, arr_2d)

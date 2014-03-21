@@ -8,6 +8,7 @@ from _graph import fill_graph
 from _sample import random_sample
 from _array import array
 from _matrix import matrix
+from _evaluate import evaluate
 from _warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
 from _utils import (
     stretch, blockwise_inner_join,
@@ -26,6 +27,7 @@ __all__ = [
     'random_sample',
     'array',
     'matrix',
+    'evaluate',
     'list_trees',
     'list_branches',
     'list_structures',
