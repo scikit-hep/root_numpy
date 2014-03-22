@@ -433,7 +433,7 @@ pre, #_fontwidthtest {
     font-family: 'Consolas', 'Deja Vu Sans Mono',
                  'Bitstream Vera Sans Mono', monospace;
     margin: 1em 2em;
-    font-size: 0.95em;
+    font-size: 14px;
     letter-spacing: 0.015em;
     line-height: 120%;
     padding: 0.5em;
@@ -505,7 +505,7 @@ div.admonition p.admonition-title,
 div.warning p.admonition-title,
 div.sidebar p.sidebar-title {
     margin: 0;
-    padding: 0.1em 0 0.1em 0.5em;
+    padding: 0.1em 0.5em 0.1em 0.5em;
     color: white;
     font-weight: bold;
     font-size: 1.1em;
@@ -601,6 +601,177 @@ p {
 
 .section p img {
     margin: 1em 2em;
+}
+
+/* TWEAKS ----------------------------------------------------------------------*/
+
+tt {
+    color: inherit;
+    font: inherit;
+}
+
+tt.literal {
+    font-family: monospace;
+    padding-left: 2px;
+    background-color: rgb(242, 242, 242);
+}
+
+a tt.literal {
+    border-bottom: none;
+    background-color: inherit;
+}
+
+tt.xref {
+    font-family: inherit;
+    border-bottom: none;
+    background-color: inherit;
+    font-weight: normal;
+    padding-left: 0px;
+}
+
+tt.descname {
+    font-size: 16px;
+}
+
+dl.class > dt > em {
+    font-weight: normal;
+}
+
+dl.function > dt > em {
+    font-weight: normal;
+}
+
+dl.method > dt > em {
+    font-weight: normal;
+}
+
+/*
+ * Field lists
+ */
+
+table.field-list {
+    border-collapse: collapse;
+    border-spacing: 5px;
+    margin-left: 1px;
+    border-left: 5px solid rgb(238, 238, 238) !important;
+}
+
+table.field-list th.field-name {
+    display: inline-block;
+    padding: 1px 8px 1px 5px;
+    white-space: nowrap;
+    background-color: rgb(238, 238, 238);
+}
+
+table.field-list td.field-body {
+    border-left: none !important;
+}
+
+table.field-list td.field-body > p {
+    font-style: italic;
+}
+
+table.field-list td.field-body > p > strong {
+    font-style: normal;
+}
+
+td.field-body blockquote {
+    border-left: none;
+    margin: 0;
+    padding-left: 30px;
+}
+
+td.field-body blockquote p,
+dl.class blockquote p,
+dl.function blockquote p,
+dl.method blockquote p 
+{
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+/*
+ * Headers
+ */
+
+h1 a { color: rgb(85, 85, 85); }
+h2 a { color: rgb(85, 85, 85); }
+h3 a { color: rgb(85, 85, 85); }
+h4 a { color: rgb(85, 85, 85); }
+h5 a { color: rgb(85, 85, 85); }
+h6 a { color: rgb(85, 85, 85); }
+
+h1 tt { font: inherit; border-bottom: none; }
+h2 tt { font: inherit; border-bottom: none; }
+h3 tt { font: inherit; border-bottom: none; }
+h4 tt { font: inherit; border-bottom: none; }
+h5 tt { font: inherit; border-bottom: none; }
+h6 tt { font: inherit; border-bottom: none; }
+
+p.rubric {
+    color: rgb(85, 85, 85);
+    font-size: 120%;
+    font-weight: normal;
+    border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+
+/*
+ * Tables
+ */
+
+table.citation {
+    border: none;
+}
+
+table.docutils td, table.docutils th {
+    border: none;
+}
+
+table.docutils {
+    margin-bottom: 9.5px;
+}
+
+
+/*
+ * Admonitions
+ */
+
+p.admonition-title {
+    display: inline;
+}
+
+p.admonition-title:after {
+    content: ":";
+}
+
+div.seealso {
+    background-color: #ffc;
+    border: 1px solid #ff6;
+}
+
+div.seealso dt {
+    float: left;
+    clear: left;
+    min-width: 4em;
+    padding-right: 1em;
+}
+
+div.seealso dd {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+div.warning {
+    background-color: #ffe4e4;
+    border: 1px solid #f66;
+}
+
+div.note {
+    background-color: #eee;
+    border: 1px solid #ccc;
 }
 
 
