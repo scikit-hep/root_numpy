@@ -472,6 +472,10 @@ def test_blockwise_inner_join():
     a1 = rnp.blockwise_inner_join(
         test_data, ['sl', 'al'], test_data['fk'], ['ar'])
 
+    # specify fk with string
+    a1 = rnp.blockwise_inner_join(
+        test_data, ['sl', 'al'], 'fk', ['ar'])
+
     exp1 = np.array([
         (1.0, 11, 2, 1),
         (1.0, 12, 1, 0),
@@ -481,7 +485,7 @@ def test_blockwise_inner_join():
             ('sl', '<f8'),
             ('al', '<i8'),
             ('ar', '<i8'),
-            ('fk1', '<i8')])
+            ('fk', '<i8')])
     assert_array_equal(a1, exp1, verbose=True)
 
     # vector join with force repeat
@@ -496,7 +500,7 @@ def test_blockwise_inner_join():
             ('sl', '<f8'),
             ('al', '|O8'),
             ('ar', '<i8'),
-            ('fk1', '<i8')])
+            ('fk', '<i8')])
     assert_equal(str(a2), str(exp2)) # numpy testing doesn't like subarray
     assert_equal(a2.dtype, exp2.dtype)
 
@@ -510,7 +514,7 @@ def test_blockwise_inner_join():
             ('sl', '<f8'),
             ('al', '|O8'),
             ('ar', '<i8'),
-            ('fk1', '<i8')])
+            ('fk', '<i8')])
     assert_equal(str(a3), str(exp3)) # numpy testing doesn't like subarray
     assert_equal(a3.dtype, exp3.dtype)
 

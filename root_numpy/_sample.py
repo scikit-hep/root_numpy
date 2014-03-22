@@ -7,19 +7,14 @@ __all__ = [
 
 
 def random_sample(root_object, n_samples, seed=None):
-    """
-    Construct a NumPy array from a random sampling of a ROOT function or
-    histogram.
+    """Create a random array by sampling a ROOT function or histogram.
 
     Parameters
     ----------
-
     root_object : a ROOT function (TF1, TF2, TF3) or histogram (TH1, TH2, TH3)
         The ROOT function or histogram to sample.
-
     n_samples : positive int
         The number of random samples to generate.
-
     seed : None, positive int or 0, optional (default=None)
         The random seed, set via ROOT.gRandom.SetSeed(seed):
         http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed
@@ -28,7 +23,6 @@ def random_sample(root_object, n_samples, seed=None):
 
     Returns
     -------
-
     array : a numpy array
         A numpy array with a shape corresponding to the dimensionality
         of the function or histogram. A flat array is returned when sampling
@@ -37,7 +31,6 @@ def random_sample(root_object, n_samples, seed=None):
 
     Examples
     --------
-
     >>> from root_numpy import random_sample
     >>> from ROOT import TF1, TF2, TF3
     >>> random_sample(TF1("f1", "TMath::DiLog(x)"), 1E4, seed=1)

@@ -8,9 +8,7 @@ __all__ = [
 
 
 def evaluate(root_object, array):
-    """
-    Evaluate a ROOT histogram, function, graph, or spline at all values
-    in a NumPy array and return the resulting array.
+    """Evaluate a ROOT histogram, function, graph, or spline over an array.
 
     Parameters
     ----------
@@ -44,6 +42,7 @@ def evaluate(root_object, array):
     >>> func = TF2("f2", "x*y")
     >>> evaluate(func, [[1, 1], [1, 2], [3, 1]])
     array([ 1.,  2.,  3.])
+
     """
     import ROOT
     array = np.asarray(array, dtype=np.double)

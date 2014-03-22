@@ -8,30 +8,24 @@ __all__ = [
 
 
 def fill_hist(hist, array, weights=None, return_indices=False):
-    """
-    Fill a ROOT histogram with a NumPy array.
+    """Fill a ROOT histogram with a NumPy array.
 
     Parameters
     ----------
-
     hist : a ROOT TH1, TH2, or TH3
         The ROOT histogram to fill.
-
     array : numpy array of shape [n_samples, n_dimensions]
         The values to fill the histogram with. The number of columns
         must match the dimensionality of the histogram. Supply a flat
         numpy array when filling a 1D histogram.
-
     weights : numpy array
         A flat numpy array of weights for each sample in ``array``.
-
     return_indices : bool, optional (default=False)
         If True then return an array of the bin indices filled for each element
         in ``array``.
 
     Returns
     -------
-
     indices : numpy array or None
         If ``return_indices`` is True, then return an array of the bin indices
         filled for each element in ``array`` otherwise return None.

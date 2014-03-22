@@ -7,24 +7,20 @@ __all__ = [
 
 
 def matrix(mat):
-    """
-    Convert a ROOT TMatrix into a NumPy matrix.
+    """Convert a ROOT TMatrix into a NumPy matrix.
 
     Parameters
     ----------
-
     mat : ROOT TMatrixT
         A ROOT TMatrixD or TMatrixF
 
     Returns
     -------
-
     mat : numpy.matrix
         A NumPy matrix
 
     Examples
     --------
-
     >>> from root_numpy import matrix
     >>> from ROOT import TMatrixD
     >>> a = TMatrixD(4, 4)
