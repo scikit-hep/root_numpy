@@ -8,15 +8,12 @@ __all__ = [
 
 
 def array(arr, copy=True):
-    """
-    Convert a ROOT TArray into a NumPy array.
+    """Convert a ROOT TArray into a NumPy array.
 
     Parameters
     ----------
-
     arr : ROOT TArray
         A ROOT TArrayD, TArrayF, TArrayL, TArrayI or TArrayS
-
     copy : bool, optional (default=True)
         If True (the default) then copy the underlying array, otherwise
         the NumPy array will view the same memory as the ROOT array.
@@ -28,7 +25,6 @@ def array(arr, copy=True):
 
     Examples
     --------
-
     >>> from root_numpy import array
     >>> from ROOT import TArrayD
     >>> a = TArrayD(5)

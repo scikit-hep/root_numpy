@@ -8,15 +8,12 @@ __all__ = [
 
 
 def fill_graph(graph, array):
-    """
-    Fill a ROOT graph with a NumPy array.
+    """Fill a ROOT graph with a NumPy array.
 
     Parameters
     ----------
-
     hist : a ROOT TGraph or TGraph2D
         The ROOT graph to fill.
-
     array : numpy array of shape [n_samples, n_dimensions]
         The values to fill the graph with. The number of columns
         must match the dimensionality of the graph.
