@@ -34,7 +34,7 @@ def evaluate_h3(hist,
 def evaluate_f1(func,
                 np.ndarray[np.double_t, ndim=1] array):
     # perform type checking on python side
-    cdef TF1* _func = <TF1*> PyCObject_AsVoidPtr(func)
+    cdef TFormula* _func = <TFormula*> PyCObject_AsVoidPtr(func)
     cdef long size = array.shape[0]
     cdef np.ndarray[np.double_t, ndim=1] values = np.empty(size, dtype=np.double)
     cdef long i
@@ -45,7 +45,7 @@ def evaluate_f1(func,
 def evaluate_f2(func,
                 np.ndarray[np.double_t, ndim=2] array):
     # perform type checking on python side
-    cdef TF2* _func = <TF2*> PyCObject_AsVoidPtr(func)
+    cdef TFormula* _func = <TFormula*> PyCObject_AsVoidPtr(func)
     cdef long size = array.shape[0]
     cdef np.ndarray[np.double_t, ndim=1] values = np.empty(size, dtype=np.double)
     cdef long i
@@ -56,12 +56,23 @@ def evaluate_f2(func,
 def evaluate_f3(func,
                 np.ndarray[np.double_t, ndim=2] array):
     # perform type checking on python side
-    cdef TF3* _func = <TF3*> PyCObject_AsVoidPtr(func)
+    cdef TFormula* _func = <TFormula*> PyCObject_AsVoidPtr(func)
     cdef long size = array.shape[0]
     cdef np.ndarray[np.double_t, ndim=1] values = np.empty(size, dtype=np.double)
     cdef long i
     for i from 0 <= i < size:
         values[i] = _func.Eval(array[i][0], array[i][1], array[i][2])
+    return values
+
+def evaluate_f4(func,
+                np.ndarray[np.double_t, ndim=2] array):
+    # perform type checking on python side
+    cdef TFormula* _func = <TFormula*> PyCObject_AsVoidPtr(func)
+    cdef long size = array.shape[0]
+    cdef np.ndarray[np.double_t, ndim=1] values = np.empty(size, dtype=np.double)
+    cdef long i
+    for i from 0 <= i < size:
+        values[i] = _func.Eval(array[i][0], array[i][1], array[i][2], array[i][3])
     return values
 
 def evaluate_graph(graph,
