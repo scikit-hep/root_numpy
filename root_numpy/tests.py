@@ -12,7 +12,7 @@ from ROOT import (
     TChain, TFile, TTree,
     TH1D, TH2D, TH3D,
     TGraph, TGraph2D,
-    TF1, TF2, TF3)
+    TF1, TF2, TF3, TFormula)
 
 import root_numpy as rnp
 from root_numpy.testdata import get_filepath, get_file
@@ -709,12 +709,23 @@ def test_evaluate():
     arr_1d = np.random.rand(5)
     arr_2d = np.random.rand(5, 2)
     arr_3d = np.random.rand(5, 3)
+    arr_4d = np.random.rand(5, 4)
     # evaluate the functions
     assert_array_equal(rnp.evaluate(f1, arr_1d), map(f1.Eval, arr_1d))
+    assert_array_equal(rnp.evaluate(f1.GetTitle(), arr_1d),
+                       map(f1.Eval, arr_1d))
     assert_array_equal(rnp.evaluate(f2, arr_2d),
+                       [f2.Eval(*x) for x in arr_2d])
+    assert_array_equal(rnp.evaluate(f2.GetTitle(), arr_2d),
                        [f2.Eval(*x) for x in arr_2d])
     assert_array_equal(rnp.evaluate(f3, arr_3d),
                        [f3.Eval(*x) for x in arr_3d])
+    assert_array_equal(rnp.evaluate(f3.GetTitle(), arr_3d),
+                       [f3.Eval(*x) for x in arr_3d])
+    # 4d formula
+    f4 = TFormula('test', 'x*y+z*t')
+    assert_array_equal(rnp.evaluate(f4, arr_4d),
+                       [f4.Eval(*x) for x in arr_4d])
     # evaluate the histograms
     assert_array_equal(rnp.evaluate(h1, arr_1d),
                        [h1.GetBinContent(h1.FindBin(x)) for x in arr_1d])
@@ -744,3 +755,7 @@ def test_evaluate():
     assert_raises(ValueError, rnp.evaluate, f3, arr_2d)
     assert_raises(ValueError, rnp.evaluate, g, arr_2d)
     assert_raises(ValueError, rnp.evaluate, s, arr_2d)
+    assert_raises(ValueError, rnp.evaluate, "f", arr_1d)
+    assert_raises(ValueError, rnp.evaluate, "x*y", arr_1d)
+    assert_raises(ValueError, rnp.evaluate, "x", arr_2d)
+    assert_raises(ValueError, rnp.evaluate, "x*y", arr_3d)

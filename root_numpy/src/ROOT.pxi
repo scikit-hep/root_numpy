@@ -72,6 +72,13 @@ cdef extern from "TList.h":
         TObject* At(int idx)
         int GetEntries()
 
+cdef extern from "TFormula.h":
+    cdef cppclass TFormula:
+        double Eval(double x)
+        double Eval(double x, double y)
+        double Eval(double x, double y, double z)
+        double Eval(double x, double y, double z, double t)
+
 cdef extern from "TTreeFormula.h":
     cdef cppclass TTreeFormula:
         TTreeFormula(const_char*, const_char*, TTree*)
