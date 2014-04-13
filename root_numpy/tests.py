@@ -11,6 +11,7 @@ import ROOT
 from ROOT import (
     TChain, TFile, TTree,
     TH1D, TH2D, TH3D,
+    TProfile, TProfile2D, TProfile3D,
     TGraph, TGraph2D,
     TF1, TF2, TF3, TFormula)
 
@@ -18,7 +19,8 @@ import root_numpy as rnp
 from root_numpy.testdata import get_filepath, get_file
 from root_numpy.extern.ordereddict import OrderedDict
 
-from nose.tools import raises, assert_raises, assert_equal, assert_almost_equal
+from nose.tools import (raises, assert_raises, assert_true,
+                        assert_equal, assert_almost_equal)
 
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
@@ -378,6 +380,50 @@ def test_fill_hist():
     h = list()
     a = np.random.randn(100)
     assert_raises(TypeError, rnp.fill_hist, h, a)
+
+
+def test_fill_profile():
+    np.random.seed(0)
+    w1D = np.empty(1E6)
+    w1D.fill(2.)
+    data1D = np.random.randn(1E6, 2)
+    data2D = np.random.randn(1E6, 3)
+    data3D = np.random.randn(1E4, 4)
+
+    a = TProfile('th1d', 'test', 1000, -5, 5)
+    rnp.fill_profile(a, data1D)
+    assert_true(a.Integral() !=0)
+
+    a_w = TProfile('th1dw', 'test', 1000, -5, 5)
+    rnp.fill_profile(a_w, data1D, w1D)
+    assert_true(a_w.Integral() != 0)
+    assert_equal(a_w.Integral(), a.Integral())
+
+    b = TProfile2D('th2d', 'test', 100, -5, 5, 100, -5, 5)
+    rnp.fill_profile(b, data2D)
+    assert_true(b.Integral() != 0)
+
+    c = TProfile3D('th3d', 'test', 10, -5, 5, 10, -5, 5, 10, -5, 5)
+    rnp.fill_profile(c, data3D)
+    assert_true(c.Integral() != 0)
+
+    # array and weights lengths do not match
+    assert_raises(ValueError, rnp.fill_profile, c, data3D, np.ones(10))
+
+    # weights is not 1D
+    assert_raises(ValueError, rnp.fill_profile, c, data3D,
+                  np.ones((data3D.shape[0], 1)))
+
+    # array is not 2D
+    assert_raises(ValueError, rnp.fill_profile, c, np.ones(10))
+
+    # length of second axis is not one more than dimensionality of the profile
+    for h in (a, b, c):
+        assert_raises(ValueError, rnp.fill_profile, h, np.random.randn(1E4, 5))
+
+    # wrong type
+    assert_raises(TypeError, rnp.fill_profile,
+                  TH1D("test", "test", 1, 0, 1), data1D)
 
 
 def test_fill_graph():
