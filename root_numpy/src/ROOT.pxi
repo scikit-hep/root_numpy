@@ -128,6 +128,21 @@ cdef extern from "TH3.h":
         int FindBin(double x, double y, double z)
         double GetBinContent(int bin)
 
+cdef extern from "TProfile.h":
+    cdef cppclass TProfile:
+        int Fill(double x, double y)
+        int Fill(double x, double y, double w)
+
+cdef extern from "TProfile2D.h":
+    cdef cppclass TProfile2D:
+        int Fill(double x, double y, double z)
+        int Fill(double x, double y, double z, double w)
+
+cdef extern from "TProfile3D.h":
+    cdef cppclass TProfile3D:
+        int Fill(double x, double y, double z, double t)
+        int Fill(double x, double y, double z, double t, double w)
+
 cdef extern from "TGraph.h":
     cdef cppclass TGraph:
         void Set(int n)
