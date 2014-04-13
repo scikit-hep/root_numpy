@@ -92,18 +92,18 @@ def fill_profile(profile, array, weights=None, return_indices=False):
     """
     import ROOT
     array = np.asarray(array, dtype=np.double)
-    if weights is not None:
-        weights = np.asarray(weights, dtype=np.double)
-        if weights.shape[0] != array.shape[0]:
-            raise ValueError("array and weights must have the same length")
-        if weights.ndim != 1:
-            raise ValueError("weight must be 1-dimensional")
     if array.ndim != 2:
         raise ValueError("array must be 2-dimensional")
     if array.shape[1] != profile.GetDimension() + 1:
         raise ValueError(
             "there must be one more column than the "
             "dimensionality of the profile")
+    if weights is not None:
+        weights = np.asarray(weights, dtype=np.double)
+        if weights.shape[0] != array.shape[0]:
+            raise ValueError("array and weights must have the same length")
+        if weights.ndim != 1:
+            raise ValueError("weight must be 1-dimensional")
     if isinstance(profile, ROOT.TProfile3D):
         return _librootnumpy.fill_p3(
             ROOT.AsCObject(profile), array, weights, return_indices)
