@@ -24,6 +24,7 @@ what they are and what they do.
    array2tree
    array2root
    fill_hist
+   fill_profile
    fill_graph
    random_sample
    evaluate
