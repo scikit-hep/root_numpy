@@ -53,6 +53,7 @@ cdef extern from "TTree.h":
         TBranch* Branch(const_char* name, void* address, const_char* leaflist)
         TBranch* GetBranch(const_char* name)
         TObjArray* GetListOfBranches()
+        int GetNbranches()
         int Fill()
         int Scan()
         void Delete(void*)

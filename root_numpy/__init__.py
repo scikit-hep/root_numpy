@@ -15,6 +15,7 @@ from _utils import (
     rec2array, stack, dup_idx)
 from info import __version__
 
+
 __all__ = [
     'root2array',
     'root2rec',
