@@ -85,7 +85,7 @@ class BetterChain
             TObjArray* branches = fChain->GetListOfBranches();
             int ibranch, nbranches;
             TBranch* branch;
-            nbranches = branches->GetEntries();
+            nbranches = branches->GetEntriesFast();
             for (ibranch = 0; ibranch < nbranches; ++ibranch)
             {
                 branch = (TBranch*) branches->At(ibranch);

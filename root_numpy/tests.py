@@ -13,7 +13,8 @@ from ROOT import (
     TH1D, TH2D, TH3D,
     TProfile, TProfile2D, TProfile3D,
     TGraph, TGraph2D,
-    TF1, TF2, TF3, TFormula)
+    TF1, TF2, TF3, TFormula,
+    TLorentzVector)
 
 import root_numpy as rnp
 from root_numpy.testdata import get_filepath, get_file
@@ -25,6 +26,7 @@ from nose.tools import (raises, assert_raises, assert_true,
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
 warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=rnp.RootNumpyUnconvertibleWarning)
 
 
 def load(data):
@@ -99,7 +101,7 @@ def test_single_filename_not_exist():
 
 
 @raises(ValueError)
-def test_doubel_tree_name_not_specified():
+def test_double_tree_name_not_specified():
     f = load('doubletree1.root')
     a = rnp.root2array(f)
 
@@ -108,6 +110,41 @@ def test_single_chain():
     f = load(['single1.root', 'single2.root'])
     a = rnp.root2array(f)
     check_single(a, 200)
+
+
+def test_tree_without_branches():
+    tree = TTree('test', 'test')
+    assert_raises(ValueError, rnp.tree2rec, tree)
+
+
+def test_empty_branches():
+    f = load('single1.root')
+    assert_raises(ValueError, rnp.root2array, f, branches=[])
+
+
+def test_empty_tree():
+    from array import array
+    tree = TTree('tree', 'tree')
+    d = array('d', [0.])
+    tree.Branch('double', d, 'double/D')
+    rnp.tree2array(tree)
+
+
+def test_unsupported_branch_in_branches():
+    tree = TTree('test', 'test')
+    vect = TLorentzVector()
+    double = np.array([0], dtype=float)
+    tree.Branch('vector', vect)
+    tree.Branch('double', double, 'double/D')
+    rnp.tree2array(tree)
+    assert_raises(TypeError, rnp.tree2array, tree, branches=['vector'])
+
+
+def test_no_supported_branches():
+    tree = TTree('test', 'test')
+    vect = TLorentzVector()
+    tree.Branch('vector', vect)
+    assert_raises(RuntimeError, rnp.tree2array, tree)
 
 
 def test_fixed():
@@ -573,14 +610,6 @@ def test_struct():
                 ('branch1_floatleaf', '<f4'),
                 ('branch2_intleaf', '<i4'),
                 ('branch2_floatleaf', '<f4')]))
-
-
-def test_empty_tree():
-    from array import array
-    tree = TTree('tree', 'tree')
-    d = array('d', [0.])
-    tree.Branch('double', d, 'double/D')
-    rnp.tree2array(tree)
 
 
 def test_array2tree():

@@ -360,6 +360,7 @@ CONVERTERS.insert(CONVERTERS_ITEM(
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<double> >', new VectorVectorConverter[double]()))
 
+
 cdef Converter* find_converter(Column* col):
     cdef ColumnType ct = col.coltype
     cdef string typename = string(col.GetTypeName())
@@ -407,8 +408,9 @@ cdef np.ndarray init_array(vector[Column*]& columns,
                            weight_name):
     cdef Column* this_col
     cdef Converter* this_conv
+    cdef unsigned int i
     nst = []
-    for i in range(columns.size()):
+    for i from 0 <= i < columns.size():
         this_col = columns[i]
         this_conv = find_converter(this_col)
         if this_conv == NULL:
@@ -439,6 +441,10 @@ cdef handle_load(int load, bool ignore_index=False):
 cdef object tree2array(TTree* tree, branches, selection,
                        start, stop, step,
                        include_weight, weight_name):
+
+    if tree.GetNbranches() == 0:
+        raise ValueError("tree has no branches")
+
     # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* col
@@ -479,10 +485,15 @@ cdef object tree2array(TTree* tree, branches, selection,
         
         # Parse the tree structure to determine branches and leaves
         structure = parse_tree_structure(tree)
+        user_branches = False
         if branches is None:
             branches = structure.keys()
+        elif len(branches) == 0:
+            raise ValueError("branches is an empty list")
         elif len(branches) != len(set(branches)):
             raise ValueError("duplicate branches requested")
+        else:
+            user_branches = True
 
         for branch in branches:
             if branch in structure:
@@ -493,6 +504,10 @@ cdef object tree2array(TTree* tree, branches, selection,
                         colname = branch if shortname else '%s_%s' % (branch, leaf)
                         col = bc.MakeColumn(branch, leaf, colname)
                         columns.push_back(col)
+                    elif user_branches:
+                        raise TypeError(
+                            "cannot convert leaf %s of branch %s "
+                            "with type %s (skipping)" % (branch, leaf, ltype))
                     else:
                         warnings.warn(
                             "cannot convert leaf %s of branch %s "
@@ -514,6 +529,9 @@ cdef object tree2array(TTree* tree, branches, selection,
                 bc.AddFormula(formula)
                 col = new FormulaColumn(branch, formula)
                 columns.push_back(col)
+
+        if columns.size() == 0:
+            raise RuntimeError("unable to convert any branches in this tree")
         
         # Activate branches used by formulae and columns
         # and deactivate all others
