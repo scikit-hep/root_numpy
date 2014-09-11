@@ -14,12 +14,10 @@ TYPES = {
     TypeName[unsigned_long_long]().name: ('unsigned long long', np.dtype(np.ulonglong), np.NPY_ULONGLONG),
     TypeName[float]().name:              ('float',              np.dtype(np.float32),   np.NPY_FLOAT32),
     TypeName[double]().name:             ('double',             np.dtype(np.float64),   np.NPY_FLOAT64),
-    TypeName[string]().name:             ('string',             np.dtype(np.string_),   np.NPY_STRING),
 }
 
 TYPES_NUMPY2ROOT = {
     np.dtype(np.bool):      (1, 'O'),
-    #np.int8 from cython means something else
     np.dtype(np.int8):      (1, 'B'),
     np.dtype(np.int16):     (2, 'S'),
     np.dtype(np.int32):     (4, 'I'),
@@ -31,7 +29,6 @@ TYPES_NUMPY2ROOT = {
     np.dtype(np.float):     (8, 'D'),
     np.dtype(np.float32):   (4, 'F'),
     np.dtype(np.float64):   (8, 'D'),
-#    np.dtype(np.string_):   (18, 'S'),
 }
 
 
@@ -39,11 +36,9 @@ def list_trees(fname):
     cdef TFile* f = Open(fname, 'read')
     if f is NULL:
         raise IOError("cannot read %s" % fname)
-
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
         raise IOError("unable to get keys in %s" % fname)
-
     ret = []
     cdef int n = keys.GetEntries()
     cdef TObject* obj
@@ -65,15 +60,12 @@ def list_structures(fname, tree=None):
             raise ValueError("multiple trees found: %s" % (', '.join(tree)))
         else:
             tree = tree[0]
-    
     cdef TFile* f = Open(fname, 'read')
     if f is NULL:
         raise IOError("cannot read %s" % fname)
-    
     cdef TTree* t = <TTree*> f.Get(tree)
     if t is NULL:
         raise IOError("tree %s not found in %s" % (tree, fname))
-
     return parse_tree_structure(t)
 
 
@@ -82,6 +74,8 @@ def list_branches(fname, tree=None):
 
 
 cdef parse_tree_structure(TTree* tree):
+    cdef int ibranch
+    cdef int ileaf
     cdef char* name
     cdef TBranch* thisBranch
     cdef TLeaf* thisLeaf
@@ -90,14 +84,14 @@ cdef parse_tree_structure(TTree* tree):
     ret = OrderedDict()
     if branches is NULL:
         return ret
-    for ibranch in range(branches.GetEntries()):
+    for ibranch from 0 <= ibranch < branches.GetEntries():
         thisBranch = <TBranch*>(branches.At(ibranch))
         leaves = thisBranch.GetListOfLeaves()
         if leaves is NULL:
             raise RuntimeError("branch %s has no leaves" % thisBranch.GetName())
         leaflist = []
-        for ibranch in range(leaves.GetEntries()):
-            thisLeaf = <TLeaf*>leaves.At(ibranch)
+        for ileaf from 0 <= ileaf < leaves.GetEntries():
+            thisLeaf = <TLeaf*>leaves.At(ileaf)
             lname = thisLeaf.GetName()
             # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
             ltype = <bytes>ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
@@ -113,23 +107,19 @@ cdef parse_tree_structure(TTree* tree):
 # create numpy array of given type code with
 # given numelement and size of each element
 # and write it to buffer
-cdef inline int create_numpyarray(
-        void* buffer, void* src, int typecode, unsigned long numele, int elesize):
+cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
+                                  unsigned long numele, int elesize):
     cdef np.npy_intp dims[1]
     dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, typecode, 0)
-
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
     # increase one since we are putting in buffer directly
     Py_INCREF(tmp)
-
     # copy to tmp.data
     cdef unsigned long nbytes = numele * elesize
     memcpy(tmp.data, src, nbytes)
-
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
-
     return sizeof(tmpobj)
 
 
@@ -139,29 +129,51 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     cdef np.npy_intp dims[1]
     dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
-
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
     # increase one since we are putting in buffer directly
     Py_INCREF(tmp)
-
     # can't use memcpy here...
     cdef unsigned long i
     for i from 0 <= i < numele:
         tmp[i] = src.at(i)
-
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
+    return sizeof(tmpobj)
 
+
+cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src):
+    cdef unsigned long numele = src.size()
+    cdef np.npy_intp dims[1]
+    dims[0] = numele;
+    cdef int objsize = np.dtype('O').itemsize
+    cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
+    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
+    # increase one since we are putting in buffer directly
+    Py_INCREF(tmp)
+    cdef PyObject* tmpstrobj
+    cdef char* dataptr = <char*> tmp.data
+    # can't use memcpy here...
+    cdef unsigned long i
+    for i from 0 <= i < numele:
+        py_bytes = str(src.at(i))
+        Py_INCREF(py_bytes)
+        tmpstrobj = <PyObject*> py_bytes
+        memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
+    # now write PyObject* to buffer
+    memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
 
 
 cdef cppclass Converter:
     __init__():
         pass
+
     __dealloc__():
         pass
+
     int write(Column* col, void* buffer):
         pass
+
     object get_nptype():
         pass
 
@@ -171,105 +183,112 @@ cdef cppclass BasicConverter(Converter):
     int size
     int nptypecode
     string nptype
+
     __init__(int size, string nptype, int nptypecode):
         this.size = size
         this.nptypecode = nptypecode
         this.nptype = nptype
+
     int write(Column* col, void* buffer):
         cdef void* src = col.GetValuePointer()
         memcpy(buffer, src, this.size)
         return this.size
+
     object get_nptype():
         return np.dtype(this.nptype)
+
     int get_nptypecode():
         return this.nptypecode
 
 
-cdef cppclass VaryArrayConverter(Converter):
+cdef cppclass ObjectConverterBase(Converter):
+    object get_nptype():
+        return np.object
+
+    object get_nptypecode():
+        return np.NPY_OBJECT
+
+
+cdef cppclass VaryArrayConverter(ObjectConverterBase):
     BasicConverter* conv # converter for single element
     int typecode
     int elesize
+
     __init__(BasicConverter* conv):
         this.conv = conv
         this.typecode = conv.get_nptypecode()
         this.elesize = conv.size
+
     int write(Column* col, void* buffer):
         cdef int numele = col.GetLen()
         cdef void* src = col.GetValuePointer()
         return create_numpyarray(buffer, src, this.typecode, numele, this.elesize)
-    object get_nptype():
-        return np.object
-    object get_nptypecode():
-        return np.NPY_OBJECT
 
 
 cdef cppclass FixedArrayConverter(Converter):
     BasicConverter* conv # converter for single element
     int L # numele
+
     __init__(BasicConverter* conv, int L):
         this.conv = conv
         this.L = L
+
     int write(Column* col, void* buffer):
         cdef void* src = col.GetValuePointer()
         cdef int nbytes = col.GetSize()
         memcpy(buffer, src, nbytes)
         return nbytes
+
     object get_nptype():
         return (np.dtype(this.conv.nptype), this.L)
+
     int get_nptypecode():
         return this.conv.nptypecode
 
 
-cdef cppclass VectorConverterBase(Converter):
-    object get_nptype():
-        return np.object
-    object get_nptypecode():
-        return np.NPY_OBJECT
-
-
-cdef cppclass VectorConverter[T](VectorConverterBase):
+cdef cppclass VectorConverter[T](ObjectConverterBase):
     int elesize
     int nptypecode
     Vector2Array[T] v2a
+
     __init__():
         cdef TypeName[T] ast = TypeName[T]()
         info = TYPES[ast.name]
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
+
     int write(Column* col, void* buffer):
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef unsigned long numele = tmp.size()
-        # check cython auto generate code
+        # check cython auto-generated code
         # if it really does &((*tmp)[0])
         cdef T* fa = this.v2a.convert(tmp)
         return create_numpyarray(buffer, fa, this.nptypecode, numele, this.elesize)
 
-cdef cppclass VectorVectorConverter[T](VectorConverterBase):
+
+cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
     int elesize
     int nptypecode
     Vector2Array[T] v2a
+
     __init__():
         cdef TypeName[T] ast = TypeName[T]()
         info = TYPES[ast.name]
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
+
     int write(Column* col, void* buffer):
         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
-
-        #this will hold number of subvectors
+        # this will hold number of subvectors
         cdef unsigned long numele
         cdef T* fa
-
-        #these are defined solely for the outer array wrapper
+        # these are defined solely for the outer array wrapper
         cdef int objsize = np.dtype('O').itemsize
         cdef int objtypecode = np.NPY_OBJECT
-
-        # it seems *tmp is exposed via tmp[0]
         numele = tmp[0].size()
-
-        # we want to create an outer array container that dataptr points to, containing pointers
-        #    from create_numpyarray()
-        #define an (numele)-dimensional outer array to hold our subvectors fa
+        # create an outer array container that dataptr points to,
+        # containing pointers from create_numpyarray().
+        # define an (numele)-dimensional outer array to hold our subvectors fa
         cdef np.npy_intp dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
@@ -278,36 +297,112 @@ cdef cppclass VectorVectorConverter[T](VectorConverterBase):
         Py_INCREF(outer)
         # now write PyObject* to buffer
         memcpy(buffer, &outerobj, sizeof(PyObject*))
-
-        # build a dataptr pointing to outer, so we can shift and write each of the subvectors
+        # build a dataptr pointing to outer, so we can shift and write each
+        # of the subvectors
         cdef char* dataptr = <char*> outer.data
-
         # loop through all subvectors
-        for i in xrange(numele):
+        for i from 0 <= i < numele:
             fa = this.v2a.convert(&tmp[0][i])
-            # for some reason, shift isn't working, so we're directly shifting it ourselves
-            #dataptr = shift(&dataptr, objsize)
-            create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode, tmp[0][i].size(), this.elesize)
+            create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode,
+                              tmp[0][i].size(), this.elesize)
         return sizeof(outerobj)
 
-cdef cppclass VectorBoolConverter(VectorConverterBase):
-    __init__():
-        pass
+
+cdef cppclass VectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
     int write(Column* col, void* buffer):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp)
 
 
+cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
+    # Requires special treament since vector<bool> stores contents as bits...
+    int write(Column* col, void* buffer):
+        cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()
+        # this will hold number of subvectors
+        cdef unsigned long numele
+        # these are defined solely for the outer array wrapper
+        cdef int objsize = np.dtype('O').itemsize
+        cdef int objtypecode = np.NPY_OBJECT
+        numele = tmp[0].size()
+        # create an outer array container that dataptr points to,
+        # containing pointers from create_numpyarray().
+        # define an (numele)-dimensional outer array to hold our subvectors fa
+        cdef np.npy_intp dims[1]
+        dims[0] = numele
+        cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
+        cdef PyObject* outerobj = <PyObject*> outer # borrow ref
+        # increase one since we are putting in buffer directly
+        Py_INCREF(outer)
+        # now write PyObject* to buffer
+        memcpy(buffer, &outerobj, sizeof(PyObject*))
+        # build a dataptr pointing to outer, so we can shift and write each
+        # of the subvectors
+        cdef char* dataptr = <char*> outer.data
+        # loop through all subvectors
+        for i from 0 <= i < numele:
+            create_numpyarray_vectorbool(&dataptr[i*objsize], &tmp[0][i])
+        return sizeof(outerobj)
+
+
+cdef cppclass StringConverter(ObjectConverterBase):
+    int write(Column* col, void* buffer):
+        cdef string* s = <string*> col.GetValuePointer()
+        py_bytes = str(s[0])
+        cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
+        # increase one since we are putting in buffer directly
+        Py_INCREF(py_bytes)
+        # now write PyObject* to buffer
+        memcpy(buffer, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+
+
+cdef cppclass VectorStringConverter(ObjectConverterBase):
+    int write(Column* col, void* buffer):
+        cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
+        return create_numpyarray_vectorstring(buffer, tmp)
+
+
+cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
+    int write(Column* col, void* buffer):
+        cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()
+        # this will hold number of subvectors
+        cdef unsigned long numele
+        # these are defined solely for the outer array wrapper
+        cdef int objsize = np.dtype('O').itemsize
+        cdef int objtypecode = np.NPY_OBJECT
+        numele = tmp[0].size()
+        # create an outer array container that dataptr points to,
+        # containing pointers from create_numpyarray().
+        # define an (numele)-dimensional outer array to hold our subvectors fa
+        cdef np.npy_intp dims[1]
+        dims[0] = numele
+        cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
+        cdef PyObject* outerobj = <PyObject*> outer # borrow ref
+        # increase one since we are putting in buffer directly
+        Py_INCREF(outer)
+        # now write PyObject* to buffer
+        memcpy(buffer, &outerobj, sizeof(PyObject*))
+        # build a dataptr pointing to outer, so we can shift and write each
+        # of the subvectors
+        cdef char* dataptr = <char*> outer.data
+        # loop through all subvectors
+        for i from 0 <= i < numele:
+            create_numpyarray_vectorstring(&dataptr[i*objsize], &tmp[0][i])
+        return sizeof(outerobj)
+
+
 cdef cpp_map[string, Converter*] CONVERTERS
 ctypedef pair[string, Converter*] CONVERTERS_ITEM
 
+# basic type converters
 for ctypename, (ctype, dtype, dtypecode) in TYPES.items():
     CONVERTERS.insert(CONVERTERS_ITEM(
         ctype, new BasicConverter(
             dtype.itemsize, dtype.name, dtypecode)))
 
-# special case for vector<bool>
+
+# vector<> converters
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<bool>', new VectorBoolConverter()))
 CONVERTERS.insert(CONVERTERS_ITEM(
@@ -334,7 +429,9 @@ CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<float>', new VectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<double>', new VectorConverter[double]()))
-#    vector<vector<string> > doesn't work -- just returns blanks, so it's with type-casting
+# vector<vector<> > converters
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<bool> >', new VectorVectorBoolConverter()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<char> >', new VectorVectorConverter[char]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
@@ -359,6 +456,13 @@ CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<float> >', new VectorVectorConverter[float]()))
 CONVERTERS.insert(CONVERTERS_ITEM(
     'vector<vector<double> >', new VectorVectorConverter[double]()))
+# string converters
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'string', new StringConverter()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<string>', new VectorStringConverter()))
+CONVERTERS.insert(CONVERTERS_ITEM(
+    'vector<vector<string> >', new VectorVectorStringConverter()))
 
 
 cdef Converter* find_converter(Column* col):
@@ -529,7 +633,7 @@ cdef object tree2array(TTree* tree, branches, selection,
                 bc.AddFormula(formula)
                 col = new FormulaColumn(branch, formula)
                 columns.push_back(col)
-
+        
         if columns.size() == 0:
             raise RuntimeError("unable to convert any branches in this tree")
         
