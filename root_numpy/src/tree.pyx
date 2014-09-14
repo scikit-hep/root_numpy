@@ -35,10 +35,10 @@ TYPES_NUMPY2ROOT = {
 def list_trees(fname):
     cdef TFile* f = Open(fname, 'read')
     if f is NULL:
-        raise IOError("cannot read %s" % fname)
+        raise IOError("cannot read {0}".format(fname))
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
-        raise IOError("unable to get keys in %s" % fname)
+        raise IOError("unable to get keys in {0}".format(fname))
     ret = []
     cdef int n = keys.GetEntries()
     cdef TKey* key
@@ -55,15 +55,15 @@ def list_structures(fname, tree=None):
         # automatically select single tree
         tree = list_trees(fname)
         if len(tree) != 1:
-            raise ValueError("multiple trees found: %s" % (', '.join(tree)))
+            raise ValueError("multiple trees found: {0}".format(', '.join(tree)))
         else:
             tree = tree[0]
     cdef TFile* f = Open(fname, 'read')
     if f is NULL:
-        raise IOError("cannot read %s" % fname)
+        raise IOError("cannot read {0}".format(fname))
     cdef TTree* t = <TTree*> f.Get(tree)
     if t is NULL:
-        raise IOError("tree %s not found in %s" % (tree, fname))
+        raise IOError("tree {0} not found in {1}".format(tree, fname))
     return parse_tree_structure(t)
 
 
@@ -71,34 +71,46 @@ def list_branches(fname, tree=None):
     return list_structures(fname, tree).keys()
 
 
-cdef parse_tree_structure(TTree* tree):
-    cdef int ibranch
-    cdef int ileaf
-    cdef char* name
-    cdef TBranch* thisBranch
-    cdef TLeaf* thisLeaf
-    cdef TObjArray* branches = tree.GetListOfBranches()
+
+cdef parse_branch_structure(TBranch* branch):
     cdef TObjArray* leaves
+    cdef TLeaf* leaf
+    cdef int ileaf
+    leaves = branch.GetListOfLeaves()
+    if leaves is NULL:
+        raise RuntimeError("branch {0} has no leaves".format(branch.GetName()))
+    leaflist = []
+    for ileaf in range(leaves.GetEntries()):
+        leaf = <TLeaf*>leaves.At(ileaf)
+        lname = leaf.GetName()
+        # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
+        ltype = <bytes>ResolveTypedef(leaf.GetTypeName(), True).c_str()
+        leaflist.append((lname, ltype))
+    if not leaflist:
+        raise RuntimeError(
+            "leaf list for branch {0} is empty".format(
+                branch.GetName()))
+    return leaflist
+
+
+cdef parse_tree_structure(TTree* tree, branches=None):
+    cdef int ibranch
+    cdef TBranch* branch
     ret = OrderedDict()
-    if branches is NULL:
+    if branches is not None:
+        for branch_name in branches:
+            branch = tree.GetBranch(branch_name)            
+            if branch is NULL:
+                continue
+            ret[branch.GetName()] = parse_branch_structure(branch)
         return ret
-    for ibranch in range(branches.GetEntries()):
-        thisBranch = <TBranch*>(branches.At(ibranch))
-        leaves = thisBranch.GetListOfLeaves()
-        if leaves is NULL:
-            raise RuntimeError("branch %s has no leaves" % thisBranch.GetName())
-        leaflist = []
-        for ileaf in range(leaves.GetEntries()):
-            thisLeaf = <TLeaf*>leaves.At(ileaf)
-            lname = thisLeaf.GetName()
-            # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-            ltype = <bytes>ResolveTypedef(thisLeaf.GetTypeName(), True).c_str()
-            leaflist.append((lname, ltype))
-        if not leaflist:
-            raise RuntimeError(
-                "leaf list for branch %s is empty" %
-                    thisBranch.GetName())
-        ret[thisBranch.GetName()] = leaflist
+    # all branches
+    cdef TObjArray* all_branches = tree.GetListOfBranches()
+    if all_branches is NULL:
+        return ret
+    for ibranch in range(all_branches.GetEntries()):
+        branch = <TBranch*>(all_branches.At(ibranch))
+        ret[branch.GetName()] = parse_branch_structure(branch)
     return ret
 
 
@@ -519,7 +531,7 @@ cdef np.ndarray init_array(vector[Column*]& columns,
         this_col = columns[i]
         this_conv = find_converter(this_col)
         if this_conv == NULL:
-            raise ValueError("No converter for %s" % this_col.GetTypeName())
+            raise ValueError("no converter for {0}".format(this_col.GetTypeName()))
         nst.append((this_col.colname, this_conv.get_nptype()))
         cv.push_back(this_conv)
     if include_weight:
@@ -550,11 +562,10 @@ cdef object tree2array(TTree* tree, branches, selection,
     if tree.GetNbranches() == 0:
         raise ValueError("tree has no branches")
 
-    # This is actually vector of pointers despite how it looks
     cdef vector[Column*] columns
     cdef Column* col
 
-    # Make a better chain so we can register all columns
+    # Make a "better" chain so we can register all columns
     cdef BetterChain* bc = new BetterChain(tree)
     handle_load(bc.Prepare(), True)
 
@@ -564,7 +575,6 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef int num_entries_selected = 0
     cdef int ientry
 
-    # list of converter in the same order
     cdef Converter* conv
     cdef unsigned long numcol
     cdef void* dataptr
@@ -576,7 +586,7 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef char* c_string
 
     try:
-        # Setup the selection if we have one
+        # Set up the selection if we have one
         if selection:
             py_string = str(selection)
             c_string = py_string
@@ -589,7 +599,7 @@ cdef object tree2array(TTree* tree, branches, selection,
             bc.AddFormula(selection_formula)
         
         # Parse the tree structure to determine branches and leaves
-        structure = parse_tree_structure(tree)
+        structure = parse_tree_structure(tree, branches=branches)
         user_branches = False
         if branches is None:
             branches = structure.keys()
@@ -606,29 +616,28 @@ cdef object tree2array(TTree* tree, branches, selection,
                 shortname = len(leaves) == 1
                 for leaf, ltype in leaves:
                     if CONVERTERS.find(ltype) != CONVERTERS.end():
-                        colname = branch if shortname else '%s_%s' % (branch, leaf)
+                        colname = branch if shortname else '{0}_{1}'.format(branch, leaf)
                         col = bc.MakeColumn(branch, leaf, colname)
                         columns.push_back(col)
                     elif user_branches:
                         raise TypeError(
-                            "cannot convert leaf %s of branch %s "
-                            "with type %s (skipping)" % (branch, leaf, ltype))
+                            "cannot convert leaf {0} of branch {1} "
+                            "with type {2} (skipping)".format(branch, leaf, ltype))
                     else:
                         warnings.warn(
-                            "cannot convert leaf %s of branch %s "
-                            "with type %s (skipping)" % (branch, leaf, ltype),
+                            "cannot convert leaf {0} of branch {1} "
+                            "with type {2} (skipping)".format(branch, leaf, ltype),
                             RootNumpyUnconvertibleWarning)
             else:
-                # attempt to interpret as an expression
+                # Attempt to interpret as an expression
                 py_string = str(branch)
                 c_string = py_string
                 formula = new TTreeFormula(c_string, c_string, bc.fChain)
                 if formula == NULL or formula.GetNdim() == 0:
                     del formula
                     raise ValueError(
-                        "The branch or expression %s is not present or valid. "
-                        "Call list_branches or appropriate ROOT methods "
-                        "to see a list of available branches" % branch)
+                        "the branch or expression {0} "
+                        "is not present or valid".format(branch))
                 # The chain will take care of updating the formula leaves when
                 # rolling over to the next tree.
                 bc.AddFormula(formula)
@@ -646,7 +655,7 @@ cdef object tree2array(TTree* tree, branches, selection,
         # make an appropriate array structure
         arr = init_array(columns, conv_array, num_entries,
                          include_weight, weight_name)
-        # exclude weight column
+        # Exclude weight column
         numcol = columns.size()
         
         indices = slice(start, stop, step).indices(num_entries)
@@ -720,9 +729,9 @@ def root2array_fromCObj(tree, branches, selection,
             include_weight, weight_name)
 
 
-"""
-array -> TTree conversion follows:
-"""
+####################################
+# array -> TTree conversion follows:
+####################################
 
 cdef cppclass NP2CConverter:
     void fill_from(void* source):
@@ -754,8 +763,8 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
             existing_type = this.branch.GetTitle().rpartition('/')[-1]
             if str(roottype) != existing_type:
                 raise TypeError(
-                    "field `%s` of type `%s` is not compatible "
-                    "with existing branch of type `%s`" % (
+                    "field `{0}` of type `{1}` is not compatible "
+                    "with existing branch of type `{2}`".format(
                         name, roottype, existing_type))
             this.branch.SetAddress(this.value)
         this.branch.SetStatus(1)
@@ -777,9 +786,9 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
         nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
         return new ScalarNP2CConverter(tree, name, roottype, nbytes)
     elif dtype == np.dtype(np.object):
-        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
+        warnings.warn("converter for %r not implemented yet (skipping)" % dtype)
         return NULL
-        #lets peek
+        # let's peek
         """
         if type(peekvalue) == type(np.array([])):
             ndim = peekvalue.ndim
@@ -787,7 +796,7 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype, peekvalue=None
             #TODO finish this
         """
     else:
-        warnings.warn("Converter for %r not implemented yet (skipping)" % dtype)
+        warnings.warn("converter for %r not implemented yet (skipping)" % dtype)
     return NULL
 
 
@@ -870,9 +879,9 @@ def array2tree_toCObj(arr, name='tree', tree=None):
 def array2root(arr, filename, treename='tree', mode='update'):
     cdef TFile* file = Open(filename, mode)
     if file is NULL:
-        raise IOError("cannot open file %s" % filename)
+        raise IOError("cannot open file {0}".format(filename))
     if not file.IsWritable():
-        raise IOError("file %s is not writable" % filename)
+        raise IOError("file {0} is not writable".format(filename))
     cdef TTree* tree = array2tree(arr, name=treename)
     tree.Write()
     file.Close()
