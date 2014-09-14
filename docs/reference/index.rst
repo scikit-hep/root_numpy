@@ -60,6 +60,7 @@ Long64_t            np.int64
 ULong64_t           np.uint64
 x[10]               (np.primitivetype, (10,))
 x[nx]               np.object
+string              np.object
 vector<t>           np.object
 vector<vector<t> >  np.object
 ==================  =========================

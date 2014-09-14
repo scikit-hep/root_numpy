@@ -267,21 +267,24 @@ def test_specific_branch():
 
 
 def test_vector():
-    a = rnp.root2rec(load('hvector.root'))
-    types = [('v_i', 'O'),\
-             ('v_f', 'O'),\
-             ('v_F', 'O'),\
-             ('v_d', 'O'),\
-             ('v_l', 'O'),\
-             ('v_c', 'O'),\
-             ('v_b', 'O'),\
-             ('vv_i', 'O'),\
-             ('vv_f', 'O'),\
-             ('vv_F', 'O'),\
-             ('vv_d', 'O'),\
-             ('vv_l', 'O'),\
-             ('vv_c', 'O')]
-    assert_equal(a.dtype, types )
+    a = rnp.root2rec(load('vector.root'))
+    types = [
+        ('v_i', 'O'),
+        ('v_f', 'O'),
+        ('v_F', 'O'),
+        ('v_d', 'O'),
+        ('v_l', 'O'),
+        ('v_c', 'O'),
+        ('v_b', 'O'),
+        ('vv_i', 'O'),
+        ('vv_f', 'O'),
+        ('vv_F', 'O'),
+        ('vv_d', 'O'),
+        ('vv_l', 'O'),
+        ('vv_c', 'O'),
+        ('vv_b', 'O'),
+    ]
+    assert_equal(a.dtype, types)
 
     assert_equal(a.v_i[0].dtype, np.int32)
     assert_equal(a.v_f[0].dtype, np.float32)
@@ -298,6 +301,7 @@ def test_vector():
     assert_equal(a.vv_d[0].dtype, np.object)
     assert_equal(a.vv_l[0].dtype, np.object)
     assert_equal(a.vv_c[0].dtype, np.object)
+    assert_equal(a.vv_b[0].dtype, np.object)
 
     assert_equal(a.vv_i[0][0].dtype, np.int32)
     assert_equal(a.vv_f[0][0].dtype, np.float32)
@@ -305,41 +309,65 @@ def test_vector():
     assert_equal(a.vv_d[0][0].dtype, np.float64)
     assert_equal(a.vv_l[0][0].dtype, np.int64)
     assert_equal(a.vv_c[0][0].dtype, np.int8)
+    assert_equal(a.vv_b[0][0].dtype, np.bool)
 
-    #check couple value
+    # check a few values
     assert_equal(a.v_i[0][0], 1)
     assert_equal(a.v_i[1][1], 3)
-    assert_equal(a.v_i[-2][0], 99)
-    assert_equal(a.v_i[-2][-1], 107)
+    assert_equal(a.v_i[-2][0], 9)
+    assert_equal(a.v_i[-2][-1], 17)
 
     assert_equal(a.v_f[0][0], 2.0)
     assert_equal(a.v_f[1][1], 5.0)
-    assert_equal(a.v_f[-2][0], 198.0)
-    assert_equal(a.v_f[-2][-1], 206.0)
+    assert_equal(a.v_f[-2][0], 18.0)
+    assert_equal(a.v_f[-2][-1], 26.0)
 
     assert_equal(a.v_F[0][0], 2.0)
     assert_equal(a.v_F[1][1], 5.0)
-    assert_equal(a.v_F[-2][0], 198.0)
-    assert_equal(a.v_F[-2][-1], 206.0)
+    assert_equal(a.v_F[-2][0], 18.0)
+    assert_equal(a.v_F[-2][-1], 26.0)
 
-    # stricter conditioning for numpy arrays
+    # more strict conditioning for numpy arrays
     def assert_equal_array(arr1, arr2):
-      return assert_equal( (arr1 == arr2).all(), True)
+        return assert_equal((arr1 == arr2).all(), True,
+            "array mismatch: {0} != {1}".format(arr1, arr2))
 
     assert_equal_array(a.vv_i[0][0], np.array([1], dtype=np.int32) )
     assert_equal_array(a.vv_i[1][1], np.array([2, 3], dtype=np.int32) )
-    assert_equal_array(a.vv_i[-2][0], np.array([99], dtype=np.int32) )
-    assert_equal_array(a.vv_i[-2][-1], np.array([ 99, 100, 101, 102, 103, 104, 105, 106, 107], dtype=np.int32) )
+    assert_equal_array(a.vv_i[-2][0], np.array([9], dtype=np.int32) )
+    assert_equal_array(a.vv_i[-2][-1],
+                       np.array([ 9, 10, 11, 12, 13, 14, 15, 16, 17],
+                                dtype=np.int32))
 
     assert_equal_array(a.vv_f[0][0], np.array([ 2.], dtype=np.float32) )
     assert_equal_array(a.vv_f[1][1], np.array([ 4.,  5.], dtype=np.float32) )
-    assert_equal_array(a.vv_f[-2][0], np.array([ 198.], dtype=np.float32) )
-    assert_equal_array(a.vv_f[-2][-1], np.array([ 198.,  199.,  200.,  201.,  202.,  203.,  204.,  205.,  206.], dtype=np.float32) )
+    assert_equal_array(a.vv_f[-2][0], np.array([ 18.], dtype=np.float32) )
+    assert_equal_array(a.vv_f[-2][-1],
+                       np.array([ 18.,  19.,  20.,  21.,  22.,
+                                  23.,  24.,  25.,  26.],
+                                dtype=np.float32))
 
     assert_equal_array(a.vv_F[0][0], np.array([ 2.], dtype=np.float32) )
     assert_equal_array(a.vv_F[1][1], np.array([ 4.,  5.], dtype=np.float32) )
-    assert_equal_array(a.vv_F[-2][0], np.array([ 198.], dtype=np.float32) )
-    assert_equal_array(a.vv_F[-2][-1], np.array([ 198.,  199.,  200.,  201.,  202.,  203.,  204.,  205.,  206.], dtype=np.float32) )
+    assert_equal_array(a.vv_F[-2][0], np.array([ 18.], dtype=np.float32) )
+    assert_equal_array(a.vv_F[-2][-1],
+                       np.array([ 18.,  19.,  20.,  21.,  22.,
+                                  23.,  24.,  25.,  26.],
+                                dtype=np.float32))
+
+
+def test_string():
+    a = rnp.root2rec(load('string.root'))
+    types = [
+        ('message', 'O'),
+        ('vect', 'O'),
+        ('vect2d', 'O'),
+    ]
+    assert_equal(a.dtype, types)
+    assert_equal(a[0][0], 'Hello World!')
+    assert_equal(a[0][1][0], 'Hello!')
+    assert_equal(a[0][2][0][0], 'Hello!')
+
 
 def test_slice():
     a = rnp.root2rec(load('single1.root'), stop=10)
@@ -603,7 +631,7 @@ def test_blockwise_inner_join():
 
 
 def test_struct():
-    assert_array_equal(rnp.root2rec(load('structbranches.root')),
+    assert_array_equal(rnp.root2rec(load('struct.root')),
         np.array([(10, 15.5, 20, 781.2)],
             dtype=[
                 ('branch1_intleaf', '<i4'),
