@@ -84,13 +84,13 @@ cdef parse_tree_structure(TTree* tree):
     ret = OrderedDict()
     if branches is NULL:
         return ret
-    for ibranch from 0 <= ibranch < branches.GetEntries():
+    for ibranch in range(branches.GetEntries()):
         thisBranch = <TBranch*>(branches.At(ibranch))
         leaves = thisBranch.GetListOfLeaves()
         if leaves is NULL:
             raise RuntimeError("branch %s has no leaves" % thisBranch.GetName())
         leaflist = []
-        for ileaf from 0 <= ileaf < leaves.GetEntries():
+        for ileaf in range(leaves.GetEntries()):
             thisLeaf = <TLeaf*>leaves.At(ileaf)
             lname = thisLeaf.GetName()
             # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
@@ -134,7 +134,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     Py_INCREF(tmp)
     # can't use memcpy here...
     cdef unsigned long i
-    for i from 0 <= i < numele:
+    for i in range(numele):
         tmp[i] = src.at(i)
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
@@ -154,7 +154,7 @@ cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src
     cdef char* dataptr = <char*> tmp.data
     # can't use memcpy here...
     cdef unsigned long i
-    for i from 0 <= i < numele:
+    for i in range(numele):
         py_bytes = str(src.at(i))
         Py_INCREF(py_bytes)
         tmpstrobj = <PyObject*> py_bytes
@@ -301,7 +301,8 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
         # loop through all subvectors
-        for i from 0 <= i < numele:
+        cdef unsigned long i
+        for i in range(numele):
             fa = this.v2a.convert(&tmp[0][i])
             create_numpyarray(&dataptr[i*objsize], fa, this.nptypecode,
                               tmp[0][i].size(), this.elesize)
@@ -340,7 +341,8 @@ cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
         # loop through all subvectors
-        for i from 0 <= i < numele:
+        cdef unsigned long i
+        for i in range(numele):
             create_numpyarray_vectorbool(&dataptr[i*objsize], &tmp[0][i])
         return sizeof(outerobj)
 
@@ -387,7 +389,8 @@ cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
         # loop through all subvectors
-        for i from 0 <= i < numele:
+        cdef unsigned long i
+        for i in range(numele):
             create_numpyarray_vectorstring(&dataptr[i*objsize], &tmp[0][i])
         return sizeof(outerobj)
 
@@ -514,7 +517,7 @@ cdef np.ndarray init_array(vector[Column*]& columns,
     cdef Converter* this_conv
     cdef unsigned int i
     nst = []
-    for i from 0 <= i < columns.size():
+    for i in range(columns.size()):
         this_col = columns[i]
         this_conv = find_converter(this_col)
         if this_conv == NULL:
@@ -797,11 +800,11 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef auto_ptr[NP2CConverter] tmp
-    cdef unsigned int icv = 0
+    cdef unsigned int icv
     cdef int icol
     cdef long arr_len = arr.shape[0]
     cdef long idata
-    cdef unsigned long pos_len = 0
+    cdef unsigned long pos_len
     cdef unsigned long ipos
     cdef void* source = NULL
     cdef void* thisrow = NULL
@@ -815,7 +818,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         fields = arr.dtype.fields
         
         # figure out the structure
-        for icol from 0 <= icol < len(fieldnames):
+        for icol in range(len(fieldnames)):
             fieldname = fieldnames[icol]
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname] 
@@ -827,9 +830,9 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
 
         # fill in data
         pos_len = posarray.size()
-        for idata from 0 <= idata < arr_len:
+        for idata in range(arr_len):
             thisrow = np.PyArray_GETPTR1(arr, idata)
-            for ipos from 0 <= ipos < pos_len:
+            for ipos in range(pos_len):
                 roffset = roffsetarray[ipos]
                 source = shift(thisrow, roffset)
                 conv_array[ipos].fill_from(source)
@@ -845,7 +848,7 @@ cdef TTree* array2tree(np.ndarray arr, name='tree', TTree* tree=NULL) except *:
         # how do I clean up TTree?
         # root has some global funny memory management...
         # need to make sure no double free
-        for icv from 0 <= icv < conv_array.size():
+        for icv in range(conv_array.size()):
             tmpcv = conv_array[icv]
             del tmpcv
 
