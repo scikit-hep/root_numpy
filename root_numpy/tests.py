@@ -49,8 +49,12 @@ def check_single(single, n=100, id=1):
 
 
 def test_list_trees():
+    # TTree
     trees = rnp.list_trees(load('vary1.root'))
     assert_equal(trees, ['tree'])
+    # TNtuple
+    trees = rnp.list_trees(load('ntuple.root'))
+    assert_equal(trees, ['ntuple'])
 
 
 def test_list_branches():
@@ -65,6 +69,13 @@ def test_list_structures():
         ('f_float', [('f_float', 'float')]),
         ('d_double', [('d_double', 'double')])])
     assert_equal(structure, expected)
+
+
+def test_ntuple():
+    f = load('ntuple.root')
+    a = rnp.root2array(f)
+    assert_equal(len(a), 10)
+    assert_equal(len(a.dtype.names), 3)
 
 
 def test_single():

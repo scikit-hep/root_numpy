@@ -41,14 +41,12 @@ def list_trees(fname):
         raise IOError("unable to get keys in %s" % fname)
     ret = []
     cdef int n = keys.GetEntries()
-    cdef TObject* obj
+    cdef TKey* key
     for i in range(n):
-        name = keys.At(i).GetName()
-        obj = f.Get(name)
-        if obj is not NULL:
-            clname = str(obj.ClassName())
-            if  clname == 'TTree':
-                ret.append(name)
+        key = <TKey*> keys.At(i)
+        clsname = str(key.GetClassName())
+        if clsname == 'TTree' or clsname == 'TNtuple':
+            ret.append(str(key.GetName()))
     return ret
 
 
