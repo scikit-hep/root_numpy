@@ -4,12 +4,24 @@
 
 #include "TFile.h"
 #include "TTree.h"
+#include "TNtuple.h"
 #include "TRandom.h"
 
 
 using std::vector;
 using std::string;
 
+
+void makentuple()
+{
+    TFile f("ntuple.root", "RECREATE");
+    TNtuple ntuple("ntuple", "ntuple", "x:y:z");
+    for (int i = 0; i < 10; ++i) {
+        ntuple.Fill(gRandom->Gaus(), gRandom->Gaus(), gRandom->Gaus());
+    }
+    ntuple.Write();
+    f.Close();
+}
 
 void makevector()
 {
@@ -50,7 +62,7 @@ void makevector()
     t.Branch("vv_c", "std::vector<std::vector<char> >", &vv_c);
     t.Branch("vv_b", "std::vector<std::vector<bool> >", &vv_b);
 
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 10; ++i) {
         v_i.clear();
         v_f.clear();
         v_F.clear();
@@ -120,7 +132,7 @@ void makefixed(int id)
     int n[5]; tree.Branch("n_int", &n, "n_int[5]/I");
     float f[7]; tree.Branch("f_float", &f, "f_float[7]/F");
     double d[10]; tree.Branch("d_double", &d, "d_double[10]/D");
-    for(int i=0;i<100;i++){
+    for(int i=0;i<100;i++) {
         for(int i_n=0;i_n<5;i_n++){n[i_n] = 5*i+i_n+id;}
         for(int i_f=0;i_f<7;i_f++){f[i_f] = 2*(5*i+i_f)+0.5+id;}
         for(int i_d=0;i_d<10;i_d++){d[i_d] = 3*(5*i+i_d)+0.5+id;}
@@ -169,7 +181,7 @@ void make2tree(int id)
     double x,y;
     tree.Branch("x", &x);
     tree.Branch("y", &y);
-    for(int i=0; i<10; ++i){
+    for(int i=0; i<10; ++i) {
         x=i; y=2*i;
         tree.Fill();
     }
@@ -225,7 +237,7 @@ void makerandom()
     float y; tree.Branch("y", &y, "y/F");
     float z; tree.Branch("z", &z, "z/F");
 
-    for(i=0; i<100; ++i){
+    for(i=0; i<100; ++i) {
         x = gRandom->Gaus();
         y = gRandom->Gaus();
         z = gRandom->Gaus();
@@ -260,6 +272,7 @@ void makestring()
 
 int main(void)
 {
+    makentuple();
     makesingle(1, 2.);
     makesingle(2, 3.);
     makefixed(1);

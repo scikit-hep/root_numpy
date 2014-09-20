@@ -1,6 +1,24 @@
 from libcpp cimport bool
 from libcpp.string cimport string, const_char
 
+cdef extern from "TFile.h":
+    cdef cppclass TFile:
+        TFile(const_char*, const_char*)
+        void Print()
+        TList* GetListOfKeys()
+        TObject* Get(const_char*)
+        void Close()
+        bool IsOpen()
+        bool IsWritable()
+
+cdef extern from "TFile.h" namespace "TFile":
+    TFile* Open(const_char*, const_char*)
+
+cdef extern from "TKey.h":
+    cdef cppclass TKey:
+        const_char* GetName()
+        const_char* GetClassName()
+
 cdef extern from "TObject.h":
     cdef cppclass TObject:
         TObject()
@@ -11,6 +29,12 @@ cdef extern from "TObjArray.h":
     cdef cppclass TObjArray:
         TObject* At(int i)
         int GetSize()
+        int GetEntries()
+
+cdef extern from "TList.h":
+    cdef cppclass TList:
+        TObject* list
+        TObject* At(int idx)
         int GetEntries()
 
 cdef extern from "TBranch.h":
@@ -27,19 +51,6 @@ cdef extern from "TLeaf.h":
         const_char* GetTypeName()
         TLeaf* GetLeafCounter(int&)
         const_char* GetName()
-
-cdef extern from "TFile.h":
-    cdef cppclass TFile:
-        TFile(const_char*, const_char*)
-        void Print()
-        TList* GetListOfKeys()
-        TObject* Get(const_char*)
-        void Close()
-        bool IsOpen()
-        bool IsWritable()
-
-cdef extern from "TFile.h" namespace "TFile":
-    TFile* Open(const_char*, const_char*)
 
 cdef extern from "TTree.h":
     cdef cppclass TTree:
@@ -66,12 +77,6 @@ cdef extern from "TChain.h":
         TChain(const_char*)
         int Add(const_char*, long)
         void Print()
-
-cdef extern from "TList.h":
-    cdef cppclass TList:
-        TObject* list
-        TObject* At(int idx)
-        int GetEntries()
 
 cdef extern from "TFormula.h":
     cdef cppclass TFormula:
