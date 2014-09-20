@@ -70,7 +70,7 @@ librootnumpy = Extension('root_numpy._librootnumpy',
         np.get_include(),
         root_inc,
         'root_numpy/src'],
-    extra_compile_args=[],
+    extra_compile_args=['-Wno-unused-function'],
     extra_link_args=root_ldflags + ['-lTreePlayer'])
 
 # check for custom args
