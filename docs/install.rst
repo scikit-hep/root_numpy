@@ -22,15 +22,22 @@ root_numpy has been tested with:
 * Python 2.6, 2.7
 * GNU/Linux, Mac OS
 
-.. warning:: **Mac OS:** if you're compiling root_numpy with Clang and
-   linking against libc++, you will also need to compile ROOT with Clang and
-   libc++, because libstdc++ and libc++ are not ABI compatible.
+.. warning:: **Mac OS:** the libstdc++ and libc++ ABIs are not compatible.
 
-   ROOT compiles with Clang and libc++ since version 5.34/11, but PyROOT has a
-   bug which was fixed after that, so it is best to compile from the
-   v5-34-00-patches branch of ROOT. You can do this easily with Homebrew via::
+   If you’re compiling root_numpy with Clang and linking against libc++, you
+   will also need to compile ROOT with Clang and libc++. ROOT compiles with Clang
+   and libc++ since version 5.34/11, but PyROOT has a bug which was fixed after
+   that, so it is best to compile from the v5-34-00-patches branch of ROOT. You
+   can do this easily with Homebrew via::
 
       brew install --HEAD root
+
+   This issue also comes up if you're using a Python bundle such as Anaconda
+   or Enthought Canopy. These bundles build against libstdc++, the GCC C++
+   standard library, which is used in Mac OSX 10.5 and later.  On Mac OSX 10.7 and
+   later, the default compiler links against libc++, the Clang C++ standard
+   library.
+
 
 Getting the Latest Source
 =========================
