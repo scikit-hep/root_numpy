@@ -199,7 +199,49 @@ class BetterChain
                 return (int)load;
             }
             ientry = entry;
-            return fChain->GetEntry(ientry);
+            // In order to get performance comparable to TTreeFormula, we
+            // manually iterate over the branches we need and call
+            // TBranch::GetEntry.  This is effectively the same procedure as
+            // TTree::GetEntry, except TTree::GetEntry loops over ALL branches,
+            // not just those which are active, and calls TBranch::GetEntry.
+            // While TBranch::GetEntry is a no-op in the case that the branch is
+            // inactive, this iteration can be a HUGE performance hit for TTrees
+            // with many branches, which is why TTreeFormula doesn't use
+            // TTree::GetEntry and sees far better performance.
+            // HACK: The code in tree.pyx expects the return value of this
+            // function to be non-0, because TTree::GetEntry normally picks up
+            // those branches which are activate due to their membership in
+            // formulae.  In fact, it is perfectly legitimate for
+            // TTree::GetEntry to return 0 without indicating an error, but to
+            // appease the existing code, we'll call GetEntry on all branches
+            // with formula membership, and it won't cost us anything since
+            // TTreeFormula won't reload them.
+            LeafCache::iterator lit, lend = leafcache.end();
+            int total_read = 0;
+            for (lit = leafcache.begin(); lit != lend; ++lit)
+            {
+                int read = lit->second->leaf->GetBranch()->GetEntry(load);
+                if (read < 0)
+                {
+                    return read;
+                }
+                total_read += read;
+            }
+            std::vector<TTreeFormula *>::iterator fit, fend = formulae.end();
+            for (fit = formulae.begin(); fit != fend; ++fit)
+            {
+                int ncodes = (*fit)->GetNcodes();
+                for (int n = 0; n < ncodes; ++n)
+                {
+                    int read = (*fit)->GetLeaf(n)->GetBranch()->GetEntry(load);
+                    if (read < 0)
+                    {
+                        return read;
+                    }
+                    total_read += read;
+                }
+            }
+            return total_read;
         }
 
         int Next()
