@@ -886,7 +886,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     # If a tree with that name exists, we want to update it
     cdef TTree* tree = <TTree*> file.Get(treename)
     tree = array2tree(arr, name=treename, tree=tree)
-    tree.Write()
+    tree.Write(treename, 2) # TObject::kOverwrite
     file.Close()
     # how to clean up TTree? Same question as above.
     del file

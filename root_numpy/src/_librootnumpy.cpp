@@ -247,9 +247,9 @@ void __Pyx_call_destructor(T* x) {
 #include <utility>
 #include <map>
 #include <string>
+#include "TObject.h"
 #include "TFile.h"
 #include "TKey.h"
-#include "TObject.h"
 #include "TObjArray.h"
 #include "TList.h"
 #include "TBranch.h"
@@ -19204,7 +19204,7 @@ static PyObject *__pyx_pf_13_librootnumpy_12array2root(CYTHON_UNUSED PyObject *_
  *     # If a tree with that name exists, we want to update it
  *     cdef TTree* tree = <TTree*> file.Get(treename)             # <<<<<<<<<<<<<<
  *     tree = array2tree(arr, name=treename, tree=tree)
- *     tree.Write()
+ *     tree.Write(treename, 2) # TObject::kOverwrite
  */
 
 #line 887 "root_numpy/src/tree.pyx"
@@ -19217,7 +19217,7 @@ static PyObject *__pyx_pf_13_librootnumpy_12array2root(CYTHON_UNUSED PyObject *_
  *     # If a tree with that name exists, we want to update it
  *     cdef TTree* tree = <TTree*> file.Get(treename)
  *     tree = array2tree(arr, name=treename, tree=tree)             # <<<<<<<<<<<<<<
- *     tree.Write()
+ *     tree.Write(treename, 2) # TObject::kOverwrite
  *     file.Close()
  */
 
@@ -19242,17 +19242,20 @@ static PyObject *__pyx_pf_13_librootnumpy_12array2root(CYTHON_UNUSED PyObject *_
   /* "root_numpy/src/tree.pyx":889
  *     cdef TTree* tree = <TTree*> file.Get(treename)
  *     tree = array2tree(arr, name=treename, tree=tree)
- *     tree.Write()             # <<<<<<<<<<<<<<
+ *     tree.Write(treename, 2) # TObject::kOverwrite             # <<<<<<<<<<<<<<
  *     file.Close()
  *     # how to clean up TTree? Same question as above.
  */
 
 #line 889 "root_numpy/src/tree.pyx"
-  __pyx_v_tree->Write();
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_treename); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 889; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 889 "root_numpy/src/tree.pyx"
+  __pyx_v_tree->Write(__pyx_t_2, 2);
 
   /* "root_numpy/src/tree.pyx":890
  *     tree = array2tree(arr, name=treename, tree=tree)
- *     tree.Write()
+ *     tree.Write(treename, 2) # TObject::kOverwrite
  *     file.Close()             # <<<<<<<<<<<<<<
  *     # how to clean up TTree? Same question as above.
  *     del file

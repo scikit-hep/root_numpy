@@ -1,6 +1,12 @@
 from libcpp cimport bool
 from libcpp.string cimport string, const_char
 
+cdef extern from "TObject.h":
+    cdef cppclass TObject:
+        TObject()
+        const_char* GetName()
+        const_char* ClassName()
+
 cdef extern from "TFile.h":
     cdef cppclass TFile:
         TFile(const_char*, const_char*)
@@ -18,12 +24,6 @@ cdef extern from "TKey.h":
     cdef cppclass TKey:
         const_char* GetName()
         const_char* GetClassName()
-
-cdef extern from "TObject.h":
-    cdef cppclass TObject:
-        TObject()
-        const_char* GetName()
-        const_char* ClassName()
 
 cdef extern from "TObjArray.h":
     cdef cppclass TObjArray:
@@ -70,6 +70,7 @@ cdef extern from "TTree.h":
         void Delete(void*)
         long SetEntries(long)
         int Write()
+        int Write(const_char* name, int option)
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
