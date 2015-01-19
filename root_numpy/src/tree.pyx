@@ -39,15 +39,15 @@ def list_trees(fname):
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
         raise IOError("unable to get keys in {0}".format(fname))
-    ret = []
+    ret = dict()
     cdef int n = keys.GetEntries()
     cdef TKey* key
     for i in range(n):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
-            ret.append(str(key.GetName()))
-    return ret
+            ret[str(key.GetName())] = None
+    return ret.keys()
 
 
 def list_structures(fname, tree=None):
