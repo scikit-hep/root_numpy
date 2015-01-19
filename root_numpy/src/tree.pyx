@@ -39,15 +39,15 @@ def list_trees(fname):
     cdef TList* keys = f.GetListOfKeys()
     if keys is NULL:
         raise IOError("unable to get keys in {0}".format(fname))
-    ret = []
+    ret = dict()
     cdef int n = keys.GetEntries()
     cdef TKey* key
     for i in range(n):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
-            ret.append(str(key.GetName()))
-    return ret
+            ret[str(key.GetName())] = None
+    return ret.keys()
 
 
 def list_structures(fname, tree=None):
@@ -886,7 +886,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     # If a tree with that name exists, we want to update it
     cdef TTree* tree = <TTree*> file.Get(treename)
     tree = array2tree(arr, name=treename, tree=tree)
-    tree.Write()
+    tree.Write(treename, 2) # TObject::kOverwrite
     file.Close()
     # how to clean up TTree? Same question as above.
     del file

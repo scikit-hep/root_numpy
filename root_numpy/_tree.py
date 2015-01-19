@@ -326,10 +326,10 @@ def array2tree(arr, name='tree', tree=None):
     name : str (optional, default='tree')
         Name of the created ROOT TTree if ``tree`` is None.
     tree : existing ROOT TTree (optional, default=None)
-        Any branch with the same name as a field in the
-        numpy array will be extended as long as the types are compatible,
-        otherwise a TypeError is raised. New branches will be created
-        and filled for all new fields.
+        An existing ROOT TTree to be extended by the numpy array.  Any branch
+        with the same name as a field in the numpy array will be extended as
+        long as the types are compatible, otherwise a TypeError is raised. New
+        branches will be created and filled for all new fields.
 
     Returns
     -------
@@ -366,7 +366,9 @@ def array2root(arr, filename, treename='tree', mode='update'):
         Name of the output ROOT TFile. A new file will be created if it
         doesn't already exist.
     treename : str (optional, default='tree')
-        Name of the created ROOT TTree.
+        Name of the ROOT TTree that will be created. If a TTree with the same
+        name already exists in the TFile, it will be extended as documented in
+        :func:`array2tree`.
     mode : str (optional, default='update')
         Mode used to open the ROOT TFile ('update' or 'recreate').
 

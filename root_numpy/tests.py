@@ -685,6 +685,12 @@ def test_array2root():
             ('w', np.bool)])
     tmp_fd, tmp_path = tempfile.mkstemp(suffix='.root')
     rnp.array2root(a, tmp_path, mode='recreate')
+    a_conv = rnp.root2array(tmp_path)
+    assert_array_equal(a, a_conv)
+    # extend the tree
+    rnp.array2root(a, tmp_path, mode='update')
+    a_conv2 = rnp.root2array(tmp_path)
+    assert_array_equal(np.hstack([a, a]), a_conv2)
     os.close(tmp_fd)
     os.remove(tmp_path)
 
