@@ -16,9 +16,9 @@ def fill_hist(hist, array, weights=None, return_indices=False):
     hist : a ROOT TH1, TH2, or TH3
         The ROOT histogram to fill.
     array : numpy array of shape [n_samples, n_dimensions]
-        The values to fill the histogram with. The number of columns
-        must match the dimensionality of the histogram. Supply a flat
-        numpy array when filling a 1D histogram.
+        The values to fill the histogram with. The number of columns must match
+        the dimensionality of the histogram. Supply a flat numpy array when
+        filling a 1D histogram.
     weights : numpy array
         A flat numpy array of weights for each sample in ``array``.
     return_indices : bool, optional (default=False)
@@ -75,8 +75,8 @@ def fill_profile(profile, array, weights=None, return_indices=False):
     profile : a ROOT TProfile, TProfile2D, or TProfile3D
         The ROOT profile to fill.
     array : numpy array of shape [n_samples, n_dimensions]
-        The values to fill the histogram with.
-        There must be one more column than the dimensionality of the profile.
+        The values to fill the histogram with. There must be one more column
+        than the dimensionality of the profile.
     weights : numpy array
         A flat numpy array of weights for each sample in ``array``.
     return_indices : bool, optional (default=False)

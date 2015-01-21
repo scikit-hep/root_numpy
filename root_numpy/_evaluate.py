@@ -14,11 +14,11 @@ def evaluate(root_object, array):
     Parameters
     ----------
     root_object : TH[1|2|3], TF[1|2|3], TFormula, TGraph, TSpline, or string
-        A ROOT histogram, function, formula, graph, spline, or string.
-        If a string is specified, a TFormula is created.
+        A ROOT histogram, function, formula, graph, spline, or string. If a
+        string is specified, a TFormula is created.
     array : ndarray
-        An array containing the values to evaluate the ROOT object on.
-        The shape must match the dimensionality of the ROOT object.
+        An array containing the values to evaluate the ROOT object on. The
+        shape must match the dimensionality of the ROOT object.
 
     Returns
     -------
@@ -29,12 +29,11 @@ def evaluate(root_object, array):
     Raises
     ------
     TypeError
-        If the ROOT object is not a histogram, function, graph, or spline
+        If the ROOT object is not a histogram, function, graph, or spline.
     ValueError
-        If the shape of the array is not compatible with the dimensionality
-        of the ROOT object being evaluated.
-        If the string expression does not compile to a valid TFormula
-        expression.
+        If the shape of the array is not compatible with the dimensionality of
+        the ROOT object being evaluated. If the string expression does not
+        compile to a valid TFormula expression.
 
     Examples
     --------
