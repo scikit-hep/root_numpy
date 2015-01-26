@@ -60,6 +60,13 @@ except OSError:
             "ROOTSYS is {0} but running {1} failed".format(
                 rootsys, root_config))
 
+librootnumpy_comp_args =  ['-Wno-unused-function']
+
+root_cflags = str(subprocess.Popen(["root-config", "--cflags"],
+                                   stdout=subprocess.PIPE).communicate()[0])
+if "-std=c++11" in root_cflags:
+    librootnumpy_comp_args.append("-std=c++11")
+
 librootnumpy = Extension('root_numpy._librootnumpy',
     sources=[
         'root_numpy/src/_librootnumpy.cpp',
@@ -70,7 +77,7 @@ librootnumpy = Extension('root_numpy._librootnumpy',
         np.get_include(),
         root_inc,
         'root_numpy/src'],
-    extra_compile_args=['-Wno-unused-function'],
+    extra_compile_args=librootnumpy_comp_args,
     extra_link_args=root_ldflags + ['-lTreePlayer'])
 
 # check for custom args
