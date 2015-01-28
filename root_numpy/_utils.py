@@ -27,8 +27,8 @@ def rec2array(rec, fields=None):
     rec : NumPy record/structured array
         A NumPy structured array that will be cast into a homogenous data type.
     fields : list of strings, optional (default=None)
-        The fields to include as columns in the output array.
-        If None, then all columns will be included.
+        The fields to include as columns in the output array. If None, then all
+        columns will be included.
 
     Returns
     -------
@@ -52,8 +52,8 @@ def stack(recs, fields=None):
     recs : list
         List of NumPy record arrays
     fields : list of strings, optional (default=None)
-        The list of fields to include in the stacked array.
-        If None, then include the fields in common to all the record arrays.
+        The list of fields to include in the stacked array. If None, then
+        include the fields in common to all the record arrays.
 
     Returns
     -------
@@ -74,8 +74,8 @@ def stretch(arr, fields):
     """Stretch an array.
 
     Stretch an array by ``hstack()``-ing  multiple array fields while
-    preserving column names and record array structure. If a scalar field
-    is specified, it will be stretched along with array fields.
+    preserving column names and record array structure. If a scalar field is
+    specified, it will be stretched along with array fields.
 
     Parameters
     ----------
@@ -188,22 +188,21 @@ def blockwise_inner_join(data, left, foreign_key, right,
     left : array
         Array of left side column names.
     foreign_key : array or string
-        NumPy array or string ``foreign_key`` column name
-        This column can be either an integer or an array of ints.
-        If ``foreign_key`` is an array of int column, left column will
-        be treated according to left column type:
+        NumPy array or string ``foreign_key`` column name. This column can be
+        either an integer or an array of ints. If ``foreign_key`` is an array
+        of int column, left column will be treated according to left column
+        type:
 
         * Scalar columns or columns in ``force_repeat`` will be repeated
         * Array columns not in ``force_repeat`` will be assumed to the
           same length as ``foreign_key`` and will be stretched by index
     right : array
-        Array of right side column names.
-        These are array columns that each index ``foreign_key`` points to.
-        These columns are assumed to have the same length.
+        Array of right side column names. These are array columns that each
+        index ``foreign_key`` points to. These columns are assumed to have the
+        same length.
     force_repeat : array, optional (default=None)
-        Array of left column names that
-        will be forced to stretch even if it's an array (useful when
-        you want to emulate a multiple join).
+        Array of left column names that will be forced to stretch even if it's
+        an array (useful when you want to emulate a multiple join).
     foreign_key_name : str, optional (default=None)
         The name of foreign key column in the output array.
 

@@ -15,8 +15,8 @@ def fill_graph(graph, array):
     hist : a ROOT TGraph or TGraph2D
         The ROOT graph to fill.
     array : numpy array of shape [n_samples, n_dimensions]
-        The values to fill the graph with. The number of columns
-        must match the dimensionality of the graph.
+        The values to fill the graph with. The number of columns must match the
+        dimensionality of the graph.
 
     """
     import ROOT

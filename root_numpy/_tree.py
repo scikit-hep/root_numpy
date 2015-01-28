@@ -108,24 +108,24 @@ def root2array(filenames,
     Parameters
     ----------
     filenames : str or list
-        ROOT file name pattern or list of patterns. Wildcarding is
-        supported by Python globbing.
+        ROOT file name pattern or list of patterns. Wildcarding is supported by
+        Python globbing.
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
     branches : list of str, optional (default=None)
-        List of branch names to include as columns of the array.
-        If None or empty then include all branches than can be converted in the
-        first tree.
-        If branches contains duplicate branches, only the first one is used.
+        List of branch names to include as columns of the array. If None or
+        empty then include all branches than can be converted in the first
+        tree. If branches contains duplicate branches, only the first one is
+        used.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
-        The meaning of the ``start``, ``stop`` and ``step``
-        parameters is the same as for Python slices.
-        If a range is supplied (by setting some of the
-        ``start``, ``stop`` or ``step`` parameters), only the entries in that
-        range and fulfilling the ``selection`` condition (if defined) are used.
+        The meaning of the ``start``, ``stop`` and ``step`` parameters is the
+        same as for Python slices. If a range is supplied (by setting some of
+        the ``start``, ``stop`` or ``step`` parameters), only the entries in
+        that range and fulfilling the ``selection`` condition (if defined) are
+        used.
     include_weight : bool, optional (default=False)
         Include a column containing the tree weight.
     weight_name : str, optional (default='weight')
@@ -242,22 +242,21 @@ def tree2array(tree,
 
     Parameters
     ----------
-
-    treename : str
-        Name of the tree to convert.
+    tree : ROOT TTree instance
+        The ROOT TTree to convert into an array.
     branches : list of str, optional (default=None)
-        List of branch names to include as columns of the array.
-        If None or empty then include all branches than can be converted in the
-        first tree.
-        If branches contains duplicate branches, only the first one is used.
+        List of branch names to include as columns of the array. If None or
+        empty then include all branches than can be converted in the first
+        tree. If branches contains duplicate branches, only the first one is
+        used.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
-        The meaning of the ``start``, ``stop`` and ``step``
-        parameters is the same as for Python slices.
-        If a range is supplied (by setting some of the
-        ``start``, ``stop`` or ``step`` parameters), only the entries in that
-        range and fulfilling the ``selection`` condition (if defined) are used.
+        The meaning of the ``start``, ``stop`` and ``step`` parameters is the
+        same as for Python slices. If a range is supplied (by setting some of
+        the ``start``, ``stop`` or ``step`` parameters), only the entries in
+        that range and fulfilling the ``selection`` condition (if defined) are
+        used.
     include_weight : bool, optional (default=False)
         Include a column containing the tree weight.
     weight_name : str, optional (default='weight')
@@ -325,8 +324,8 @@ def array2tree(arr, name='tree', tree=None):
         A numpy structured array
     name : str (optional, default='tree')
         Name of the created ROOT TTree if ``tree`` is None.
-    tree : existing ROOT TTree (optional, default=None)
-        An existing ROOT TTree to be extended by the numpy array.  Any branch
+    tree : ROOT TTree (optional, default=None)
+        An existing ROOT TTree to be extended by the numpy array. Any branch
         with the same name as a field in the numpy array will be extended as
         long as the types are compatible, otherwise a TypeError is raised. New
         branches will be created and filled for all new fields.
@@ -363,8 +362,8 @@ def array2root(arr, filename, treename='tree', mode='update'):
     arr : array
         A numpy structured array
     filename : str
-        Name of the output ROOT TFile. A new file will be created if it
-        doesn't already exist.
+        Name of the output ROOT TFile. A new file will be created if it doesn't
+        already exist.
     treename : str (optional, default='tree')
         Name of the ROOT TTree that will be created. If a TTree with the same
         name already exists in the TFile, it will be extended as documented in

@@ -18,16 +18,16 @@ def random_sample(root_object, n_samples, seed=None):
     seed : None, positive int or 0, optional (default=None)
         The random seed, set via ROOT.gRandom.SetSeed(seed):
         http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed
-        If 0, the seed will be random. If None (the default),
-        ROOT.gRandom will not be touched and the current seed will be used.
+        If 0, the seed will be random. If None (the default), ROOT.gRandom will
+        not be touched and the current seed will be used.
 
     Returns
     -------
     array : a numpy array
-        A numpy array with a shape corresponding to the dimensionality
-        of the function or histogram. A flat array is returned when sampling
-        TF1 or TH1. An array with shape [n_samples, n_dimensions] is returned
-        when sampling TF2, TF3, TH2, or TH3.
+        A numpy array with a shape corresponding to the dimensionality of the
+        function or histogram. A flat array is returned when sampling TF1 or
+        TH1. An array with shape [n_samples, n_dimensions] is returned when
+        sampling TF2, TF3, TH2, or TH3.
 
     Examples
     --------
