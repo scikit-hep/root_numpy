@@ -38,14 +38,14 @@ sys.path.insert(0, local_path)
 
 
 def root_flags(root_config='root-config'):
-    root_inc = subprocess.Popen([root_config, '--incdir'],
-        stdout=subprocess.PIPE).communicate()[0].strip()
+    root_cflags = subprocess.Popen([root_config, '--cflags'],
+        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
     root_ldflags = subprocess.Popen([root_config, '--libs'],
         stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
-    return root_inc, root_ldflags
+    return root_cflags, root_ldflags
 
 try:
-    root_inc, root_ldflags = root_flags()
+    root_cflags, root_ldflags = root_flags()
 except OSError:
     rootsys = os.getenv('ROOTSYS', None)
     if rootsys is None:
@@ -54,7 +54,7 @@ except OSError:
             "Is ROOT installed and setup properly?")
     try:
         root_config = os.path.join(rootsys, 'bin', 'root-config')
-        root_inc, root_ldflags = root_flags(root_config)
+        root_cflags, root_ldflags = root_flags(root_config)
     except OSError:
         raise RuntimeError(
             "ROOTSYS is {0} but running {1} failed".format(
@@ -68,9 +68,8 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     language='c++',
     include_dirs=[
         np.get_include(),
-        root_inc,
         'root_numpy/src'],
-    extra_compile_args=['-Wno-unused-function'],
+    extra_compile_args=root_cflags + ['-Wno-unused-function'],
     extra_link_args=root_ldflags + ['-lTreePlayer'])
 
 # check for custom args
