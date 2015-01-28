@@ -178,7 +178,12 @@ def test_vary():
     assert_equal(
         a.dtype,
         [('len_n', '<i4'), ('len_f', '<i4'), ('len_d', '<i4'),
-            ('n_int', 'O'), ('f_float', 'O'), ('d_double', 'O')])
+         ('n_char', 'O'), ('n_uchar', 'O'),
+         ('n_short', 'O'), ('n_ushort', 'O'),
+         ('n_int', 'O'), ('n_uint', 'O'),
+         ('n_long', 'O'), ('n_ulong', 'O'),
+         ('f_float', 'O'), ('d_double', 'O')])
+
     #check length
     for i in range(len(a)):
         assert_equal(a.len_n[i], len(a.n_int[i]))
