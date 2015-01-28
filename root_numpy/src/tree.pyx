@@ -5,7 +5,7 @@ TYPES = {
     TypeName[char]().name:               ('char',               np.dtype(np.int8),      np.NPY_INT8),
     TypeName[unsigned_char]().name:      ('unsigned char',      np.dtype(np.uint8),     np.NPY_UINT8),
     TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),
-    TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+    TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),
     TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),
     TypeName[unsigned_int]().name:       ('unsigned int',       np.dtype(np.uint32),    np.NPY_UINT32),
     TypeName[long]().name:               ('long',               np.dtype(np.int64),     np.NPY_INT64),

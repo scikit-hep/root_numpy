@@ -55679,7 +55679,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  *     TypeName[char]().name:               ('char',               np.dtype(np.int8),      np.NPY_INT8),
  *     TypeName[unsigned_char]().name:      ('unsigned char',      np.dtype(np.uint8),     np.NPY_UINT8),             # <<<<<<<<<<<<<<
  *     TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),
- *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+ *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),
  */
 
 #line 6 "root_numpy/src/tree.pyx"
@@ -55779,7 +55779,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  *     TypeName[char]().name:               ('char',               np.dtype(np.int8),      np.NPY_INT8),
  *     TypeName[unsigned_char]().name:      ('unsigned char',      np.dtype(np.uint8),     np.NPY_UINT8),
  *     TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),             # <<<<<<<<<<<<<<
- *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+ *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),
  *     TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),
  */
 
@@ -55879,7 +55879,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
   /* "root_numpy/src/tree.pyx":8
  *     TypeName[unsigned_char]().name:      ('unsigned char',      np.dtype(np.uint8),     np.NPY_UINT8),
  *     TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),
- *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),             # <<<<<<<<<<<<<<
+ *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),             # <<<<<<<<<<<<<<
  *     TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),
  *     TypeName[unsigned_int]().name:       ('unsigned int',       np.dtype(np.uint32),    np.NPY_UINT32),
  */
@@ -55930,7 +55930,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
 #line 8 "root_numpy/src/tree.pyx"
-  __pyx_t_5 = PyInt_FromLong(NPY_UINT8); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyInt_FromLong(NPY_UINT16); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 8 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_5);
@@ -55979,7 +55979,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
 
   /* "root_numpy/src/tree.pyx":9
  *     TypeName[short]().name:              ('short',              np.dtype(np.int16),     np.NPY_INT16),
- *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+ *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),
  *     TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),             # <<<<<<<<<<<<<<
  *     TypeName[unsigned_int]().name:       ('unsigned int',       np.dtype(np.uint32),    np.NPY_UINT32),
  *     TypeName[long]().name:               ('long',               np.dtype(np.int64),     np.NPY_INT64),
@@ -56079,7 +56079,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
   /* "root_numpy/src/tree.pyx":10
- *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT8),
+ *     TypeName[unsigned_short]().name:     ('unsigned short',     np.dtype(np.uint16),    np.NPY_UINT16),
  *     TypeName[int]().name:                ('int',                np.dtype(np.int32),     np.NPY_INT32),
  *     TypeName[unsigned_int]().name:       ('unsigned int',       np.dtype(np.uint32),    np.NPY_UINT32),             # <<<<<<<<<<<<<<
  *     TypeName[long]().name:               ('long',               np.dtype(np.int64),     np.NPY_INT64),
