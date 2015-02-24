@@ -18,7 +18,11 @@ from ROOT import (
 
 import root_numpy as rnp
 from root_numpy.testdata import get_filepath, get_file
-from root_numpy.extern.ordereddict import OrderedDict
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    from root_numpy.extern.ordereddict import OrderedDict
 
 from nose.tools import (raises, assert_raises, assert_true,
                         assert_equal, assert_almost_equal)
@@ -36,16 +40,16 @@ def load(data):
         return get_filepath(data)
 
 
-def check_single(single, n=100, id=1):
+def check_single(single, n=100, offset=1):
     assert_equal(
         single.dtype,
         [('n_int', '<i4'), ('f_float', '<f4'), ('d_double', '<f8')])
     assert_equal(len(single), n)
     for i in range(len(single)):
-        id = (i / 100) + 1
-        assert_equal(single[i][0], i % 100 + id)
-        assert_almost_equal(single[i][1], i % 100 * 2.0 + id)
-        assert_almost_equal(single[i][2], i % 100 * 3.0 + id)
+        offset = (i // 100) + 1
+        assert_equal(single[i][0], i % 100 + offset)
+        assert_almost_equal(single[i][1], i % 100 * 2.0 + offset)
+        assert_almost_equal(single[i][2], i % 100 * 3.0 + offset)
 
 
 def test_list_trees():
@@ -541,7 +545,7 @@ def test_stretch():
             ('df2', 'O'),
             ('df3', 'O')])
 
-    for i in xrange(nrec):
+    for i in range(nrec):
         df1 = np.array(range(i + 1), dtype=np.float)
         df2 = np.array(range(i + 1), dtype=np.int) * 2
         df3 = np.array(range(i + 1), dtype=np.double) * 3
@@ -578,7 +582,7 @@ def test_stretch():
             ('df1', 'O'),
             ('df2', 'O')])
 
-    for i in xrange(nrec):
+    for i in range(nrec):
         df1 = np.array(range(i + 1), dtype=np.float)
         df2 = np.array(range(i + 2), dtype=np.int) * 2
         arr[i] = (i, df1, df2)
@@ -836,9 +840,10 @@ def test_evaluate():
     arr_3d = np.random.rand(5, 3)
     arr_4d = np.random.rand(5, 4)
     # evaluate the functions
-    assert_array_equal(rnp.evaluate(f1, arr_1d), map(f1.Eval, arr_1d))
+    assert_array_equal(rnp.evaluate(f1, arr_1d),
+                       [f1.Eval(x) for x in arr_1d])
     assert_array_equal(rnp.evaluate(f1.GetTitle(), arr_1d),
-                       map(f1.Eval, arr_1d))
+                       [f1.Eval(x) for x in arr_1d])
     assert_array_equal(rnp.evaluate(f2, arr_2d),
                        [f2.Eval(*x) for x in arr_2d])
     assert_array_equal(rnp.evaluate(f2.GetTitle(), arr_2d),
@@ -865,7 +870,8 @@ def test_evaluate():
     assert_array_equal(rnp.evaluate(g, [0, .5, 1]), [1, 1.5, 2])
     from ROOT import TSpline3
     s = TSpline3("spline", g)
-    assert_array_equal(rnp.evaluate(s, [0, .5, 1]), map(s.Eval, [0, .5, 1]))
+    assert_array_equal(rnp.evaluate(s, [0, .5, 1]),
+                       [s.Eval(x) for x in [0, .5, 1]])
     # test exceptions
     assert_raises(TypeError, rnp.evaluate, object(), [1, 2, 3])
     assert_raises(ValueError, rnp.evaluate, h1, arr_2d)

@@ -1,6 +1,8 @@
 import numpy as np
 import operator
-from _librootnumpy import _blockwise_inner_join
+
+from .extern.six import string_types
+from ._librootnumpy import _blockwise_inner_join
 
 
 __all__ = [
@@ -62,8 +64,8 @@ def stack(recs, fields=None):
 
     """
     if fields is None:
-        fields = list(reduce(operator.and_,
-            [set(rec.dtype.names) for rec in recs]))
+        fields = list(set.intersection(
+            *[set(rec.dtype.names) for rec in recs]))
         # preserve order of fields wrt first record array
         if set(fields) == set(recs[0].dtype.names):
             fields = list(recs[0].dtype.names)
@@ -225,7 +227,7 @@ def blockwise_inner_join(data, left, foreign_key, right,
     dtype=[('sl', '<f8'), ('al', '|O8'), ('ar', '<i8'), ('fk', '<i8')])
 
     """
-    if isinstance(foreign_key, basestring):
+    if isinstance(foreign_key, string_types):
         foreign_key = data[foreign_key]
     return _blockwise_inner_join(data, left, foreign_key, right,
                                  force_repeat, foreign_key_name)

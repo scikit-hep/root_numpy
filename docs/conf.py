@@ -11,6 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from __future__ import print_function
+
 import sys, os
 import datetime
 now = datetime.datetime.now()
@@ -24,7 +26,7 @@ sys.path.insert(0, os.path.abspath(os.path.pardir))
 sys.path.insert(1, 'sphinxext')
 
 import root_numpy.info
-print "building docs for root_numpy {0}".format(root_numpy.__version__)
+print("building docs for root_numpy {0}".format(root_numpy.__version__))
 
 # -- General configuration -----------------------------------------------------
 

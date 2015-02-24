@@ -1,19 +1,19 @@
-from _tree import (
+from ._tree import (
     root2array, root2rec,
     tree2array, tree2rec,
     array2tree, array2root,
     list_trees, list_branches, list_structures)
-from _hist import fill_hist, fill_profile
-from _graph import fill_graph
-from _sample import random_sample
-from _array import array
-from _matrix import matrix
-from _evaluate import evaluate
-from _warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
-from _utils import (
+from ._hist import fill_hist, fill_profile
+from ._graph import fill_graph
+from ._sample import random_sample
+from ._array import array
+from ._matrix import matrix
+from ._evaluate import evaluate
+from ._warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
+from ._utils import (
     stretch, blockwise_inner_join,
     rec2array, stack, dup_idx)
-from info import __version__
+from .info import __version__
 
 
 __all__ = [

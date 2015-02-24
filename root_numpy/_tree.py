@@ -1,7 +1,8 @@
 from glob import glob
 import numpy as np
 
-import _librootnumpy
+from .extern.six import string_types
+from . import _librootnumpy
 
 
 __all__ = [
@@ -22,7 +23,7 @@ def _glob(filenames):
     string if the glob didn't match anything so URLs for remote file access
     are not clobbered.
     """
-    if isinstance(filenames, basestring):
+    if isinstance(filenames, string_types):
         filenames = [filenames]
     matches = []
     for name in filenames:

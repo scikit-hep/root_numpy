@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 try:
     import numpy as np
 except ImportError:
@@ -39,10 +41,13 @@ sys.path.insert(0, local_path)
 
 def root_flags(root_config='root-config'):
     root_cflags = subprocess.Popen([root_config, '--cflags'],
-        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
+        stdout=subprocess.PIPE).communicate()[0].strip()
     root_ldflags = subprocess.Popen([root_config, '--libs'],
-        stdout=subprocess.PIPE).communicate()[0].strip().split(' ')
-    return root_cflags, root_ldflags
+        stdout=subprocess.PIPE).communicate()[0].strip()
+    if sys.version > '3':
+        root_cflags = root_cflags.decode('utf-8')
+        root_ldflags = root_ldflags.decode('utf-8')
+    return root_cflags.split(), root_ldflags.split()
 
 try:
     root_cflags, root_ldflags = root_flags()
@@ -91,9 +96,9 @@ if release:
     open('root_numpy/info.py', 'w').write(
         dev_info.replace('.dev', ''))
 
-execfile('root_numpy/info.py')
+exec(open('root_numpy/info.py').read())
 if 'install' in sys.argv:
-    print __doc__
+    print(__doc__)
 
 setup(
     name='root_numpy',
@@ -105,7 +110,7 @@ setup(
     license='MIT',
     url='http://rootpy.github.io/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
-                 'root_numpy/root_numpy-%s.tar.gz' % __version__,
+                 'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
     packages=[
         'root_numpy',
         'root_numpy.testdata',
