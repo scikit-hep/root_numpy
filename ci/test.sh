@@ -9,8 +9,10 @@ set -e
 python --version
 python -c "import numpy; print('numpy %s' % numpy.__version__)"
 # Check if ROOT and PyROOT work
-root -l -q
+#root -l -q
 python -c "import ROOT; ROOT.TBrowser()"
+
+export PYTHONPATH=/home/travis/.local/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/:$PYTHONPATH
 
 # Install into the user site-packages directory and run tests on that
 time make install-user
