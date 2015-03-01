@@ -46,6 +46,9 @@ cdef extern from "util.h":
         TypeName()
         const_char* name
 
+cdef extern from "2to3.h":
+    pass 
+
 cdef extern from "Vector2Array.h":
     cdef cppclass Vector2Array[T]:
         T* convert(vector[T]* v)

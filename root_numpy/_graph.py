@@ -1,5 +1,5 @@
 import numpy as np
-import _librootnumpy
+from . import _librootnumpy
 
 
 __all__ = [

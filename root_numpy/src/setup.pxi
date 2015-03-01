@@ -1,4 +1,7 @@
 # cython: experimental_cpp_class_def=True
+#import sys
+#PY3 = sys.version > '3'
+
 import numpy as np
 cimport numpy as np
 np.import_array()
@@ -6,9 +9,16 @@ np.import_array()
 from cpython cimport array
 from cpython.ref cimport Py_INCREF, Py_XDECREF
 from cpython cimport PyObject
+
+# Python 3
+#from cpython.pycapsule cimport (PyCapsule_GetPointer,
+#                                PyCapsule_CheckExact,
+#                                PyCapsule_New)
+# Python 2
 from cpython.cobject cimport (PyCObject_AsVoidPtr,
                               PyCObject_Check,
                               PyCObject_FromVoidPtr)
+
 from cython.operator cimport dereference as deref, preincrement as inc
 
 from libcpp.vector cimport vector
@@ -26,7 +36,7 @@ except ImportError:
 
 import atexit
 import warnings
-from _warnings import RootNumpyUnconvertibleWarning
+from ._warnings import RootNumpyUnconvertibleWarning
 
 ctypedef unsigned char unsigned_char
 ctypedef unsigned short unsigned_short

@@ -47,7 +47,7 @@ def list_trees(fname):
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
             ret[str(key.GetName())] = None
-    return ret.keys()
+    return list(ret.keys())
 
 
 def list_structures(fname, tree=None):
@@ -68,8 +68,7 @@ def list_structures(fname, tree=None):
 
 
 def list_branches(fname, tree=None):
-    return list_structures(fname, tree).keys()
-
+    return list(list_structures(fname, tree).keys())
 
 
 cdef parse_branch_structure(TBranch* branch):
@@ -84,7 +83,7 @@ cdef parse_branch_structure(TBranch* branch):
         leaf = <TLeaf*>leaves.At(ileaf)
         lname = leaf.GetName()
         # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-        ltype = <bytes>ResolveTypedef(leaf.GetTypeName(), True).c_str()
+        ltype = <unicode>ResolveTypedef(leaf.GetTypeName(), True).c_str()
         leaflist.append((lname, ltype))
     if not leaflist:
         raise RuntimeError(
@@ -582,14 +581,12 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef int nb
     cdef int entry_size
     cdef vector[Converter*] conv_array
-    cdef bytes py_string
     cdef char* c_string
 
     try:
         # Set up the selection if we have one
         if selection:
-            py_string = str(selection)
-            c_string = py_string
+            c_string = selection
             selection_formula = new TTreeFormula("selection", c_string, bc.fChain)
             if selection_formula == NULL or selection_formula.GetNdim() == 0:
                 del selection_formula
@@ -630,8 +627,7 @@ cdef object tree2array(TTree* tree, branches, selection,
                             RootNumpyUnconvertibleWarning)
             else:
                 # Attempt to interpret as an expression
-                py_string = str(branch)
-                c_string = py_string
+                c_string = branch
                 formula = new TTreeFormula(c_string, c_string, bc.fChain)
                 if formula == NULL or formula.GetNdim() == 0:
                     del formula

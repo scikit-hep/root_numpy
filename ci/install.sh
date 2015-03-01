@@ -6,13 +6,15 @@
 
 set -e
 
-sudo apt-get update -qq
-sudo apt-get install -qq python-nose python-pip
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt-get -qq update
+sudo apt-get -qq install g++-4.8
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+sudo apt-get -qq install python-nose python-pip
 pip install coverage coveralls
 
-# Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM
-# for the correct Python / ROOT version
-time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
-time tar zxf root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
-mv root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION} root
+# Install the ROOT binary
+time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/rootv${ROOT}_python${TRAVIS_PYTHON_VERSION}_gcc4.8_x86_64.tar.gz
+time tar zxf rootv${ROOT}_python${TRAVIS_PYTHON_VERSION}_gcc4.8_x86_64.tar.gz
+mv rootv${ROOT}_python${TRAVIS_PYTHON_VERSION}_gcc4.8_x86_64 root
 source root/bin/thisroot.sh

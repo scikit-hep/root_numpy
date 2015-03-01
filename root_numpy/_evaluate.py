@@ -1,6 +1,8 @@
 import uuid
 import numpy as np
-import _librootnumpy
+
+from .extern.six import string_types
+from . import _librootnumpy
 
 
 __all__ = [
@@ -91,8 +93,8 @@ def evaluate(root_object, array):
         if array.ndim != 1:
             raise ValueError("array must be 1-dimensional")
         return _librootnumpy.evaluate_f1(ROOT.AsCObject(root_object), array)
-    elif isinstance(root_object, (basestring, ROOT.TFormula)):
-        if isinstance(root_object, basestring):
+    elif isinstance(root_object, (string_types, ROOT.TFormula)):
+        if isinstance(root_object, string_types):
             # attempt to create a formula
             root_object = ROOT.TFormula(uuid.uuid4().hex, root_object)
         ndim = root_object.GetNdim()

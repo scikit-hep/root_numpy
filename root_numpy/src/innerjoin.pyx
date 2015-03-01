@@ -31,14 +31,14 @@ cpdef _blockwise_inner_join(data, left, fk, right,
 
     repeat_columns = [c for c in left if data.dtype[c] != 'O' or c in force_repeat]
     cdef np.ndarray[np.int_t] repeat_indices = \
-        np.array(map(data.dtype.names.index, repeat_columns), np.int) 
+        np.array([data.dtype.names.index(x) for x in repeat_columns], np.int) 
     
     stretch_columns = [c for c in left if c not in repeat_columns]
     cdef np.ndarray[np.int_t] stretch_indices = \
-        np.array(map(data.dtype.names.index, stretch_columns), np.int)
+        np.array([data.dtype.names.index(x) for x in stretch_columns], np.int)
     
     cdef np.ndarray[np.int_t] right_indices = \
-        np.array(map(data.dtype.names.index, right), np.int)
+        np.array([data.dtype.names.index(x) for x in right], np.int)
     
     # making new dtype
     new_dtype = []
@@ -92,11 +92,11 @@ cdef _vector_fk_inner_join(np.ndarray data, right, np.ndarray fk,
     
     # find where each of repeat/stretch/right lands
     cdef np.ndarray[np.int_t, ndim=1] repeat_result_indices = \
-        np.array(map(ret.dtype.names.index, repeat_columns), np.int)
+        np.array([ret.dtype.names.index(x) for x in repeat_columns], np.int)
     cdef np.ndarray[np.int_t, ndim=1] stretch_result_indices = \
-        np.array(map(ret.dtype.names.index, stretch_columns), np.int)
+        np.array([ret.dtype.names.index(x) for x in stretch_columns], np.int)
     cdef np.ndarray[np.int_t, ndim=1] right_result_indices = \
-        np.array(map(ret.dtype.names.index, right), np.int)
+        np.array([ret.dtype.names.index(x) for x in right], np.int)
 
     cdef int fk_result_index = ret.dtype.names.index(fk_name)
     cdef long nrepeat = len(repeat_indices)
@@ -162,11 +162,11 @@ cdef _scalar_fk_inner_join(np.ndarray data, right, np.ndarray fk,
     
     # find where each of repeat/stretch/right lands
     cdef np.ndarray[np.int_t] repeat_result_indices = \
-        np.array(map(ret.dtype.names.index, repeat_columns ), np.int)
+        np.array([ret.dtype.names.index(x) for x in repeat_columns], np.int)
     cdef np.ndarray[np.int_t] stretch_result_indices = \
-        np.array(map(ret.dtype.names.index, stretch_columns ), np.int)
+        np.array([ret.dtype.names.index(x) for x in stretch_columns], np.int)
     cdef np.ndarray[np.int_t] right_result_indices = \
-        np.array(map(ret.dtype.names.index, right ), np.int)
+        np.array([ret.dtype.names.index(x) for x in right], np.int)
     cdef int fk_result_index = ret.dtype.names.index(fk_name)
     
     cdef long nrepeat = len(repeat_indices)

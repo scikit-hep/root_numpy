@@ -1,4 +1,4 @@
-import _librootnumpy
+from . import _librootnumpy
 
 
 __all__ = [
