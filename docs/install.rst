@@ -18,8 +18,8 @@ be found, the installation aborts.
 root_numpy has been tested with:
 
 * ROOT 5.32, 5.34
-* NumPy 1.6, 1.7, 1.8
-* Python 2.6, 2.7
+* NumPy 1.6, 1.7, 1.8, 1.9
+* Python 2.6, 2.7, 3.4
 * GNU/Linux, Mac OS
 
 .. warning:: **Mac OS:** the libstdc++ and libc++ ABIs are not compatible.
@@ -72,8 +72,6 @@ To install a `released version
 <http://pypi.python.org/pypi/root_numpy/>`_ of
 `root_numpy` use `pip <http://pypi.python.org/pypi/pip>`_.
 
-.. note:: This will install the latest version of root_numpy on PyPI which may
-   be lacking many new unreleased features.
 
 To install in your `home directory
 <http://www.python.org/dev/peps/pep-0370/>`_::
@@ -83,6 +81,12 @@ To install in your `home directory
 To install system-wide (requires root privileges)::
 
    sudo ROOTSYS=$ROOTSYS pip install root_numpy
+
+.. note:: The above will install the latest version of root_numpy on PyPI
+   and may be lacking new unreleased features. You can also use pip to
+   install the latest version of root_numpy on github::
+
+       pip install --upgrade --user https://github.com/rootpy/root_numpy/zipball/master
 
 Running the Tests
 =================
