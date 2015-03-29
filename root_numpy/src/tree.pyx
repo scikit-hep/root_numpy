@@ -31,6 +31,18 @@ TYPES_NUMPY2ROOT = {
     np.dtype(np.float64):   (8, 'D'),
 }
 
+SPECIAL_TYPEDEFS = {
+    'Long64_t': 'long long',
+    'ULong64_t': 'unsigned long long',
+}
+
+
+cdef inline unicode resolve_type(const char* typename):
+    # resolve Float_t -> float, vector<Float_t> -> vector<float>, ... 
+    resolvedtype = <unicode>ResolveTypedef(typename, True).c_str()
+    resolvedtype = <unicode>SPECIAL_TYPEDEFS.get(resolvedtype, resolvedtype)
+    return resolvedtype
+
 
 def list_trees(fname):
     cdef TFile* f = Open(fname, 'read')
@@ -82,8 +94,7 @@ cdef parse_branch_structure(TBranch* branch):
     for ileaf in range(leaves.GetEntries()):
         leaf = <TLeaf*>leaves.At(ileaf)
         lname = leaf.GetName()
-        # resolve Float_t -> float, vector<Float_t> -> vector<float>, ..
-        ltype = <unicode>ResolveTypedef(leaf.GetTypeName(), True).c_str()
+        ltype = resolve_type(leaf.GetTypeName())
         leaflist.append((lname, ltype))
     if not leaflist:
         raise RuntimeError(
@@ -511,7 +522,7 @@ cdef Converter* find_converter(Column* col):
 
 
 cdef Converter* find_converter_by_typename(string typename):
-    it = CONVERTERS.find(ResolveTypedef(typename.c_str(), True))
+    it = CONVERTERS.find(resolve_type(typename.c_str()))
     if it == CONVERTERS.end():
         return NULL
     return deref(it).second
