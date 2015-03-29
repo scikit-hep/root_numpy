@@ -1,0 +1,3 @@
+ignore-paths:
+    - docs
+    - root_numpy/extern
