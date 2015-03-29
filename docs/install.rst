@@ -17,7 +17,7 @@ be found, the installation aborts.
 
 root_numpy has been tested with:
 
-* ROOT 5.32, 5.34
+* ROOT 5.32, 5.34, 6.04
 * NumPy 1.6, 1.7, 1.8, 1.9
 * Python 2.6, 2.7, 3.4
 * GNU/Linux, Mac OS
