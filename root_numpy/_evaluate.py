@@ -103,7 +103,7 @@ def evaluate(root_object, array):
         if ndim == 1:
             if array.ndim != 1:
                 raise ValueError("array must be 1-dimensional")
-            return _librootnumpy.evaluate_f1(
+            return _librootnumpy.evaluate_formula_1d(
                 ROOT.AsCObject(root_object), array)
         if array.ndim != 2:
             raise ValueError("array must be 2-dimensional")
@@ -112,13 +112,13 @@ def evaluate(root_object, array):
                 "length of the second dimension must equal "
                 "the dimension of the function")
         if ndim == 2:
-            return _librootnumpy.evaluate_f2(
+            return _librootnumpy.evaluate_formula_2d(
                 ROOT.AsCObject(root_object), array)
         elif ndim == 3:
-            return _librootnumpy.evaluate_f3(
+            return _librootnumpy.evaluate_formula_3d(
                 ROOT.AsCObject(root_object), array)
         # 4d
-        return _librootnumpy.evaluate_f4(
+        return _librootnumpy.evaluate_formula_4d(
             ROOT.AsCObject(root_object), array)
     elif isinstance(root_object, ROOT.TGraph):
         if array.ndim != 1:
