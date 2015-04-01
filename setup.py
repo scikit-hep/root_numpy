@@ -94,7 +94,7 @@ if release:
     shutil.move('root_numpy/info.py', 'info.tmp')
     dev_info = ''.join(open('info.tmp', 'r').readlines())
     open('root_numpy/info.py', 'w').write(
-        dev_info.replace('.dev', ''))
+        dev_info.replace('.dev0', ''))
 
 exec(open('root_numpy/info.py').read())
 if 'install' in sys.argv:
