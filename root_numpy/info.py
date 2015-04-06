@@ -7,4 +7,4 @@
                    |_____|                    |_|    |___/
 """
 __version__ = '4.0.1.dev0'
-__doc__ = __doc__.format(__version__) # pylint:disable=redefined-builtin
+__doc__ = __doc__.format(__version__)  # pylint:disable=redefined-builtin

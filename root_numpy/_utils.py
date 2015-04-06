@@ -135,7 +135,7 @@ def stretch(arr, fields):
                 raise ValueError(
                     "Array lengths do not match: "
                     "expected %d but found %d in %s" %
-                        (numrec, len(stack), c))
+                    (numrec, len(stack), c))
             ret[c] = stack
         else:
             # FIXME: this is rather inefficient since the repeat result

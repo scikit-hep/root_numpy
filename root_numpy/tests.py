@@ -260,7 +260,8 @@ def test_selection_and_expression():
 
 
 def test_object_expression():
-    rec = rnp.root2rec(load('object*.root'), branches=['vect.Pt()'])
+    rec = rnp.root2rec(load(['object1.root', 'object2.root']),
+                       branches=['vect.Pt()'])
     assert_array_equal(
         rec['vect.Pt()'],
         np.concatenate([

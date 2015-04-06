@@ -61,7 +61,8 @@ def evaluate(root_object, array):
                 raise ValueError(
                     "length of the second dimension must equal "
                     "the dimension of the histogram")
-            return _librootnumpy.evaluate_h3(ROOT.AsCObject(root_object), array)
+            return _librootnumpy.evaluate_h3(
+                ROOT.AsCObject(root_object), array)
         elif isinstance(root_object, ROOT.TH2):
             if array.ndim != 2:
                 raise ValueError("array must be 2-dimensional")
@@ -69,10 +70,12 @@ def evaluate(root_object, array):
                 raise ValueError(
                     "length of the second dimension must equal "
                     "the dimension of the histogram")
-            return _librootnumpy.evaluate_h2(ROOT.AsCObject(root_object), array)
+            return _librootnumpy.evaluate_h2(
+                ROOT.AsCObject(root_object), array)
         if array.ndim != 1:
             raise ValueError("array must be 1-dimensional")
-        return _librootnumpy.evaluate_h1(ROOT.AsCObject(root_object), array)
+        return _librootnumpy.evaluate_h1(
+            ROOT.AsCObject(root_object), array)
     elif isinstance(root_object, ROOT.TF1):
         if isinstance(root_object, ROOT.TF3):
             if array.ndim != 2:
@@ -81,7 +84,8 @@ def evaluate(root_object, array):
                 raise ValueError(
                     "length of the second dimension must equal "
                     "the dimension of the function")
-            return _librootnumpy.evaluate_f3(ROOT.AsCObject(root_object), array)
+            return _librootnumpy.evaluate_f3(
+                ROOT.AsCObject(root_object), array)
         elif isinstance(root_object, ROOT.TF2):
             if array.ndim != 2:
                 raise ValueError("array must be 2-dimensional")
@@ -89,10 +93,12 @@ def evaluate(root_object, array):
                 raise ValueError(
                     "length of the second dimension must equal "
                     "the dimension of the function")
-            return _librootnumpy.evaluate_f2(ROOT.AsCObject(root_object), array)
+            return _librootnumpy.evaluate_f2(
+                ROOT.AsCObject(root_object), array)
         if array.ndim != 1:
             raise ValueError("array must be 1-dimensional")
-        return _librootnumpy.evaluate_f1(ROOT.AsCObject(root_object), array)
+        return _librootnumpy.evaluate_f1(
+            ROOT.AsCObject(root_object), array)
     elif isinstance(root_object, (string_types, ROOT.TFormula)):
         if isinstance(root_object, string_types):
             # attempt to create a formula
@@ -123,11 +129,13 @@ def evaluate(root_object, array):
     elif isinstance(root_object, ROOT.TGraph):
         if array.ndim != 1:
             raise ValueError("array must be 1-dimensional")
-        return _librootnumpy.evaluate_graph(ROOT.AsCObject(root_object), array)
+        return _librootnumpy.evaluate_graph(
+            ROOT.AsCObject(root_object), array)
     elif isinstance(root_object, ROOT.TSpline):
         if array.ndim != 1:
             raise ValueError("array must be 1-dimensional")
-        return _librootnumpy.evaluate_spline(ROOT.AsCObject(root_object), array)
+        return _librootnumpy.evaluate_spline(
+            ROOT.AsCObject(root_object), array)
     raise TypeError(
         "root_object is not a ROOT histogram, function, formula, "
         "graph, spline or string")
