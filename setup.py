@@ -40,9 +40,11 @@ sys.path.insert(0, local_path)
 
 
 def root_flags(root_config='root-config'):
-    root_cflags = subprocess.Popen([root_config, '--cflags'],
+    root_cflags = subprocess.Popen(
+        [root_config, '--cflags'],
         stdout=subprocess.PIPE).communicate()[0].strip()
-    root_ldflags = subprocess.Popen([root_config, '--libs'],
+    root_ldflags = subprocess.Popen(
+        [root_config, '--libs'],
         stdout=subprocess.PIPE).communicate()[0].strip()
     if sys.version > '3':
         root_cflags = root_cflags.decode('utf-8')
@@ -65,7 +67,8 @@ except OSError:
             "ROOTSYS is {0} but running {1} failed".format(
                 rootsys, root_config))
 
-librootnumpy = Extension('root_numpy._librootnumpy',
+librootnumpy = Extension(
+    'root_numpy._librootnumpy',
     sources=[
         'root_numpy/src/_librootnumpy.cpp',
     ],
@@ -74,7 +77,10 @@ librootnumpy = Extension('root_numpy._librootnumpy',
     include_dirs=[
         np.get_include(),
         'root_numpy/src'],
-    extra_compile_args=root_cflags + ['-Wno-unused-function'],
+    extra_compile_args=root_cflags + [
+        '-Wno-unused-function',
+        '-Wno-write-strings',
+    ],
     extra_link_args=root_ldflags + ['-lTreePlayer'])
 
 # check for custom args

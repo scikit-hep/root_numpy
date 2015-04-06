@@ -575,13 +575,12 @@ cdef object tree2array(TTree* tree, branches, selection,
     cdef vector[Column*] columns
     cdef Column* col
 
-    # Make a "better" chain so we can register all columns
-    cdef BetterChain* bc = new BetterChain(tree)
-    handle_load(bc.Prepare(), True)
+    cdef TreeChain* chain = new TreeChain(tree)
+    handle_load(chain.Prepare(), True)
 
     cdef TTreeFormula* selection_formula = NULL
     cdef TTreeFormula* formula = NULL
-    cdef int num_entries = bc.GetEntries()
+    cdef int num_entries = chain.GetEntries()
     cdef int num_entries_selected = 0
     cdef int ientry
 
@@ -598,13 +597,13 @@ cdef object tree2array(TTree* tree, branches, selection,
         # Set up the selection if we have one
         if selection:
             c_string = selection
-            selection_formula = new TTreeFormula("selection", c_string, bc.fChain)
+            selection_formula = new TTreeFormula("selection", c_string, chain.fChain)
             if selection_formula == NULL or selection_formula.GetNdim() == 0:
                 del selection_formula
                 raise ValueError("could not compile selection formula")
             # The chain will take care of updating the formula leaves when
             # rolling over to the next tree.
-            bc.AddFormula(selection_formula)
+            chain.AddFormula(selection_formula)
         
         # Parse the tree structure to determine branches and leaves
         structure = parse_tree_structure(tree, branches=branches)
@@ -625,7 +624,7 @@ cdef object tree2array(TTree* tree, branches, selection,
                 for leaf, ltype in leaves:
                     if CONVERTERS.find(ltype) != CONVERTERS.end():
                         colname = branch if shortname else '{0}_{1}'.format(branch, leaf)
-                        col = bc.MakeColumn(branch, leaf, colname)
+                        col = chain.MakeColumn(branch, leaf, colname)
                         columns.push_back(col)
                     elif user_branches:
                         raise TypeError(
@@ -639,7 +638,7 @@ cdef object tree2array(TTree* tree, branches, selection,
             else:
                 # Attempt to interpret as an expression
                 c_string = branch
-                formula = new TTreeFormula(c_string, c_string, bc.fChain)
+                formula = new TTreeFormula(c_string, c_string, chain.fChain)
                 if formula == NULL or formula.GetNdim() == 0:
                     del formula
                     raise ValueError(
@@ -647,7 +646,7 @@ cdef object tree2array(TTree* tree, branches, selection,
                         "is not present or valid".format(branch))
                 # The chain will take care of updating the formula leaves when
                 # rolling over to the next tree.
-                bc.AddFormula(formula)
+                chain.AddFormula(formula)
                 col = new FormulaColumn(branch, formula)
                 columns.push_back(col)
         
@@ -656,7 +655,7 @@ cdef object tree2array(TTree* tree, branches, selection,
         
         # Activate branches used by formulae and columns
         # and deactivate all others
-        bc.InitBranches()
+        chain.InitBranches()
 
         # Now that we have all the columns we can
         # make an appropriate array structure
@@ -667,7 +666,7 @@ cdef object tree2array(TTree* tree, branches, selection,
         
         indices = slice(start, stop, step).indices(num_entries)
         for ientry in xrange(*indices):
-            entry_size = bc.GetEntry(ientry)
+            entry_size = chain.GetEntry(ientry)
             handle_load(entry_size)
             if entry_size == 0:
                 raise IOError("read failure in current tree")
@@ -688,12 +687,12 @@ cdef object tree2array(TTree* tree, branches, selection,
                 # poorman pointer magic
                 dataptr = shift(dataptr, nb)
             if include_weight:
-                (<double*> dataptr)[0] = bc.GetWeight() 
+                (<double*> dataptr)[0] = chain.GetWeight() 
 
             # Increment number of selected entries last
             num_entries_selected += 1
     finally:
-        del bc
+        del chain
     
     # If we selected fewer than num_entries entries then shrink the array
     if num_entries_selected < num_entries:

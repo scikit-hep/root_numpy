@@ -26,9 +26,9 @@ cdef extern from "Column.h":
         void* GetValuePointer()
         const_char* GetTypeName()
 
-cdef extern from "BetterChain.h":
-    cdef cppclass BetterChain:
-        BetterChain(TTree*)
+cdef extern from "TreeChain.h":
+    cdef cppclass TreeChain:
+        TreeChain(TTree*)
         long Prepare()
         int Next()
         Column* MakeColumn(string bname, string lname, string colname)
