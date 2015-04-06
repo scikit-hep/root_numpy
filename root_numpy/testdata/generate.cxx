@@ -6,6 +6,7 @@
 #include "TTree.h"
 #include "TNtuple.h"
 #include "TRandom.h"
+#include "TLorentzVector.h"
 
 
 using std::vector;
@@ -311,6 +312,25 @@ void makestring()
     file.Close();
 }
 
+void makeobject(int id)
+{
+    char buffer[255];
+    sprintf(buffer, "object%d.root", id);
+    TFile file(buffer, "RECREATE");
+    TTree tree("tree", "tree with object branches");
+    int entry;
+    TLorentzVector vect;
+    tree.Branch("entry", &entry, "i/I");
+    // TLorentzVector is split across multiple subbranches
+    tree.Branch("vect", &vect);
+    for (entry=0; entry<10; ++entry) {
+        vect.SetPtEtaPhiM(entry + id, entry + id, 0, 0);
+        tree.Fill();
+    }
+    tree.Write();
+    file.Close();
+}
+
 int main(void)
 {
     makentuple();
@@ -325,5 +345,7 @@ int main(void)
     makestruct();
     makerandom();
     makestring();
+    makeobject(1);
+    makeobject(2);
     return 0;
 }

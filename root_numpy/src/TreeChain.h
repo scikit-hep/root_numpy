@@ -1,5 +1,5 @@
-#ifndef __BETTER_CHAIN_H
-#define __BETTER_CHAIN_H
+#ifndef __TREE_CHAIN_H
+#define __TREE_CHAIN_H
 
 #include <string>
 #include <iostream>
@@ -23,12 +23,29 @@
 #include "util.h"
 
 
-// Correct TChain implementation with cache TLeaf*
-class BetterChain
+void activate_branch_recursive(TBranch* branch)
+{
+    if (branch == NULL)
+    {
+        return;
+    }
+    // Activate the branch
+    branch->SetStatus(true);
+    TObjArray* subbranches = branch->GetListOfBranches();
+    // Loop on subbranches
+    for (int i = 0; i < subbranches->GetEntries(); ++i)
+    {
+        activate_branch_recursive((TBranch*)subbranches->At(i));
+    }
+}
+
+
+// Improved TChain implementation
+class TreeChain
 {
     public:
 
-        BetterChain(TTree* fChain):
+        TreeChain(TTree* fChain):
             fChain(fChain),
             ientry(0)
         {
@@ -37,11 +54,11 @@ class BetterChain
             fChain->SetNotify(notifier);
         }
 
-        ~BetterChain()
+        ~TreeChain()
         {
             if (!fChain)
             {
-                // This is somehow needed (copied from MakeClass)
+                // Copied from MakeClass
                 return;
             }
 
@@ -55,8 +72,7 @@ class BetterChain
                                         status_it->second);
             }
 
-            fChain->SetNotify(notifier->oldnotify); // Do not switch these two lines!
-            //delete fChain->GetCurrentFile(); // ROOT does something funny
+            fChain->SetNotify(notifier->oldnotify);
 
             LeafCache::iterator it;
             for(it = leafcache.begin(); it != leafcache.end(); ++it)
@@ -64,7 +80,7 @@ class BetterChain
                 delete it->second;
             }
 
-            // BetterChain owns the formulae and so we delete them here
+            // TreeChain owns the formulae and so we delete them here
             std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
@@ -91,15 +107,13 @@ class BetterChain
                 branch = (TBranch*) branches->At(ibranch);
                 original_branch_status[branch->GetName()] =
                     branch->TestBit(kDoNotProcess) == 0;
-                // Only the required branches will be added to the cache later
-                fChain->DropBranchFromCache(branch, kTRUE);
             }
             // Enable all branches since we don't know yet which branches are
             // required by the formulae. The branches must be activated when a
-            // TTreeFormula is initially created. All branches will be
-            // disabled in InitBranches() before only enabling the ones that are
+            // TTreeFormula is initially created. All branches will be disabled
+            // in InitBranches() before only enabling the ones that are
             // actually required
-            fChain->SetBranchStatus("*", 1);
+            fChain->SetBranchStatus("*", true);
             //fChain->SetCacheSize(10000000);
             return load;
         }
@@ -129,7 +143,7 @@ class BetterChain
 
         void AddFormula(TTreeFormula* formula)
         {
-            // The BetterChain will take ownership of the formula
+            // The TreeChain will take ownership of the formula
             if (formula == NULL)
             {
                 return;
@@ -146,9 +160,11 @@ class BetterChain
             LeafCache::iterator it;
 
             // Disable all branches
-            fChain->SetBranchStatus("*", 0);
+            fChain->SetBranchStatus("*", false);
+            // Only the required branches will be added to the cache later
+            fChain->DropBranchFromCache("*", true);
 
-            for (it=leafcache.begin(); it!=leafcache.end(); ++it)
+            for (it = leafcache.begin(); it != leafcache.end(); ++it)
             {
                 bname = it->first.first;
                 lname = it->first.second;
@@ -156,37 +172,61 @@ class BetterChain
                 leaf = branch->FindLeaf(lname.c_str());
 
                 // Make the branch active and cache it
-                fChain->SetBranchStatus(bname.c_str(), 1);
-                fChain->AddBranchToCache(branch, kTRUE);
+                fChain->SetBranchStatus(bname.c_str(), true);
+                fChain->AddBranchToCache(branch, true);
                 // and the length leaf as well
 
-                // TODO Does it work if user doesn't want the length column in the structure?
+                // TODO: Does this work if user doesn't want the length column
+                // in the output structure?
                 TLeaf* leafCount = leaf->GetLeafCount();
                 if (leafCount != NULL)
                 {
-                    fChain->SetBranchStatus(leafCount->GetBranch()->GetName(), 1);
-                    fChain->AddBranchToCache(leafCount->GetBranch(), kTRUE);
+                    branch = leafCount->GetBranch();
+                    fChain->SetBranchStatus(branch->GetName(), true);
+                    fChain->AddBranchToCache(branch, true);
                 }
             }
 
             // Activate all branches used by the formulae
-            int ncodes;
+            int ncodes, n;
             std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
                 ncodes = (*fit)->GetNcodes();
-                for (int n = 0; n < ncodes; ++n)
+                for (n = 0; n < ncodes; ++n)
                 {
                     branch = (*fit)->GetLeaf(n)->GetBranch();
-                    // Make the branch active and cache it
-                    fChain->SetBranchStatus(branch->GetName(), 1);
-                    fChain->AddBranchToCache(branch, kTRUE);
+                    fChain->SetBranchStatus(branch->GetName(), true);
+                    fChain->AddBranchToCache(branch, true);
+                    // Branch may be a TObject split across multiple
+                    // subbranches. These must be activated recursively.
+                    activate_branch_recursive(branch);
                 }
             }
         }
 
         int GetEntry(long entry)
         {
+            /*
+            In order to get performance comparable to TTreeFormula, we manually
+            iterate over the branches we need and call TBranch::GetEntry. This
+            is effectively the same procedure as TTree::GetEntry, except
+            TTree::GetEntry loops over ALL branches, not just those which are
+            active, and calls TBranch::GetEntry. While TBranch::GetEntry is a
+            no-op in the case that the branch is inactive, this iteration can
+            be a HUGE performance hit for TTrees with many branches, which is
+            why TTreeFormula doesn't use TTree::GetEntry and sees far better
+            performance.
+
+            Note: The code in tree.pyx expects the return value of this
+            function to be non-0, because TTree::GetEntry normally picks up
+            those branches which are activate due to their membership in
+            formulae. In fact, it is perfectly legitimate for TTree::GetEntry
+            to return 0 without indicating an error, but to appease the
+            existing code, we'll call GetEntry on all branches with formula
+            membership, and it won't cost us anything since TTreeFormula won't
+            reload them.
+            */
             long load;
             // Read contents of entry.
             if (!fChain)
@@ -199,41 +239,25 @@ class BetterChain
                 return (int)load;
             }
             ientry = entry;
-            // In order to get performance comparable to TTreeFormula, we
-            // manually iterate over the branches we need and call
-            // TBranch::GetEntry.  This is effectively the same procedure as
-            // TTree::GetEntry, except TTree::GetEntry loops over ALL branches,
-            // not just those which are active, and calls TBranch::GetEntry.
-            // While TBranch::GetEntry is a no-op in the case that the branch is
-            // inactive, this iteration can be a HUGE performance hit for TTrees
-            // with many branches, which is why TTreeFormula doesn't use
-            // TTree::GetEntry and sees far better performance.
-            // HACK: The code in tree.pyx expects the return value of this
-            // function to be non-0, because TTree::GetEntry normally picks up
-            // those branches which are activate due to their membership in
-            // formulae.  In fact, it is perfectly legitimate for
-            // TTree::GetEntry to return 0 without indicating an error, but to
-            // appease the existing code, we'll call GetEntry on all branches
-            // with formula membership, and it won't cost us anything since
-            // TTreeFormula won't reload them.
-            LeafCache::iterator lit, lend = leafcache.end();
             int total_read = 0;
+            int read, ncodes;
+            LeafCache::iterator lit, lend = leafcache.end();
             for (lit = leafcache.begin(); lit != lend; ++lit)
             {
-                int read = lit->second->leaf->GetBranch()->GetEntry(load);
+                read = lit->second->leaf->GetBranch()->GetEntry(load);
                 if (read < 0)
                 {
                     return read;
                 }
                 total_read += read;
             }
-            std::vector<TTreeFormula *>::iterator fit, fend = formulae.end();
+            std::vector<TTreeFormula*>::iterator fit, fend = formulae.end();
             for (fit = formulae.begin(); fit != fend; ++fit)
             {
-                int ncodes = (*fit)->GetNcodes();
+                ncodes = (*fit)->GetNcodes();
                 for (int n = 0; n < ncodes; ++n)
                 {
-                    int read = (*fit)->GetLeaf(n)->GetBranch()->GetEntry(load);
+                    read = (*fit)->GetLeaf(n)->GetBranch()->GetEntry(load);
                     if (read < 0)
                     {
                         return read;
@@ -246,31 +270,32 @@ class BetterChain
 
         int Next()
         {
-            int ret = GetEntry(ientry);
-            ++ientry;
-            return ret;
+            return GetEntry(ientry++);
         }
 
         void Notify()
         {
-            // Taking care of all the leaves
+            TBranch* branch;
+            TLeaf* leaf;
+
+            // Handle all the leaves
             LeafCache::iterator it;
             for(it = leafcache.begin(); it != leafcache.end(); ++it)
             {
                 std::string bname = it->first.first;
                 std::string lname = it->first.second;
-                TBranch* branch = fChain->FindBranch(bname.c_str());
-                if (branch==0)
+                branch = fChain->FindBranch(bname.c_str());
+                if (branch == NULL)
                 {
-                    std::cerr << "WARNING cannot find branch " << bname
+                    std::cerr << "WARNING: cannot find branch " << bname
                               << std::endl;
                     it->second->skipped = true;
                     continue;
                 }
-                TLeaf* leaf = branch->FindLeaf(lname.c_str());
-                if (leaf==0)
+                leaf = branch->FindLeaf(lname.c_str());
+                if (leaf == NULL)
                 {
-                    std::cerr << "WARNING cannot find leaf " << lname
+                    std::cerr << "WARNING: cannot find leaf " << lname
                               << " for branch " << bname << std::endl;
                     it->second->skipped = true;
                     continue;
@@ -279,11 +304,21 @@ class BetterChain
                 it->second->skipped = false;
             }
 
-            // Update all formula leaves
+            // Update all formula leaves and activate all object subbranches
+            // used by the formulae
+            int ncodes, n;
             std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
                 (*fit)->UpdateFormulaLeaves();
+                ncodes = (*fit)->GetNcodes();
+                for (n = 0; n < ncodes; ++n)
+                {
+                    branch = (*fit)->GetLeaf(n)->GetBranch();
+                    // Branch may be a TObject split across multiple
+                    // subbranches. These must be activated recursively.
+                    activate_branch_recursive(branch);
+                }
             }
         }
 

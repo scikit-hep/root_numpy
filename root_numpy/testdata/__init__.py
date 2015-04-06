@@ -2,6 +2,12 @@ import os
 from pkg_resources import resource_filename
 
 
+__all__ = [
+    'get_filepath',
+    'get_file',
+]
+
+
 def get_filepath(name='test.root'):
     return resource_filename('root_numpy', os.path.join('testdata', name))
 

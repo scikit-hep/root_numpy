@@ -259,6 +259,16 @@ def test_selection_and_expression():
             load('test.root'), branches=['x', 'x*z'], selection='z>0')))
 
 
+def test_object_expression():
+    rec = rnp.root2rec(load(['object1.root', 'object2.root']),
+                       branches=['vect.Pt()'])
+    assert_array_equal(
+        rec['vect.Pt()'],
+        np.concatenate([
+            np.arange(10, dtype='d') + 1,
+            np.arange(10, dtype='d') + 2]))
+
+
 def test_branch_status():
     # test that original branch status is preserved
     chain = TChain('tree')
