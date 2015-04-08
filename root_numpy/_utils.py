@@ -72,7 +72,7 @@ def stack(recs, fields=None):
     return np.hstack([rec[fields] for rec in recs])
 
 
-def stretch(arr, fields):
+def stretch(arr, fields=None):
     """Stretch an array.
 
     Stretch an array by ``hstack()``-ing  multiple array fields while
@@ -83,8 +83,8 @@ def stretch(arr, fields):
     ----------
     arr : NumPy structured or record array
         The array to be stretched.
-    fields : list of strings
-        A list of column names to stretch.
+    fields : list of strings, optional (default=None)
+        A list of column names to stretch. If None, then stretch all fields.
 
     Returns
     -------
@@ -105,19 +105,21 @@ def stretch(arr, fields):
     """
     dt = []
     has_array_field = False
-    has_scalar_filed = False
     first_array = None
 
+    if fields is None:
+        fields = arr.dtype.names
+
     # Construct dtype
-    for c in fields:
-        if _is_object_field(arr, c):
-            dt.append((c, arr[c][0].dtype))
+    for field in fields:
+        if _is_object_field(arr, field):
+            dt.append((field, arr[field][0].dtype))
             has_array_field = True
-            first_array = c if first_array is None else first_array
+            if first_array is None:
+                first_array = field
         else:
             # Assume scalar
-            dt.append((c, arr[c].dtype))
-            has_scalar_filed = True
+            dt.append((field, arr[field].dtype))
 
     if not has_array_field:
         raise RuntimeError("No array column specified")
@@ -126,21 +128,21 @@ def stretch(arr, fields):
     numrec = np.sum(len_array)
     ret = np.empty(numrec, dtype=dt)
 
-    for c in fields:
-        if _is_object_field(arr, c):
+    for field in fields:
+        if _is_object_field(arr, field):
             # FIXME: this is rather inefficient since the stack
             # is copied over to the return value
-            stack = np.hstack(arr[c])
+            stack = np.hstack(arr[field])
             if len(stack) != numrec:
                 raise ValueError(
                     "Array lengths do not match: "
                     "expected %d but found %d in %s" %
-                    (numrec, len(stack), c))
-            ret[c] = stack
+                    (numrec, len(stack), field))
+            ret[field] = stack
         else:
             # FIXME: this is rather inefficient since the repeat result
             # is copied over to the return value
-            ret[c] = np.repeat(arr[c], len_array)
+            ret[field] = np.repeat(arr[field], len_array)
 
     return ret
 
