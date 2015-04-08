@@ -6,12 +6,12 @@ __all__ = [
 ]
 
 
-def random_sample(root_object, n_samples, seed=None):
+def random_sample(obj, n_samples, seed=None):
     """Create a random array by sampling a ROOT function or histogram.
 
     Parameters
     ----------
-    root_object : a ROOT function (TF1, TF2, TF3) or histogram (TH1, TH2, TH3)
+    obj : TH[1|2|3] or TF[1|2|3]
         The ROOT function or histogram to sample.
     n_samples : positive int
         The number of random samples to generate.
@@ -62,22 +62,22 @@ def random_sample(root_object, n_samples, seed=None):
             raise ValueError("seed must be positive or 0")
         ROOT.gRandom.SetSeed(seed)
     # functions
-    if isinstance(root_object, ROOT.TF1):
-        if isinstance(root_object, ROOT.TF3):
+    if isinstance(obj, ROOT.TF1):
+        if isinstance(obj, ROOT.TF3):
             return _librootnumpy.sample_f3(
-                ROOT.AsCObject(root_object), n_samples)
-        elif isinstance(root_object, ROOT.TF2):
+                ROOT.AsCObject(obj), n_samples)
+        elif isinstance(obj, ROOT.TF2):
             return _librootnumpy.sample_f2(
-                ROOT.AsCObject(root_object), n_samples)
-        return _librootnumpy.sample_f1(ROOT.AsCObject(root_object), n_samples)
+                ROOT.AsCObject(obj), n_samples)
+        return _librootnumpy.sample_f1(ROOT.AsCObject(obj), n_samples)
     # histograms
-    elif isinstance(root_object, ROOT.TH1):
-        if isinstance(root_object, ROOT.TH3):
+    elif isinstance(obj, ROOT.TH1):
+        if isinstance(obj, ROOT.TH3):
             return _librootnumpy.sample_h3(
-                ROOT.AsCObject(root_object), n_samples)
-        elif isinstance(root_object, ROOT.TH2):
+                ROOT.AsCObject(obj), n_samples)
+        elif isinstance(obj, ROOT.TH2):
             return _librootnumpy.sample_h2(
-                ROOT.AsCObject(root_object), n_samples)
-        return _librootnumpy.sample_h1(ROOT.AsCObject(root_object), n_samples)
+                ROOT.AsCObject(obj), n_samples)
+        return _librootnumpy.sample_h1(ROOT.AsCObject(obj), n_samples)
     raise TypeError(
-        "root_object must be a ROOT function or histogram")
+        "obj must be a ROOT function or histogram")

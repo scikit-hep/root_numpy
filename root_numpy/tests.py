@@ -900,3 +900,47 @@ def test_evaluate():
     assert_raises(ValueError, rnp.evaluate, "x*y", arr_1d)
     assert_raises(ValueError, rnp.evaluate, "x", arr_2d)
     assert_raises(ValueError, rnp.evaluate, "x*y", arr_3d)
+
+
+def make_histogram(ndim, hist_type):
+    hist_cls = eval('ROOT.TH{0}{1}'.format(ndim, hist_type))
+    if ndim == 1:
+        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1)
+        func = ROOT.TF1('f1', 'x')
+        hist.FillRandom('f1')
+    elif ndim == 2:
+        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1, 10, 0, 1)
+        func = ROOT.TF2('f2', 'x*y')
+        hist.FillRandom('f2')
+    elif ndim == 3:
+        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1, 10, 0, 1, 10, 0, 1)
+        func = ROOT.TF3('f3', 'x*y*z')
+        hist.FillRandom('f3')
+    else:
+        raise ValueError("ndim must be 1, 2, or 3")
+    return hist
+
+
+def check_hist2array(hist, include_overflow, copy):
+    array = rnp.hist2array(hist, include_overflow=include_overflow, copy=copy)
+    assert_equal(hist.GetDimension(), array.ndim)
+    for iaxis, axis in enumerate('XYZ'[:array.ndim]):
+        if include_overflow:
+            assert_equal(array.shape[iaxis],
+                         eval('hist.GetNbins{0}()'.format(axis)) + 2)
+        else:
+            assert_equal(array.shape[iaxis],
+                         eval('hist.GetNbins{0}()'.format(axis)))
+    # non-zero elements
+    assert_true(np.any(array))
+
+
+def test_hist2array():
+    assert_raises(TypeError, rnp.hist2array, object())
+    for ndim in (1, 2, 3):
+        for hist_type in 'DFISC':
+            hist = make_histogram(ndim, hist_type)
+            yield check_hist2array, hist, False, False
+            yield check_hist2array, hist, False, True
+            yield check_hist2array, hist, True, False
+            yield check_hist2array, hist, True, True

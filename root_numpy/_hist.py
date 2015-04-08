@@ -5,7 +5,18 @@ from . import _librootnumpy
 __all__ = [
     'fill_hist',
     'fill_profile',
+    'hist2array',
+    'array2hist',
 ]
+
+DTYPE_ROOT2NUMPY = dict(C='b1', S='i2', I='i4', F='f4', D='f8')
+ARRAY_NUMPY2ROOT = dict(
+    [(ndim, dict([
+        (hist_type,
+            eval('_librootnumpy.h{0}{1}_array'.format(
+                ndim, hist_type.lower())))
+        for hist_type in 'DFISC']))
+        for ndim in (1, 2, 3)])
 
 
 def fill_hist(hist, array, weights=None, return_indices=False):
@@ -13,7 +24,7 @@ def fill_hist(hist, array, weights=None, return_indices=False):
 
     Parameters
     ----------
-    hist : a ROOT TH1, TH2, or TH3
+    hist : ROOT TH1, TH2, or TH3
         The ROOT histogram to fill.
     array : numpy array of shape [n_samples, n_dimensions]
         The values to fill the histogram with. The number of columns must match
@@ -72,7 +83,7 @@ def fill_profile(profile, array, weights=None, return_indices=False):
 
     Parameters
     ----------
-    profile : a ROOT TProfile, TProfile2D, or TProfile3D
+    profile : ROOT TProfile, TProfile2D, or TProfile3D
         The ROOT profile to fill.
     array : numpy array of shape [n_samples, n_dimensions]
         The values to fill the histogram with. There must be one more column
@@ -116,3 +127,151 @@ def fill_profile(profile, array, weights=None, return_indices=False):
     raise TypeError(
         "profile must be an instance of "
         "ROOT.TProfile, ROOT.TProfile2D, or ROOT.TProfile3D")
+
+
+def hist2array(hist, include_overflow=False, copy=True):
+    """Convert a ROOT histogram into a NumPy array
+
+    Parameters
+    ----------
+    hist : ROOT TH1, TH2, or TH3
+        The ROOT histogram to convert into an array
+    include_overflow : bool, optional (default=False)
+        If True, the over- and underflow bins will be included in the
+        output numpy array. These bins are excluded by default.
+    copy : bool, optional (default=True)
+        If True (the default) then copy the underlying array, otherwise the
+        NumPy array will view (and not own) the same memory as the ROOT
+        histogram's array.
+
+    Returns
+    -------
+    array : numpy array
+        A NumPy array containing the histogram bin values
+
+    Raises
+    ------
+    TypeError
+        If hist is not a ROOT histogram.
+
+    """
+    import ROOT
+    if isinstance(hist, ROOT.TH3):
+        shape = (hist.GetNbinsZ() + 2,
+                 hist.GetNbinsY() + 2,
+                 hist.GetNbinsX() + 2)
+    elif isinstance(hist, ROOT.TH2):
+        shape = (hist.GetNbinsY() + 2, hist.GetNbinsX() + 2)
+    elif isinstance(hist, ROOT.TH1):
+        shape = (hist.GetNbinsX() + 2,)
+    else:
+        raise TypeError(
+            "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
+
+    # Determine the corresponding numpy dtype
+    for hist_type in 'DFISC':
+        if isinstance(hist, eval('ROOT.TArray{0}'.format(hist_type))):
+            break
+
+    # Constuct a NumPy array viewing the underlying histogram array
+    if hist_type == 'C':
+        array_func = eval('_librootnumpy.array_h{0}c'.format(len(shape)))
+        array = array_func(ROOT.AsCObject(hist))
+        array.shape = shape
+    else:
+        dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
+        array = np.ndarray(shape=shape, dtype=dtype, buffer=hist.GetArray())
+
+    if not include_overflow:
+        # Remove overflow and underflow bins
+        if array.ndim == 1:
+            array = array[1:-1]
+        elif array.ndim == 2:
+            array = array[1:-1, 1:-1]
+        elif array.ndim == 3:
+            array = array[1:-1, 1:-1, 1:-1]
+    if copy:
+        return np.copy(array)
+    return array
+
+
+def array2hist(array, hist):
+    """Convert a NumPy array into a ROOT histogram
+
+    Parameters
+    ----------
+    array : numpy array
+        A 1, 2, or 3-d numpy array that will set the bin contents of the
+        ROOT histogram.
+    hist : ROOT TH1, TH2, or TH3
+        A ROOT histogram.
+
+    Raises
+    ------
+    TypeError
+        If hist is not a ROOT histogram.
+    ValueError
+        If the array and histogram are not compatible in terms of
+        dimensionality or number of bins along any axis.
+
+    Notes
+    -----
+    The NumPy array is copied into the histogram's internal array. If the input
+    NumPy array is not of the same data type as the histogram bin contents
+    (i.e. TH1D vs TH1F, etc.) and/or the input array does not contain overflow
+    bins along any of the axes, an additional copy is made into a temporary
+    array with all values converted into the matching data type and with
+    overflow bins included. Avoid this second copy by ensuring that the NumPy
+    array data type matches the histogram data type and that overflow bins are
+    included.
+
+    """
+    import ROOT
+    if isinstance(hist, ROOT.TH3):
+        shape = (hist.GetNbinsZ() + 2,
+                 hist.GetNbinsY() + 2,
+                 hist.GetNbinsX() + 2)
+    elif isinstance(hist, ROOT.TH2):
+        shape = (hist.GetNbinsY() + 2, hist.GetNbinsX() + 2)
+    elif isinstance(hist, ROOT.TH1):
+        shape = (hist.GetNbinsX() + 2,)
+    else:
+        raise TypeError(
+            "hist must be an instance of ROOT.TH1, ROOT.TH2, or ROOT.TH3")
+
+    # Determine the corresponding numpy dtype
+    for hist_type in 'DFISC':
+        if isinstance(hist, eval('ROOT.TArray{0}'.format(hist_type))):
+            break
+    else:
+        # We should never reach this
+        raise TypeError(
+            "hist must be an instance of ROOT.TH[123][DFISC]")
+
+    # Constuct a NumPy array viewing the underlying histogram array
+    dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
+    # No copy is made if the dtype is the same as input
+    _array = np.ascontiguousarray(array, dtype=dtype)
+    if _array.ndim != len(shape):
+        raise ValueError(
+            "array and histogram do not have "
+            "the same number of dimensions")
+    if _array.shape != shape:
+        # Check for overflow along each axis
+        slices = []
+        for axis, bins in enumerate(shape):
+            if _array.shape[axis] == bins - 2:
+                slices.append(slice(1, -1))
+            elif _array.shape[axis] == bins:
+                slices.append(slice(None))
+            else:
+                raise ValueError(
+                    "array and histogram are not compatible along "
+                    "the {0}-axis".format("xyz"[axis]))
+        array_overflow = np.zeros(shape, dtype=dtype)
+        array_overflow[tuple(slices)] = _array
+        _array = array_overflow
+    ARRAY_NUMPY2ROOT[len(shape)][hist_type](
+        ROOT.AsCObject(hist), np.ravel(_array))
+    # Set the number of entries to the number of array elements
+    hist.SetEntries(_array.size)

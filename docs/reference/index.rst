@@ -23,6 +23,8 @@ what they are and what they do.
    tree2rec
    array2tree
    array2root
+   hist2array
+   array2hist
    fill_hist
    fill_profile
    fill_graph

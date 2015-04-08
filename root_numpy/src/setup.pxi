@@ -21,6 +21,7 @@ from cpython.cobject cimport (PyCObject_AsVoidPtr,
 
 from cython.operator cimport dereference as deref, preincrement as inc
 
+from libcpp.cast cimport dynamic_cast
 from libcpp.vector cimport vector
 from libcpp.map cimport map as cpp_map
 from libcpp.pair cimport pair
