@@ -51,14 +51,9 @@ def root_flags(root_config='root-config'):
         root_ldflags = root_ldflags.decode('utf-8')
     return root_cflags.split(), root_ldflags.split()
 
-try:
-    root_cflags, root_ldflags = root_flags()
-except OSError:
-    rootsys = os.getenv('ROOTSYS', None)
-    if rootsys is None:
-        raise RuntimeError(
-            "root-config is not in PATH and ROOTSYS is not set. "
-            "Is ROOT installed and setup properly?")
+
+rootsys = os.getenv('ROOTSYS', None)
+if rootsys is not None:
     try:
         root_config = os.path.join(rootsys, 'bin', 'root-config')
         root_cflags, root_ldflags = root_flags(root_config)
@@ -66,6 +61,13 @@ except OSError:
         raise RuntimeError(
             "ROOTSYS is {0} but running {1} failed".format(
                 rootsys, root_config))
+else:
+    try:
+        root_cflags, root_ldflags = root_flags()
+    except OSError:
+        raise RuntimeError(
+            "root-config is not in PATH and ROOTSYS is not set. "
+            "Is ROOT installed correctly?")
 
 librootnumpy = Extension(
     'root_numpy._librootnumpy',
