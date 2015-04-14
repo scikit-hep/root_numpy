@@ -714,77 +714,84 @@ def test_array2root():
     os.remove(tmp_path)
 
 
-def test_random_sample_f1():
-    func = TF1("f1", "TMath::DiLog(x)")
-    sample = rnp.random_sample(func, 100)
-    assert_equal(sample.shape, (100,))
-    rnp.random_sample(func, 100, seed=1)
+def check_random_sample(obj):
+    sample = rnp.random_sample(obj, 100)
+    ndim = getattr(obj, 'GetDimension',
+                   getattr(obj, 'GetNdim', None))()
+    if ndim > 1:
+        assert_equal(sample.shape, (100, ndim))
+    else:
+        assert_equal(sample.shape, (100,))
+    a = rnp.random_sample(obj, 10, seed=1)
+    b = rnp.random_sample(obj, 10, seed=1)
+    c = rnp.random_sample(obj, 10, seed=2)
+    assert_array_equal(a, b)
+    assert_true((a != c).any())
 
 
-def test_random_sample_f2():
-    func = TF2("f2", "sin(x)*sin(y)/(x*y)")
-    sample = rnp.random_sample(func, 100)
-    assert_equal(sample.shape, (100, 2))
-
-
-def test_random_sample_f3():
-    func = TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)")
-    sample = rnp.random_sample(func, 100)
-    assert_equal(sample.shape, (100, 3))
-
-
-def test_random_sample_h1():
-    hist = TH1D("h1", "h1", 10, -3, 3)
-    sample = rnp.random_sample(hist, 100)
-    assert_equal(sample.shape, (100,))
-
-
-def test_random_sample_h2():
-    hist = TH2D("h2", "h2", 10, -3, 3, 10, -3, 3)
-    sample = rnp.random_sample(hist, 100)
-    assert_equal(sample.shape, (100, 2))
-
-
-def test_random_sample_h3():
-    hist = TH3D("h3", "h3", 10, -3, 3, 10, -3, 3, 10, -3, 3)
-    sample = rnp.random_sample(hist, 100)
-    assert_equal(sample.shape, (100, 3))
+def test_random_sample():
+    funcs = [
+        TF1("f1", "TMath::DiLog(x)"),
+        TF2("f2", "sin(x)*sin(y)/(x*y)"),
+        TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)"),
+    ]
+    hists = [
+        TH1D("h1", "h1", 10, -3, 3),
+        TH2D("h2", "h2", 10, -3, 3, 10, -3, 3),
+        TH3D("h3", "h3", 10, -3, 3, 10, -3, 3, 10, -3, 3),
+    ]
+    for i, hist in enumerate(hists):
+        hist.FillRandom(funcs[i].GetName())
+    for obj in funcs + hists:
+        yield check_random_sample, obj
 
 
 def test_random_sample_bad_input():
     func = TF1("f1", "TMath::DiLog(x)")
     assert_raises(ValueError, rnp.random_sample, func, 0)
     assert_raises(ValueError, rnp.random_sample, func, 10, seed=-1)
-    assert_raises(TypeError, rnp.random_sample, object, 10)
+    assert_raises(TypeError, rnp.random_sample, object(), 10)
+
+
+def check_array(cls, copy):
+    a = cls(10)
+    a[2] = 2
+    b = rnp.array(a, copy=copy)
+    assert_equal(b[2], 2)
+    assert_equal(b.shape[0], 10)
 
 
 def test_array():
     for copy in (True, False):
         for cls in (getattr(ROOT, 'TArray{0}'.format(atype))
                 for atype in 'DFLIS'):
-            a = cls(10)
-            a[2] = 2
-            b = rnp.array(a, copy=copy)
-            assert_equal(b[2], 2)
-            assert_equal(b.shape[0], 10)
+            yield check_array, cls, copy
         a = ROOT.TArrayC(10)
         b = rnp.array(a, copy=copy)
         assert_equal(b.shape[0], 10)
     assert_raises(TypeError, rnp.array, object)
 
 
+def check_matrix(cls):
+    mat = cls(5, 5)
+    mat[1][2] = 2
+    np_mat = rnp.matrix(mat)
+    assert_equal(np_mat[1, 2], 2)
+
+
+def check_matrix_sym(cls):
+    mat = cls(5)
+    mat[2][2] = 2
+    np_mat = rnp.matrix(mat)
+    assert_equal(np_mat[2, 2], 2)
+
+
 def test_matrix():
     for cls in (getattr(ROOT, 'TMatrix{0}'.format(atype)) for atype in 'DF'):
-        m = cls(5, 5)
-        m[1][2] = 2
-        n = rnp.matrix(m)
-        assert_equal(n[1, 2], 2)
+        yield check_matrix, cls
 
     for cls in (getattr(ROOT, 'TMatrix{0}Sym'.format(atype)) for atype in 'DF'):
-        m = cls(5)
-        m[2][2] = 2
-        n = rnp.matrix(m)
-        assert_equal(n[2, 2], 2)
+        yield check_matrix_sym, cls
 
     assert_raises(TypeError, rnp.matrix, object)
 
