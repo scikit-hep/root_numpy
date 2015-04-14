@@ -910,22 +910,26 @@ def test_evaluate():
     assert_raises(ValueError, rnp.evaluate, "x*y", arr_3d)
 
 
-def make_histogram(ndim, hist_type):
+def make_histogram(hist_type, shape, fill=True):
+    # shape=([[z_bins,] y_bins,] x_bins)
+    ndim = len(shape)
     hist_cls = eval('ROOT.TH{0}{1}'.format(ndim, hist_type))
     if ndim == 1:
-        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1)
-        func = ROOT.TF1('f1', 'x')
-        hist.FillRandom('f1')
+        hist = hist_cls(hist_cls.__name__, '',
+                        shape[0], 0, 1)
+        func = ROOT.TF1('func', 'x')
     elif ndim == 2:
-        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1, 10, 0, 1)
-        func = ROOT.TF2('f2', 'x*y')
-        hist.FillRandom('f2')
+        hist = hist_cls(hist_cls.__name__, '',
+                        shape[1], 0, 1, shape[0], 0, 1)
+        func = ROOT.TF2('func', 'x*y')
     elif ndim == 3:
-        hist = hist_cls(hist_cls.__name__, "", 10, 0, 1, 10, 0, 1, 10, 0, 1)
-        func = ROOT.TF3('f3', 'x*y*z')
-        hist.FillRandom('f3')
+        hist = hist_cls(hist_cls.__name__, '',
+                        shape[2], 0, 1, shape[1], 0, 1, shape[0], 0, 1)
+        func = ROOT.TF3('func', 'x*y*z')
     else:
         raise ValueError("ndim must be 1, 2, or 3")
+    if fill:
+        hist.FillRandom('func')
     return hist
 
 
@@ -947,12 +951,31 @@ def test_hist2array():
     assert_raises(TypeError, rnp.hist2array, object())
     for ndim in (1, 2, 3):
         for hist_type in 'DFISC':
-            hist = make_histogram(ndim, hist_type)
+            hist = make_histogram(hist_type, shape=(5,) * ndim)
             yield check_hist2array, hist, False, False
             yield check_hist2array, hist, False, True
             yield check_hist2array, hist, True, False
             yield check_hist2array, hist, True, True
 
 
+def check_array2hist(hist):
+    arr = RNG.randint(0, 10, size=(4, 5))
+    arr_overflow = RNG.randint(0, 10, size=(6, 7))
+    hist2 = hist.Clone()
+    rnp.array2hist(arr, hist)
+    rnp.array2hist(arr_overflow, hist2)
+    arr_hist = rnp.hist2array(hist)
+    arr2_hist = rnp.hist2array(hist2, include_overflow=True)
+    assert_array_equal(arr_hist, arr)
+    assert_array_equal(arr2_hist, arr_overflow)
+
+
 def test_array2hist():
-    RNG.randint(0, 10, size=(4, 4))
+    assert_raises(TypeError, rnp.array2hist,
+                  object(), ROOT.TH1D('test', '', 10, 0, 1))
+    assert_raises(TypeError, rnp.array2hist,
+                  np.array([1, 2]), object())
+    for ndim in (1, 2, 3):
+        for hist_type in 'DFISC':
+            hist = make_histogram(hist_type, shape=(5,) * ndim, fill=False)
+            yield check_array2hist, hist

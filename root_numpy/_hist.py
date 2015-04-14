@@ -243,10 +243,6 @@ def array2hist(array, hist):
     for hist_type in 'DFISC':
         if isinstance(hist, eval('ROOT.TArray{0}'.format(hist_type))):
             break
-    else:
-        # We should never reach this
-        raise TypeError(
-            "hist must be an instance of ROOT.TH[123][DFISC]")
 
     # Constuct a NumPy array viewing the underlying histogram array
     dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
