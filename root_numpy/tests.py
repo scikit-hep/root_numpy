@@ -959,15 +959,18 @@ def test_hist2array():
 
 
 def check_array2hist(hist):
-    arr = RNG.randint(0, 10, size=(4, 5))
-    arr_overflow = RNG.randint(0, 10, size=(6, 7))
-    hist2 = hist.Clone()
+    shape = np.array([hist.GetNbinsX(), hist.GetNbinsY(), hist.GetNbinsZ()])
+    shape = shape[:hist.GetDimension()]
+    shape_overflow = shape + 2
+    arr = RNG.randint(0, 10, size=shape)
+    arr_overflow = RNG.randint(0, 10, size=shape_overflow)
+    hist_overflow = hist.Clone()
     rnp.array2hist(arr, hist)
-    rnp.array2hist(arr_overflow, hist2)
+    rnp.array2hist(arr_overflow, hist_overflow)
     arr_hist = rnp.hist2array(hist)
-    arr2_hist = rnp.hist2array(hist2, include_overflow=True)
+    arr_hist_overflow = rnp.hist2array(hist_overflow, include_overflow=True)
     assert_array_equal(arr_hist, arr)
-    assert_array_equal(arr2_hist, arr_overflow)
+    assert_array_equal(arr_hist_overflow, arr_overflow)
 
 
 def test_array2hist():

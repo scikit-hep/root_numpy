@@ -2085,9 +2085,8 @@ static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_double_t = { "double_t", 
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t = { "float32_t", NULL, sizeof(__pyx_t_5numpy_float32_t), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, IS_UNSIGNED(int) ? 'U' : 'I', IS_UNSIGNED(int), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_short = { "short", NULL, sizeof(short), { 0 }, 0, IS_UNSIGNED(short) ? 'U' : 'I', IS_UNSIGNED(short), 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_char = { "char", NULL, sizeof(char), { 0 }, 0, 'H', IS_UNSIGNED(char), 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int_t = { "int_t", NULL, sizeof(__pyx_t_5numpy_int_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int_t), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t = { "int8_t", NULL, sizeof(__pyx_t_5numpy_int8_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int8_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int8_t), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int_t = { "int_t", NULL, sizeof(__pyx_t_5numpy_int_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int_t), 0 };
 #define __Pyx_MODULE_NAME "_librootnumpy"
 int __pyx_module_is_main__librootnumpy = 0;
 
@@ -26254,7 +26253,7 @@ static PyObject *__pyx_pf_13_librootnumpy_56h3s_array(CYTHON_UNUSED PyObject *__
  *     cdef TArrayS* _arr = dynamic_cast["TArrayS*"](_hist)
  *     _arr.Set(array.shape[0], &array[0])             # <<<<<<<<<<<<<<
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  */
 
 #line 109 "root_numpy/src/array.pyx"
@@ -26358,7 +26357,7 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
 /* "root_numpy/src/array.pyx":111
  *     _arr.Set(array.shape[0], &array[0])
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -26609,7 +26608,7 @@ static PyObject *__pyx_pf_13_librootnumpy_58h1c_array(CYTHON_UNUSED PyObject *__
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
 #line 111 "root_numpy/src/array.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_char, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 111; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 111; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 111 "root_numpy/src/array.pyx"
   }
@@ -26619,10 +26618,10 @@ static PyObject *__pyx_pf_13_librootnumpy_58h1c_array(CYTHON_UNUSED PyObject *__
 
   /* "root_numpy/src/array.pyx":112
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)             # <<<<<<<<<<<<<<
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  */
 
 #line 112 "root_numpy/src/array.pyx"
@@ -26632,10 +26631,10 @@ static PyObject *__pyx_pf_13_librootnumpy_58h1c_array(CYTHON_UNUSED PyObject *__
   __pyx_v__hist = ((TH1C *)__pyx_t_1);
 
   /* "root_numpy/src/array.pyx":113
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)             # <<<<<<<<<<<<<<
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
  */
 
@@ -26663,9 +26662,9 @@ static PyObject *__pyx_pf_13_librootnumpy_58h1c_array(CYTHON_UNUSED PyObject *__
   /* "root_numpy/src/array.pyx":114
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])             # <<<<<<<<<<<<<<
+ *     _arr.Set(array.shape[0], <char*> &array[0])             # <<<<<<<<<<<<<<
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  */
 
 #line 114 "root_numpy/src/array.pyx"
@@ -26699,12 +26698,12 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
   }
 
 #line 114 "root_numpy/src/array.pyx"
-  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), (&(*__Pyx_BufPtrStrided1d(char *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides))));
+  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), ((char *)(&(*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int8_t *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides)))));
 
   /* "root_numpy/src/array.pyx":111
  *     _arr.Set(array.shape[0], &array[0])
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -26767,9 +26766,9 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
 }
 
 /* "root_numpy/src/array.pyx":116
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -27020,7 +27019,7 @@ static PyObject *__pyx_pf_13_librootnumpy_60h2c_array(CYTHON_UNUSED PyObject *__
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
 #line 116 "root_numpy/src/array.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_char, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 116 "root_numpy/src/array.pyx"
   }
@@ -27030,10 +27029,10 @@ static PyObject *__pyx_pf_13_librootnumpy_60h2c_array(CYTHON_UNUSED PyObject *__
 
   /* "root_numpy/src/array.pyx":117
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)             # <<<<<<<<<<<<<<
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  */
 
 #line 117 "root_numpy/src/array.pyx"
@@ -27043,10 +27042,10 @@ static PyObject *__pyx_pf_13_librootnumpy_60h2c_array(CYTHON_UNUSED PyObject *__
   __pyx_v__hist = ((TH2C *)__pyx_t_1);
 
   /* "root_numpy/src/array.pyx":118
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)             # <<<<<<<<<<<<<<
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
  */
 
@@ -27074,9 +27073,9 @@ static PyObject *__pyx_pf_13_librootnumpy_60h2c_array(CYTHON_UNUSED PyObject *__
   /* "root_numpy/src/array.pyx":119
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])             # <<<<<<<<<<<<<<
+ *     _arr.Set(array.shape[0], <char*> &array[0])             # <<<<<<<<<<<<<<
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  */
 
 #line 119 "root_numpy/src/array.pyx"
@@ -27110,12 +27109,12 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
   }
 
 #line 119 "root_numpy/src/array.pyx"
-  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), (&(*__Pyx_BufPtrStrided1d(char *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides))));
+  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), ((char *)(&(*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int8_t *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides)))));
 
   /* "root_numpy/src/array.pyx":116
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -27178,9 +27177,9 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
 }
 
 /* "root_numpy/src/array.pyx":121
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -27431,7 +27430,7 @@ static PyObject *__pyx_pf_13_librootnumpy_62h3c_array(CYTHON_UNUSED PyObject *__
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
 #line 121 "root_numpy/src/array.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_char, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 121; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_array.rcbuffer->pybuffer, (PyObject*)__pyx_v_array, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 121; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 121 "root_numpy/src/array.pyx"
   }
@@ -27441,10 +27440,10 @@ static PyObject *__pyx_pf_13_librootnumpy_62h3c_array(CYTHON_UNUSED PyObject *__
 
   /* "root_numpy/src/array.pyx":122
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)             # <<<<<<<<<<<<<<
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  */
 
 #line 122 "root_numpy/src/array.pyx"
@@ -27454,10 +27453,10 @@ static PyObject *__pyx_pf_13_librootnumpy_62h3c_array(CYTHON_UNUSED PyObject *__
   __pyx_v__hist = ((TH3C *)__pyx_t_1);
 
   /* "root_numpy/src/array.pyx":123
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)             # <<<<<<<<<<<<<<
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  */
 
 #line 123 "root_numpy/src/array.pyx"
@@ -27484,7 +27483,7 @@ static PyObject *__pyx_pf_13_librootnumpy_62h3c_array(CYTHON_UNUSED PyObject *__
   /* "root_numpy/src/array.pyx":124
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
- *     _arr.Set(array.shape[0], &array[0])             # <<<<<<<<<<<<<<
+ *     _arr.Set(array.shape[0], <char*> &array[0])             # <<<<<<<<<<<<<<
  */
 
 #line 124 "root_numpy/src/array.pyx"
@@ -27518,12 +27517,12 @@ if (unlikely(__pyx_t_3 >= __pyx_pybuffernd_array.diminfo[0].shape)) __pyx_t_4 = 
   }
 
 #line 124 "root_numpy/src/array.pyx"
-  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), (&(*__Pyx_BufPtrStrided1d(char *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides))));
+  __pyx_v__arr->Set((__pyx_v_array->dimensions[0]), ((char *)(&(*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int8_t *, __pyx_pybuffernd_array.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_array.diminfo[0].strides)))));
 
   /* "root_numpy/src/array.pyx":121
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -65283,7 +65282,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "root_numpy/src/array.pyx":111
  *     _arr.Set(array.shape[0], &array[0])
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -65301,9 +65300,9 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__105 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__104, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_h1c_array, 111, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__105)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 111; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "root_numpy/src/array.pyx":116
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -65321,9 +65320,9 @@ static int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__107 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__106, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_h2c_array, 116, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__107)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "root_numpy/src/array.pyx":121
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -70998,7 +70997,7 @@ goto __pyx_L16_unpacking_failed;
   /* "root_numpy/src/array.pyx":111
  *     _arr.Set(array.shape[0], &array[0])
  * 
- * def h1c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -71016,9 +71015,9 @@ goto __pyx_L16_unpacking_failed;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "root_numpy/src/array.pyx":116
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h2c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */
@@ -71036,9 +71035,9 @@ goto __pyx_L16_unpacking_failed;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "root_numpy/src/array.pyx":121
- *     _arr.Set(array.shape[0], &array[0])
+ *     _arr.Set(array.shape[0], <char*> &array[0])
  * 
- * def h3c_array(root_hist, np.ndarray[char, ndim=1] array):             # <<<<<<<<<<<<<<
+ * def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):             # <<<<<<<<<<<<<<
  *     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
  *     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
  */

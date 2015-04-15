@@ -9,7 +9,7 @@ __all__ = [
     'array2hist',
 ]
 
-DTYPE_ROOT2NUMPY = dict(C='b1', S='i2', I='i4', F='f4', D='f8')
+DTYPE_ROOT2NUMPY = dict(C='i1', S='i2', I='i4', F='f4', D='f8')
 ARRAY_NUMPY2ROOT = dict(
     [(ndim, dict([
         (hist_type,

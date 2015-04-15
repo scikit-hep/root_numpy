@@ -108,17 +108,17 @@ def h3s_array(root_hist, np.ndarray[short, ndim=1] array):
     cdef TArrayS* _arr = dynamic_cast["TArrayS*"](_hist)
     _arr.Set(array.shape[0], &array[0])
 
-def h1c_array(root_hist, np.ndarray[char, ndim=1] array):
+def h1c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
     cdef TH1C* _hist = <TH1C*> PyCObject_AsVoidPtr(root_hist)
     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
-    _arr.Set(array.shape[0], &array[0])
+    _arr.Set(array.shape[0], <char*> &array[0])
 
-def h2c_array(root_hist, np.ndarray[char, ndim=1] array):
+def h2c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
     cdef TH2C* _hist = <TH2C*> PyCObject_AsVoidPtr(root_hist)
     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
-    _arr.Set(array.shape[0], &array[0])
+    _arr.Set(array.shape[0], <char*> &array[0])
 
-def h3c_array(root_hist, np.ndarray[char, ndim=1] array):
+def h3c_array(root_hist, np.ndarray[np.int8_t, ndim=1] array):
     cdef TH3C* _hist = <TH3C*> PyCObject_AsVoidPtr(root_hist)
     cdef TArrayC* _arr = dynamic_cast["TArrayC*"](_hist)
-    _arr.Set(array.shape[0], &array[0])
+    _arr.Set(array.shape[0], <char*> &array[0])
