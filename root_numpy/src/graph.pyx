@@ -1,3 +1,5 @@
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_g1(graph,
             np.ndarray[np.double_t, ndim=2] array):
     # perform type checking on python side
@@ -8,6 +10,9 @@ def fill_g1(graph,
     for i from 0 <= i < size:
         _graph.SetPoint(i, array[i, 0], array[i, 1])
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_g2(graph,
             np.ndarray[np.double_t, ndim=2] array):
     # perform type checking on python side

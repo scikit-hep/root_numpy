@@ -1,6 +1,27 @@
 from libcpp cimport bool
 from libcpp.string cimport string, const_char
 
+cdef extern from "2to3.h":
+    pass 
+
+cdef extern from "util.h":
+    cdef void* shift(void*, int)
+    void printaddr(void* v)
+    cdef cppclass TypeName[T]:
+        TypeName()
+        const_char* name
+
+cdef extern from "Vector2Array.h":
+    cdef cppclass Vector2Array[T]:
+        T* convert(vector[T]* v)
+
+cdef extern from "<memory>" namespace "std": 
+    cdef cppclass auto_ptr[T]:
+        auto_ptr() 
+        auto_ptr(T* ptr) 
+        reset (T* p)
+        T* get()
+
 cdef extern from "Column.h":
     cdef enum ColumnType:
         SINGLE, FIXED, VARY
@@ -38,24 +59,3 @@ cdef extern from "TreeChain.h":
         TTree* fChain
         void AddFormula(TTreeFormula* formula)
         void InitBranches()
-
-cdef extern from "util.h":
-    cdef void* shift(void*, int)
-    void printaddr(void* v)
-    cdef cppclass TypeName[T]:
-        TypeName()
-        const_char* name
-
-cdef extern from "2to3.h":
-    pass 
-
-cdef extern from "Vector2Array.h":
-    cdef cppclass Vector2Array[T]:
-        T* convert(vector[T]* v)
-
-cdef extern from "<memory>" namespace "std": 
-    cdef cppclass auto_ptr[T]:
-        auto_ptr() 
-        auto_ptr(T* ptr) 
-        reset (T* p)
-        T* get()
