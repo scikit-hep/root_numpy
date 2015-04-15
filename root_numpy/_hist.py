@@ -190,6 +190,8 @@ def hist2array(hist, include_overflow=False, copy=True):
             array = array[1:-1, 1:-1]
         elif array.ndim == 3:
             array = array[1:-1, 1:-1, 1:-1]
+    # Preserve x, y, z -> axis 0, 1, 2 order
+    array = np.transpose(array)
     if copy:
         return np.copy(array)
     return array
@@ -228,11 +230,11 @@ def array2hist(array, hist):
     """
     import ROOT
     if isinstance(hist, ROOT.TH3):
-        shape = (hist.GetNbinsZ() + 2,
+        shape = (hist.GetNbinsX() + 2,
                  hist.GetNbinsY() + 2,
-                 hist.GetNbinsX() + 2)
+                 hist.GetNbinsZ() + 2)
     elif isinstance(hist, ROOT.TH2):
-        shape = (hist.GetNbinsY() + 2, hist.GetNbinsX() + 2)
+        shape = (hist.GetNbinsX() + 2, hist.GetNbinsY() + 2)
     elif isinstance(hist, ROOT.TH1):
         shape = (hist.GetNbinsX() + 2,)
     else:
@@ -268,6 +270,6 @@ def array2hist(array, hist):
         array_overflow[tuple(slices)] = _array
         _array = array_overflow
     ARRAY_NUMPY2ROOT[len(shape)][hist_type](
-        ROOT.AsCObject(hist), np.ravel(_array))
+        ROOT.AsCObject(hist), np.ravel(np.transpose(_array)))
     # Set the number of entries to the number of array elements
     hist.SetEntries(_array.size)
