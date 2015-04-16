@@ -913,7 +913,7 @@ def test_evaluate():
 def make_histogram(hist_type, shape, fill=True):
     # shape=([[z_bins,] y_bins,] x_bins)
     ndim = len(shape)
-    hist_cls = eval('ROOT.TH{0}{1}'.format(ndim, hist_type))
+    hist_cls = getattr(ROOT, 'TH{0}{1}'.format(ndim, hist_type))
     if ndim == 1:
         hist = hist_cls(hist_cls.__name__, '',
                         shape[0], 0, 1)
@@ -939,10 +939,10 @@ def check_hist2array(hist, include_overflow, copy):
     for iaxis, axis in enumerate('XYZ'[:array.ndim]):
         if include_overflow:
             assert_equal(array.shape[iaxis],
-                         eval('hist.GetNbins{0}()'.format(axis)) + 2)
+                         getattr(hist, 'GetNbins{0}'.format(axis))() + 2)
         else:
             assert_equal(array.shape[iaxis],
-                         eval('hist.GetNbins{0}()'.format(axis)))
+                         getattr(hist, 'GetNbins{0}'.format(axis))())
     # non-zero elements
     assert_true(np.any(array))
 
@@ -961,23 +961,46 @@ def test_hist2array():
 def check_array2hist(hist):
     shape = np.array([hist.GetNbinsX(), hist.GetNbinsY(), hist.GetNbinsZ()])
     shape = shape[:hist.GetDimension()]
-    shape_overflow = shape + 2
     arr = RNG.randint(0, 10, size=shape)
+    rnp.array2hist(arr, hist)
+    arr_hist = rnp.hist2array(hist)
+    assert_array_equal(arr_hist, arr)
+
+    shape_overflow = shape + 2
     arr_overflow = RNG.randint(0, 10, size=shape_overflow)
     hist_overflow = hist.Clone()
-    rnp.array2hist(arr, hist)
+    hist_overflow.Reset()
     rnp.array2hist(arr_overflow, hist_overflow)
-    arr_hist = rnp.hist2array(hist)
     arr_hist_overflow = rnp.hist2array(hist_overflow, include_overflow=True)
-    assert_array_equal(arr_hist, arr)
     assert_array_equal(arr_hist_overflow, arr_overflow)
+
+    if len(shape) == 1:
+        return
+
+    # overflow not specified on all axes
+    arr_overflow2 = arr_overflow[1:-1]
+    hist_overflow2 = hist.Clone()
+    hist_overflow2.Reset()
+    rnp.array2hist(arr_overflow2, hist_overflow2)
+    arr_hist_overflow2 = rnp.hist2array(hist_overflow2, include_overflow=True)
+    assert_array_equal(arr_hist_overflow2[1:-1], arr_overflow2)
 
 
 def test_array2hist():
+    # wrong type
     assert_raises(TypeError, rnp.array2hist,
                   object(), ROOT.TH1D('test', '', 10, 0, 1))
+    # wrong type
     assert_raises(TypeError, rnp.array2hist,
                   np.array([1, 2]), object())
+    # dimensions don't match
+    assert_raises(ValueError, rnp.array2hist,
+                  np.arange(4).reshape(2, 2), ROOT.TH1D('test', '', 10, 0, 1))
+    # shape not compatible
+    assert_raises(ValueError, rnp.array2hist,
+                  np.arange(4).reshape(2, 2),
+                  ROOT.TH2D('test', '', 4, 0, 1, 3, 0, 1))
+
     for ndim in (1, 2, 3):
         for hist_type in 'DFISC':
             hist = make_histogram(hist_type, shape=(5,) * ndim, fill=False)
