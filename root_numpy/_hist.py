@@ -13,7 +13,7 @@ DTYPE_ROOT2NUMPY = dict(C='i1', S='i2', I='i4', F='f4', D='f8')
 ARRAY_NUMPY2ROOT = dict(
     [(ndim, dict([
         (hist_type,
-            eval('_librootnumpy.h{0}{1}_array'.format(
+            getattr(_librootnumpy, 'h{0}{1}_array'.format(
                 ndim, hist_type.lower())))
         for hist_type in 'DFISC']))
         for ndim in (1, 2, 3)])
@@ -170,12 +170,12 @@ def hist2array(hist, include_overflow=False, copy=True):
 
     # Determine the corresponding numpy dtype
     for hist_type in 'DFISC':
-        if isinstance(hist, eval('ROOT.TArray{0}'.format(hist_type))):
+        if isinstance(hist, getattr(ROOT, 'TArray{0}'.format(hist_type))):
             break
 
     # Constuct a NumPy array viewing the underlying histogram array
     if hist_type == 'C':
-        array_func = eval('_librootnumpy.array_h{0}c'.format(len(shape)))
+        array_func = getattr(_librootnumpy, 'array_h{0}c'.format(len(shape)))
         array = array_func(ROOT.AsCObject(hist))
         array.shape = shape
     else:
@@ -243,7 +243,7 @@ def array2hist(array, hist):
 
     # Determine the corresponding numpy dtype
     for hist_type in 'DFISC':
-        if isinstance(hist, eval('ROOT.TArray{0}'.format(hist_type))):
+        if isinstance(hist, getattr(ROOT, 'TArray{0}'.format(hist_type))):
             break
 
     # Constuct a NumPy array viewing the underlying histogram array
