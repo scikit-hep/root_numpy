@@ -172,6 +172,10 @@ def hist2array(hist, include_overflow=False, copy=True):
     for hist_type in 'DFISC':
         if isinstance(hist, getattr(ROOT, 'TArray{0}'.format(hist_type))):
             break
+    else:
+        raise AssertionError(
+            "hist is somehow an instance of TH[1|2|3] "
+            "but not TArray[D|F|I|S|C]")
 
     # Constuct a NumPy array viewing the underlying histogram array
     if hist_type == 'C':
@@ -190,6 +194,9 @@ def hist2array(hist, include_overflow=False, copy=True):
             array = array[1:-1, 1:-1]
         elif array.ndim == 3:
             array = array[1:-1, 1:-1, 1:-1]
+        else:
+            raise AssertionError(
+                "array somehow has more than three dimensions")
     # Preserve x, y, z -> axis 0, 1, 2 order
     array = np.transpose(array)
     if copy:
@@ -245,6 +252,10 @@ def array2hist(array, hist):
     for hist_type in 'DFISC':
         if isinstance(hist, getattr(ROOT, 'TArray{0}'.format(hist_type))):
             break
+    else:
+        raise AssertionError(
+            "hist is somehow an instance of TH[1|2|3] "
+            "but not TArray[D|F|I|S|C]")
 
     # Constuct a NumPy array viewing the underlying histogram array
     dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])

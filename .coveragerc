@@ -8,3 +8,6 @@ omit =
     */root/*
     */root_numpy/extern/*
     */setup.py
+[report]
+exclude_lines =
+    raise AssertionError
