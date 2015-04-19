@@ -772,7 +772,7 @@ typedef npy_double __pyx_t_5numpy_double_t;
 #line 760 "../../.local/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd"
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "root_numpy/src/setup.pxi":36
+/* "root_numpy/src/setup.pxi":37
  * from ._warnings import RootNumpyUnconvertibleWarning
  * 
  * ctypedef unsigned char unsigned_char             # <<<<<<<<<<<<<<
@@ -780,10 +780,10 @@ typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
  * ctypedef unsigned int unsigned_int
  */
 
-#line 36 "root_numpy/src/setup.pxi"
+#line 37 "root_numpy/src/setup.pxi"
 typedef unsigned char __pyx_t_13_librootnumpy_unsigned_char;
 
-/* "root_numpy/src/setup.pxi":37
+/* "root_numpy/src/setup.pxi":38
  * 
  * ctypedef unsigned char unsigned_char
  * ctypedef unsigned short unsigned_short             # <<<<<<<<<<<<<<
@@ -791,10 +791,10 @@ typedef unsigned char __pyx_t_13_librootnumpy_unsigned_char;
  * ctypedef unsigned long unsigned_long
  */
 
-#line 37 "root_numpy/src/setup.pxi"
+#line 38 "root_numpy/src/setup.pxi"
 typedef unsigned short __pyx_t_13_librootnumpy_unsigned_short;
 
-/* "root_numpy/src/setup.pxi":38
+/* "root_numpy/src/setup.pxi":39
  * ctypedef unsigned char unsigned_char
  * ctypedef unsigned short unsigned_short
  * ctypedef unsigned int unsigned_int             # <<<<<<<<<<<<<<
@@ -802,10 +802,10 @@ typedef unsigned short __pyx_t_13_librootnumpy_unsigned_short;
  * ctypedef long long long_long
  */
 
-#line 38 "root_numpy/src/setup.pxi"
+#line 39 "root_numpy/src/setup.pxi"
 typedef unsigned int __pyx_t_13_librootnumpy_unsigned_int;
 
-/* "root_numpy/src/setup.pxi":39
+/* "root_numpy/src/setup.pxi":40
  * ctypedef unsigned short unsigned_short
  * ctypedef unsigned int unsigned_int
  * ctypedef unsigned long unsigned_long             # <<<<<<<<<<<<<<
@@ -813,10 +813,10 @@ typedef unsigned int __pyx_t_13_librootnumpy_unsigned_int;
  * ctypedef unsigned long long unsigned_long_long
  */
 
-#line 39 "root_numpy/src/setup.pxi"
+#line 40 "root_numpy/src/setup.pxi"
 typedef unsigned long __pyx_t_13_librootnumpy_unsigned_long;
 
-/* "root_numpy/src/setup.pxi":40
+/* "root_numpy/src/setup.pxi":41
  * ctypedef unsigned int unsigned_int
  * ctypedef unsigned long unsigned_long
  * ctypedef long long long_long             # <<<<<<<<<<<<<<
@@ -824,10 +824,10 @@ typedef unsigned long __pyx_t_13_librootnumpy_unsigned_long;
  * 
  */
 
-#line 40 "root_numpy/src/setup.pxi"
+#line 41 "root_numpy/src/setup.pxi"
 typedef PY_LONG_LONG __pyx_t_13_librootnumpy_long_long;
 
-/* "root_numpy/src/setup.pxi":41
+/* "root_numpy/src/setup.pxi":42
  * ctypedef unsigned long unsigned_long
  * ctypedef long long long_long
  * ctypedef unsigned long long unsigned_long_long             # <<<<<<<<<<<<<<
@@ -835,7 +835,7 @@ typedef PY_LONG_LONG __pyx_t_13_librootnumpy_long_long;
  * include "ROOT.pxi"
  */
 
-#line 41 "root_numpy/src/setup.pxi"
+#line 42 "root_numpy/src/setup.pxi"
 typedef unsigned PY_LONG_LONG __pyx_t_13_librootnumpy_unsigned_long_long;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -2044,6 +2044,8 @@ static CYTHON_INLINE int __pyx_f_7cpython_5array_extend_buffer(arrayobject *, ch
 
 /* Module declarations from 'cython' */
 
+/* Module declarations from 'libcpp' */
+
 /* Module declarations from 'libcpp.cast' */
 
 /* Module declarations from 'libcpp.vector' */
@@ -2055,8 +2057,6 @@ static CYTHON_INLINE int __pyx_f_7cpython_5array_extend_buffer(arrayobject *, ch
 /* Module declarations from 'libcpp.pair' */
 
 /* Module declarations from 'libcpp.string' */
-
-/* Module declarations from 'libcpp' */
 
 /* Module declarations from '_librootnumpy' */
 static std::map<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_v_13_librootnumpy_CONVERTERS;
@@ -60552,7 +60552,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_IOError = __Pyx_GetBuiltinName(__pyx_n_s_IOError); if (!__pyx_builtin_IOError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -62690,7 +62690,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
 #line 5 "root_numpy/src/setup.pxi"
   import_array();
 
-  /* "root_numpy/src/setup.pxi":26
+  /* "root_numpy/src/setup.pxi":27
  * from libc.stdlib cimport malloc, free, realloc
  * 
  * try:             # <<<<<<<<<<<<<<
@@ -62698,17 +62698,17 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  * except ImportError:
  */
 
-#line 26 "root_numpy/src/setup.pxi"
+#line 27 "root_numpy/src/setup.pxi"
   {
     __Pyx_ExceptionSave(&__pyx_t_2, &__pyx_t_3, &__pyx_t_4);
     __Pyx_XGOTREF(__pyx_t_2);
     __Pyx_XGOTREF(__pyx_t_3);
     __Pyx_XGOTREF(__pyx_t_4);
 
-#line 26 "root_numpy/src/setup.pxi"
+#line 27 "root_numpy/src/setup.pxi"
     /*try:*/ {
 
-      /* "root_numpy/src/setup.pxi":27
+      /* "root_numpy/src/setup.pxi":28
  * 
  * try:
  *     from collections import OrderedDict             # <<<<<<<<<<<<<<
@@ -62716,70 +62716,70 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  *     # Fall back on drop-in
  */
 
-#line 27 "root_numpy/src/setup.pxi"
-      __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
+#line 28 "root_numpy/src/setup.pxi"
+      __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_INCREF(__pyx_n_s_OrderedDict);
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_OrderedDict);
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_GIVEREF(__pyx_n_s_OrderedDict);
 
-#line 27 "root_numpy/src/setup.pxi"
-      __pyx_t_5 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_1, -1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
+#line 28 "root_numpy/src/setup.pxi"
+      __pyx_t_5 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_1, -1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
-      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_5, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
+#line 28 "root_numpy/src/setup.pxi"
+      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_5, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 27 "root_numpy/src/setup.pxi"
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_OrderedDict, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
+#line 28 "root_numpy/src/setup.pxi"
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_OrderedDict, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L2_error;}
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     }
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     goto __pyx_L9_try_end;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __pyx_L2_error:;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 27 "root_numpy/src/setup.pxi"
+#line 28 "root_numpy/src/setup.pxi"
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "root_numpy/src/setup.pxi":28
+    /* "root_numpy/src/setup.pxi":29
  * try:
  *     from collections import OrderedDict
  * except ImportError:             # <<<<<<<<<<<<<<
@@ -62787,28 +62787,28 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  *     from .extern.ordereddict import OrderedDict
  */
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
     __pyx_t_6 = PyErr_ExceptionMatches(__pyx_builtin_ImportError);
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
     if (__pyx_t_6) {
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
       __Pyx_AddTraceback("_librootnumpy", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 28 "root_numpy/src/setup.pxi"
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_1, &__pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
+#line 29 "root_numpy/src/setup.pxi"
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_1, &__pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 28 "root_numpy/src/setup.pxi"
+#line 29 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "root_numpy/src/setup.pxi":30
+      /* "root_numpy/src/setup.pxi":31
  * except ImportError:
  *     # Fall back on drop-in
  *     from .extern.ordereddict import OrderedDict             # <<<<<<<<<<<<<<
@@ -62816,103 +62816,103 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  * import atexit
  */
 
-#line 30 "root_numpy/src/setup.pxi"
-      __pyx_t_8 = PyList_New(1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
+#line 31 "root_numpy/src/setup.pxi"
+      __pyx_t_8 = PyList_New(1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_INCREF(__pyx_n_s_OrderedDict);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       PyList_SET_ITEM(__pyx_t_8, 0, __pyx_n_s_OrderedDict);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_GIVEREF(__pyx_n_s_OrderedDict);
 
-#line 30 "root_numpy/src/setup.pxi"
-      __pyx_t_9 = __Pyx_Import(__pyx_n_s_extern_ordereddict, __pyx_t_8, 1); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
+#line 31 "root_numpy/src/setup.pxi"
+      __pyx_t_9 = __Pyx_Import(__pyx_n_s_extern_ordereddict, __pyx_t_8, 1); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
-      __pyx_t_8 = __Pyx_ImportFrom(__pyx_t_9, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
+#line 31 "root_numpy/src/setup.pxi"
+      __pyx_t_8 = __Pyx_ImportFrom(__pyx_t_9, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 30 "root_numpy/src/setup.pxi"
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_OrderedDict, __pyx_t_8) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
+#line 31 "root_numpy/src/setup.pxi"
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_OrderedDict, __pyx_t_8) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L4_except_error;}
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
       goto __pyx_L3_exception_handled;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     }
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     goto __pyx_L4_except_error;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __pyx_L4_except_error:;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_2);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_3);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_4);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     goto __pyx_L1_error;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __pyx_L3_exception_handled:;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_2);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_3);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_XGIVEREF(__pyx_t_4);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
     __pyx_L9_try_end:;
 
-#line 30 "root_numpy/src/setup.pxi"
+#line 31 "root_numpy/src/setup.pxi"
   }
 
-  /* "root_numpy/src/setup.pxi":32
+  /* "root_numpy/src/setup.pxi":33
  *     from .extern.ordereddict import OrderedDict
  * 
  * import atexit             # <<<<<<<<<<<<<<
@@ -62920,19 +62920,19 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  * from ._warnings import RootNumpyUnconvertibleWarning
  */
 
-#line 32 "root_numpy/src/setup.pxi"
-  __pyx_t_7 = __Pyx_Import(__pyx_n_s_atexit, 0, -1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 33 "root_numpy/src/setup.pxi"
+  __pyx_t_7 = __Pyx_Import(__pyx_n_s_atexit, 0, -1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 32 "root_numpy/src/setup.pxi"
+#line 33 "root_numpy/src/setup.pxi"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 32 "root_numpy/src/setup.pxi"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_atexit, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 33 "root_numpy/src/setup.pxi"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_atexit, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 32 "root_numpy/src/setup.pxi"
+#line 33 "root_numpy/src/setup.pxi"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/setup.pxi":33
+  /* "root_numpy/src/setup.pxi":34
  * 
  * import atexit
  * import warnings             # <<<<<<<<<<<<<<
@@ -62940,19 +62940,19 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  * 
  */
 
-#line 33 "root_numpy/src/setup.pxi"
-  __pyx_t_7 = __Pyx_Import(__pyx_n_s_warnings, 0, -1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 34 "root_numpy/src/setup.pxi"
+  __pyx_t_7 = __Pyx_Import(__pyx_n_s_warnings, 0, -1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 33 "root_numpy/src/setup.pxi"
+#line 34 "root_numpy/src/setup.pxi"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 33 "root_numpy/src/setup.pxi"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_warnings, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 34 "root_numpy/src/setup.pxi"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_warnings, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 33 "root_numpy/src/setup.pxi"
+#line 34 "root_numpy/src/setup.pxi"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/setup.pxi":34
+  /* "root_numpy/src/setup.pxi":35
  * import atexit
  * import warnings
  * from ._warnings import RootNumpyUnconvertibleWarning             # <<<<<<<<<<<<<<
@@ -62960,43 +62960,43 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  * ctypedef unsigned char unsigned_char
  */
 
-#line 34 "root_numpy/src/setup.pxi"
-  __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 35 "root_numpy/src/setup.pxi"
+  __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_INCREF(__pyx_n_s_RootNumpyUnconvertibleWarning);
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   PyList_SET_ITEM(__pyx_t_7, 0, __pyx_n_s_RootNumpyUnconvertibleWarning);
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_GIVEREF(__pyx_n_s_RootNumpyUnconvertibleWarning);
 
-#line 34 "root_numpy/src/setup.pxi"
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_warnings_2, __pyx_t_7, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 35 "root_numpy/src/setup.pxi"
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_warnings_2, __pyx_t_7, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 34 "root_numpy/src/setup.pxi"
-  __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_RootNumpyUnconvertibleWarning); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 35 "root_numpy/src/setup.pxi"
+  __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_RootNumpyUnconvertibleWarning); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 34 "root_numpy/src/setup.pxi"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_RootNumpyUnconvertibleWarning, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 35 "root_numpy/src/setup.pxi"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_RootNumpyUnconvertibleWarning, __pyx_t_7) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 34 "root_numpy/src/setup.pxi"
+#line 35 "root_numpy/src/setup.pxi"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "root_numpy/src/tree.pyx":1

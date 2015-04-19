@@ -4,8 +4,8 @@ PYTHON := $(shell which python)
 CYTHON := $(shell which cython)
 NOSETESTS := $(shell which nosetests)
 
-CYTHON_PYX := root_numpy/src/_librootnumpy.pyx
-CYTHON_CPP := root_numpy/src/_librootnumpy.cpp
+CYTHON_PYX := root_numpy/src/_librootnumpy.pyx root_numpy/tmva/src/_libtmvanumpy.pyx
+CYTHON_CPP := root_numpy/src/_librootnumpy.cpp root_numpy/tmva/src/_libtmvanumpy.cpp
 CYTHON_SRC := $(filter-out $(CYTHON_PYX),$(filter-out $(CYTHON_CPP),$(wildcard root_numpy/src/*)))
 CYTHON_PYX_SRC := $(filter-out $(CYTHON_PYX),$(wildcard root_numpy/src/*.pyx))
 

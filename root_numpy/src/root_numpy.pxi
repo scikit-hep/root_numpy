@@ -1,5 +1,3 @@
-from libcpp cimport bool
-from libcpp.string cimport string, const_char
 
 cdef extern from "2to3.h":
     pass 
