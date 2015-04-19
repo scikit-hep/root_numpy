@@ -3,7 +3,7 @@ from ._tree import (
     tree2array, tree2rec,
     array2tree, array2root,
     list_trees, list_branches, list_structures)
-from ._hist import fill_hist, fill_profile
+from ._hist import fill_hist, fill_profile, hist2array, array2hist
 from ._graph import fill_graph
 from ._sample import random_sample
 from ._array import array
@@ -23,6 +23,8 @@ __all__ = [
     'tree2rec',
     'array2tree',
     'array2root',
+    'hist2array',
+    'array2hist',
     'fill_hist',
     'fill_profile',
     'fill_graph',

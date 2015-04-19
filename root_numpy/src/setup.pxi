@@ -1,6 +1,4 @@
-# cython: experimental_cpp_class_def=True
-#import sys
-#PY3 = sys.version > '3'
+# cython: experimental_cpp_class_def=True, c_string_type=str, c_string_encoding=ascii
 
 import numpy as np
 cimport numpy as np
@@ -10,17 +8,14 @@ from cpython cimport array
 from cpython.ref cimport Py_INCREF, Py_XDECREF
 from cpython cimport PyObject
 
-# Python 3
-#from cpython.pycapsule cimport (PyCapsule_GetPointer,
-#                                PyCapsule_CheckExact,
-#                                PyCapsule_New)
-# Python 2
 from cpython.cobject cimport (PyCObject_AsVoidPtr,
                               PyCObject_Check,
                               PyCObject_FromVoidPtr)
 
 from cython.operator cimport dereference as deref, preincrement as inc
+cimport cython
 
+from libcpp.cast cimport dynamic_cast
 from libcpp.vector cimport vector
 from libcpp.map cimport map as cpp_map
 from libcpp.pair cimport pair

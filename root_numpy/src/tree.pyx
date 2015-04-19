@@ -1,5 +1,3 @@
-# cython: experimental_cpp_class_def=True
-
 TYPES = {
     TypeName[bool]().name:               ('bool',               np.dtype(np.bool),      np.NPY_BOOL),
     TypeName[char]().name:               ('char',               np.dtype(np.int8),      np.NPY_INT8),

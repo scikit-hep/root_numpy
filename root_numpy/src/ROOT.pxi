@@ -118,6 +118,17 @@ cdef extern from "TH1.h":
         int Fill(double x, double w)
         int FindBin(double x)
         double GetBinContent(int bin)
+        
+    cdef cppclass TH1D:
+        pass
+    cdef cppclass TH1F:
+        pass
+    cdef cppclass TH1I:
+        pass
+    cdef cppclass TH1S:
+        pass
+    cdef cppclass TH1C:
+        pass
 
 cdef extern from "TH2.h":
     cdef cppclass TH2:
@@ -126,6 +137,17 @@ cdef extern from "TH2.h":
         int Fill(double x, double y, double w)
         int FindBin(double x, double y)
         double GetBinContent(int bin)
+    
+    cdef cppclass TH2D:
+        pass
+    cdef cppclass TH2F:
+        pass
+    cdef cppclass TH2I:
+        pass
+    cdef cppclass TH2S:
+        pass
+    cdef cppclass TH2C:
+        pass
 
 cdef extern from "TH3.h":
     cdef cppclass TH3:
@@ -134,6 +156,17 @@ cdef extern from "TH3.h":
         int Fill(double x, double y, double z, double w)
         int FindBin(double x, double y, double z)
         double GetBinContent(int bin)
+    
+    cdef cppclass TH3D:
+        pass
+    cdef cppclass TH3F:
+        pass
+    cdef cppclass TH3I:
+        pass
+    cdef cppclass TH3S:
+        pass
+    cdef cppclass TH3C:
+        pass
 
 cdef extern from "TProfile.h":
     cdef cppclass TProfile:
@@ -169,31 +202,43 @@ cdef extern from "TArrayD.h":
     cdef cppclass TArrayD:
         int GetSize()
         double* GetArray()
+        void Set(int n, double* array)
+        double* fArray
 
 cdef extern from "TArrayF.h":
     cdef cppclass TArrayF:
         int GetSize()
         float* GetArray()
+        void Set(int n, float* array)
+        float* fArray
 
 cdef extern from "TArrayL.h":
     cdef cppclass TArrayL:
         int GetSize()
         long* GetArray()
+        void Set(int n, long* array)
+        long* fArray
 
 cdef extern from "TArrayI.h":
     cdef cppclass TArrayI:
         int GetSize()
         int* GetArray()
+        void Set(int n, int* array)
+        int* fArray
 
 cdef extern from "TArrayS.h":
     cdef cppclass TArrayS:
         int GetSize()
         short* GetArray()
+        void Set(int n, short* array)
+        short* fArray
 
 cdef extern from "TArrayC.h":
     cdef cppclass TArrayC:
         int GetSize()
         char* GetArray()
+        void Set(int n, char* array)
+        char* fArray
 
 cdef extern from "TMatrixTBase.h":
     cdef cppclass TMatrixDBase:

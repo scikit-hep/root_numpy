@@ -1,3 +1,5 @@
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_h1(hist,
             np.ndarray[np.double_t, ndim=1] array,
             np.ndarray[np.double_t, ndim=1] weights=None,
@@ -23,6 +25,9 @@ def fill_h1(hist,
     if return_indices:
         return idx
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_h2(hist,
             np.ndarray[np.double_t, ndim=2] array,
             np.ndarray[np.double_t, ndim=1] weights=None,
@@ -48,6 +53,9 @@ def fill_h2(hist,
     if return_indices:
         return idx
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_h3(hist,
             np.ndarray[np.double_t, ndim=2] array,
             np.ndarray[np.double_t, ndim=1] weights=None,
@@ -73,6 +81,9 @@ def fill_h3(hist,
     if return_indices:
         return idx
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_p1(profile,
             np.ndarray[np.double_t, ndim=2] array,
             np.ndarray[np.double_t, ndim=1] weights=None,
@@ -98,6 +109,9 @@ def fill_p1(profile,
     if return_indices:
         return idx
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_p2(profile,
             np.ndarray[np.double_t, ndim=2] array,
             np.ndarray[np.double_t, ndim=1] weights=None,
@@ -123,6 +137,9 @@ def fill_p2(profile,
     if return_indices:
         return idx
 
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def fill_p3(profile,
             np.ndarray[np.double_t, ndim=2] array,
             np.ndarray[np.double_t, ndim=1] weights=None,

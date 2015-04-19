@@ -1,7 +1,4 @@
-#  Makefile.arch can be in a number of different locations depending on the system
-#  you're compiling on. The Fink installed version of ROOT for instance has this file
-#  in a different location than the "normally installed" ROOT versions...
-#
+# Makefile.arch can be in a number of different locations
 ARCH_LOC_1 := $(wildcard $(shell root-config --prefix)/test/Makefile.arch)
 ARCH_LOC_2 := $(wildcard $(shell root-config --prefix)/share/root/test/Makefile.arch)
 ARCH_LOC_3 := $(wildcard $(shell root-config --prefix)/share/doc/root/test/Makefile.arch)
@@ -28,7 +25,7 @@ else
   endif
 endif 
 
-# Name of the executable:
+# Name of the executable
 EXE = generate
 
 # List of all source files to build
@@ -36,7 +33,7 @@ CPPLIST = $(wildcard *.$(SrcSuf))
 
 CXXFLAGS += -g
 
-# The default is to create the shared library:
+# The default is to create the executable
 default: $(EXE)
 
 # Rule to create the dictionaries

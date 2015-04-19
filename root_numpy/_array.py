@@ -16,7 +16,7 @@ def array(arr, copy=True):
         A ROOT TArrayD, TArrayF, TArrayL, TArrayI or TArrayS
     copy : bool, optional (default=True)
         If True (the default) then copy the underlying array, otherwise the
-        NumPy array will view the same memory as the ROOT array.
+        NumPy array will view (and not own) the same memory as the ROOT array.
 
     Returns
     -------
