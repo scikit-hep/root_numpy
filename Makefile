@@ -4,10 +4,11 @@ PYTHON := $(shell which python)
 CYTHON := $(shell which cython)
 NOSETESTS := $(shell which nosetests)
 
-CYTHON_PYX := root_numpy/src/_librootnumpy.pyx root_numpy/tmva/src/_libtmvanumpy.pyx
-CYTHON_CPP := $(patsubst %.pyx,%.cpp,$(CYTHON_PYX))
-CYTHON_SRC := $(filter-out $(CYTHON_PYX),$(filter-out $(CYTHON_CPP),$(wildcard root_numpy/src/*)))
-CYTHON_PYX_SRC := $(filter-out $(CYTHON_PYX),$(wildcard root_numpy/src/*.pyx))
+CYTHON_CORE_PYX := root_numpy/src/_librootnumpy.pyx
+CYTHON_TMVA_PYX := root_numpy/tmva/src/_libtmvanumpy.pyx
+CYTHON_CORE_CPP := $(CYTHON_CORE_PYX:.pyx=.cpp)
+CYTHON_TMVA_CPP := $(CYTHON_TMVA_PYX:.pyx=.cpp)
+CYTHON_PYX_SRC := $(filter-out $(CYTHON_CORE_PYX),$(wildcard root_numpy/src/*.pyx))
 
 INTERACTIVE := $(shell ([ -t 0 ] && echo 1) || echo 0)
 
@@ -18,7 +19,7 @@ else
 	OPEN := xdg-open
 endif
 
-all: $(CYTHON_CPP) clean inplace test
+all: clean cython inplace test
 
 clean-pyc:
 	@find . -name "*.pyc" -exec rm {} \;
@@ -34,13 +35,12 @@ clean-html:
 
 clean: clean-build clean-pyc clean-so
 
-$(CYTHON_PYX): $(CYTHON_SRC)
-
-%.cpp: %.pyx
+.SECONDEXPANSION:
+%.cpp: %.pyx $$(filter-out $$@,$$(wildcard $$(@D)/*))
 	@echo "compiling $< ..."
 	$(CYTHON) --cplus --fast-fail --line-directives $<
 
-cython: $(CYTHON_CPP)
+cython: $(CYTHON_CORE_CPP) $(CYTHON_TMVA_CPP)
 
 show-cython: clean-html
 	@tmp=`mktemp -d`; \
