@@ -154,6 +154,10 @@ def hist2array(hist, include_overflow=False, copy=True):
     TypeError
         If hist is not a ROOT histogram.
 
+    See Also
+    --------
+    array2hist
+
     """
     import ROOT
     if isinstance(hist, ROOT.TH3):
@@ -233,6 +237,65 @@ def array2hist(array, hist):
     overflow bins included. Avoid this second copy by ensuring that the NumPy
     array data type matches the histogram data type and that overflow bins are
     included.
+
+    See Also
+    --------
+    hist2array
+
+    Examples
+    --------
+
+    >>> from root_numpy import array2hist, hist2array
+    >>> import numpy as np
+    >>> from rootpy.plotting import Hist2D
+    >>> hist = Hist2D(5, 0, 1, 3, 0, 1, type='F')
+    >>> array = np.random.randint(0, 10, size=(7, 5))
+    >>> array
+    array([[6, 7, 8, 3, 4],
+           [8, 9, 7, 6, 2],
+           [2, 3, 4, 5, 2],
+           [7, 6, 5, 7, 3],
+           [2, 0, 5, 6, 8],
+           [0, 0, 6, 5, 2],
+           [2, 2, 1, 5, 4]])
+    >>> array2hist(array, hist)
+    >>> # dtype matches histogram type (D, F, I, S, C)
+    >>> hist2array(hist)
+    array([[ 9.,  7.,  6.],
+           [ 3.,  4.,  5.],
+           [ 6.,  5.,  7.],
+           [ 0.,  5.,  6.],
+           [ 0.,  6.,  5.]], dtype=float32)
+    >>> # overflow is excluded by default
+    >>> hist2array(hist, include_overflow=True)
+    array([[ 6.,  7.,  8.,  3.,  4.],
+           [ 8.,  9.,  7.,  6.,  2.],
+           [ 2.,  3.,  4.,  5.,  2.],
+           [ 7.,  6.,  5.,  7.,  3.],
+           [ 2.,  0.,  5.,  6.,  8.],
+           [ 0.,  0.,  6.,  5.,  2.],
+           [ 2.,  2.,  1.,  5.,  4.]], dtype=float32)
+    >>> array2 = hist2array(hist, include_overflow=True, copy=False)
+    >>> hist[2, 2] = -10
+    >>> # array2 views the same memory as hist because copy=False
+    >>> array2
+    array([[  6.,   7.,   8.,   3.,   4.],
+           [  8.,   9.,   7.,   6.,   2.],
+           [  2.,   3., -10.,   5.,   2.],
+           [  7.,   6.,   5.,   7.,   3.],
+           [  2.,   0.,   5.,   6.,   8.],
+           [  0.,   0.,   6.,   5.,   2.],
+           [  2.,   2.,   1.,   5.,   4.]], dtype=float32)
+    >>> # x, y, z axes correspond to axes 0, 1, 2 in numpy
+    >>> hist[2, 3] = -10
+    >>> array2
+    array([[  6.,   7.,   8.,   3.,   4.],
+           [  8.,   9.,   7.,   6.,   2.],
+           [  2.,   3., -10., -10.,   2.],
+           [  7.,   6.,   5.,   7.,   3.],
+           [  2.,   0.,   5.,   6.,   8.],
+           [  0.,   0.,   6.,   5.,   2.],
+           [  2.,   2.,   1.,   5.,   4.]], dtype=float32)
 
     """
     import ROOT

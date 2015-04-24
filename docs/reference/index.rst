@@ -7,10 +7,13 @@ root_numpy Reference
 :Release: |version|
 :Date: |today|
 
-.. module:: root_numpy
-
 This reference manual details the functions included in root_numpy, describing
 what they are and what they do.
+
+root_numpy
+----------
+
+.. module:: root_numpy
 
 .. autosummary::
    :toctree: generated
@@ -38,6 +41,17 @@ what they are and what they do.
    stretch
    dup_idx
    blockwise_inner_join
+
+root_numpy.tmva
+---------------
+
+.. module:: root_numpy.tmva
+
+.. autosummary::
+   :toctree: generated
+
+   factory_add_events
+   reader_evaluate
 
 .. _conversion_table:
 
@@ -70,7 +84,3 @@ vector<vector<t> >  np.object
 Variable length arrays (such as ``particletype[nparticle]``) and vectors
 (such as ``vector<int>``) are converted to NumPy arrays of the corresponding
 types. Fixed length arrays are converted to fixed length NumPy array fields.
-
-.. note::
-    Tab completion for numpy.recarray column names (yourdata.<TAB>)
-    is also available with this `numpy extension <https://github.com/piti118/inumpy>`_.

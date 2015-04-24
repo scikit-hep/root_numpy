@@ -12,7 +12,7 @@ __all__ = [
 def factory_add_events(factory, events, labels,
                        signal_label=None, weights=None,
                        test=False):
-    """Add events to a TMVA::Factory from a NumPy array.
+    """Add training or test events to a TMVA::Factory from a NumPy array.
 
     Parameters
     ----------
