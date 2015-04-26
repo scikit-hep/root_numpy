@@ -48,31 +48,26 @@ class TMVAClassifier(object):
         self.factory.DeleteAllMethods()
 
         # test exceptions
-        assert_raises(TypeError, rnp.tmva.factory_add_events,
+        assert_raises(TypeError, rnp.tmva.add_classification_events,
                       object(), X, y)
-        assert_raises(ValueError, rnp.tmva.factory_add_events,
-                      self.factory, [1, 2, 3], [0, 1, 0])
-        assert_raises(ValueError, rnp.tmva.factory_add_events,
+        assert_raises(ValueError, rnp.tmva.add_classification_events,
                       self.factory, X, y[:y.shape[0] / 2])
-        y_bad = np.copy(y)
-        y_bad[0] = 100
-        assert_raises(ValueError, rnp.tmva.factory_add_events,
-                      self.factory, X, y_bad)
         if weights is not None:
-            assert_raises(ValueError, rnp.tmva.factory_add_events,
+            assert_raises(ValueError, rnp.tmva.add_classification_events,
                           self.factory, X, y,
                           weights=weights[:weights.shape[0]/2])
-            assert_raises(ValueError, rnp.tmva.factory_add_events,
+            assert_raises(ValueError, rnp.tmva.add_classification_events,
                           self.factory, X, y,
-                          weights=weights[:,np.newaxis])
+                          weights=weights[:, np.newaxis])
 
-        rnp.tmva.factory_add_events(self.factory, X, y,
-                                    weights=weights, signal_label=signal_label)
+        rnp.tmva.add_classification_events(
+            self.factory, X, y, weights=weights, signal_label=signal_label)
         if X_test is not None and y_test is not None:
-            rnp.tmva.factory_add_events(self.factory, X_test, y_test,
-                                        weights=weights_test,
-                                        signal_label=signal_label,
-                                        test=True)
+            rnp.tmva.add_classification_events(
+                self.factory, X_test, y_test,
+                weights=weights_test,
+                signal_label=signal_label,
+                test=True)
         self.factory.PrepareTrainingAndTestTree(
             TCut('1'), 'NormMode=EqualNumEvents')
         self.factory.BookMethod('BDT', 'BDT',
@@ -86,11 +81,11 @@ class TMVAClassifier(object):
         reader.BookMVA('BDT',
                        os.path.join(self.tmpdir,
                                     '{0}_BDT.weights.xml'.format(self.name)))
-        assert_raises(TypeError, rnp.tmva.reader_evaluate,
+        assert_raises(TypeError, rnp.tmva.evaluate_reader,
                       object(), 'BDT', X)
-        assert_raises(ValueError, rnp.tmva.reader_evaluate,
+        assert_raises(ValueError, rnp.tmva.evaluate_reader,
                       reader, 'BDT', [1, 2, 3])
-        return rnp.tmva.reader_evaluate(reader, 'BDT', X)
+        return rnp.tmva.evaluate_reader(reader, 'BDT', X)
 
 
 def test_tmva():

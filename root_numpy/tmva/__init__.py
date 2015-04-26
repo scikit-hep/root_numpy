@@ -1,8 +1,11 @@
-from ._factory import factory_add_events
-from ._reader import reader_evaluate
+from ._factory import add_classification_events
+from ._factory import add_regression_events
+from ._evaluate import evaluate_reader, evaluate_method
 
 
 __all__ = [
-    'factory_add_events',
-    'reader_evaluate',
+    'add_classification_events',
+    'add_regression_events',
+    'evaluate_reader',
+    'evaluate_method',
 ]

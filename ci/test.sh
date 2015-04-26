@@ -8,10 +8,11 @@ set -e
 
 gcc -dumpversion
 g++ -dumpversion
+ldd --version
 python --version
 python -c "import numpy; print('numpy %s' % numpy.__version__)"
+
 # Check if ROOT and PyROOT work
-#root -l -q
 python -c "import ROOT; ROOT.TBrowser()"
 python -c "from __future__ import print_function; import ROOT; print(ROOT.gROOT.GetVersion())"
 

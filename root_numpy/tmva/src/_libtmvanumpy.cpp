@@ -248,8 +248,10 @@ void __Pyx_call_destructor(T* x) {
 #include <map>
 #include <string>
 #include "2to3.h"
+#include "TMVA/Types.h"
+#include "TMVA/Event.h"
 #include "TMVA/Factory.h"
-#include "TMVA/Reader.h"
+#include "TMVA/MethodBase.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -454,7 +456,7 @@ static const char *__pyx_filename;
 
 static const char *__pyx_f[] = {
   "factory.pyx",
-  "reader.pyx",
+  "evaluate.pyx",
   "array.pxd",
   "__init__.pxd",
   "stringsource",
@@ -964,15 +966,21 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject
 #define __Pyx_PyObject_GetAttrStr(o,n) PyObject_GetAttr(o,n)
 #endif
 
-static PyObject *__Pyx_GetBuiltinName(PyObject *name);
-
-static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
-
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
 #else
 #define __Pyx_PyObject_Call(func, arg, kw) PyObject_Call(func, arg, kw)
 #endif
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg);
+#endif
+
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg);
+
+static PyObject *__Pyx_GetBuiltinName(PyObject *name);
+
+static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
 
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
@@ -1140,7 +1148,52 @@ static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
 
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
+static CYTHON_INLINE unsigned int __Pyx_PyInt_As_unsigned_int(PyObject *);
+
+#ifndef __Pyx_CppExn2PyErr
+#include <new>
+#include <typeinfo>
+#include <stdexcept>
+#include <ios>
+static void __Pyx_CppExn2PyErr() {
+  try {
+    if (PyErr_Occurred())
+      ; // let the latest Python exn pass through and ignore the current one
+    else
+      throw;
+  } catch (const std::bad_alloc& exn) {
+    PyErr_SetString(PyExc_MemoryError, exn.what());
+  } catch (const std::bad_cast& exn) {
+    PyErr_SetString(PyExc_TypeError, exn.what());
+  } catch (const std::domain_error& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::invalid_argument& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::ios_base::failure& exn) {
+    PyErr_SetString(PyExc_IOError, exn.what());
+  } catch (const std::out_of_range& exn) {
+    PyErr_SetString(PyExc_IndexError, exn.what());
+  } catch (const std::overflow_error& exn) {
+    PyErr_SetString(PyExc_OverflowError, exn.what());
+  } catch (const std::range_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::underflow_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::exception& exn) {
+    PyErr_SetString(PyExc_RuntimeError, exn.what());
+  }
+  catch (...)
+  {
+    PyErr_SetString(PyExc_RuntimeError, "Unknown exception");
+  }
+}
+#endif
+
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
+
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
+
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_int(unsigned int value);
 
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -1239,8 +1292,6 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
         static CYTHON_INLINE __pyx_t_double_complex __Pyx_c_pow(__pyx_t_double_complex, __pyx_t_double_complex);
     #endif
 #endif
-
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
@@ -1382,6 +1433,7 @@ static CYTHON_INLINE int __pyx_f_7cpython_5array_extend_buffer(arrayobject *, ch
 static std::string __pyx_convert_string_from_py_std__string(PyObject *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_double_t = { "double_t", NULL, sizeof(__pyx_t_5numpy_double_t), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int_t = { "int_t", NULL, sizeof(__pyx_t_5numpy_int_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int_t), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t = { "float32_t", NULL, sizeof(__pyx_t_5numpy_float32_t), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "_libtmvanumpy"
 int __pyx_module_is_main__libtmvanumpy = 0;
 
@@ -1390,8 +1442,12 @@ static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
-static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, int __pyx_v_signal_label, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
-static PyObject *__pyx_pf_13_libtmvanumpy_2reader_evaluate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events_twoclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, int __pyx_v_signal_label, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_2factory_add_events_multiclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_4factory_add_events_regression(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_target, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_twoclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_multiclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_classes); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_10evaluate_regression(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_targets); /* proto */
 static int __pyx_pf_7cpython_5array_5array___getbuffer__(arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info, CYTHON_UNUSED int __pyx_v_flags); /* proto */
 static void __pyx_pf_7cpython_5array_5array_2__releasebuffer__(CYTHON_UNUSED arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
@@ -1416,7 +1472,6 @@ static char __pyx_k_Zf[] = "Zf";
 static char __pyx_k_Zg[] = "Zg";
 static char __pyx_k_np[] = "np";
 static char __pyx_k_main[] = "__main__";
-static char __pyx_k_name[] = "name";
 static char __pyx_k_size[] = "size";
 static char __pyx_k_test[] = "test";
 static char __pyx_k_dtype[] = "dtype";
@@ -1425,48 +1480,75 @@ static char __pyx_k_event[] = "event";
 static char __pyx_k_label[] = "label";
 static char __pyx_k_numpy[] = "numpy";
 static char __pyx_k_range[] = "range";
+static char __pyx_k_Signal[] = "Signal";
 static char __pyx_k_double[] = "double";
 static char __pyx_k_events[] = "events";
+static char __pyx_k_format[] = "format";
 static char __pyx_k_import[] = "__import__";
 static char __pyx_k_labels[] = "labels";
+static char __pyx_k_method[] = "method";
 static char __pyx_k_output[] = "output";
-static char __pyx_k_reader[] = "reader";
+static char __pyx_k_target[] = "target";
 static char __pyx_k_test_2[] = "__test__";
 static char __pyx_k_weight[] = "weight";
 static char __pyx_k_factory[] = "factory";
+static char __pyx_k_float32[] = "float32";
 static char __pyx_k_weights[] = "weights";
-static char __pyx_k_reader_2[] = "_reader";
+static char __pyx_k_features[] = "features";
+static char __pyx_k_method_2[] = "_method";
+static char __pyx_k_treetype[] = "treetype";
 static char __pyx_k_factory_2[] = "_factory";
+static char __pyx_k_n_classes[] = "n_classes";
+static char __pyx_k_n_targets[] = "n_targets";
+static char __pyx_k_Background[] = "Background";
+static char __pyx_k_Class__0_d[] = "Class_{0:d}";
+static char __pyx_k_Regression[] = "Regression";
 static char __pyx_k_ValueError[] = "ValueError";
 static char __pyx_k_n_features[] = "n_features";
 static char __pyx_k_MemoryError[] = "MemoryError";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
 static char __pyx_k_libtmvanumpy[] = "_libtmvanumpy";
 static char __pyx_k_signal_label[] = "signal_label";
-static char __pyx_k_reader_evaluate[] = "reader_evaluate";
-static char __pyx_k_factory_add_events[] = "factory_add_events";
+static char __pyx_k_evaluate_twoclass[] = "evaluate_twoclass";
+static char __pyx_k_evaluate_multiclass[] = "evaluate_multiclass";
+static char __pyx_k_evaluate_regression[] = "evaluate_regression";
+static char __pyx_k_factory_add_events_twoclass[] = "factory_add_events_twoclass";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
+static char __pyx_k_factory_add_events_multiclass[] = "factory_add_events_multiclass";
+static char __pyx_k_factory_add_events_regression[] = "factory_add_events_regression";
 static char __pyx_k_home_endw_workspace_root_numpy[] = "/home/endw/workspace/root_numpy/root_numpy/tmva/src/factory.pyx";
 static char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
 static char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
-static char __pyx_k_home_endw_workspace_root_numpy_2[] = "/home/endw/workspace/root_numpy/root_numpy/tmva/src/reader.pyx";
+static char __pyx_k_home_endw_workspace_root_numpy_2[] = "/home/endw/workspace/root_numpy/root_numpy/tmva/src/evaluate.pyx";
 static char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
+static PyObject *__pyx_n_b_Background;
+static PyObject *__pyx_kp_s_Class__0_d;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_MemoryError;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
+static PyObject *__pyx_n_b_Regression;
 static PyObject *__pyx_n_s_RuntimeError;
+static PyObject *__pyx_n_b_Signal;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_double;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_empty;
+static PyObject *__pyx_n_s_evaluate_multiclass;
+static PyObject *__pyx_n_s_evaluate_regression;
+static PyObject *__pyx_n_s_evaluate_twoclass;
 static PyObject *__pyx_n_s_event;
 static PyObject *__pyx_n_s_events;
 static PyObject *__pyx_n_s_factory;
 static PyObject *__pyx_n_s_factory_2;
-static PyObject *__pyx_n_s_factory_add_events;
+static PyObject *__pyx_n_s_factory_add_events_multiclass;
+static PyObject *__pyx_n_s_factory_add_events_regression;
+static PyObject *__pyx_n_s_factory_add_events_twoclass;
+static PyObject *__pyx_n_s_features;
+static PyObject *__pyx_n_s_float32;
+static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_kp_s_home_endw_workspace_root_numpy;
 static PyObject *__pyx_kp_s_home_endw_workspace_root_numpy_2;
 static PyObject *__pyx_n_s_i;
@@ -1476,21 +1558,23 @@ static PyObject *__pyx_n_s_label;
 static PyObject *__pyx_n_s_labels;
 static PyObject *__pyx_n_s_libtmvanumpy;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_method;
+static PyObject *__pyx_n_s_method_2;
+static PyObject *__pyx_n_s_n_classes;
 static PyObject *__pyx_n_s_n_features;
-static PyObject *__pyx_n_s_name;
+static PyObject *__pyx_n_s_n_targets;
 static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_n_s_output;
 static PyObject *__pyx_n_s_range;
-static PyObject *__pyx_n_s_reader;
-static PyObject *__pyx_n_s_reader_2;
-static PyObject *__pyx_n_s_reader_evaluate;
 static PyObject *__pyx_n_s_signal_label;
 static PyObject *__pyx_n_s_size;
+static PyObject *__pyx_n_s_target;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_test_2;
+static PyObject *__pyx_n_s_treetype;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_weight;
 static PyObject *__pyx_n_s_weights;
@@ -1502,15 +1586,23 @@ static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__9;
+static PyObject *__pyx_tuple__11;
+static PyObject *__pyx_tuple__13;
+static PyObject *__pyx_tuple__15;
+static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_codeobj__8;
 static PyObject *__pyx_codeobj__10;
+static PyObject *__pyx_codeobj__12;
+static PyObject *__pyx_codeobj__14;
+static PyObject *__pyx_codeobj__16;
+static PyObject *__pyx_codeobj__18;
 
 /* "root_numpy/tmva/src/factory.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def factory_add_events(factory,             # <<<<<<<<<<<<<<
- *                        np.ndarray[np.double_t, ndim=2] events,
- *                        np.ndarray[np.int_t, ndim=1] labels,
+ * def factory_add_events_twoclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
  */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
@@ -1520,13 +1612,13 @@ static PyObject *__pyx_codeobj__10;
 /* Python wrapper */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_13_libtmvanumpy_1factory_add_events = 
+static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events_twoclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_1factory_add_events_twoclass = 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-{"factory_add_events", (PyCFunction)__pyx_pw_13_libtmvanumpy_1factory_add_events, METH_VARARGS|METH_KEYWORDS, 0};
+{"factory_add_events_twoclass", (PyCFunction)__pyx_pw_13_libtmvanumpy_1factory_add_events_twoclass, METH_VARARGS|METH_KEYWORDS, 0};
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events_twoclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_factory = 0
 #line 4 "root_numpy/tmva/src/factory.pyx"
 ;
@@ -1556,7 +1648,7 @@ static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events(PyObject *__pyx_se
   __Pyx_RefNannyDeclarations
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_RefNannySetupContext("factory_add_events (wrapper)", 0);
+  __Pyx_RefNannySetupContext("factory_add_events_twoclass (wrapper)", 0);
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   {
@@ -1567,277 +1659,277 @@ static PyObject *__pyx_pw_13_libtmvanumpy_1factory_add_events(PyObject *__pyx_se
 #line 4 "root_numpy/tmva/src/factory.pyx"
     PyObject* values[6] = {0,0,0,0,0,0};
 
-    /* "root_numpy/tmva/src/factory.pyx":8
- *                        np.ndarray[np.int_t, ndim=1] labels,
- *                        int signal_label,
- *                        np.ndarray[np.double_t, ndim=1] weights=None,             # <<<<<<<<<<<<<<
- *                        bool test=False):
+    /* "root_numpy/tmva/src/factory.pyx":9
+ *         np.ndarray[np.int_t, ndim=1] labels,
+ *         int signal_label,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,             # <<<<<<<<<<<<<<
+ *         bool test=False):
  *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
  */
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     values[4] = (PyObject *)((PyArrayObject *)Py_None);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     if (unlikely(__pyx_kwds)) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       Py_ssize_t kw_args;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       switch (pos_args) {
         case  6: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
         case  5: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         case  4: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  0: break;
         default: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       kw_args = PyDict_Size(__pyx_kwds);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       switch (pos_args) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  0:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_factory)) != 0)) kw_args--;
         else 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  1:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("factory_add_events", 0, 4, 6, 1); 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_twoclass", 0, 4, 6, 1); 
+#line 9 "root_numpy/tmva/src/factory.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  2:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_labels)) != 0)) kw_args--;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("factory_add_events", 0, 4, 6, 2); 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_twoclass", 0, 4, 6, 2); 
+#line 9 "root_numpy/tmva/src/factory.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  3:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_signal_label)) != 0)) kw_args--;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("factory_add_events", 0, 4, 6, 3); 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_twoclass", 0, 4, 6, 3); 
+#line 9 "root_numpy/tmva/src/factory.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  4:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (kw_args > 0) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_weights);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
           if (value) { values[4] = value; kw_args--; }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         case  5:
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         if (kw_args > 0) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_test);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
           if (value) { values[5] = value; kw_args--; }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       if (unlikely(kw_args > 0)) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "factory_add_events") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+#line 9 "root_numpy/tmva/src/factory.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "factory_add_events_twoclass") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     } else {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       switch (PyTuple_GET_SIZE(__pyx_args)) {
         case  6: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
         case  5: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         case  4: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
         break;
         default: 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     }
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     __pyx_v_factory = values[0];
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     __pyx_v_events = ((PyArrayObject *)values[1]);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     __pyx_v_labels = ((PyArrayObject *)values[2]);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_signal_label = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_signal_label == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+#line 9 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_signal_label = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_signal_label == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     __pyx_v_weights = ((PyArrayObject *)values[4]);
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     if (values[5]) {
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
-      __pyx_v_test = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_test == (bool)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+#line 9 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_test = __Pyx_PyObject_IsTrue(values[5]); if (unlikely((__pyx_v_test == (bool)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 8 "root_numpy/tmva/src/factory.pyx"
+#line 9 "root_numpy/tmva/src/factory.pyx"
     } else {
 
-      /* "root_numpy/tmva/src/factory.pyx":9
- *                        int signal_label,
- *                        np.ndarray[np.double_t, ndim=1] weights=None,
- *                        bool test=False):             # <<<<<<<<<<<<<<
+      /* "root_numpy/tmva/src/factory.pyx":10
+ *         int signal_label,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):             # <<<<<<<<<<<<<<
  *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
  *     cdef long size = events.shape[0]
  */
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
       __pyx_v_test = ((bool)0);
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
     }
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   }
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   goto __pyx_L4_argument_unpacking_done;
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("factory_add_events", 0, 4, 6, PyTuple_GET_SIZE(__pyx_args)); 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RaiseArgtupleInvalid("factory_add_events_twoclass", 0, 4, 6, PyTuple_GET_SIZE(__pyx_args)); 
+#line 10 "root_numpy/tmva/src/factory.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   __pyx_L3_error:;
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events", __pyx_clineno, __pyx_lineno, __pyx_filename);
+#line 10 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_twoclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   return NULL;
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
+#line 10 "root_numpy/tmva/src/factory.pyx"
   __pyx_L4_argument_unpacking_done:;
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 10 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_labels), __pyx_ptype_5numpy_ndarray, 1, "labels", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 6; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 10 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_labels), __pyx_ptype_5numpy_ndarray, 1, "labels", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 9 "root_numpy/tmva/src/factory.pyx"
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_weights), __pyx_ptype_5numpy_ndarray, 1, "weights", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 10 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_weights), __pyx_ptype_5numpy_ndarray, 1, "weights", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = 
-#line 9 "root_numpy/tmva/src/factory.pyx"
-__pyx_pf_13_libtmvanumpy_factory_add_events(__pyx_self, __pyx_v_factory, __pyx_v_events, __pyx_v_labels, __pyx_v_signal_label, __pyx_v_weights, __pyx_v_test);
+#line 10 "root_numpy/tmva/src/factory.pyx"
+__pyx_pf_13_libtmvanumpy_factory_add_events_twoclass(__pyx_self, __pyx_v_factory, __pyx_v_events, __pyx_v_labels, __pyx_v_signal_label, __pyx_v_weights, __pyx_v_test);
 
   /* "root_numpy/tmva/src/factory.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def factory_add_events(factory,             # <<<<<<<<<<<<<<
- *                        np.ndarray[np.double_t, ndim=2] events,
- *                        np.ndarray[np.int_t, ndim=1] labels,
+ * def factory_add_events_twoclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
  */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
@@ -1871,7 +1963,7 @@ __pyx_pf_13_libtmvanumpy_factory_add_events(__pyx_self, __pyx_v_factory, __pyx_v
 
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, int __pyx_v_signal_label, PyArrayObject *__pyx_v_weights, bool __pyx_v_test) {
+static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events_twoclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, int __pyx_v_signal_label, PyArrayObject *__pyx_v_weights, bool __pyx_v_test) {
   TMVA::Factory *__pyx_v__factory
 #line 4 "root_numpy/tmva/src/factory.pyx"
 ;
@@ -1893,7 +1985,10 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
   int __pyx_v_label
 #line 4 "root_numpy/tmva/src/factory.pyx"
 ;
-  std::vector<double>  __pyx_v_event
+  std::vector<double>  *__pyx_v_event
+#line 4 "root_numpy/tmva/src/factory.pyx"
+;
+  TMVA::Types::ETreeType __pyx_v_treetype
 #line 4 "root_numpy/tmva/src/factory.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_events
@@ -1919,20 +2014,22 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   void *__pyx_t_1;
-  long __pyx_t_2;
-  long __pyx_t_3;
-  int __pyx_t_4;
-  int __pyx_t_5;
-  long __pyx_t_6;
+  std::vector<double>  *__pyx_t_2;
+  int __pyx_t_3;
+  long __pyx_t_4;
+  long __pyx_t_5;
+  int __pyx_t_6;
   long __pyx_t_7;
   long __pyx_t_8;
   long __pyx_t_9;
+  long __pyx_t_10;
+  std::string __pyx_t_11;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_RefNannySetupContext("factory_add_events", 0);
+  __Pyx_RefNannySetupContext("factory_add_events_twoclass", 0);
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __pyx_pybuffer_events.pybuffer.buf = NULL;
@@ -2015,32 +2112,32 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __pyx_pybuffernd_weights.diminfo[0].strides = __pyx_pybuffernd_weights.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_weights.diminfo[0].shape = __pyx_pybuffernd_weights.rcbuffer->pybuffer.shape[0];
 
-  /* "root_numpy/tmva/src/factory.pyx":10
- *                        np.ndarray[np.double_t, ndim=1] weights=None,
- *                        bool test=False):
+  /* "root_numpy/tmva/src/factory.pyx":11
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):
  *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)             # <<<<<<<<<<<<<<
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]
  */
 
-#line 10 "root_numpy/tmva/src/factory.pyx"
-  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_factory); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 11 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_factory); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/factory.pyx"
+#line 11 "root_numpy/tmva/src/factory.pyx"
   __pyx_v__factory = ((TMVA::Factory *)__pyx_t_1);
 
-  /* "root_numpy/tmva/src/factory.pyx":11
- *                        bool test=False):
+  /* "root_numpy/tmva/src/factory.pyx":12
+ *         bool test=False):
  *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
  *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
  *     cdef long n_features = events.shape[1]
  *     cdef long i, j
  */
 
-#line 11 "root_numpy/tmva/src/factory.pyx"
+#line 12 "root_numpy/tmva/src/factory.pyx"
   __pyx_v_size = (__pyx_v_events->dimensions[0]);
 
-  /* "root_numpy/tmva/src/factory.pyx":12
+  /* "root_numpy/tmva/src/factory.pyx":13
  *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
@@ -2048,200 +2145,226 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
  *     cdef double weight = 1.
  */
 
-#line 12 "root_numpy/tmva/src/factory.pyx"
+#line 13 "root_numpy/tmva/src/factory.pyx"
   __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
 
-  /* "root_numpy/tmva/src/factory.pyx":14
+  /* "root_numpy/tmva/src/factory.pyx":15
  *     cdef long n_features = events.shape[1]
  *     cdef long i, j
  *     cdef double weight = 1.             # <<<<<<<<<<<<<<
  *     cdef int label
- *     cdef vector[double] event
+ *     cdef vector[double]* event = new vector[double](n_features)
  */
 
-#line 14 "root_numpy/tmva/src/factory.pyx"
+#line 15 "root_numpy/tmva/src/factory.pyx"
   __pyx_v_weight = 1.;
 
   /* "root_numpy/tmva/src/factory.pyx":17
+ *     cdef double weight = 1.
  *     cdef int label
- *     cdef vector[double] event
- *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
- *         event.clear()
- *         label = labels[i]
+ *     cdef vector[double]* event = new vector[double](n_features)             # <<<<<<<<<<<<<<
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
  */
 
 #line 17 "root_numpy/tmva/src/factory.pyx"
-  __pyx_t_2 = __pyx_v_size;
+  try {
 
 #line 17 "root_numpy/tmva/src/factory.pyx"
-  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_2; __pyx_v_i++) {
+    __pyx_t_2 = new std::vector<double> (__pyx_v_n_features);
 
-    /* "root_numpy/tmva/src/factory.pyx":18
- *     cdef vector[double] event
+#line 17 "root_numpy/tmva/src/factory.pyx"
+  } catch(...) {
+
+#line 17 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 17 "root_numpy/tmva/src/factory.pyx"
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 17 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 17 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_event = __pyx_t_2;
+
+  /* "root_numpy/tmva/src/factory.pyx":18
+ *     cdef int label
+ *     cdef vector[double]* event = new vector[double](n_features)
+ *     cdef ETreeType treetype = kTraining             # <<<<<<<<<<<<<<
+ *     if test:
+ *         treetype = kTesting
+ */
+
+#line 18 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_treetype = TMVA::Types::kTraining;
+
+  /* "root_numpy/tmva/src/factory.pyx":19
+ *     cdef vector[double]* event = new vector[double](n_features)
+ *     cdef ETreeType treetype = kTraining
+ *     if test:             # <<<<<<<<<<<<<<
+ *         treetype = kTesting
  *     for i from 0 <= i < size:
- *         event.clear()             # <<<<<<<<<<<<<<
+ */
+
+#line 19 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_3 = (__pyx_v_test != 0);
+
+#line 19 "root_numpy/tmva/src/factory.pyx"
+  if (__pyx_t_3) {
+
+    /* "root_numpy/tmva/src/factory.pyx":20
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
+ *         treetype = kTesting             # <<<<<<<<<<<<<<
+ *     for i from 0 <= i < size:
+ *         label = labels[i]
+ */
+
+#line 20 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_treetype = TMVA::Types::kTesting;
+
+#line 20 "root_numpy/tmva/src/factory.pyx"
+    goto __pyx_L3;
+
+#line 20 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 20 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L3:;
+
+  /* "root_numpy/tmva/src/factory.pyx":21
+ *     if test:
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
  *         label = labels[i]
  *         if weights is not None:
  */
 
-#line 18 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_event.clear();
+#line 21 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_4 = __pyx_v_size;
 
-    /* "root_numpy/tmva/src/factory.pyx":19
+#line 21 "root_numpy/tmva/src/factory.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_4; __pyx_v_i++) {
+
+    /* "root_numpy/tmva/src/factory.pyx":22
+ *         treetype = kTesting
  *     for i from 0 <= i < size:
- *         event.clear()
  *         label = labels[i]             # <<<<<<<<<<<<<<
  *         if weights is not None:
  *             weight = weights[i]
  */
 
-#line 19 "root_numpy/tmva/src/factory.pyx"
-    __pyx_t_3 = __pyx_v_i;
+#line 22 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_5 = __pyx_v_i;
 
-#line 19 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_label = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_3, __pyx_pybuffernd_labels.diminfo[0].strides));
+#line 22 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_label = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_labels.diminfo[0].strides));
 
-    /* "root_numpy/tmva/src/factory.pyx":20
- *         event.clear()
+    /* "root_numpy/tmva/src/factory.pyx":23
+ *     for i from 0 <= i < size:
  *         label = labels[i]
  *         if weights is not None:             # <<<<<<<<<<<<<<
  *             weight = weights[i]
  *         for j from 0 <= j < n_features:
  */
 
-#line 20 "root_numpy/tmva/src/factory.pyx"
-    __pyx_t_4 = (((PyObject *)__pyx_v_weights) != Py_None);
+#line 23 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_3 = (((PyObject *)__pyx_v_weights) != Py_None);
 
-#line 20 "root_numpy/tmva/src/factory.pyx"
-    __pyx_t_5 = (__pyx_t_4 != 0);
+#line 23 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_6 = (__pyx_t_3 != 0);
 
-#line 20 "root_numpy/tmva/src/factory.pyx"
-    if (__pyx_t_5) {
+#line 23 "root_numpy/tmva/src/factory.pyx"
+    if (__pyx_t_6) {
 
-      /* "root_numpy/tmva/src/factory.pyx":21
+      /* "root_numpy/tmva/src/factory.pyx":24
  *         label = labels[i]
  *         if weights is not None:
  *             weight = weights[i]             # <<<<<<<<<<<<<<
  *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])
+ *             event[0][j] = events[i, j]
  */
 
-#line 21 "root_numpy/tmva/src/factory.pyx"
-      __pyx_t_6 = __pyx_v_i;
+#line 24 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_7 = __pyx_v_i;
 
-#line 21 "root_numpy/tmva/src/factory.pyx"
-      __pyx_v_weight = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_weights.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_weights.diminfo[0].strides));
+#line 24 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_weight = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_weights.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_weights.diminfo[0].strides));
 
-#line 21 "root_numpy/tmva/src/factory.pyx"
-      goto __pyx_L5;
+#line 24 "root_numpy/tmva/src/factory.pyx"
+      goto __pyx_L6;
 
-#line 21 "root_numpy/tmva/src/factory.pyx"
+#line 24 "root_numpy/tmva/src/factory.pyx"
     }
 
-#line 21 "root_numpy/tmva/src/factory.pyx"
-    __pyx_L5:;
+#line 24 "root_numpy/tmva/src/factory.pyx"
+    __pyx_L6:;
 
-    /* "root_numpy/tmva/src/factory.pyx":22
+    /* "root_numpy/tmva/src/factory.pyx":25
  *         if weights is not None:
  *             weight = weights[i]
  *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
- *             event.push_back(<double> events[i, j])
- *         if test:
+ *             event[0][j] = events[i, j]
+ *         if label == signal_label:
  */
 
-#line 22 "root_numpy/tmva/src/factory.pyx"
-    __pyx_t_7 = __pyx_v_n_features;
+#line 25 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_8 = __pyx_v_n_features;
 
-#line 22 "root_numpy/tmva/src/factory.pyx"
-    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_7; __pyx_v_j++) {
+#line 25 "root_numpy/tmva/src/factory.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_8; __pyx_v_j++) {
 
-      /* "root_numpy/tmva/src/factory.pyx":23
+      /* "root_numpy/tmva/src/factory.pyx":26
  *             weight = weights[i]
  *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])             # <<<<<<<<<<<<<<
- *         if test:
- *             if label == signal_label:
+ *             event[0][j] = events[i, j]             # <<<<<<<<<<<<<<
+ *         if label == signal_label:
+ *             _factory.AddEvent("Signal", treetype, event[0], weight)
  */
 
-#line 23 "root_numpy/tmva/src/factory.pyx"
-      __pyx_t_8 = __pyx_v_i;
+#line 26 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_9 = __pyx_v_i;
 
-#line 23 "root_numpy/tmva/src/factory.pyx"
-      __pyx_t_9 = __pyx_v_j;
+#line 26 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_10 = __pyx_v_j;
 
-#line 23 "root_numpy/tmva/src/factory.pyx"
-      __pyx_v_event.push_back(((double)(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_9, __pyx_pybuffernd_events.diminfo[1].strides))));
+#line 26 "root_numpy/tmva/src/factory.pyx"
+      ((__pyx_v_event[0])[__pyx_v_j]) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_events.diminfo[1].strides));
 
-#line 23 "root_numpy/tmva/src/factory.pyx"
+#line 26 "root_numpy/tmva/src/factory.pyx"
     }
 
-    /* "root_numpy/tmva/src/factory.pyx":24
+    /* "root_numpy/tmva/src/factory.pyx":27
  *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])
- *         if test:             # <<<<<<<<<<<<<<
- *             if label == signal_label:
- *                 _factory.AddSignalTestEvent(event, weight)
- */
-
-#line 24 "root_numpy/tmva/src/factory.pyx"
-    __pyx_t_5 = (__pyx_v_test != 0);
-
-#line 24 "root_numpy/tmva/src/factory.pyx"
-    if (__pyx_t_5) {
-
-      /* "root_numpy/tmva/src/factory.pyx":25
- *             event.push_back(<double> events[i, j])
- *         if test:
- *             if label == signal_label:             # <<<<<<<<<<<<<<
- *                 _factory.AddSignalTestEvent(event, weight)
- *             else:
- */
-
-#line 25 "root_numpy/tmva/src/factory.pyx"
-      __pyx_t_5 = ((__pyx_v_label == __pyx_v_signal_label) != 0);
-
-#line 25 "root_numpy/tmva/src/factory.pyx"
-      if (__pyx_t_5) {
-
-        /* "root_numpy/tmva/src/factory.pyx":26
- *         if test:
- *             if label == signal_label:
- *                 _factory.AddSignalTestEvent(event, weight)             # <<<<<<<<<<<<<<
- *             else:
- *                 _factory.AddBackgroundTestEvent(event, weight)
- */
-
-#line 26 "root_numpy/tmva/src/factory.pyx"
-        __pyx_v__factory->AddSignalTestEvent(__pyx_v_event, __pyx_v_weight);
-
-#line 26 "root_numpy/tmva/src/factory.pyx"
-        goto __pyx_L9;
-
-#line 26 "root_numpy/tmva/src/factory.pyx"
-      }
-
-#line 26 "root_numpy/tmva/src/factory.pyx"
-      /*else*/ {
-
-        /* "root_numpy/tmva/src/factory.pyx":28
- *                 _factory.AddSignalTestEvent(event, weight)
- *             else:
- *                 _factory.AddBackgroundTestEvent(event, weight)             # <<<<<<<<<<<<<<
+ *             event[0][j] = events[i, j]
+ *         if label == signal_label:             # <<<<<<<<<<<<<<
+ *             _factory.AddEvent("Signal", treetype, event[0], weight)
  *         else:
- *             if label == signal_label:
+ */
+
+#line 27 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_6 = ((__pyx_v_label == __pyx_v_signal_label) != 0);
+
+#line 27 "root_numpy/tmva/src/factory.pyx"
+    if (__pyx_t_6) {
+
+      /* "root_numpy/tmva/src/factory.pyx":28
+ *             event[0][j] = events[i, j]
+ *         if label == signal_label:
+ *             _factory.AddEvent("Signal", treetype, event[0], weight)             # <<<<<<<<<<<<<<
+ *         else:
+ *             _factory.AddEvent("Background", treetype, event[0], weight)
  */
 
 #line 28 "root_numpy/tmva/src/factory.pyx"
-        __pyx_v__factory->AddBackgroundTestEvent(__pyx_v_event, __pyx_v_weight);
+      __pyx_t_11 = __pyx_convert_string_from_py_std__string(__pyx_n_b_Signal); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 28 "root_numpy/tmva/src/factory.pyx"
-      }
+      __pyx_v__factory->AddEvent(__pyx_t_11, __pyx_v_treetype, (__pyx_v_event[0]), __pyx_v_weight);
 
 #line 28 "root_numpy/tmva/src/factory.pyx"
-      __pyx_L9:;
-
-#line 28 "root_numpy/tmva/src/factory.pyx"
-      goto __pyx_L8;
+      goto __pyx_L9;
 
 #line 28 "root_numpy/tmva/src/factory.pyx"
     }
@@ -2250,69 +2373,45 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
     /*else*/ {
 
       /* "root_numpy/tmva/src/factory.pyx":30
- *                 _factory.AddBackgroundTestEvent(event, weight)
+ *             _factory.AddEvent("Signal", treetype, event[0], weight)
  *         else:
- *             if label == signal_label:             # <<<<<<<<<<<<<<
- *                 _factory.AddSignalTrainingEvent(event, weight)
- *             else:
+ *             _factory.AddEvent("Background", treetype, event[0], weight)             # <<<<<<<<<<<<<<
+ *     del event
+ * 
  */
 
 #line 30 "root_numpy/tmva/src/factory.pyx"
-      __pyx_t_5 = ((__pyx_v_label == __pyx_v_signal_label) != 0);
+      __pyx_t_11 = __pyx_convert_string_from_py_std__string(__pyx_n_b_Background); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 30 "root_numpy/tmva/src/factory.pyx"
-      if (__pyx_t_5) {
+      __pyx_v__factory->AddEvent(__pyx_t_11, __pyx_v_treetype, (__pyx_v_event[0]), __pyx_v_weight);
 
-        /* "root_numpy/tmva/src/factory.pyx":31
- *         else:
- *             if label == signal_label:
- *                 _factory.AddSignalTrainingEvent(event, weight)             # <<<<<<<<<<<<<<
- *             else:
- *                 _factory.AddBackgroundTrainingEvent(event, weight)
- */
-
-#line 31 "root_numpy/tmva/src/factory.pyx"
-        __pyx_v__factory->AddSignalTrainingEvent(__pyx_v_event, __pyx_v_weight);
-
-#line 31 "root_numpy/tmva/src/factory.pyx"
-        goto __pyx_L10;
-
-#line 31 "root_numpy/tmva/src/factory.pyx"
-      }
-
-#line 31 "root_numpy/tmva/src/factory.pyx"
-      /*else*/ {
-
-        /* "root_numpy/tmva/src/factory.pyx":33
- *                 _factory.AddSignalTrainingEvent(event, weight)
- *             else:
- *                 _factory.AddBackgroundTrainingEvent(event, weight)             # <<<<<<<<<<<<<<
- */
-
-#line 33 "root_numpy/tmva/src/factory.pyx"
-        __pyx_v__factory->AddBackgroundTrainingEvent(__pyx_v_event, __pyx_v_weight);
-
-#line 33 "root_numpy/tmva/src/factory.pyx"
-      }
-
-#line 33 "root_numpy/tmva/src/factory.pyx"
-      __pyx_L10:;
-
-#line 33 "root_numpy/tmva/src/factory.pyx"
+#line 30 "root_numpy/tmva/src/factory.pyx"
     }
 
-#line 33 "root_numpy/tmva/src/factory.pyx"
-    __pyx_L8:;
+#line 30 "root_numpy/tmva/src/factory.pyx"
+    __pyx_L9:;
 
-#line 33 "root_numpy/tmva/src/factory.pyx"
+#line 30 "root_numpy/tmva/src/factory.pyx"
   }
+
+  /* "root_numpy/tmva/src/factory.pyx":31
+ *         else:
+ *             _factory.AddEvent("Background", treetype, event[0], weight)
+ *     del event             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+#line 31 "root_numpy/tmva/src/factory.pyx"
+  delete __pyx_v_event;
 
   /* "root_numpy/tmva/src/factory.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def factory_add_events(factory,             # <<<<<<<<<<<<<<
- *                        np.ndarray[np.double_t, ndim=2] events,
- *                        np.ndarray[np.int_t, ndim=1] labels,
+ * def factory_add_events_twoclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
  */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
@@ -2349,7 +2448,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_twoclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __pyx_r = NULL;
@@ -2384,268 +2483,1990 @@ static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events(CYTHON_UNUSED PyObj
 #line 4 "root_numpy/tmva/src/factory.pyx"
 }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+/* "root_numpy/tmva/src/factory.pyx":36
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_multiclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
 
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 /* Python wrapper */
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pw_13_libtmvanumpy_3reader_evaluate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_13_libtmvanumpy_3reader_evaluate = 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-{"reader_evaluate", (PyCFunction)__pyx_pw_13_libtmvanumpy_3reader_evaluate, METH_VARARGS|METH_KEYWORDS, 0};
+#line 36 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_3factory_add_events_multiclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_3factory_add_events_multiclass = 
+#line 36 "root_numpy/tmva/src/factory.pyx"
+{"factory_add_events_multiclass", (PyCFunction)__pyx_pw_13_libtmvanumpy_3factory_add_events_multiclass, METH_VARARGS|METH_KEYWORDS, 0};
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pw_13_libtmvanumpy_3reader_evaluate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_reader = 0
-#line 4 "root_numpy/tmva/src/factory.pyx"
-;
-  PyObject *__pyx_v_name = 0
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_3factory_add_events_multiclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_factory = 0
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   PyArrayObject *__pyx_v_events = 0
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  PyArrayObject *__pyx_v_labels = 0
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  PyArrayObject *__pyx_v_weights = 0
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  bool __pyx_v_test
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   PyObject *__pyx_r = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_RefNannySetupContext("reader_evaluate (wrapper)", 0);
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannySetupContext("factory_add_events_multiclass (wrapper)", 0);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reader,&__pyx_n_s_name,&__pyx_n_s_events,0};
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_factory,&__pyx_n_s_events,&__pyx_n_s_labels,&__pyx_n_s_weights,&__pyx_n_s_test,0};
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    PyObject* values[3] = {0,0,0};
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    PyObject* values[5] = {0,0,0,0,0};
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+    /* "root_numpy/tmva/src/factory.pyx":40
+ *         np.ndarray[np.double_t, ndim=2] events,
+ *         np.ndarray[np.int_t, ndim=1] labels,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,             # <<<<<<<<<<<<<<
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ */
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    values[3] = (PyObject *)((PyArrayObject *)Py_None);
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
     if (unlikely(__pyx_kwds)) {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       Py_ssize_t kw_args;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       switch (pos_args) {
+        case  5: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         case  0: break;
         default: 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       kw_args = PyDict_Size(__pyx_kwds);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       switch (pos_args) {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         case  0:
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_reader)) != 0)) kw_args--;
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_factory)) != 0)) kw_args--;
         else 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         case  1:
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_name)) != 0)) kw_args--;
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("reader_evaluate", 1, 3, 3, 1); 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-{__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_multiclass", 0, 3, 5, 1); 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         case  2:
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_labels)) != 0)) kw_args--;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("reader_evaluate", 1, 3, 3, 2); 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-{__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_multiclass", 0, 3, 5, 2); 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
         }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        case  3:
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (kw_args > 0) {
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_weights);
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+          if (value) { values[3] = value; kw_args--; }
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        case  4:
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (kw_args > 0) {
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_test);
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+          if (value) { values[4] = value; kw_args--; }
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       if (unlikely(kw_args > 0)) {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "reader_evaluate") < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "factory_add_events_multiclass") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
       }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-
-#line 4 "root_numpy/tmva/src/factory.pyx"
-      goto __pyx_L5_argtuple_error;
-
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
     } else {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+#line 40 "root_numpy/tmva/src/factory.pyx"
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  3: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
+        break;
+        default: 
+#line 40 "root_numpy/tmva/src/factory.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
     }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_reader = values[0];
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_factory = values[0];
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_name = values[1];
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_events = ((PyArrayObject *)values[1]);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-    __pyx_v_events = ((PyArrayObject *)values[2]);
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_labels = ((PyArrayObject *)values[2]);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_weights = ((PyArrayObject *)values[3]);
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    if (values[4]) {
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_test = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_test == (bool)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 40 "root_numpy/tmva/src/factory.pyx"
+    } else {
+
+      /* "root_numpy/tmva/src/factory.pyx":41
+ *         np.ndarray[np.int_t, ndim=1] labels,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):             # <<<<<<<<<<<<<<
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 41 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_test = ((bool)0);
+
+#line 41 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 41 "root_numpy/tmva/src/factory.pyx"
   }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   goto __pyx_L4_argument_unpacking_done;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("reader_evaluate", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-{__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("factory_add_events_multiclass", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); 
+#line 41 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   __pyx_L3_error:;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_AddTraceback("_libtmvanumpy.reader_evaluate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+#line 41 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_multiclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   return NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 41 "root_numpy/tmva/src/factory.pyx"
   __pyx_L4_argument_unpacking_done:;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 41 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 38; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 41 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_labels), __pyx_ptype_5numpy_ndarray, 1, "labels", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 41 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_weights), __pyx_ptype_5numpy_ndarray, 1, "weights", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 40; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-__pyx_pf_13_libtmvanumpy_2reader_evaluate(__pyx_self, __pyx_v_reader, __pyx_v_name, __pyx_v_events);
+#line 41 "root_numpy/tmva/src/factory.pyx"
+__pyx_pf_13_libtmvanumpy_2factory_add_events_multiclass(__pyx_self, __pyx_v_factory, __pyx_v_events, __pyx_v_labels, __pyx_v_weights, __pyx_v_test);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  /* "root_numpy/tmva/src/factory.pyx":36
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_multiclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
 
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   /* function exit code */
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   goto __pyx_L0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __pyx_L1_error:;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __pyx_r = NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __pyx_L0:;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   return __pyx_r;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-static PyObject *__pyx_pf_13_libtmvanumpy_2reader_evaluate(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events) {
-  TMVA::Reader *__pyx_v__reader
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pf_13_libtmvanumpy_2factory_add_events_multiclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, PyArrayObject *__pyx_v_weights, bool __pyx_v_test) {
+  TMVA::Factory *__pyx_v__factory
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   long __pyx_v_size
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   long __pyx_v_n_features
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   long __pyx_v_i
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   long __pyx_v_j
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
-  std::vector<double>  __pyx_v_event
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  double __pyx_v_weight
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
-  PyArrayObject *__pyx_v_output = 0
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  int __pyx_v_label
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  std::vector<double>  *__pyx_v_event
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  TMVA::Types::ETreeType __pyx_v_treetype
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_events
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
   __Pyx_Buffer __pyx_pybuffer_events
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_output
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_labels
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
-  __Pyx_Buffer __pyx_pybuffer_output
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_Buffer __pyx_pybuffer_labels
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_weights
+#line 36 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_weights
+#line 36 "root_numpy/tmva/src/factory.pyx"
 ;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  void *__pyx_t_1;
+  std::vector<double>  *__pyx_t_2;
+  int __pyx_t_3;
+  long __pyx_t_4;
+  long __pyx_t_5;
+  int __pyx_t_6;
+  long __pyx_t_7;
+  long __pyx_t_8;
+  long __pyx_t_9;
+  long __pyx_t_10;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
+  PyObject *__pyx_t_13 = NULL;
+  PyObject *__pyx_t_14 = NULL;
+  PyObject *__pyx_t_15 = NULL;
+  std::string __pyx_t_16;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannySetupContext("factory_add_events_multiclass", 0);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_events.pybuffer.buf = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_events.refcount = 0;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.data = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_labels.pybuffer.buf = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_labels.refcount = 0;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_labels.data = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_labels.rcbuffer = &__pyx_pybuffer_labels;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_weights.pybuffer.buf = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_weights.refcount = 0;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.data = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.rcbuffer = &__pyx_pybuffer_weights;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_labels.rcbuffer->pybuffer, (PyObject*)__pyx_v_labels, &__Pyx_TypeInfo_nn___pyx_t_5numpy_int_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_labels.diminfo[0].strides = __pyx_pybuffernd_labels.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_labels.diminfo[0].shape = __pyx_pybuffernd_labels.rcbuffer->pybuffer.shape[0];
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_weights.rcbuffer->pybuffer, (PyObject*)__pyx_v_weights, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.diminfo[0].strides = __pyx_pybuffernd_weights.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_weights.diminfo[0].shape = __pyx_pybuffernd_weights.rcbuffer->pybuffer.shape[0];
+
+  /* "root_numpy/tmva/src/factory.pyx":42
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)             # <<<<<<<<<<<<<<
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]
+ */
+
+#line 42 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_factory); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 42 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v__factory = ((TMVA::Factory *)__pyx_t_1);
+
+  /* "root_numpy/tmva/src/factory.pyx":43
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ */
+
+#line 43 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_size = (__pyx_v_events->dimensions[0]);
+
+  /* "root_numpy/tmva/src/factory.pyx":44
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
+ *     cdef long i, j
+ *     cdef double weight = 1.
+ */
+
+#line 44 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
+
+  /* "root_numpy/tmva/src/factory.pyx":46
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ *     cdef double weight = 1.             # <<<<<<<<<<<<<<
+ *     cdef int label
+ *     cdef vector[double]* event = new vector[double](n_features)
+ */
+
+#line 46 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_weight = 1.;
+
+  /* "root_numpy/tmva/src/factory.pyx":48
+ *     cdef double weight = 1.
+ *     cdef int label
+ *     cdef vector[double]* event = new vector[double](n_features)             # <<<<<<<<<<<<<<
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
+ */
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+  try {
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_2 = new std::vector<double> (__pyx_v_n_features);
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+  } catch(...) {
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 48 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_event = __pyx_t_2;
+
+  /* "root_numpy/tmva/src/factory.pyx":49
+ *     cdef int label
+ *     cdef vector[double]* event = new vector[double](n_features)
+ *     cdef ETreeType treetype = kTraining             # <<<<<<<<<<<<<<
+ *     if test:
+ *         treetype = kTesting
+ */
+
+#line 49 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_treetype = TMVA::Types::kTraining;
+
+  /* "root_numpy/tmva/src/factory.pyx":50
+ *     cdef vector[double]* event = new vector[double](n_features)
+ *     cdef ETreeType treetype = kTraining
+ *     if test:             # <<<<<<<<<<<<<<
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:
+ */
+
+#line 50 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_3 = (__pyx_v_test != 0);
+
+#line 50 "root_numpy/tmva/src/factory.pyx"
+  if (__pyx_t_3) {
+
+    /* "root_numpy/tmva/src/factory.pyx":51
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
+ *         treetype = kTesting             # <<<<<<<<<<<<<<
+ *     for i from 0 <= i < size:
+ *         label = labels[i]
+ */
+
+#line 51 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_treetype = TMVA::Types::kTesting;
+
+#line 51 "root_numpy/tmva/src/factory.pyx"
+    goto __pyx_L3;
+
+#line 51 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 51 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L3:;
+
+  /* "root_numpy/tmva/src/factory.pyx":52
+ *     if test:
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
+ *         label = labels[i]
+ *         if weights is not None:
+ */
+
+#line 52 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_4 = __pyx_v_size;
+
+#line 52 "root_numpy/tmva/src/factory.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_4; __pyx_v_i++) {
+
+    /* "root_numpy/tmva/src/factory.pyx":53
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:
+ *         label = labels[i]             # <<<<<<<<<<<<<<
+ *         if weights is not None:
+ *             weight = weights[i]
+ */
+
+#line 53 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_5 = __pyx_v_i;
+
+#line 53 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_label = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_int_t *, __pyx_pybuffernd_labels.rcbuffer->pybuffer.buf, __pyx_t_5, __pyx_pybuffernd_labels.diminfo[0].strides));
+
+    /* "root_numpy/tmva/src/factory.pyx":54
+ *     for i from 0 <= i < size:
+ *         label = labels[i]
+ *         if weights is not None:             # <<<<<<<<<<<<<<
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:
+ */
+
+#line 54 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_3 = (((PyObject *)__pyx_v_weights) != Py_None);
+
+#line 54 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_6 = (__pyx_t_3 != 0);
+
+#line 54 "root_numpy/tmva/src/factory.pyx"
+    if (__pyx_t_6) {
+
+      /* "root_numpy/tmva/src/factory.pyx":55
+ *         label = labels[i]
+ *         if weights is not None:
+ *             weight = weights[i]             # <<<<<<<<<<<<<<
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]
+ */
+
+#line 55 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_7 = __pyx_v_i;
+
+#line 55 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_weight = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_weights.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_weights.diminfo[0].strides));
+
+#line 55 "root_numpy/tmva/src/factory.pyx"
+      goto __pyx_L6;
+
+#line 55 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 55 "root_numpy/tmva/src/factory.pyx"
+    __pyx_L6:;
+
+    /* "root_numpy/tmva/src/factory.pyx":56
+ *         if weights is not None:
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
+ *             event[0][j] = events[i, j]
+ *         _factory.AddEvent("Class_{0:d}".format(label), treetype, event[0], weight)
+ */
+
+#line 56 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_8 = __pyx_v_n_features;
+
+#line 56 "root_numpy/tmva/src/factory.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_8; __pyx_v_j++) {
+
+      /* "root_numpy/tmva/src/factory.pyx":57
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]             # <<<<<<<<<<<<<<
+ *         _factory.AddEvent("Class_{0:d}".format(label), treetype, event[0], weight)
+ *     del event
+ */
+
+#line 57 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_9 = __pyx_v_i;
+
+#line 57 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_10 = __pyx_v_j;
+
+#line 57 "root_numpy/tmva/src/factory.pyx"
+      ((__pyx_v_event[0])[__pyx_v_j]) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_events.diminfo[1].strides));
+
+#line 57 "root_numpy/tmva/src/factory.pyx"
+    }
+
+    /* "root_numpy/tmva/src/factory.pyx":58
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]
+ *         _factory.AddEvent("Class_{0:d}".format(label), treetype, event[0], weight)             # <<<<<<<<<<<<<<
+ *     del event
+ * 
+ */
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Class__0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_GOTREF(__pyx_t_12);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_label); if (unlikely(!__pyx_t_13)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_GOTREF(__pyx_t_13);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_14 = NULL;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_12))) {
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_12);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      if (likely(__pyx_t_14)) {
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_12);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+        __Pyx_INCREF(__pyx_t_14);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+        __Pyx_INCREF(function);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+        __Pyx_DECREF_SET(__pyx_t_12, function);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    if (!__pyx_t_14) {
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_GOTREF(__pyx_t_11);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    } else {
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_15 = PyTuple_New(1+1); if (unlikely(!__pyx_t_15)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_GOTREF(__pyx_t_15);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_14); __Pyx_GIVEREF(__pyx_t_14); __pyx_t_14 = NULL;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      PyTuple_SET_ITEM(__pyx_t_15, 0+1, __pyx_t_13);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_GIVEREF(__pyx_t_13);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_13 = 0;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_12, __pyx_t_15, NULL); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_GOTREF(__pyx_t_11);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+      __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_16 = __pyx_convert_string_from_py_std__string(__pyx_t_11); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v__factory->AddEvent(__pyx_t_16, __pyx_v_treetype, (__pyx_v_event[0]), __pyx_v_weight);
+
+#line 58 "root_numpy/tmva/src/factory.pyx"
+  }
+
+  /* "root_numpy/tmva/src/factory.pyx":59
+ *             event[0][j] = events[i, j]
+ *         _factory.AddEvent("Class_{0:d}".format(label), treetype, event[0], weight)
+ *     del event             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+#line 59 "root_numpy/tmva/src/factory.pyx"
+  delete __pyx_v_event;
+
+  /* "root_numpy/tmva/src/factory.pyx":36
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_multiclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  /* function exit code */
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L0;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L1_error:;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XDECREF(__pyx_t_11);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XDECREF(__pyx_t_12);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XDECREF(__pyx_t_13);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XDECREF(__pyx_t_14);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XDECREF(__pyx_t_15);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_labels.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_weights.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_multiclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_r = NULL;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L2;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L0:;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_labels.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_weights.rcbuffer->pybuffer);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L2:;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XGIVEREF(__pyx_r);
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  return __pyx_r;
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
+}
+
+/* "root_numpy/tmva/src/factory.pyx":64
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_regression(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+/* Python wrapper */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_5factory_add_events_regression(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_5factory_add_events_regression = 
+#line 64 "root_numpy/tmva/src/factory.pyx"
+{"factory_add_events_regression", (PyCFunction)__pyx_pw_13_libtmvanumpy_5factory_add_events_regression, METH_VARARGS|METH_KEYWORDS, 0};
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_5factory_add_events_regression(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_factory = 0
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  PyArrayObject *__pyx_v_events = 0
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  PyArrayObject *__pyx_v_target = 0
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  PyArrayObject *__pyx_v_weights = 0
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  bool __pyx_v_test
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  PyObject *__pyx_r = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannyDeclarations
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannySetupContext("factory_add_events_regression (wrapper)", 0);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_factory,&__pyx_n_s_events,&__pyx_n_s_target,&__pyx_n_s_weights,&__pyx_n_s_test,0};
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    PyObject* values[5] = {0,0,0,0,0};
+
+    /* "root_numpy/tmva/src/factory.pyx":68
+ *         np.ndarray[np.double_t, ndim=2] events,
+ *         np.ndarray[np.double_t, ndim=1] target,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,             # <<<<<<<<<<<<<<
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ */
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    values[3] = (PyObject *)((PyArrayObject *)Py_None);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__pyx_kwds)) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      Py_ssize_t kw_args;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      switch (pos_args) {
+        case  5: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  3: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        case  2: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  0: break;
+        default: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      kw_args = PyDict_Size(__pyx_kwds);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      switch (pos_args) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  0:
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_factory)) != 0)) kw_args--;
+        else 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  1:
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_regression", 0, 3, 5, 1); 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  2:
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_target)) != 0)) kw_args--;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("factory_add_events_regression", 0, 3, 5, 2); 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  3:
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (kw_args > 0) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_weights);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+          if (value) { values[3] = value; kw_args--; }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        case  4:
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (kw_args > 0) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_test);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+          if (value) { values[4] = value; kw_args--; }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      if (unlikely(kw_args > 0)) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "factory_add_events_regression") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    } else {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  5: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        case  4: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        case  3: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+        break;
+        default: 
+#line 68 "root_numpy/tmva/src/factory.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_factory = values[0];
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_events = ((PyArrayObject *)values[1]);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_target = ((PyArrayObject *)values[2]);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_weights = ((PyArrayObject *)values[3]);
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    if (values[4]) {
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_test = __Pyx_PyObject_IsTrue(values[4]); if (unlikely((__pyx_v_test == (bool)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 68 "root_numpy/tmva/src/factory.pyx"
+    } else {
+
+      /* "root_numpy/tmva/src/factory.pyx":69
+ *         np.ndarray[np.double_t, ndim=1] target,
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):             # <<<<<<<<<<<<<<
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_test = ((bool)0);
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L4_argument_unpacking_done;
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("factory_add_events_regression", 0, 3, 5, PyTuple_GET_SIZE(__pyx_args)); 
+#line 69 "root_numpy/tmva/src/factory.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L3_error:;
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_regression", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  return NULL;
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L4_argument_unpacking_done:;
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_target), __pyx_ptype_5numpy_ndarray, 1, "target", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 67; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 69 "root_numpy/tmva/src/factory.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_weights), __pyx_ptype_5numpy_ndarray, 1, "weights", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = 
+#line 69 "root_numpy/tmva/src/factory.pyx"
+__pyx_pf_13_libtmvanumpy_4factory_add_events_regression(__pyx_self, __pyx_v_factory, __pyx_v_events, __pyx_v_target, __pyx_v_weights, __pyx_v_test);
+
+  /* "root_numpy/tmva/src/factory.pyx":64
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_regression(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  /* function exit code */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L1_error:;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_r = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L0:;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  return __pyx_r;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+static PyObject *__pyx_pf_13_libtmvanumpy_4factory_add_events_regression(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_target, PyArrayObject *__pyx_v_weights, bool __pyx_v_test) {
+  TMVA::Factory *__pyx_v__factory
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  long __pyx_v_size
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  long __pyx_v_n_features
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  long __pyx_v_i
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  long __pyx_v_j
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  double __pyx_v_weight
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  std::vector<double>  *__pyx_v_event
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  TMVA::Types::ETreeType __pyx_v_treetype
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_events
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_events
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_target
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_target
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_weights
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_weights
+#line 64 "root_numpy/tmva/src/factory.pyx"
+;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  void *__pyx_t_1;
+  std::vector<double>  *__pyx_t_2;
+  int __pyx_t_3;
+  long __pyx_t_4;
+  int __pyx_t_5;
+  long __pyx_t_6;
+  long __pyx_t_7;
+  long __pyx_t_8;
+  long __pyx_t_9;
+  std::string __pyx_t_10;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannySetupContext("factory_add_events_regression", 0);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_events.pybuffer.buf = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_events.refcount = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.data = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_target.pybuffer.buf = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_target.refcount = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_target.data = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_target.rcbuffer = &__pyx_pybuffer_target;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_weights.pybuffer.buf = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffer_weights.refcount = 0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.data = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.rcbuffer = &__pyx_pybuffer_weights;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_target.rcbuffer->pybuffer, (PyObject*)__pyx_v_target, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_target.diminfo[0].strides = __pyx_pybuffernd_target.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_target.diminfo[0].shape = __pyx_pybuffernd_target.rcbuffer->pybuffer.shape[0];
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  {
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_weights.rcbuffer->pybuffer, (PyObject*)__pyx_v_weights, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_pybuffernd_weights.diminfo[0].strides = __pyx_pybuffernd_weights.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_weights.diminfo[0].shape = __pyx_pybuffernd_weights.rcbuffer->pybuffer.shape[0];
+
+  /* "root_numpy/tmva/src/factory.pyx":70
+ *         np.ndarray[np.double_t, ndim=1] weights=None,
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)             # <<<<<<<<<<<<<<
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]
+ */
+
+#line 70 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_factory); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 70; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 70 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v__factory = ((TMVA::Factory *)__pyx_t_1);
+
+  /* "root_numpy/tmva/src/factory.pyx":71
+ *         bool test=False):
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ */
+
+#line 71 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_size = (__pyx_v_events->dimensions[0]);
+
+  /* "root_numpy/tmva/src/factory.pyx":72
+ *     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
+ *     cdef long i, j
+ *     cdef double weight = 1.
+ */
+
+#line 72 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
+
+  /* "root_numpy/tmva/src/factory.pyx":74
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ *     cdef double weight = 1.             # <<<<<<<<<<<<<<
+ *     cdef vector[double]* event = new vector[double](n_features + 1)
+ *     cdef ETreeType treetype = kTraining
+ */
+
+#line 74 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_weight = 1.;
+
+  /* "root_numpy/tmva/src/factory.pyx":75
+ *     cdef long i, j
+ *     cdef double weight = 1.
+ *     cdef vector[double]* event = new vector[double](n_features + 1)             # <<<<<<<<<<<<<<
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
+ */
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+  try {
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_2 = new std::vector<double> ((__pyx_v_n_features + 1));
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+  } catch(...) {
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 75 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_event = __pyx_t_2;
+
+  /* "root_numpy/tmva/src/factory.pyx":76
+ *     cdef double weight = 1.
+ *     cdef vector[double]* event = new vector[double](n_features + 1)
+ *     cdef ETreeType treetype = kTraining             # <<<<<<<<<<<<<<
+ *     if test:
+ *         treetype = kTesting
+ */
+
+#line 76 "root_numpy/tmva/src/factory.pyx"
+  __pyx_v_treetype = TMVA::Types::kTraining;
+
+  /* "root_numpy/tmva/src/factory.pyx":77
+ *     cdef vector[double]* event = new vector[double](n_features + 1)
+ *     cdef ETreeType treetype = kTraining
+ *     if test:             # <<<<<<<<<<<<<<
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:
+ */
+
+#line 77 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_3 = (__pyx_v_test != 0);
+
+#line 77 "root_numpy/tmva/src/factory.pyx"
+  if (__pyx_t_3) {
+
+    /* "root_numpy/tmva/src/factory.pyx":78
+ *     cdef ETreeType treetype = kTraining
+ *     if test:
+ *         treetype = kTesting             # <<<<<<<<<<<<<<
+ *     for i from 0 <= i < size:
+ *         if weights is not None:
+ */
+
+#line 78 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v_treetype = TMVA::Types::kTesting;
+
+#line 78 "root_numpy/tmva/src/factory.pyx"
+    goto __pyx_L3;
+
+#line 78 "root_numpy/tmva/src/factory.pyx"
+  }
+
+#line 78 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L3:;
+
+  /* "root_numpy/tmva/src/factory.pyx":79
+ *     if test:
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
+ *         if weights is not None:
+ *             weight = weights[i]
+ */
+
+#line 79 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_4 = __pyx_v_size;
+
+#line 79 "root_numpy/tmva/src/factory.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_4; __pyx_v_i++) {
+
+    /* "root_numpy/tmva/src/factory.pyx":80
+ *         treetype = kTesting
+ *     for i from 0 <= i < size:
+ *         if weights is not None:             # <<<<<<<<<<<<<<
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:
+ */
+
+#line 80 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_3 = (((PyObject *)__pyx_v_weights) != Py_None);
+
+#line 80 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_5 = (__pyx_t_3 != 0);
+
+#line 80 "root_numpy/tmva/src/factory.pyx"
+    if (__pyx_t_5) {
+
+      /* "root_numpy/tmva/src/factory.pyx":81
+ *     for i from 0 <= i < size:
+ *         if weights is not None:
+ *             weight = weights[i]             # <<<<<<<<<<<<<<
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]
+ */
+
+#line 81 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_6 = __pyx_v_i;
+
+#line 81 "root_numpy/tmva/src/factory.pyx"
+      __pyx_v_weight = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_weights.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_weights.diminfo[0].strides));
+
+#line 81 "root_numpy/tmva/src/factory.pyx"
+      goto __pyx_L6;
+
+#line 81 "root_numpy/tmva/src/factory.pyx"
+    }
+
+#line 81 "root_numpy/tmva/src/factory.pyx"
+    __pyx_L6:;
+
+    /* "root_numpy/tmva/src/factory.pyx":82
+ *         if weights is not None:
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
+ *             event[0][j] = events[i, j]
+ *         event[0][n_features] = target[i]
+ */
+
+#line 82 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_7 = __pyx_v_n_features;
+
+#line 82 "root_numpy/tmva/src/factory.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_7; __pyx_v_j++) {
+
+      /* "root_numpy/tmva/src/factory.pyx":83
+ *             weight = weights[i]
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]             # <<<<<<<<<<<<<<
+ *         event[0][n_features] = target[i]
+ *         _factory.AddEvent("Regression", treetype, event[0], weight)
+ */
+
+#line 83 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_8 = __pyx_v_i;
+
+#line 83 "root_numpy/tmva/src/factory.pyx"
+      __pyx_t_9 = __pyx_v_j;
+
+#line 83 "root_numpy/tmva/src/factory.pyx"
+      ((__pyx_v_event[0])[__pyx_v_j]) = (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_9, __pyx_pybuffernd_events.diminfo[1].strides));
+
+#line 83 "root_numpy/tmva/src/factory.pyx"
+    }
+
+    /* "root_numpy/tmva/src/factory.pyx":84
+ *         for j from 0 <= j < n_features:
+ *             event[0][j] = events[i, j]
+ *         event[0][n_features] = target[i]             # <<<<<<<<<<<<<<
+ *         _factory.AddEvent("Regression", treetype, event[0], weight)
+ *     del event
+ */
+
+#line 84 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_7 = __pyx_v_i;
+
+#line 84 "root_numpy/tmva/src/factory.pyx"
+    ((__pyx_v_event[0])[__pyx_v_n_features]) = (*__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_target.rcbuffer->pybuffer.buf, __pyx_t_7, __pyx_pybuffernd_target.diminfo[0].strides));
+
+    /* "root_numpy/tmva/src/factory.pyx":85
+ *             event[0][j] = events[i, j]
+ *         event[0][n_features] = target[i]
+ *         _factory.AddEvent("Regression", treetype, event[0], weight)             # <<<<<<<<<<<<<<
+ *     del event
+ */
+
+#line 85 "root_numpy/tmva/src/factory.pyx"
+    __pyx_t_10 = __pyx_convert_string_from_py_std__string(__pyx_n_b_Regression); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 85 "root_numpy/tmva/src/factory.pyx"
+    __pyx_v__factory->AddEvent(__pyx_t_10, __pyx_v_treetype, (__pyx_v_event[0]), __pyx_v_weight);
+
+#line 85 "root_numpy/tmva/src/factory.pyx"
+  }
+
+  /* "root_numpy/tmva/src/factory.pyx":86
+ *         event[0][n_features] = target[i]
+ *         _factory.AddEvent("Regression", treetype, event[0], weight)
+ *     del event             # <<<<<<<<<<<<<<
+ */
+
+#line 86 "root_numpy/tmva/src/factory.pyx"
+  delete __pyx_v_event;
+
+  /* "root_numpy/tmva/src/factory.pyx":64
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_regression(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  /* function exit code */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L0;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L1_error:;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_target.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_weights.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.factory_add_events_regression", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_r = NULL;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  goto __pyx_L2;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L0:;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_target.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_weights.rcbuffer->pybuffer);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_L2:;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_XGIVEREF(__pyx_r);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  return __pyx_r;
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+}
+
+/* "root_numpy/tmva/src/evaluate.pyx":4
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+/* Python wrapper */
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_7evaluate_twoclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_7evaluate_twoclass = 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+{"evaluate_twoclass", (PyCFunction)__pyx_pw_13_libtmvanumpy_7evaluate_twoclass, METH_VARARGS|METH_KEYWORDS, 0};
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_7evaluate_twoclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_method = 0
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_events = 0
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  PyObject *__pyx_r = 0;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyDeclarations
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_twoclass (wrapper)", 0);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_method,&__pyx_n_s_events,0};
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    PyObject* values[2] = {0,0};
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__pyx_kwds)) {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      Py_ssize_t kw_args;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+        case  2: 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        case  0: break;
+        default: 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      kw_args = PyDict_Size(__pyx_kwds);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        case  0:
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_method)) != 0)) kw_args--;
+        else 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        case  1:
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_twoclass", 1, 2, 2, 1); 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      if (unlikely(kw_args > 0)) {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "evaluate_twoclass") < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      goto __pyx_L5_argtuple_error;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    } else {
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_method = values[0];
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_events = ((PyArrayObject *)values[1]);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L4_argument_unpacking_done;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("evaluate_twoclass", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L3_error:;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_twoclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  return NULL;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L4_argument_unpacking_done:;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = 
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pf_13_libtmvanumpy_6evaluate_twoclass(__pyx_self, __pyx_v_method, __pyx_v_events);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  /* function exit code */
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L0;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L1_error:;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = NULL;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L0:;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  return __pyx_r;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_twoclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events) {
+  TMVA::MethodBase *__pyx_v__method
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_size
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_n_features
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_i
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_j
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  std::vector<float>  __pyx_v_features
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  TMVA::Event *__pyx_v_event
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_output = 0
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_events
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_events
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_output
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_output
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+;
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   void *__pyx_t_1;
@@ -2659,391 +4480,1898 @@ static PyObject *__pyx_pf_13_libtmvanumpy_2reader_evaluate(CYTHON_UNUSED PyObjec
   long __pyx_t_9;
   long __pyx_t_10;
   long __pyx_t_11;
-  std::string __pyx_t_12;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __Pyx_RefNannySetupContext("reader_evaluate", 0);
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_twoclass", 0);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.pybuffer.buf = NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.refcount = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.data = NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.rcbuffer = &__pyx_pybuffer_output;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.pybuffer.buf = NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.refcount = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.data = NULL;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
 
-  /* "root_numpy/tmva/src/reader.pyx":5
+  /* "root_numpy/tmva/src/evaluate.pyx":5
  * @cython.wraparound(False)
- * def reader_evaluate(reader, name, np.ndarray[np.double_t, ndim=2] events):
- *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)             # <<<<<<<<<<<<<<
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)             # <<<<<<<<<<<<<<
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]
  */
 
-#line 5 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_reader); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 5 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_method); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 5 "root_numpy/tmva/src/reader.pyx"
-  __pyx_v__reader = ((TMVA::Reader *)__pyx_t_1);
+#line 5 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method = ((TMVA::MethodBase *)__pyx_t_1);
 
-  /* "root_numpy/tmva/src/reader.pyx":6
- * def reader_evaluate(reader, name, np.ndarray[np.double_t, ndim=2] events):
- *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
+  /* "root_numpy/tmva/src/evaluate.pyx":6
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
  *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
  *     cdef long n_features = events.shape[1]
  *     cdef long i, j
  */
 
-#line 6 "root_numpy/tmva/src/reader.pyx"
+#line 6 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_size = (__pyx_v_events->dimensions[0]);
 
-  /* "root_numpy/tmva/src/reader.pyx":7
- *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
+  /* "root_numpy/tmva/src/evaluate.pyx":7
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
  *     cdef long i, j
- *     cdef vector[double] event
+ *     cdef vector[float] features
  */
 
-#line 7 "root_numpy/tmva/src/reader.pyx"
+#line 7 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
 
-  /* "root_numpy/tmva/src/reader.pyx":10
+  /* "root_numpy/tmva/src/evaluate.pyx":10
  *     cdef long i, j
- *     cdef vector[double] event
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+ */
+
+#line 10 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":11
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+ *     for i from 0 <= i < size:
+ */
+
+#line 11 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":12
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)             # <<<<<<<<<<<<<<
  *     for i from 0 <= i < size:
- *         event.clear()
+ *         for j from 0 <= j < n_features:
  */
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_2);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_2 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_double); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_double); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_6);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_6);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_7 = ((PyArrayObject *)__pyx_t_6);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
-      {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     } else {
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
 __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0];
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_7 = 0;
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_output = ((PyArrayObject *)__pyx_t_6);
 
-#line 10 "root_numpy/tmva/src/reader.pyx"
+#line 12 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_6 = 0;
 
-  /* "root_numpy/tmva/src/reader.pyx":11
- *     cdef vector[double] event
+  /* "root_numpy/tmva/src/evaluate.pyx":13
+ *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
  *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
- *         event.clear()
  *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])
  */
 
-#line 11 "root_numpy/tmva/src/reader.pyx"
+#line 13 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_8 = __pyx_v_size;
 
-#line 11 "root_numpy/tmva/src/reader.pyx"
+#line 13 "root_numpy/tmva/src/evaluate.pyx"
   for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_8; __pyx_v_i++) {
 
-    /* "root_numpy/tmva/src/reader.pyx":12
+    /* "root_numpy/tmva/src/evaluate.pyx":14
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
  *     for i from 0 <= i < size:
- *         event.clear()             # <<<<<<<<<<<<<<
- *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])
- */
-
-#line 12 "root_numpy/tmva/src/reader.pyx"
-    __pyx_v_event.clear();
-
-    /* "root_numpy/tmva/src/reader.pyx":13
- *     for i from 0 <= i < size:
- *         event.clear()
  *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
- *             event.push_back(<double> events[i, j])
- *         output[i] = _reader.EvaluateMVA(event, name)
+ *             event.SetVal(j, events[i, j])
+ *         output[i] = _method.GetMvaValue()
  */
 
-#line 13 "root_numpy/tmva/src/reader.pyx"
+#line 14 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_9 = __pyx_v_n_features;
 
-#line 13 "root_numpy/tmva/src/reader.pyx"
+#line 14 "root_numpy/tmva/src/evaluate.pyx"
     for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_9; __pyx_v_j++) {
 
-      /* "root_numpy/tmva/src/reader.pyx":14
- *         event.clear()
+      /* "root_numpy/tmva/src/evaluate.pyx":15
+ *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])             # <<<<<<<<<<<<<<
- *         output[i] = _reader.EvaluateMVA(event, name)
- *     return output
+ *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
+ *         output[i] = _method.GetMvaValue()
+ *     _method.fTmpEvent = NULL
  */
 
-#line 14 "root_numpy/tmva/src/reader.pyx"
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_10 = __pyx_v_i;
 
-#line 14 "root_numpy/tmva/src/reader.pyx"
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_11 = __pyx_v_j;
 
-#line 14 "root_numpy/tmva/src/reader.pyx"
-      __pyx_v_event.push_back(((double)(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_events.diminfo[1].strides))));
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_events.diminfo[1].strides)));
 
-#line 14 "root_numpy/tmva/src/reader.pyx"
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-    /* "root_numpy/tmva/src/reader.pyx":15
+    /* "root_numpy/tmva/src/evaluate.pyx":16
  *         for j from 0 <= j < n_features:
- *             event.push_back(<double> events[i, j])
- *         output[i] = _reader.EvaluateMVA(event, name)             # <<<<<<<<<<<<<<
+ *             event.SetVal(j, events[i, j])
+ *         output[i] = _method.GetMvaValue()             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = NULL
+ *     del event
+ */
+
+#line 16 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_9 = __pyx_v_i;
+
+#line 16 "root_numpy/tmva/src/evaluate.pyx"
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_output.diminfo[0].strides) = __pyx_v__method->GetMvaValue();
+
+#line 16 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+  /* "root_numpy/tmva/src/evaluate.pyx":17
+ *             event.SetVal(j, events[i, j])
+ *         output[i] = _method.GetMvaValue()
+ *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
+ *     del event
  *     return output
  */
 
-#line 15 "root_numpy/tmva/src/reader.pyx"
-    __pyx_t_12 = __pyx_convert_string_from_py_std__string(__pyx_v_name); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 17 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = NULL;
 
-#line 15 "root_numpy/tmva/src/reader.pyx"
-    __pyx_t_9 = __pyx_v_i;
-
-#line 15 "root_numpy/tmva/src/reader.pyx"
-    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_output.diminfo[0].strides) = __pyx_v__reader->EvaluateMVA(__pyx_v_event, __pyx_t_12);
-
-#line 15 "root_numpy/tmva/src/reader.pyx"
-  }
-
-  /* "root_numpy/tmva/src/reader.pyx":16
- *             event.push_back(<double> events[i, j])
- *         output[i] = _reader.EvaluateMVA(event, name)
- *     return output             # <<<<<<<<<<<<<<
+  /* "root_numpy/tmva/src/evaluate.pyx":18
+ *         output[i] = _method.GetMvaValue()
+ *     _method.fTmpEvent = NULL
+ *     del event             # <<<<<<<<<<<<<<
+ *     return output
+ * 
  */
 
-#line 16 "root_numpy/tmva/src/reader.pyx"
+#line 18 "root_numpy/tmva/src/evaluate.pyx"
+  delete __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":19
+ *     _method.fTmpEvent = NULL
+ *     del event
+ *     return output             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+#line 19 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 16 "root_numpy/tmva/src/reader.pyx"
+#line 19 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_INCREF(((PyObject *)__pyx_v_output));
 
-#line 16 "root_numpy/tmva/src/reader.pyx"
+#line 19 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = ((PyObject *)__pyx_v_output);
 
-#line 16 "root_numpy/tmva/src/reader.pyx"
+#line 19 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/tmva/src/reader.pyx":4
+  /* "root_numpy/tmva/src/evaluate.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def reader_evaluate(reader, name, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
- *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
  *     cdef long size = events.shape[0]
  */
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
 
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   /* function exit code */
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L1_error:;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
-  __Pyx_AddTraceback("_libtmvanumpy.reader_evaluate", __pyx_clineno, __pyx_lineno, __pyx_filename);
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_twoclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = NULL;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L2;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L0:;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L2:;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_output);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
   return __pyx_r;
 
-#line 4 "root_numpy/tmva/src/reader.pyx"
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+}
+
+/* "root_numpy/tmva/src/evaluate.pyx":24
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+/* Python wrapper */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_9evaluate_multiclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_9evaluate_multiclass = 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+{"evaluate_multiclass", (PyCFunction)__pyx_pw_13_libtmvanumpy_9evaluate_multiclass, METH_VARARGS|METH_KEYWORDS, 0};
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_9evaluate_multiclass(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_method = 0
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_events = 0
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  unsigned int __pyx_v_n_classes
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  PyObject *__pyx_r = 0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyDeclarations
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_multiclass (wrapper)", 0);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_method,&__pyx_n_s_events,&__pyx_n_s_n_classes,0};
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    PyObject* values[3] = {0,0,0};
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__pyx_kwds)) {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      Py_ssize_t kw_args;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+        case  3: 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        case  2: 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        case  0: break;
+        default: 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      kw_args = PyDict_Size(__pyx_kwds);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        case  0:
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_method)) != 0)) kw_args--;
+        else 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        case  1:
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_multiclass", 1, 3, 3, 1); 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        case  2:
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_classes)) != 0)) kw_args--;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_multiclass", 1, 3, 3, 2); 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      if (unlikely(kw_args > 0)) {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "evaluate_multiclass") < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      goto __pyx_L5_argtuple_error;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    } else {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_method = values[0];
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_events = ((PyArrayObject *)values[1]);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_n_classes = __Pyx_PyInt_As_unsigned_int(values[2]); if (unlikely((__pyx_v_n_classes == (unsigned int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L4_argument_unpacking_done;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("evaluate_multiclass", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L3_error:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_multiclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  return NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L4_argument_unpacking_done:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = 
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pf_13_libtmvanumpy_8evaluate_multiclass(__pyx_self, __pyx_v_method, __pyx_v_events, __pyx_v_n_classes);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  /* function exit code */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L1_error:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L0:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  return __pyx_r;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_multiclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_classes) {
+  TMVA::MethodBase *__pyx_v__method
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_size
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_n_features
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_i
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_j
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  std::vector<float>  __pyx_v_features
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  TMVA::Event *__pyx_v_event
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_output = 0
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_events
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_events
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_output
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_output
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  void *__pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyArrayObject *__pyx_t_7 = NULL;
+  long __pyx_t_8;
+  long __pyx_t_9;
+  long __pyx_t_10;
+  long __pyx_t_11;
+  long __pyx_t_12;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_multiclass", 0);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_output.pybuffer.buf = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_output.refcount = 0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_output.data = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_output.rcbuffer = &__pyx_pybuffer_output;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_events.pybuffer.buf = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_events.refcount = 0;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.data = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
+
+  /* "root_numpy/tmva/src/evaluate.pyx":25
+ * @cython.wraparound(False)
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)             # <<<<<<<<<<<<<<
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]
+ */
+
+#line 25 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_method); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 25 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method = ((TMVA::MethodBase *)__pyx_t_1);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":26
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ */
+
+#line 26 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_size = (__pyx_v_events->dimensions[0]);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":27
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
+ *     cdef long i, j
+ *     cdef vector[float] features
+ */
+
+#line 27 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":30
+ *     cdef long i, j
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
+ */
+
+#line 30 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":31
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
+ *     for i from 0 <= i < size:
+ */
+
+#line 31 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":32
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)             # <<<<<<<<<<<<<<
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:
+ */
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_3);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_classes); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_4);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_2);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_4);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_4);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_5);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float32); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_6);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_6);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_7 = ((PyArrayObject *)__pyx_t_6);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    } else {
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_output.diminfo[1].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_output.diminfo[1].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[1];
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_7 = 0;
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_output = ((PyArrayObject *)__pyx_t_6);
+
+#line 32 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":33
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
+ *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])
+ */
+
+#line 33 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_8 = __pyx_v_size;
+
+#line 33 "root_numpy/tmva/src/evaluate.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_8; __pyx_v_i++) {
+
+    /* "root_numpy/tmva/src/evaluate.pyx":34
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
+ */
+
+#line 34 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_9 = __pyx_v_n_features;
+
+#line 34 "root_numpy/tmva/src/evaluate.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_9; __pyx_v_j++) {
+
+      /* "root_numpy/tmva/src/evaluate.pyx":35
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
+ *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
+ *     _method.fTmpEvent = NULL
+ */
+
+#line 35 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_10 = __pyx_v_i;
+
+#line 35 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_11 = __pyx_v_j;
+
+#line 35 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_events.diminfo[1].strides)));
+
+#line 35 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+    /* "root_numpy/tmva/src/evaluate.pyx":36
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = NULL
+ *     del event
+ */
+
+#line 36 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_9 = __pyx_v_i;
+
+#line 36 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_12 = 0;
+
+#line 36 "root_numpy/tmva/src/evaluate.pyx"
+    memcpy((&(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_output.diminfo[0].strides, __pyx_t_12, __pyx_pybuffernd_output.diminfo[1].strides))), (&(__pyx_v__method->GetMulticlassValues()[0])), ((sizeof(__pyx_t_5numpy_float32_t)) * __pyx_v_n_classes));
+
+#line 36 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+  /* "root_numpy/tmva/src/evaluate.pyx":37
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
+ *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
+ *     del event
+ *     return output
+ */
+
+#line 37 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = NULL;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":38
+ *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
+ *     _method.fTmpEvent = NULL
+ *     del event             # <<<<<<<<<<<<<<
+ *     return output
+ * 
+ */
+
+#line 38 "root_numpy/tmva/src/evaluate.pyx"
+  delete __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":39
+ *     _method.fTmpEvent = NULL
+ *     del event
+ *     return output             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+#line 39 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_r);
+
+#line 39 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_INCREF(((PyObject *)__pyx_v_output));
+
+#line 39 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = ((PyObject *)__pyx_v_output);
+
+#line 39 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":24
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  /* function exit code */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L1_error:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_2);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_3);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_4);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_5);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_6);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_multiclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = NULL;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L2;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L0:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L2:;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF((PyObject *)__pyx_v_output);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XGIVEREF(__pyx_r);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  return __pyx_r;
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+}
+
+/* "root_numpy/tmva/src/evaluate.pyx":44
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+/* Python wrapper */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_11evaluate_regression(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_13_libtmvanumpy_11evaluate_regression = 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+{"evaluate_regression", (PyCFunction)__pyx_pw_13_libtmvanumpy_11evaluate_regression, METH_VARARGS|METH_KEYWORDS, 0};
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pw_13_libtmvanumpy_11evaluate_regression(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_method = 0
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_events = 0
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  unsigned int __pyx_v_n_targets
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  PyObject *__pyx_r = 0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyDeclarations
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_regression (wrapper)", 0);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_method,&__pyx_n_s_events,&__pyx_n_s_n_targets,0};
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    PyObject* values[3] = {0,0,0};
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__pyx_kwds)) {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      Py_ssize_t kw_args;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+        case  3: 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        case  2: 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        case  1: 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        case  0: break;
+        default: 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      kw_args = PyDict_Size(__pyx_kwds);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      switch (pos_args) {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        case  0:
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_method)) != 0)) kw_args--;
+        else 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+goto __pyx_L5_argtuple_error;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        case  1:
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_events)) != 0)) kw_args--;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_regression", 1, 3, 3, 1); 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        case  2:
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_n_targets)) != 0)) kw_args--;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_regression", 1, 3, 3, 2); 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      if (unlikely(kw_args > 0)) {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "evaluate_regression") < 0)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      goto __pyx_L5_argtuple_error;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    } else {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_method = values[0];
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_events = ((PyArrayObject *)values[1]);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_n_targets = __Pyx_PyInt_As_unsigned_int(values[2]); if (unlikely((__pyx_v_n_targets == (unsigned int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L4_argument_unpacking_done;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("evaluate_regression", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L3_error:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_regression", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  return NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L4_argument_unpacking_done:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = 
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pf_13_libtmvanumpy_10evaluate_regression(__pyx_self, __pyx_v_method, __pyx_v_events, __pyx_v_n_targets);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  /* function exit code */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L1_error:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L0:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  return __pyx_r;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+static PyObject *__pyx_pf_13_libtmvanumpy_10evaluate_regression(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_targets) {
+  TMVA::MethodBase *__pyx_v__method
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_size
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_n_features
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_i
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  long __pyx_v_j
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  std::vector<float>  __pyx_v_features
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  TMVA::Event *__pyx_v_event
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  PyArrayObject *__pyx_v_output = 0
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_events
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_events
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_output
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+  __Pyx_Buffer __pyx_pybuffer_output
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  void *__pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyArrayObject *__pyx_t_7 = NULL;
+  long __pyx_t_8;
+  long __pyx_t_9;
+  long __pyx_t_10;
+  long __pyx_t_11;
+  long __pyx_t_12;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannySetupContext("evaluate_regression", 0);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_output.pybuffer.buf = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_output.refcount = 0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_output.data = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_output.rcbuffer = &__pyx_pybuffer_output;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_events.pybuffer.buf = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffer_events.refcount = 0;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.data = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
+
+  /* "root_numpy/tmva/src/evaluate.pyx":45
+ * @cython.wraparound(False)
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)             # <<<<<<<<<<<<<<
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]
+ */
+
+#line 45 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_method); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 45 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method = ((TMVA::MethodBase *)__pyx_t_1);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":46
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef long n_features = events.shape[1]
+ *     cdef long i, j
+ */
+
+#line 46 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_size = (__pyx_v_events->dimensions[0]);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":47
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
+ *     cdef long i, j
+ *     cdef vector[float] features
+ */
+
+#line 47 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":50
+ *     cdef long i, j
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
+ */
+
+#line 50 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
+
+  /* "root_numpy/tmva/src/evaluate.pyx":51
+ *     cdef vector[float] features
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
+ *     for i from 0 <= i < size:
+ */
+
+#line 51 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":52
+ *     cdef Event* event = new Event(features, 0)
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)             # <<<<<<<<<<<<<<
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:
+ */
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_empty); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_3);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_targets); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_4);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_2);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_4);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_4);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_5);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_float32); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_6);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_6) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_6);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_6) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_6, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_7 = ((PyArrayObject *)__pyx_t_6);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_7, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[1]; __pyx_lineno = 52; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    } else {
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_output.diminfo[1].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_output.diminfo[1].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[1];
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_7 = 0;
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_output = ((PyArrayObject *)__pyx_t_6);
+
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":53
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
+ *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])
+ */
+
+#line 53 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_8 = __pyx_v_size;
+
+#line 53 "root_numpy/tmva/src/evaluate.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_8; __pyx_v_i++) {
+
+    /* "root_numpy/tmva/src/evaluate.pyx":54
+ *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
+ */
+
+#line 54 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_9 = __pyx_v_n_features;
+
+#line 54 "root_numpy/tmva/src/evaluate.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_9; __pyx_v_j++) {
+
+      /* "root_numpy/tmva/src/evaluate.pyx":55
+ *     for i from 0 <= i < size:
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
+ *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
+ *     _method.fTmpEvent = NULL
+ */
+
+#line 55 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_10 = __pyx_v_i;
+
+#line 55 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_11 = __pyx_v_j;
+
+#line 55 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_events.diminfo[1].strides)));
+
+#line 55 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+    /* "root_numpy/tmva/src/evaluate.pyx":56
+ *         for j from 0 <= j < n_features:
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)             # <<<<<<<<<<<<<<
+ *     _method.fTmpEvent = NULL
+ *     del event
+ */
+
+#line 56 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_9 = __pyx_v_i;
+
+#line 56 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_12 = 0;
+
+#line 56 "root_numpy/tmva/src/evaluate.pyx"
+    memcpy((&(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_output.diminfo[0].strides, __pyx_t_12, __pyx_pybuffernd_output.diminfo[1].strides))), (&(__pyx_v__method->GetRegressionValues()[0])), ((sizeof(__pyx_t_5numpy_float32_t)) * __pyx_v_n_targets));
+
+#line 56 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+  /* "root_numpy/tmva/src/evaluate.pyx":57
+ *             event.SetVal(j, events[i, j])
+ *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
+ *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
+ *     del event
+ *     return output
+ */
+
+#line 57 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v__method->fTmpEvent = NULL;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":58
+ *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
+ *     _method.fTmpEvent = NULL
+ *     del event             # <<<<<<<<<<<<<<
+ *     return output
+ */
+
+#line 58 "root_numpy/tmva/src/evaluate.pyx"
+  delete __pyx_v_event;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":59
+ *     _method.fTmpEvent = NULL
+ *     del event
+ *     return output             # <<<<<<<<<<<<<<
+ */
+
+#line 59 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_r);
+
+#line 59 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_INCREF(((PyObject *)__pyx_v_output));
+
+#line 59 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = ((PyObject *)__pyx_v_output);
+
+#line 59 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":44
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  /* function exit code */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L1_error:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_2);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_3);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_4);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_5);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF(__pyx_t_6);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_AddTraceback("_libtmvanumpy.evaluate_regression", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_r = NULL;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  goto __pyx_L2;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L0:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L2:;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XDECREF((PyObject *)__pyx_v_output);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_XGIVEREF(__pyx_r);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_RefNannyFinishContext();
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  return __pyx_r;
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
 }
 
 /* "array.pxd":91
@@ -7885,20 +11213,32 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_n_b_Background, __pyx_k_Background, sizeof(__pyx_k_Background), 0, 0, 0, 1},
+  {&__pyx_kp_s_Class__0_d, __pyx_k_Class__0_d, sizeof(__pyx_k_Class__0_d), 0, 0, 1, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_MemoryError, __pyx_k_MemoryError, sizeof(__pyx_k_MemoryError), 0, 0, 1, 1},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
+  {&__pyx_n_b_Regression, __pyx_k_Regression, sizeof(__pyx_k_Regression), 0, 0, 0, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
+  {&__pyx_n_b_Signal, __pyx_k_Signal, sizeof(__pyx_k_Signal), 0, 0, 0, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_double, __pyx_k_double, sizeof(__pyx_k_double), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
+  {&__pyx_n_s_evaluate_multiclass, __pyx_k_evaluate_multiclass, sizeof(__pyx_k_evaluate_multiclass), 0, 0, 1, 1},
+  {&__pyx_n_s_evaluate_regression, __pyx_k_evaluate_regression, sizeof(__pyx_k_evaluate_regression), 0, 0, 1, 1},
+  {&__pyx_n_s_evaluate_twoclass, __pyx_k_evaluate_twoclass, sizeof(__pyx_k_evaluate_twoclass), 0, 0, 1, 1},
   {&__pyx_n_s_event, __pyx_k_event, sizeof(__pyx_k_event), 0, 0, 1, 1},
   {&__pyx_n_s_events, __pyx_k_events, sizeof(__pyx_k_events), 0, 0, 1, 1},
   {&__pyx_n_s_factory, __pyx_k_factory, sizeof(__pyx_k_factory), 0, 0, 1, 1},
   {&__pyx_n_s_factory_2, __pyx_k_factory_2, sizeof(__pyx_k_factory_2), 0, 0, 1, 1},
-  {&__pyx_n_s_factory_add_events, __pyx_k_factory_add_events, sizeof(__pyx_k_factory_add_events), 0, 0, 1, 1},
+  {&__pyx_n_s_factory_add_events_multiclass, __pyx_k_factory_add_events_multiclass, sizeof(__pyx_k_factory_add_events_multiclass), 0, 0, 1, 1},
+  {&__pyx_n_s_factory_add_events_regression, __pyx_k_factory_add_events_regression, sizeof(__pyx_k_factory_add_events_regression), 0, 0, 1, 1},
+  {&__pyx_n_s_factory_add_events_twoclass, __pyx_k_factory_add_events_twoclass, sizeof(__pyx_k_factory_add_events_twoclass), 0, 0, 1, 1},
+  {&__pyx_n_s_features, __pyx_k_features, sizeof(__pyx_k_features), 0, 0, 1, 1},
+  {&__pyx_n_s_float32, __pyx_k_float32, sizeof(__pyx_k_float32), 0, 0, 1, 1},
+  {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
   {&__pyx_kp_s_home_endw_workspace_root_numpy, __pyx_k_home_endw_workspace_root_numpy, sizeof(__pyx_k_home_endw_workspace_root_numpy), 0, 0, 1, 0},
   {&__pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_k_home_endw_workspace_root_numpy_2, sizeof(__pyx_k_home_endw_workspace_root_numpy_2), 0, 0, 1, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
@@ -7908,21 +11248,23 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_labels, __pyx_k_labels, sizeof(__pyx_k_labels), 0, 0, 1, 1},
   {&__pyx_n_s_libtmvanumpy, __pyx_k_libtmvanumpy, sizeof(__pyx_k_libtmvanumpy), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_method, __pyx_k_method, sizeof(__pyx_k_method), 0, 0, 1, 1},
+  {&__pyx_n_s_method_2, __pyx_k_method_2, sizeof(__pyx_k_method_2), 0, 0, 1, 1},
+  {&__pyx_n_s_n_classes, __pyx_k_n_classes, sizeof(__pyx_k_n_classes), 0, 0, 1, 1},
   {&__pyx_n_s_n_features, __pyx_k_n_features, sizeof(__pyx_k_n_features), 0, 0, 1, 1},
-  {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
+  {&__pyx_n_s_n_targets, __pyx_k_n_targets, sizeof(__pyx_k_n_targets), 0, 0, 1, 1},
   {&__pyx_kp_u_ndarray_is_not_C_contiguous, __pyx_k_ndarray_is_not_C_contiguous, sizeof(__pyx_k_ndarray_is_not_C_contiguous), 0, 1, 0, 0},
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_n_s_output, __pyx_k_output, sizeof(__pyx_k_output), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
-  {&__pyx_n_s_reader, __pyx_k_reader, sizeof(__pyx_k_reader), 0, 0, 1, 1},
-  {&__pyx_n_s_reader_2, __pyx_k_reader_2, sizeof(__pyx_k_reader_2), 0, 0, 1, 1},
-  {&__pyx_n_s_reader_evaluate, __pyx_k_reader_evaluate, sizeof(__pyx_k_reader_evaluate), 0, 0, 1, 1},
   {&__pyx_n_s_signal_label, __pyx_k_signal_label, sizeof(__pyx_k_signal_label), 0, 0, 1, 1},
   {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
+  {&__pyx_n_s_target, __pyx_k_target, sizeof(__pyx_k_target), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_test_2, __pyx_k_test_2, sizeof(__pyx_k_test_2), 0, 0, 1, 1},
+  {&__pyx_n_s_treetype, __pyx_k_treetype, sizeof(__pyx_k_treetype), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {&__pyx_n_s_weight, __pyx_k_weight, sizeof(__pyx_k_weight), 0, 0, 1, 1},
   {&__pyx_n_s_weights, __pyx_k_weights, sizeof(__pyx_k_weights), 0, 0, 1, 1},
@@ -8047,13 +11389,13 @@ static int __Pyx_InitCachedConstants(void) {
   /* "root_numpy/tmva/src/factory.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def factory_add_events(factory,             # <<<<<<<<<<<<<<
- *                        np.ndarray[np.double_t, ndim=2] events,
- *                        np.ndarray[np.int_t, ndim=1] labels,
+ * def factory_add_events_twoclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
  */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_tuple__7 = PyTuple_Pack(14, __pyx_n_s_factory, __pyx_n_s_events, __pyx_n_s_labels, __pyx_n_s_signal_label, __pyx_n_s_weights, __pyx_n_s_test, __pyx_n_s_factory_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_weight, __pyx_n_s_label, __pyx_n_s_event); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__7 = PyTuple_Pack(15, __pyx_n_s_factory, __pyx_n_s_events, __pyx_n_s_labels, __pyx_n_s_signal_label, __pyx_n_s_weights, __pyx_n_s_test, __pyx_n_s_factory_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_weight, __pyx_n_s_label, __pyx_n_s_event, __pyx_n_s_treetype); if (unlikely(!__pyx_tuple__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __Pyx_GOTREF(__pyx_tuple__7);
@@ -8062,36 +11404,124 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__7);
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(6, 0, 14, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_factory_add_events, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(6, 0, 15, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_factory_add_events_twoclass, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_tuple__9 = PyTuple_Pack(10, __pyx_n_s_reader, __pyx_n_s_name, __pyx_n_s_events, __pyx_n_s_reader_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_event, __pyx_n_s_output); if (unlikely(!__pyx_tuple__9)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  /* "root_numpy/tmva/src/factory.pyx":36
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_multiclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_tuple__9 = PyTuple_Pack(14, __pyx_n_s_factory, __pyx_n_s_events, __pyx_n_s_labels, __pyx_n_s_weights, __pyx_n_s_test, __pyx_n_s_factory_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_weight, __pyx_n_s_label, __pyx_n_s_event, __pyx_n_s_treetype); if (unlikely(!__pyx_tuple__9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __Pyx_GOTREF(__pyx_tuple__9);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(3, 0, 10, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_reader_evaluate, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_codeobj__10 = (PyObject*)__Pyx_PyCode_New(5, 0, 14, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__9, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_factory_add_events_multiclass, 36, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+  /* "root_numpy/tmva/src/factory.pyx":64
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_regression(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_tuple__11 = PyTuple_Pack(13, __pyx_n_s_factory, __pyx_n_s_events, __pyx_n_s_target, __pyx_n_s_weights, __pyx_n_s_test, __pyx_n_s_factory_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_weight, __pyx_n_s_event, __pyx_n_s_treetype); if (unlikely(!__pyx_tuple__11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_GOTREF(__pyx_tuple__11);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_GIVEREF(__pyx_tuple__11);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(5, 0, 13, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_factory_add_events_regression, 64, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "root_numpy/tmva/src/evaluate.pyx":4
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_tuple__13 = PyTuple_Pack(10, __pyx_n_s_method, __pyx_n_s_events, __pyx_n_s_method_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_features, __pyx_n_s_event, __pyx_n_s_output); if (unlikely(!__pyx_tuple__13)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_tuple__13);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_tuple__13);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(2, 0, 10, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_twoclass, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "root_numpy/tmva/src/evaluate.pyx":24
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_tuple__15 = PyTuple_Pack(11, __pyx_n_s_method, __pyx_n_s_events, __pyx_n_s_n_classes, __pyx_n_s_method_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_features, __pyx_n_s_event, __pyx_n_s_output); if (unlikely(!__pyx_tuple__15)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_tuple__15);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_tuple__15);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(3, 0, 11, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_multiclass, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "root_numpy/tmva/src/evaluate.pyx":44
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_tuple__17 = PyTuple_Pack(11, __pyx_n_s_method, __pyx_n_s_events, __pyx_n_s_n_targets, __pyx_n_s_method_2, __pyx_n_s_size, __pyx_n_s_n_features, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_features, __pyx_n_s_event, __pyx_n_s_output); if (unlikely(!__pyx_tuple__17)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_tuple__17);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_tuple__17);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(3, 0, 11, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_regression, 44, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   return 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L1_error:;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   return -1;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
 }
 
 static int __Pyx_InitGlobals(void) {
@@ -8235,33 +11665,121 @@ PyMODINIT_FUNC PyInit__libtmvanumpy(void)
   /* "root_numpy/tmva/src/factory.pyx":4
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def factory_add_events(factory,             # <<<<<<<<<<<<<<
- *                        np.ndarray[np.double_t, ndim=2] events,
- *                        np.ndarray[np.int_t, ndim=1] labels,
+ * def factory_add_events_twoclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
  */
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_1factory_add_events, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_1factory_add_events_twoclass, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_factory_add_events, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_factory_add_events_twoclass, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 4 "root_numpy/tmva/src/factory.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_3reader_evaluate, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  /* "root_numpy/tmva/src/factory.pyx":36
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_multiclass(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_3factory_add_events_multiclass, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 36 "root_numpy/tmva/src/factory.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reader_evaluate, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_factory_add_events_multiclass, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 4 "root_numpy/tmva/src/factory.pyx"
+#line 36 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "root_numpy/tmva/src/factory.pyx":64
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def factory_add_events_regression(             # <<<<<<<<<<<<<<
+ *         factory,
+ *         np.ndarray[np.double_t, ndim=2] events,
+ */
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_5factory_add_events_regression, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_factory_add_events_regression, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 64 "root_numpy/tmva/src/factory.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":4
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_7evaluate_twoclass, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evaluate_twoclass, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 4; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 4 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":24
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_9evaluate_multiclass, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evaluate_multiclass, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 24 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":44
+ * @cython.boundscheck(False)
+ * @cython.wraparound(False)
+ * def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
+ *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+ *     cdef long size = events.shape[0]
+ */
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_libtmvanumpy_11evaluate_regression, NULL, __pyx_n_s_libtmvanumpy); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evaluate_regression, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 44; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 44 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "_libtmvanumpy.pyx":1
@@ -9120,6 +12638,74 @@ static CYTHON_INLINE void __Pyx_ErrFetch(PyObject **type, PyObject **value, PyOb
 #endif
 }
 
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
+    PyObject *result;
+    ternaryfunc call = func->ob_type->tp_call;
+    if (unlikely(!call))
+        return PyObject_Call(func, arg, kw);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = (*call)(func, arg, kw);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
+    PyObject *self, *result;
+    PyCFunction cfunc;
+    cfunc = PyCFunction_GET_FUNCTION(func);
+    self = PyCFunction_GET_SELF(func);
+    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
+        return NULL;
+    result = cfunc(self, arg);
+    Py_LeaveRecursiveCall();
+    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
+        PyErr_SetString(
+            PyExc_SystemError,
+            "NULL result without error in PyObject_Call");
+    }
+    return result;
+}
+#endif
+
+#if CYTHON_COMPILING_IN_CPYTHON
+static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject *result;
+    PyObject *args = PyTuple_New(1);
+    if (unlikely(!args)) return NULL;
+    Py_INCREF(arg);
+    PyTuple_SET_ITEM(args, 0, arg);
+    result = __Pyx_PyObject_Call(func, args, NULL);
+    Py_DECREF(args);
+    return result;
+}
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+#ifdef __Pyx_CyFunction_USED
+    if (likely(PyCFunction_Check(func) || PyObject_TypeCheck(func, __pyx_CyFunctionType))) {
+#else
+    if (likely(PyCFunction_Check(func))) {
+#endif
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_O)) {
+            return __Pyx_PyObject_CallMethO(func, arg);
+        }
+    }
+    return __Pyx__PyObject_CallOneArg(func, arg);
+}
+#else
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObject *arg) {
+    PyObject* args = PyTuple_Pack(1, arg);
+    return (likely(args)) ? __Pyx_PyObject_Call(func, args, NULL) : NULL;
+}
+#endif
+
 static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
     PyObject* result = __Pyx_PyObject_GetAttrStr(__pyx_b, name);
     if (unlikely(!result)) {
@@ -9149,25 +12735,6 @@ static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name) {
     }
     return result;
 }
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw) {
-    PyObject *result;
-    ternaryfunc call = func->ob_type->tp_call;
-    if (unlikely(!call))
-        return PyObject_Call(func, arg, kw);
-    if (unlikely(Py_EnterRecursiveCall((char*)" while calling a Python object")))
-        return NULL;
-    result = (*call)(func, arg, kw);
-    Py_LeaveRecursiveCall();
-    if (unlikely(!result) && unlikely(!PyErr_Occurred())) {
-        PyErr_SetString(
-            PyExc_SystemError,
-            "NULL result without error in PyObject_Call");
-    }
-    return result;
-}
-#endif
 
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
     if (unlikely(!type)) {
@@ -9535,7 +13102,7 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
 #endif
 
 
-      static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+        static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
     PyObject *module = 0;
     PyObject *global_dict = 0;
@@ -9724,6 +13291,127 @@ raise_neg_overflow:
     return (int) -1;
 }
 
+static CYTHON_INLINE unsigned int __Pyx_PyInt_As_unsigned_int(PyObject *x) {
+    const unsigned int neg_one = (unsigned int) -1, const_zero = 0;
+    const int is_unsigned = neg_one > const_zero;
+#if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_Check(x))) {
+        if (sizeof(unsigned int) < sizeof(long)) {
+            __PYX_VERIFY_RETURN_INT(unsigned int, long, PyInt_AS_LONG(x))
+        } else {
+            long val = PyInt_AS_LONG(x);
+            if (is_unsigned && unlikely(val < 0)) {
+                goto raise_neg_overflow;
+            }
+            return (unsigned int) val;
+        }
+    } else
+#endif
+    if (likely(PyLong_Check(x))) {
+        if (is_unsigned) {
+#if CYTHON_COMPILING_IN_CPYTHON && PY_MAJOR_VERSION >= 3
+ #if CYTHON_USE_PYLONG_INTERNALS
+            switch (Py_SIZE(x)) {
+                case  0: return 0;
+                case  1: __PYX_VERIFY_RETURN_INT(unsigned int, digit, ((PyLongObject*)x)->ob_digit[0]);
+            }
+ #endif
+#endif
+            if (unlikely(Py_SIZE(x) < 0)) {
+                goto raise_neg_overflow;
+            }
+            if (sizeof(unsigned int) <= sizeof(unsigned long)) {
+                __PYX_VERIFY_RETURN_INT(unsigned int, unsigned long, PyLong_AsUnsignedLong(x))
+            } else if (sizeof(unsigned int) <= sizeof(unsigned long long)) {
+                __PYX_VERIFY_RETURN_INT(unsigned int, unsigned long long, PyLong_AsUnsignedLongLong(x))
+            }
+        } else {
+#if CYTHON_COMPILING_IN_CPYTHON && PY_MAJOR_VERSION >= 3
+ #if CYTHON_USE_PYLONG_INTERNALS
+            switch (Py_SIZE(x)) {
+                case  0: return 0;
+                case  1: __PYX_VERIFY_RETURN_INT(unsigned int,  digit, +(((PyLongObject*)x)->ob_digit[0]));
+                case -1: __PYX_VERIFY_RETURN_INT(unsigned int, sdigit, -(sdigit) ((PyLongObject*)x)->ob_digit[0]);
+            }
+ #endif
+#endif
+            if (sizeof(unsigned int) <= sizeof(long)) {
+                __PYX_VERIFY_RETURN_INT(unsigned int, long, PyLong_AsLong(x))
+            } else if (sizeof(unsigned int) <= sizeof(long long)) {
+                __PYX_VERIFY_RETURN_INT(unsigned int, long long, PyLong_AsLongLong(x))
+            }
+        }
+        {
+#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
+            PyErr_SetString(PyExc_RuntimeError,
+                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
+#else
+            unsigned int val;
+            PyObject *v = __Pyx_PyNumber_Int(x);
+ #if PY_MAJOR_VERSION < 3
+            if (likely(v) && !PyLong_Check(v)) {
+                PyObject *tmp = v;
+                v = PyNumber_Long(tmp);
+                Py_DECREF(tmp);
+            }
+ #endif
+            if (likely(v)) {
+                int one = 1; int is_little = (int)*(unsigned char *)&one;
+                unsigned char *bytes = (unsigned char *)&val;
+                int ret = _PyLong_AsByteArray((PyLongObject *)v,
+                                              bytes, sizeof(val),
+                                              is_little, !is_unsigned);
+                Py_DECREF(v);
+                if (likely(!ret))
+                    return val;
+            }
+#endif
+            return (unsigned int) -1;
+        }
+    } else {
+        unsigned int val;
+        PyObject *tmp = __Pyx_PyNumber_Int(x);
+        if (!tmp) return (unsigned int) -1;
+        val = __Pyx_PyInt_As_unsigned_int(tmp);
+        Py_DECREF(tmp);
+        return val;
+    }
+raise_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "value too large to convert to unsigned int");
+    return (unsigned int) -1;
+raise_neg_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "can't convert negative value to unsigned int");
+    return (unsigned int) -1;
+}
+
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) -1, const_zero = 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long long)) {
+            return PyLong_FromUnsignedLongLong((unsigned long long) value);
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(long long)) {
+            return PyLong_FromLongLong((long long) value);
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
+}
+
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     const long neg_one = (long) -1, const_zero = 0;
     const int is_unsigned = neg_one > const_zero;
@@ -9746,6 +13434,32 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(long),
+                                     little, !is_unsigned);
+    }
+}
+
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_int(unsigned int value) {
+    const unsigned int neg_one = (unsigned int) -1, const_zero = 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(unsigned int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(unsigned int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+        } else if (sizeof(unsigned int) <= sizeof(unsigned long long)) {
+            return PyLong_FromUnsignedLongLong((unsigned long long) value);
+        }
+    } else {
+        if (sizeof(unsigned int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(unsigned int) <= sizeof(long long)) {
+            return PyLong_FromLongLong((long long) value);
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(unsigned int),
                                      little, !is_unsigned);
     }
 }
@@ -9989,32 +13703,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
         }
     #endif
 #endif
-
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-    const int neg_one = (int) -1, const_zero = 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long long)) {
-            return PyLong_FromUnsignedLongLong((unsigned long long) value);
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(long long)) {
-            return PyLong_FromLongLong((long long) value);
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
-}
 
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) -1, const_zero = 0;
