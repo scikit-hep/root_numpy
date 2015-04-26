@@ -33,6 +33,14 @@ def factory_add_events(factory, events, labels,
         If True, then the events will be added as test events, otherwise
         they are added as training events by default.
 
+    See Also
+    --------
+    reader_evaluate
+
+    Examples
+    --------
+    .. literalinclude:: /examples/tmva.py
+
     """
     if not isinstance(factory, TMVA.Factory):
         raise TypeError("factory must be a TMVA.Factory instance")

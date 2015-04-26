@@ -28,6 +28,14 @@ def reader_evaluate(reader, name, events):
     output : numpy array of shape [n_events]
         The method output value for each event
 
+    See Also
+    --------
+    factory_add_events
+
+    Examples
+    --------
+    .. literalinclude:: /examples/tmva.py
+
     """
     if not isinstance(reader, TMVA.Reader):
         raise TypeError("reader must be a TMVA.Reader instance")
