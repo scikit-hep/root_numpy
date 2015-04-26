@@ -19,6 +19,7 @@ pip install coverage coveralls
 # Install the ROOT binary
 build=root${ROOT}_python${TRAVIS_PYTHON_VERSION}_gcc4.8_x86_64
 if [ ! -z ${NOTMVA+x} ]; then
+    # Use a build without TMVA
     build+=_notmva
 fi
 time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/${build}.tar.gz
