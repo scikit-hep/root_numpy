@@ -5,9 +5,12 @@ python:
     - "3.4"
 env:
     - ROOT=v5-34-18
+    - ROOT=v5-34-18 NOTMVA=1
     - ROOT=master
 install: source ci/install.sh
 script: bash ci/test.sh
 after_success:
     - time coveralls
 cache: apt
+notifications:
+    email: false
