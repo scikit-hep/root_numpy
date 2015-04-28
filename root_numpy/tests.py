@@ -271,16 +271,6 @@ def test_object_expression():
             np.arange(10, dtype='d') + 2]))
 
 
-def test_branch_status():
-    # test that original branch status is preserved
-    chain = TChain('tree')
-    chain.Add(load('single1.root'))
-    chain.Add(load('single2.root'))
-    chain.SetBranchStatus('d_double', False)
-    a = rnp.tree2rec(chain, selection="d_double > 100")
-    assert_equal(chain.GetBranchStatus('d_double'), False)
-
-
 @raises(ValueError)
 def test_branch_DNE():
     chain = TChain('tree')
