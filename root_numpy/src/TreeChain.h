@@ -62,16 +62,6 @@ class TreeChain
                 return;
             }
 
-            // Revert branches to their original activated/deactivated state
-            std::map<std::string, bool>::iterator status_it;
-            for (status_it = original_branch_status.begin();
-                 status_it != original_branch_status.end();
-                 ++status_it)
-            {
-                fChain->SetBranchStatus(status_it->first.c_str(),
-                                        status_it->second);
-            }
-
             fChain->SetNotify(notifier->oldnotify);
 
             LeafCache::iterator it;
@@ -97,22 +87,9 @@ class TreeChain
             {
                 return load;
             }
-            // Remember original branch status
-            TObjArray* branches = fChain->GetListOfBranches();
-            int ibranch, nbranches;
-            TBranch* branch;
-            nbranches = branches->GetEntriesFast();
-            for (ibranch = 0; ibranch < nbranches; ++ibranch)
-            {
-                branch = (TBranch*) branches->At(ibranch);
-                original_branch_status[branch->GetName()] =
-                    branch->TestBit(kDoNotProcess) == 0;
-            }
             // Enable all branches since we don't know yet which branches are
             // required by the formulae. The branches must be activated when a
-            // TTreeFormula is initially created. All branches will be disabled
-            // in InitBranches() before only enabling the ones that are
-            // actually required
+            // TTreeFormula is initially created.
             fChain->SetBranchStatus("*", true);
             //fChain->SetCacheSize(10000000);
             return load;
@@ -159,9 +136,7 @@ class TreeChain
             std::string bname, lname;
             LeafCache::iterator it;
 
-            // Disable all branches
-            fChain->SetBranchStatus("*", false);
-            // Only the required branches will be added to the cache later
+            // Only the required branches will be added to the cache below
             fChain->DropBranchFromCache("*", true);
 
             for (it = leafcache.begin(); it != leafcache.end(); ++it)
@@ -172,7 +147,7 @@ class TreeChain
                 leaf = branch->FindLeaf(lname.c_str());
 
                 // Make the branch active and cache it
-                fChain->SetBranchStatus(bname.c_str(), true);
+                branch->SetStatus(true);
                 fChain->AddBranchToCache(branch, true);
                 // and the length leaf as well
 
@@ -182,7 +157,7 @@ class TreeChain
                 if (leafCount != NULL)
                 {
                     branch = leafCount->GetBranch();
-                    fChain->SetBranchStatus(branch->GetName(), true);
+                    branch->SetStatus(true);
                     fChain->AddBranchToCache(branch, true);
                 }
             }
@@ -196,11 +171,10 @@ class TreeChain
                 for (n = 0; n < ncodes; ++n)
                 {
                     branch = (*fit)->GetLeaf(n)->GetBranch();
-                    fChain->SetBranchStatus(branch->GetName(), true);
-                    fChain->AddBranchToCache(branch, true);
                     // Branch may be a TObject split across multiple
                     // subbranches. These must be activated recursively.
                     activate_branch_recursive(branch);
+                    fChain->AddBranchToCache(branch, true);
                 }
             }
         }
@@ -390,7 +364,6 @@ class TreeChain
         long ientry;
         MiniNotify* notifier;
         std::vector<TTreeFormula*> formulae;
-        std::map<std::string, bool> original_branch_status;
 
         // Branch name to leaf name conversion
         typedef std::pair<std::string, std::string> BL;
