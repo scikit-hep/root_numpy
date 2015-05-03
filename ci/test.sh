@@ -8,10 +8,11 @@ set -e
 
 gcc -dumpversion
 g++ -dumpversion
+ldd --version
 python --version
 python -c "import numpy; print('numpy %s' % numpy.__version__)"
+
 # Check if ROOT and PyROOT work
-#root -l -q
 python -c "import ROOT; ROOT.TBrowser()"
 python -c "from __future__ import print_function; import ROOT; print(ROOT.gROOT.GetVersion())"
 
@@ -20,5 +21,9 @@ export PYTHONPATH=/home/travis/.local/lib/python${TRAVIS_PYTHON_VERSION}/site-pa
 # Install into the user site-packages directory and run tests on that
 time make install-user
 time make test-installed
+
 # Run tests in the local directory with coverage
-time make test-coverage </dev/null
+if [ -z ${NOTMVA+x} ]; then
+    # TMVA is included in this build, so run the coverage
+    time make test-coverage </dev/null
+fi

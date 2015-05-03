@@ -52,11 +52,24 @@ def root_flags(root_config='root-config'):
     return root_cflags.split(), root_ldflags.split()
 
 
+def root_has_feature(feature, root_config='root-config'):
+    if os.getenv('NO_ROOT_NUMPY_{0}'.format(feature.upper())):
+        # override
+        return False
+    has_feature = subprocess.Popen(
+        [root_config, '--has-{0}'.format(feature)],
+        stdout=subprocess.PIPE).communicate()[0].strip()
+    if sys.version > '3':
+        has_feature = has_feature.decode('utf-8')
+    return has_feature == 'yes'
+
+
 rootsys = os.getenv('ROOTSYS', None)
 if rootsys is not None:
     try:
         root_config = os.path.join(rootsys, 'bin', 'root-config')
         root_cflags, root_ldflags = root_flags(root_config)
+        has_tmva = root_has_feature('tmva', root_config)
     except OSError:
         raise RuntimeError(
             "ROOTSYS is {0} but running {1} failed".format(
@@ -64,6 +77,7 @@ if rootsys is not None:
 else:
     try:
         root_cflags, root_ldflags = root_flags()
+        has_tmva = root_has_feature('tmva')
     except OSError:
         raise RuntimeError(
             "root-config is not in PATH and ROOTSYS is not set. "
@@ -78,12 +92,41 @@ librootnumpy = Extension(
     language='c++',
     include_dirs=[
         np.get_include(),
-        'root_numpy/src'],
+        'root_numpy/src',
+    ],
     extra_compile_args=root_cflags + [
         '-Wno-unused-function',
         '-Wno-write-strings',
     ],
     extra_link_args=root_ldflags + ['-lTreePlayer'])
+
+ext_modules = [librootnumpy]
+packages = [
+    'root_numpy',
+    'root_numpy.testdata',
+    'root_numpy.extern',
+    ]
+
+if has_tmva:
+    librootnumpy_tmva = Extension(
+        'root_numpy.tmva._libtmvanumpy',
+        sources=[
+            'root_numpy/tmva/src/_libtmvanumpy.cpp',
+        ],
+        depends=['root_numpy/src/2to3.h'],
+        language='c++',
+        include_dirs=[
+            np.get_include(),
+            'root_numpy/src',
+            'root_numpy/tmva/src',
+        ],
+        extra_compile_args=root_cflags + [
+            '-Wno-unused-function',
+            '-Wno-write-strings',
+        ],
+        extra_link_args=root_ldflags + ['-lTMVA'])
+    ext_modules.append(librootnumpy_tmva)
+    packages.append('root_numpy.tmva')
 
 # check for custom args
 filtered_args = []
@@ -119,17 +162,11 @@ setup(
     url='http://rootpy.github.io/root_numpy',
     download_url='http://pypi.python.org/packages/source/r/'
                  'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
-    packages=[
-        'root_numpy',
-        'root_numpy.testdata',
-        'root_numpy.extern',
-    ],
+    packages=packages,
     package_data={
         'root_numpy': ['testdata/*.root'],
     },
-    ext_modules=[
-        librootnumpy,
-    ],
+    ext_modules=ext_modules,
     zip_safe=False,
     classifiers=[
         'Intended Audience :: Science/Research',

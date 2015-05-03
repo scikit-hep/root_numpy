@@ -40,6 +40,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
     'numpydoc',
+    'gen_rst',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

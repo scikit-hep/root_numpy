@@ -24,16 +24,6 @@ from libcpp.string cimport string, const_char
 from libc.string cimport memcpy
 from libc.stdlib cimport malloc, free, realloc
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    # Fall back on drop-in
-    from .extern.ordereddict import OrderedDict
-
-import atexit
-import warnings
-from ._warnings import RootNumpyUnconvertibleWarning
-
 ctypedef unsigned char unsigned_char
 ctypedef unsigned short unsigned_short
 ctypedef unsigned int unsigned_int
@@ -41,6 +31,5 @@ ctypedef unsigned long unsigned_long
 ctypedef long long long_long
 ctypedef unsigned long long unsigned_long_long
 
-include "ROOT.pxi"
-include "root_numpy.pxi"
+include "TMVA.pxi"
 
