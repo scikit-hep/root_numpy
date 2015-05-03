@@ -30,7 +30,9 @@ X_train, y_train, w_train = X[:n_events], y[:n_events], w[:n_events]
 X_test, y_test, w_test = X[n_events:], y[n_events:], w[n_events:]
 
 output = TFile('tmva_output.root', 'recreate')
-factory = TMVA.Factory('classifier', output, 'AnalysisType=Multiclass')
+factory = TMVA.Factory('classifier', output,
+                       'AnalysisType=Multiclass:'
+                       '!V:Silent:!DrawProgressBar')
 for n in range(n_vars):
     factory.AddVariable('f{0}'.format(n), 'F')
 
@@ -51,5 +53,7 @@ for n in range(n_vars):
     reader.AddVariable('f{0}'.format(n), array('f', [0.]))
 reader.BookMVA('BDT', 'weights/classifier_BDTG.weights.xml')
 scores = evaluate_reader(reader, 'BDT', X_test)
+print("class probabilities:")
 print(scores)
+print("class probabilties should sum to 1:")
 print(np.sum(scores,axis=1))

@@ -13,7 +13,9 @@ y = np.sin(X).ravel() + \
 
 # Fit a regression model
 output = TFile('tmva_output.root', 'recreate')
-factory = TMVA.Factory('regressor', output, 'AnalysisType=Regression')
+factory = TMVA.Factory('regressor', output,
+                       'AnalysisType=Regression:'
+                       '!V:Silent:!DrawProgressBar')
 factory.AddVariable('x', 'F')
 factory.AddTarget('y', 'F')
 
