@@ -7,7 +7,7 @@ from ROOT import TMVA, TFile, TCut
 
 RNG = RandomState(42)
 
-# construct an example dataset for binary classification
+# Construct an example multiclass dataset
 n_vars = 5
 n_events = 1000
 class_0 = RNG.multivariate_normal(
@@ -25,7 +25,7 @@ permute = RNG.permutation(y.shape[0])
 X = X[permute]
 y = y[permute]
 
-# split into training and test datasets
+# Split into training and test datasets
 X_train, y_train, w_train = X[:n_events], y[:n_events], w[:n_events]
 X_test, y_test, w_test = X[n_events:], y[n_events:], w[n_events:]
 
@@ -34,16 +34,18 @@ factory = TMVA.Factory('classifier', output, 'AnalysisType=Multiclass')
 for n in range(n_vars):
     factory.AddVariable('f{0}'.format(n), 'F')
 
-# call root_numpy's utility functions to add events from the arrays
+# Call root_numpy's utility functions to add events from the arrays
 add_classification_events(factory, X_train, y_train, weights=w_train)
 add_classification_events(factory, X_test, y_test, weights=w_test, test=True)
 
-# train a BDT
+# Train a BDT
 factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
-factory.BookMethod('BDT', 'BDTG', 'nCuts=20:NTrees=10:MaxDepth=3:BoostType=Grad:Shrinkage=0.10:UseBaggedBoost:BaggedSampleFraction=0.50')
+factory.BookMethod('BDT', 'BDTG',
+                   'nCuts=20:NTrees=10:MaxDepth=3:'
+                   'BoostType=Grad:Shrinkage=0.10')
 factory.TrainAllMethods()
 
-# classify the test dataset with the BDT
+# Classify the test dataset with the BDT
 reader = TMVA.Reader()
 for n in range(n_vars):
     reader.AddVariable('f{0}'.format(n), array('f', [0.]))

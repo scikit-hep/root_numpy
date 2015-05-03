@@ -87,17 +87,16 @@ def evaluate_method(method, events):
     elif analysistype == TMVA.Types.kMulticlass:
         n_classes = method.DataInfo().GetNClasses()
         if n_classes < 2:
-            raise ValueError("there must be at least two classes")
+            raise AssertionError("there must be at least two classes")
         return _libtmvanumpy.evaluate_multiclass(
             ROOT.AsCObject(method), events, n_classes)
     elif analysistype == TMVA.Types.kRegression:
         n_targets = method.DataInfo().GetNTargets()
         if n_targets < 1:
-            raise ValueError("there must be at least one regression target")
+            raise AssertionError("there must be at least one regression target")
         output = _libtmvanumpy.evaluate_regression(
             ROOT.AsCObject(method), events, n_targets)
         if n_targets == 1:
             return np.ravel(output)
         return output
-    else:
-        raise ValueError("the analysis type of this method is not supported")
+    raise AssertionError("the analysis type of this method is not supported")

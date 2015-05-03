@@ -64,15 +64,16 @@ def factory_add_events_multiclass(
 def factory_add_events_regression(
         factory,
         np.ndarray[np.double_t, ndim=2] events,
-        np.ndarray[np.double_t, ndim=1] target,
+        np.ndarray[np.double_t, ndim=2] targets,
         np.ndarray[np.double_t, ndim=1] weights=None,
         bool test=False):
     cdef Factory* _factory = <Factory*> PyCObject_AsVoidPtr(factory)
     cdef long size = events.shape[0]
     cdef long n_features = events.shape[1]
+    cdef long n_targets = targets.shape[1]
     cdef long i, j
     cdef double weight = 1.
-    cdef vector[double]* event = new vector[double](n_features + 1)
+    cdef vector[double]* event = new vector[double](n_features + n_targets)
     cdef ETreeType treetype = kTraining
     if test:
         treetype = kTesting
@@ -81,6 +82,7 @@ def factory_add_events_regression(
             weight = weights[i]
         for j from 0 <= j < n_features:
             event[0][j] = events[i, j]
-        event[0][n_features] = target[i]
+        for j from 0 <= j < n_targets:
+            event[0][n_features + j] = targets[i, j]
         _factory.AddEvent("Regression", treetype, event[0], weight)
     del event

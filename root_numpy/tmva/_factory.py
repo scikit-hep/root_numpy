@@ -72,7 +72,7 @@ def add_classification_events(factory, events, labels, signal_label=None,
         raise ValueError("labels must contain at least two classes")
 
 
-def add_regression_events(factory, events, target, weights=None, test=False):
+def add_regression_events(factory, events, targets, weights=None, test=False):
     """Add regression events to a TMVA::Factory from NumPy arrays.
 
     Parameters
@@ -83,8 +83,8 @@ def add_regression_events(factory, events, target, weights=None, test=False):
     events : numpy array of shape [n_events, n_variables]
         A two-dimensional NumPy array containing the rows of events
         and columns of variables.
-    target : numpy array of shape [n_events]
-        The target value for each event in ``events``.
+    targets : numpy array of shape [n_events] or [n_events, n_targets]
+        The target value(s) for each event in ``events``.
     weights : numpy array of shape [n_events], optional
         Event weights.
     test : bool, optional (default=False)
@@ -102,11 +102,14 @@ def add_regression_events(factory, events, target, weights=None, test=False):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    target = np.asarray(target, dtype=np.float64)
-    if target.shape[0] != events.shape[0]:
-        raise ValueError("numbers of events and labels do not match")
-    if target.ndim > 1:
-        raise ValueError("target must be one-dimensional")
+    targets = np.asarray(targets, dtype=np.float64)
+    if targets.shape[0] != events.shape[0]:
+        raise ValueError("the lengths of events and targets do not match")
+    if targets.ndim == 1:
+        # convert to 2D
+        targets = targets[:, np.newaxis]
+    elif targets.ndim > 2:
+        raise ValueError("targets can not have more than two dimensions")
     if weights is not None:
         weights = np.asarray(weights, dtype=np.float64)
         if weights.shape[0] != events.shape[0]:
@@ -114,4 +117,4 @@ def add_regression_events(factory, events, target, weights=None, test=False):
         if weights.ndim != 1:
             raise ValueError("weights must be one-dimensional")
     _libtmvanumpy.factory_add_events_regression(
-        ROOT.AsCObject(factory), events, target, weights, test)
+        ROOT.AsCObject(factory), events, targets, weights, test)

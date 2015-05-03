@@ -4,16 +4,19 @@ from root_numpy.tmva import add_regression_events, evaluate_reader
 from ROOT import TMVA, TFile, TCut
 from array import array
 
-# Create the dataset
-rng = np.random.RandomState(1)
+# Create an example regression dataset
+RNG = np.random.RandomState(1)
 X = np.linspace(0, 6, 100)[:, np.newaxis]
-y = np.sin(X).ravel() + np.sin(6 * X).ravel() + rng.normal(0, 0.1, X.shape[0])
+y = np.sin(X).ravel() + \
+    np.sin(6 * X).ravel() + \
+    RNG.normal(0, 0.1, X.shape[0])
 
-# Fit regression model
+# Fit a regression model
 output = TFile('tmva_output.root', 'recreate')
 factory = TMVA.Factory('regressor', output, 'AnalysisType=Regression')
 factory.AddVariable('x', 'F')
 factory.AddTarget('y', 'F')
+
 add_regression_events(factory, X, y)
 add_regression_events(factory, X, y, test=True)
 factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
@@ -25,7 +28,7 @@ factory.BookMethod('BDT', 'BDT2',
                    'SeparationType=RegressionVariance')
 factory.TrainAllMethods()
 
-# Predict
+# Predict the regression target
 reader = TMVA.Reader()
 reader.AddVariable('x', array('f', [0.]))
 reader.BookMVA('BDT1', 'weights/regressor_BDT1.weights.xml')
