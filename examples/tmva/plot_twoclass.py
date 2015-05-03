@@ -1,3 +1,8 @@
+"""
+=========================================
+Binary Classification with NumPy and TMVA
+=========================================
+"""
 from array import array
 import numpy as np
 from numpy.random import RandomState
@@ -104,5 +109,5 @@ plt.xlabel('Score')
 plt.title('Decision Scores')
 
 plt.tight_layout()
-plt.subplots_adjust(wspace=0.35)
+plt.subplots_adjust(wspace=0.25)
 plt.show()

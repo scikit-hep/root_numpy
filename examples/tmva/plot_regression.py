@@ -1,3 +1,8 @@
+"""
+==============================
+Regression with NumPy and TMVA
+==============================
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from root_numpy.tmva import add_regression_events, evaluate_reader

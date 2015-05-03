@@ -50,8 +50,10 @@ root_numpy.tmva
 .. autosummary::
    :toctree: generated
 
-   factory_add_events
-   reader_evaluate
+   add_classification_events
+   add_regression_events
+   evaluate_reader
+   evaluate_method
 
 .. _conversion_table:
 
