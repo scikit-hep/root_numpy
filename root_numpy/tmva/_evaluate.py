@@ -29,9 +29,9 @@ def evaluate_reader(reader, name, events):
     output : numpy array of shape [n_events]
         The method output value for each event
 
-    Examples
+    See Also
     --------
-    .. literalinclude:: /examples/tmva.py
+    evaluate_method
 
     """
     if not isinstance(reader, TMVA.Reader):
@@ -60,9 +60,9 @@ def evaluate_method(method, events):
     output : numpy array of shape [n_events]
         The method output value for each event
 
-    Examples
+    See Also
     --------
-    .. literalinclude:: /examples/tmva.py
+    evaluate_reader
 
     """
     if not isinstance(method, TMVA.MethodBase):

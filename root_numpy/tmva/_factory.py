@@ -34,10 +34,6 @@ def add_classification_events(factory, events, labels, signal_label=None,
         If True, then the events will be added as test events, otherwise
         they are added as training events by default.
 
-    Examples
-    --------
-    .. literalinclude:: /examples/tmva.py
-
     """
     if not isinstance(factory, TMVA.Factory):
         raise TypeError("factory must be a TMVA.Factory instance")
