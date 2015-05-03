@@ -5,16 +5,16 @@
 root_numpy
 ==========
 
+.. image:: https://img.shields.io/pypi/v/root_numpy.svg
+   :target: https://pypi.python.org/pypi/root_numpy
 .. image:: https://travis-ci.org/rootpy/root_numpy.png
    :target: https://travis-ci.org/rootpy/root_numpy
 .. image:: https://coveralls.io/repos/rootpy/root_numpy/badge.svg?branch=master
    :target: https://coveralls.io/r/rootpy/root_numpy?branch=master
 .. image:: https://landscape.io/github/rootpy/root_numpy/master/landscape.svg?style=flat
    :target: https://landscape.io/github/rootpy/root_numpy/master
-.. image:: https://pypip.in/v/root_numpy/badge.png
+.. image:: https://img.shields.io/pypi/dm/root_numpy.svg
    :target: https://pypi.python.org/pypi/root_numpy
-.. image:: https://pypip.in/d/root_numpy/badge.png
-   :target: https://crate.io/packages/root_numpy/
 
 root_numpy is a Python extension module that provides an efficient interface
 between `ROOT <http://root.cern.ch/>`_ and `NumPy <http://www.numpy.org/>`_.
