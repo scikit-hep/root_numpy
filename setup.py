@@ -53,6 +53,9 @@ def root_flags(root_config='root-config'):
 
 
 def root_has_feature(feature, root_config='root-config'):
+    if os.getenv('NO_ROOT_NUMPY_{0}'.format(feature.upper())):
+        # override
+        return False
     has_feature = subprocess.Popen(
         [root_config, '--has-{0}'.format(feature)],
         stdout=subprocess.PIPE).communicate()[0].strip()
