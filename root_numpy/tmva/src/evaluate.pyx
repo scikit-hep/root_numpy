@@ -1,8 +1,55 @@
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):
+    cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
+    cdef IMethod* imeth = _reader.FindMVA(name)
+    if imeth == NULL:
+        raise ValueError(
+            "method '{0}' is not booked in this reader".format(name))
+    cdef MethodBase* method = dynamic_cast["MethodBase*"](imeth)
+    return evaluate_method_dispatch(method, events)
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):
+def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):
     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+    return evaluate_method_dispatch(_method, events)
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):
+    cdef long n_features = events.shape[1]
+    cdef unsigned int n_classes, n_targets
+    if n_features != _method.GetNVariables():
+        raise ValueError(
+            "this method was trained with events containing "
+            "{0} variables, but these events contain {1} variables".format(
+                _method.GetNVariables(), n_features))
+    cdef EAnalysisType analysistype
+    analysistype = _method.GetAnalysisType()
+    if analysistype == kClassification:
+        return evaluate_twoclass(_method, events)
+    elif analysistype == kMulticlass:
+        n_classes = _method.DataInfo().GetNClasses()
+        if n_classes < 2:
+            raise AssertionError("there must be at least two classes")
+        return evaluate_multiclass(_method, events, n_classes)
+    elif analysistype == kRegression:
+        n_targets = _method.DataInfo().GetNTargets()
+        if n_targets < 1:
+            raise AssertionError("there must be at least one regression target")
+        output = evaluate_regression(_method, events, n_targets)
+        if n_targets == 1:
+            return np.ravel(output)
+        return output
+    raise AssertionError("the analysis type of this method is not supported")
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):
     cdef long size = events.shape[0]
     cdef long n_features = events.shape[1]
     cdef long i, j
@@ -21,8 +68,7 @@ def evaluate_twoclass(method, np.ndarray[np.double_t, ndim=2] events):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
-    cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+cdef evaluate_multiclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
     cdef long size = events.shape[0]
     cdef long n_features = events.shape[1]
     cdef long i, j
@@ -41,8 +87,7 @@ def evaluate_multiclass(method, np.ndarray[np.double_t, ndim=2] events, unsigned
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def evaluate_regression(method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
-    cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
+cdef evaluate_regression(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
     cdef long size = events.shape[0]
     cdef long n_features = events.shape[1]
     cdef long i, j

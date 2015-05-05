@@ -36,15 +36,25 @@ def evaluate_reader(reader, name, events):
     """
     if not isinstance(reader, TMVA.Reader):
         raise TypeError("reader must be a TMVA.Reader instance")
-    method = reader.FindMVA(name)
-    if not method:
+    events = np.ascontiguousarray(events, dtype=np.float64)
+    if events.ndim == 1:
+        # convert to 2D
+        events = events[:, np.newaxis]
+    elif events.ndim != 2:
         raise ValueError(
-            "method '{0}' is not booked in this reader".format(name))
-    return evaluate_method(method, events)
+            "events must be a two-dimensional array "
+            "with one event per row")
+    return _libtmvanumpy.evaluate_reader(ROOT.AsCObject(reader), name, events)
 
 
 def evaluate_method(method, events):
     """Evaluate a TMVA::MethodBase over a NumPy array.
+
+    .. warning:: TMVA::Reader has known problems with thread safety in versions
+       of ROOT earlier than 6.03. There will potentially be a crash if you call
+       ``method = reader.FindMVA(name)`` in Python and then pass this
+       ``method`` here. Consider using ``evaluate_reader`` instead if you are
+       affected by this crash.
 
     Parameters
     ----------
@@ -75,28 +85,4 @@ def evaluate_method(method, events):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    if events.shape[1] != method.GetNVariables():
-        raise ValueError(
-            "this method was trained with events containing "
-            "{0} variables, but these events contain {1} variables".format(
-                method.GetNVariables(), events.shape[1]))
-    analysistype = method.GetAnalysisType()
-    if analysistype == TMVA.Types.kClassification:
-        return _libtmvanumpy.evaluate_twoclass(
-            ROOT.AsCObject(method), events)
-    elif analysistype == TMVA.Types.kMulticlass:
-        n_classes = method.DataInfo().GetNClasses()
-        if n_classes < 2:
-            raise AssertionError("there must be at least two classes")
-        return _libtmvanumpy.evaluate_multiclass(
-            ROOT.AsCObject(method), events, n_classes)
-    elif analysistype == TMVA.Types.kRegression:
-        n_targets = method.DataInfo().GetNTargets()
-        if n_targets < 1:
-            raise AssertionError("there must be at least one regression target")
-        output = _libtmvanumpy.evaluate_regression(
-            ROOT.AsCObject(method), events, n_targets)
-        if n_targets == 1:
-            return np.ravel(output)
-        return output
-    raise AssertionError("the analysis type of this method is not supported")
+    return _libtmvanumpy.evaluate_method(ROOT.AsCObject(method), events)
