@@ -23,7 +23,8 @@ time make install-user
 time make test-installed
 
 # Run tests in the local directory with coverage
-if [ -z ${NOTMVA+x} ]; then
-    # TMVA is included in this build, so run the coverage
+if [ ! -z ${COVERAGE+x} ] && [ -z ${NOTMVA+x} ]; then
+    # COVERAGE is set and TMVA is included in this build
+    # so run the coverage
     time make test-coverage </dev/null
 fi

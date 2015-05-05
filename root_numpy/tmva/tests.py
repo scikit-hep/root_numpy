@@ -100,14 +100,21 @@ class TMVA_Estimator(object):
                       object(), self.method, X)
         assert_raises(ValueError, rnp.tmva.evaluate_reader,
                       reader, 'DoesNotExist', X)
-        assert_raises(TypeError, rnp.tmva.evaluate_method,
-                      object(), X)
         assert_raises(ValueError, rnp.tmva.evaluate_reader,
                       reader, self.method, [[[1]]])
         if self.task != 'Regression':
             assert_raises(ValueError, rnp.tmva.evaluate_reader,
                           reader, self.method, [1, 2, 3])
-        return rnp.tmva.evaluate_reader(reader, self.method, X)
+        output = rnp.tmva.evaluate_reader(reader, self.method, X)
+        if ROOT.gROOT.GetVersionInt() >= 60300:
+            method = reader.FindMVA(self.method)
+            assert_raises(TypeError, rnp.tmva.evaluate_method,
+                          object(), X)
+            assert_raises(ValueError, rnp.tmva.evaluate_method,
+                          method, [[[1]]])
+            output_method = rnp.tmva.evaluate_method(method, X)
+            assert_array_equal(output, output_method)
+        return output
 
 
 def test_tmva_twoclass():
@@ -206,7 +213,7 @@ def test_tmva_regression():
     reg.fit(np.ravel(X), y, X_test=X, y_test=y,
             nCuts=20, NTrees=10, MaxDepth=3,
             boosttype='AdaBoostR2', SeparationType='RegressionVariance')
-    y_predict = reg.predict(X)
+    y_predict = reg.predict(np.ravel(X))
     assert_equal(y_predict.ndim, 1)
 
     # train with weights
