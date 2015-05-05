@@ -49,7 +49,7 @@ add_classification_events(factory, X_test, y_test, weights=w_test, test=True)
 # Train a BDT
 factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 factory.BookMethod('BDT', 'BDTG',
-                   'nCuts=50:NTrees=50:MaxDepth=4:'
+                   'nCuts=20:NTrees=20:MaxDepth=4:'
                    'BoostType=Grad:Shrinkage=0.10')
 factory.TrainAllMethods()
 
