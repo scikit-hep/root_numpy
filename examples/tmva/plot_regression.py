@@ -9,8 +9,10 @@ from root_numpy.tmva import add_regression_events, evaluate_reader
 from ROOT import TMVA, TFile, TCut
 from array import array
 
-# Create an example regression dataset
+plt.style.use('ggplot')
 RNG = np.random.RandomState(1)
+
+# Create an example regression dataset
 X = np.linspace(0, 6, 100)[:, np.newaxis]
 y = np.sin(X).ravel() + \
     np.sin(6 * X).ravel() + \
