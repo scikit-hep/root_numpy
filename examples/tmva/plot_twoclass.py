@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from root_numpy.tmva import add_classification_events, evaluate_reader
 from ROOT import TMVA, TFile, TCut
 
+plt.style.use('ggplot')
 RNG = RandomState(42)
 
 # Construct an example dataset for binary classification
@@ -100,7 +101,7 @@ for i, n, c in zip([-1, 1], class_names, plot_colors):
              range=plot_range,
              facecolor=c,
              label='Class %s' % n,
-             alpha=.5)
+             alpha=.5, histtype='stepfilled')
 x1, x2, y1, y2 = plt.axis()
 plt.axis((x1, x2, y1, y2 * 1.2))
 plt.legend(loc='upper right')
