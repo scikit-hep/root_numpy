@@ -3,7 +3,6 @@
 Multiclass Classification with NumPy and TMVA
 =============================================
 """
-from __future__ import print_function
 from array import array
 import numpy as np
 from numpy.random import RandomState
