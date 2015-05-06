@@ -44,9 +44,10 @@ for n in range(2):
 # Call root_numpy's utility functions to add events from the arrays
 add_classification_events(factory, X_train, y_train, weights=w_train)
 add_classification_events(factory, X_test, y_test, weights=w_test, test=True)
+# The following line is necessary if events have been added individually:
+factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 
 # Train a BDT
-factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 factory.BookMethod('BDT', 'BDTG',
                    'nCuts=20:NTrees=20:MaxDepth=4:'
                    'BoostType=Grad:Shrinkage=0.10')

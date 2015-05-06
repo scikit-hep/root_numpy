@@ -28,7 +28,9 @@ factory.AddTarget('y', 'F')
 
 add_regression_events(factory, X, y)
 add_regression_events(factory, X, y, test=True)
-factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
+# The following line is necessary if events have been added individually:
+factory.PrepareTrainingAndTestTree(TCut('1'), '')
+
 factory.BookMethod('BDT', 'BDT1',
                    'nCuts=20:NTrees=1:MaxDepth=4:BoostType=AdaBoostR2:'
                    'SeparationType=RegressionVariance')

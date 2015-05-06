@@ -5,7 +5,6 @@ python:
     - "3.4"
 env:
     - ROOT=v5-34-18
-    - ROOT=v5-34-18 NOTMVA=1
     - ROOT=master COVERAGE=1
 install: source ci/install.sh
 script: bash ci/test.sh
