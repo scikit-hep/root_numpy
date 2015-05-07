@@ -16,16 +16,17 @@ def evaluate_reader(reader, name, events, aux=0.):
     Parameters
     ----------
     reader : TMVA::Reader
-        A TMVA::Factory instance with variables booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::Factory instance with variables booked in exactly the same
+        order as the columns in ``events``.
     name : string
         The method name.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
     aux : float, optional (default=0.)
-        Auxiliary value used by MethodCuts to set the desired
-        signal efficiency.
+        Auxiliary value used by MethodCuts to set the desired signal
+        efficiency.
 
     Returns
     -------
@@ -63,14 +64,15 @@ def evaluate_method(method, events, aux=0.):
     Parameters
     ----------
     method : TMVA::MethodBase
-        A TMVA::MethodBase instance with variables booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::MethodBase instance with variables booked in exactly the same
+        order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
     aux : float, optional (default=0.)
-        Auxiliary value used by MethodCuts to set the desired
-        signal efficiency.
+        Auxiliary value used by MethodCuts to set the desired signal
+        efficiency.
 
     Returns
     -------
