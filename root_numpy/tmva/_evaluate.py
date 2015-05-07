@@ -10,7 +10,7 @@ __all__ = [
 ]
 
 
-def evaluate_reader(reader, name, events):
+def evaluate_reader(reader, name, events, aux=0.):
     """Evaluate a TMVA::Reader over a NumPy array.
 
     Parameters
@@ -23,6 +23,9 @@ def evaluate_reader(reader, name, events):
     events : numpy array of shape [n_events, n_variables]
         A two-dimensional NumPy array containing the rows of events
         and columns of variables.
+    aux : float, optional (default=0.)
+        Auxiliary value used by MethodCuts to set the desired
+        signal efficiency.
 
     Returns
     -------
@@ -44,10 +47,11 @@ def evaluate_reader(reader, name, events):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    return _libtmvanumpy.evaluate_reader(ROOT.AsCObject(reader), name, events)
+    return _libtmvanumpy.evaluate_reader(
+        ROOT.AsCObject(reader), name, events, aux)
 
 
-def evaluate_method(method, events):
+def evaluate_method(method, events, aux=0.):
     """Evaluate a TMVA::MethodBase over a NumPy array.
 
     .. warning:: TMVA::Reader has known problems with thread safety in versions
@@ -64,6 +68,9 @@ def evaluate_method(method, events):
     events : numpy array of shape [n_events, n_variables]
         A two-dimensional NumPy array containing the rows of events
         and columns of variables.
+    aux : float, optional (default=0.)
+        Auxiliary value used by MethodCuts to set the desired
+        signal efficiency.
 
     Returns
     -------
@@ -85,4 +92,4 @@ def evaluate_method(method, events):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    return _libtmvanumpy.evaluate_method(ROOT.AsCObject(method), events)
+    return _libtmvanumpy.evaluate_method(ROOT.AsCObject(method), events, aux)

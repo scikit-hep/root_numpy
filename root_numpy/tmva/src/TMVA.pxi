@@ -3,6 +3,9 @@ cdef extern from "2to3.h":
     pass 
 
 cdef extern from "TMVA/Types.h" namespace "TMVA":
+    ctypedef enum EMVA "TMVA::Types::EMVA":
+        kCuts "TMVA::Types::kCuts"
+
     ctypedef enum ETreeType "TMVA::Types::ETreeType":
         kTraining "TMVA::Types::kTraining"
         kTesting "TMVA::Types::kTesting"
@@ -30,6 +33,7 @@ cdef extern from "TMVA/IMethod.h" namespace "TMVA":
 
 cdef extern from "TMVA/MethodBase.h" namespace "TMVA":
     cdef cppclass MethodBase:
+        EMVA GetMethodType()
         EAnalysisType GetAnalysisType()
         DataSetInfo DataInfo()
         unsigned int GetNVariables()
@@ -38,6 +42,10 @@ cdef extern from "TMVA/MethodBase.h" namespace "TMVA":
         vector[float] GetMulticlassValues()
         vector[float] GetRegressionValues()
         Event* fTmpEvent
+
+cdef extern from "TMVA/MethodCuts.h" namespace "TMVA":
+    cdef cppclass MethodCuts:
+        void SetTestSignalEfficiency(double eff)
 
 cdef extern from "TMVA/Factory.h" namespace "TMVA":
     cdef cppclass Factory:

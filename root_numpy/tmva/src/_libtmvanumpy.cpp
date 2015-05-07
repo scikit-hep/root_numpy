@@ -253,6 +253,7 @@ void __Pyx_call_destructor(T* x) {
 #include "TMVA/DataSetInfo.h"
 #include "TMVA/IMethod.h"
 #include "TMVA/MethodBase.h"
+#include "TMVA/MethodCuts.h"
 #include "TMVA/Factory.h"
 #include "TMVA/Reader.h"
 #ifdef _OPENMP
@@ -1431,8 +1432,8 @@ static CYTHON_INLINE int __pyx_f_7cpython_5array_extend_buffer(arrayobject *, ch
 /* Module declarations from 'libcpp.string' */
 
 /* Module declarations from '_libtmvanumpy' */
-static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBase *, PyArrayObject *); /*proto*/
-static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *, PyArrayObject *); /*proto*/
+static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBase *, PyArrayObject *, double); /*proto*/
+static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *, PyArrayObject *, double); /*proto*/
 static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *, PyArrayObject *, unsigned int); /*proto*/
 static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *, PyArrayObject *, unsigned int); /*proto*/
 static std::string __pyx_convert_string_from_py_std__string(PyObject *); /*proto*/
@@ -1451,8 +1452,8 @@ static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_pf_13_libtmvanumpy_factory_add_events_twoclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, int __pyx_v_signal_label, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
 static PyObject *__pyx_pf_13_libtmvanumpy_2factory_add_events_multiclass(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_labels, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
 static PyObject *__pyx_pf_13_libtmvanumpy_4factory_add_events_regression(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_factory, PyArrayObject *__pyx_v_events, PyArrayObject *__pyx_v_targets, PyArrayObject *__pyx_v_weights, bool __pyx_v_test); /* proto */
-static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events); /* proto */
-static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events, double __pyx_v_aux); /* proto */
+static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, double __pyx_v_aux); /* proto */
 static int __pyx_pf_7cpython_5array_5array___getbuffer__(arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info, CYTHON_UNUSED int __pyx_v_flags); /* proto */
 static void __pyx_pf_7cpython_5array_5array_2__releasebuffer__(CYTHON_UNUSED arrayobject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
@@ -1476,6 +1477,7 @@ static char __pyx_k_Zd[] = "Zd";
 static char __pyx_k_Zf[] = "Zf";
 static char __pyx_k_Zg[] = "Zg";
 static char __pyx_k_np[] = "np";
+static char __pyx_k_aux[] = "aux";
 static char __pyx_k_main[] = "__main__";
 static char __pyx_k_name[] = "name";
 static char __pyx_k_size[] = "size";
@@ -1546,6 +1548,7 @@ static PyObject *__pyx_n_b_Regression;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_b_Signal;
 static PyObject *__pyx_n_s_ValueError;
+static PyObject *__pyx_n_s_aux;
 static PyObject *__pyx_n_s_double;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_empty;
@@ -4280,7 +4283,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_4factory_add_events_regression(CYTHON_
 /* "root_numpy/tmva/src/evaluate.pyx":3
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
  *     cdef IMethod* imeth = _reader.FindMVA(name)
  */
@@ -4308,6 +4311,9 @@ static PyObject *__pyx_pw_13_libtmvanumpy_7evaluate_reader(PyObject *__pyx_self,
   PyArrayObject *__pyx_v_events = 0
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 ;
+  double __pyx_v_aux
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -4325,10 +4331,10 @@ static PyObject *__pyx_pw_13_libtmvanumpy_7evaluate_reader(PyObject *__pyx_self,
   {
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reader,&__pyx_n_s_name,&__pyx_n_s_events,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_reader,&__pyx_n_s_name,&__pyx_n_s_events,&__pyx_n_s_aux,0};
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-    PyObject* values[3] = {0,0,0};
+    PyObject* values[4] = {0,0,0,0};
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__pyx_kwds)) {
@@ -4341,6 +4347,9 @@ static PyObject *__pyx_pw_13_libtmvanumpy_7evaluate_reader(PyObject *__pyx_self,
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
       switch (pos_args) {
+        case  4: 
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
@@ -4383,7 +4392,7 @@ goto __pyx_L5_argtuple_error;
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 3, 3, 1); 
+          __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 4, 4, 1); 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
@@ -4398,7 +4407,22 @@ goto __pyx_L5_argtuple_error;
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 3, 3, 2); 
+          __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 4, 4, 2); 
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+        case  3:
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_aux)) != 0)) kw_args--;
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 4, 4, 3); 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
@@ -4418,7 +4442,7 @@ goto __pyx_L5_argtuple_error;
       }
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
       goto __pyx_L5_argtuple_error;
@@ -4436,6 +4460,9 @@ goto __pyx_L5_argtuple_error;
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
     }
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
@@ -4448,6 +4475,9 @@ goto __pyx_L5_argtuple_error;
     __pyx_v_events = ((PyArrayObject *)values[2]);
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_aux = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_aux == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 3 "root_numpy/tmva/src/evaluate.pyx"
   }
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
@@ -4455,7 +4485,7 @@ goto __pyx_L5_argtuple_error;
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); 
+  __Pyx_RaiseArgtupleInvalid("evaluate_reader", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
@@ -4478,7 +4508,7 @@ goto __pyx_L5_argtuple_error;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-__pyx_pf_13_libtmvanumpy_6evaluate_reader(__pyx_self, __pyx_v_reader, __pyx_v_name, __pyx_v_events);
+__pyx_pf_13_libtmvanumpy_6evaluate_reader(__pyx_self, __pyx_v_reader, __pyx_v_name, __pyx_v_events, __pyx_v_aux);
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 
@@ -4511,7 +4541,7 @@ __pyx_pf_13_libtmvanumpy_6evaluate_reader(__pyx_self, __pyx_v_reader, __pyx_v_na
 
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events) {
+static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_reader, PyObject *__pyx_v_name, PyArrayObject *__pyx_v_events, double __pyx_v_aux) {
   TMVA::Reader *__pyx_v__reader
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
 ;
@@ -4575,7 +4605,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
 
   /* "root_numpy/tmva/src/evaluate.pyx":4
  * @cython.wraparound(False)
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)             # <<<<<<<<<<<<<<
  *     cdef IMethod* imeth = _reader.FindMVA(name)
  *     if imeth == NULL:
@@ -4588,7 +4618,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
   __pyx_v__reader = ((TMVA::Reader *)__pyx_t_1);
 
   /* "root_numpy/tmva/src/evaluate.pyx":5
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
  *     cdef IMethod* imeth = _reader.FindMVA(name)             # <<<<<<<<<<<<<<
  *     if imeth == NULL:
@@ -4620,7 +4650,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
  *         raise ValueError(
  *             "method '{0}' is not booked in this reader".format(name))             # <<<<<<<<<<<<<<
  *     cdef MethodBase* method = dynamic_cast["MethodBase*"](imeth)
- *     return evaluate_method_dispatch(method, events)
+ *     return evaluate_method_dispatch(method, events, aux)
  */
 
 #line 8 "root_numpy/tmva/src/evaluate.pyx"
@@ -4752,7 +4782,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
  *         raise ValueError(
  *             "method '{0}' is not booked in this reader".format(name))
  *     cdef MethodBase* method = dynamic_cast["MethodBase*"](imeth)             # <<<<<<<<<<<<<<
- *     return evaluate_method_dispatch(method, events)
+ *     return evaluate_method_dispatch(method, events, aux)
  * 
  */
 
@@ -4780,7 +4810,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
   /* "root_numpy/tmva/src/evaluate.pyx":10
  *             "method '{0}' is not booked in this reader".format(name))
  *     cdef MethodBase* method = dynamic_cast["MethodBase*"](imeth)
- *     return evaluate_method_dispatch(method, events)             # <<<<<<<<<<<<<<
+ *     return evaluate_method_dispatch(method, events, aux)             # <<<<<<<<<<<<<<
  * 
  * 
  */
@@ -4789,7 +4819,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
   __Pyx_XDECREF(__pyx_r);
 
 #line 10 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = __pyx_f_13_libtmvanumpy_evaluate_method_dispatch(__pyx_v_method, ((PyArrayObject *)__pyx_v_events)); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __pyx_f_13_libtmvanumpy_evaluate_method_dispatch(__pyx_v_method, ((PyArrayObject *)__pyx_v_events), __pyx_v_aux); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 10 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
@@ -4806,7 +4836,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
   /* "root_numpy/tmva/src/evaluate.pyx":3
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
  *     cdef IMethod* imeth = _reader.FindMVA(name)
  */
@@ -4877,9 +4907,9 @@ static PyObject *__pyx_pf_13_libtmvanumpy_6evaluate_reader(CYTHON_UNUSED PyObjec
 /* "root_numpy/tmva/src/evaluate.pyx":15
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
- *     return evaluate_method_dispatch(_method, events)
+ *     return evaluate_method_dispatch(_method, events, aux)
  */
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
@@ -4902,6 +4932,9 @@ static PyObject *__pyx_pw_13_libtmvanumpy_9evaluate_method(PyObject *__pyx_self,
   PyArrayObject *__pyx_v_events = 0
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 ;
+  double __pyx_v_aux
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -4919,10 +4952,10 @@ static PyObject *__pyx_pw_13_libtmvanumpy_9evaluate_method(PyObject *__pyx_self,
   {
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_method,&__pyx_n_s_events,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_method,&__pyx_n_s_events,&__pyx_n_s_aux,0};
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-    PyObject* values[2] = {0,0};
+    PyObject* values[3] = {0,0,0};
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__pyx_kwds)) {
@@ -4935,6 +4968,9 @@ static PyObject *__pyx_pw_13_libtmvanumpy_9evaluate_method(PyObject *__pyx_self,
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
       switch (pos_args) {
+        case  3: 
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
@@ -4974,7 +5010,22 @@ goto __pyx_L5_argtuple_error;
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
         else {
-          __Pyx_RaiseArgtupleInvalid("evaluate_method", 1, 2, 2, 1); 
+          __Pyx_RaiseArgtupleInvalid("evaluate_method", 1, 3, 3, 1); 
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+{__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+        }
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+        case  2:
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+        if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_aux)) != 0)) kw_args--;
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
+        else {
+          __Pyx_RaiseArgtupleInvalid("evaluate_method", 1, 3, 3, 2); 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
@@ -4994,7 +5045,7 @@ goto __pyx_L5_argtuple_error;
       }
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
       goto __pyx_L5_argtuple_error;
@@ -5009,6 +5060,9 @@ goto __pyx_L5_argtuple_error;
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
     }
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
@@ -5018,6 +5072,9 @@ goto __pyx_L5_argtuple_error;
     __pyx_v_events = ((PyArrayObject *)values[1]);
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_aux = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_aux == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+
+#line 15 "root_numpy/tmva/src/evaluate.pyx"
   }
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
@@ -5025,7 +5082,7 @@ goto __pyx_L5_argtuple_error;
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("evaluate_method", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); 
+  __Pyx_RaiseArgtupleInvalid("evaluate_method", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
 
@@ -5048,7 +5105,7 @@ goto __pyx_L5_argtuple_error;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_events), __pyx_ptype_5numpy_ndarray, 1, "events", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-__pyx_pf_13_libtmvanumpy_8evaluate_method(__pyx_self, __pyx_v_method, __pyx_v_events);
+__pyx_pf_13_libtmvanumpy_8evaluate_method(__pyx_self, __pyx_v_method, __pyx_v_events, __pyx_v_aux);
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 
@@ -5081,7 +5138,7 @@ __pyx_pf_13_libtmvanumpy_8evaluate_method(__pyx_self, __pyx_v_method, __pyx_v_ev
 
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events) {
+static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_method, PyArrayObject *__pyx_v_events, double __pyx_v_aux) {
   TMVA::MethodBase *__pyx_v__method
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
 ;
@@ -5133,9 +5190,9 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
 
   /* "root_numpy/tmva/src/evaluate.pyx":16
  * @cython.wraparound(False)
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)             # <<<<<<<<<<<<<<
- *     return evaluate_method_dispatch(_method, events)
+ *     return evaluate_method_dispatch(_method, events, aux)
  * 
  */
 
@@ -5146,9 +5203,9 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
   __pyx_v__method = ((TMVA::MethodBase *)__pyx_t_1);
 
   /* "root_numpy/tmva/src/evaluate.pyx":17
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
- *     return evaluate_method_dispatch(_method, events)             # <<<<<<<<<<<<<<
+ *     return evaluate_method_dispatch(_method, events, aux)             # <<<<<<<<<<<<<<
  * 
  * 
  */
@@ -5157,7 +5214,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
   __Pyx_XDECREF(__pyx_r);
 
 #line 17 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_2 = __pyx_f_13_libtmvanumpy_evaluate_method_dispatch(__pyx_v__method, ((PyArrayObject *)__pyx_v_events)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __pyx_f_13_libtmvanumpy_evaluate_method_dispatch(__pyx_v__method, ((PyArrayObject *)__pyx_v_events), __pyx_v_aux); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 17 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
@@ -5174,9 +5231,9 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
   /* "root_numpy/tmva/src/evaluate.pyx":15
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
- *     return evaluate_method_dispatch(_method, events)
+ *     return evaluate_method_dispatch(_method, events, aux)
  */
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
@@ -5236,7 +5293,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
 /* "root_numpy/tmva/src/evaluate.pyx":22
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef long n_features = events.shape[1]
  *     cdef unsigned int n_classes, n_targets
  */
@@ -5245,7 +5302,7 @@ static PyObject *__pyx_pf_13_libtmvanumpy_8evaluate_method(CYTHON_UNUSED PyObjec
 
 
 #line 22 "root_numpy/tmva/src/evaluate.pyx"
-static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events) {
+static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events, double __pyx_v_aux) {
   long __pyx_v_n_features
 #line 22 "root_numpy/tmva/src/evaluate.pyx"
 ;
@@ -5315,7 +5372,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
 
   /* "root_numpy/tmva/src/evaluate.pyx":23
  * @cython.wraparound(False)
- * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):
+ * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
  *     cdef unsigned int n_classes, n_targets
  *     if n_features != _method.GetNVariables():
@@ -5502,7 +5559,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
  *     cdef EAnalysisType analysistype
  *     analysistype = _method.GetAnalysisType()             # <<<<<<<<<<<<<<
  *     if analysistype == kClassification:
- *         return evaluate_twoclass(_method, events)
+ *         return evaluate_twoclass(_method, events, aux)
  */
 
 #line 31 "root_numpy/tmva/src/evaluate.pyx"
@@ -5523,7 +5580,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
  *     cdef EAnalysisType analysistype
  *     analysistype = _method.GetAnalysisType()
  *     if analysistype == kClassification:             # <<<<<<<<<<<<<<
- *         return evaluate_twoclass(_method, events)
+ *         return evaluate_twoclass(_method, events, aux)
  *     elif analysistype == kMulticlass:
  */
 
@@ -5533,7 +5590,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
     /* "root_numpy/tmva/src/evaluate.pyx":33
  *     analysistype = _method.GetAnalysisType()
  *     if analysistype == kClassification:
- *         return evaluate_twoclass(_method, events)             # <<<<<<<<<<<<<<
+ *         return evaluate_twoclass(_method, events, aux)             # <<<<<<<<<<<<<<
  *     elif analysistype == kMulticlass:
  *         n_classes = _method.DataInfo().GetNClasses()
  */
@@ -5542,7 +5599,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
     __Pyx_XDECREF(__pyx_r);
 
 #line 33 "root_numpy/tmva/src/evaluate.pyx"
-    __pyx_t_2 = __pyx_f_13_libtmvanumpy_evaluate_twoclass(__pyx_v__method, ((PyArrayObject *)__pyx_v_events)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __pyx_f_13_libtmvanumpy_evaluate_twoclass(__pyx_v__method, ((PyArrayObject *)__pyx_v_events), __pyx_v_aux); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 33 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_GOTREF(__pyx_t_2);
@@ -5561,7 +5618,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
 
     /* "root_numpy/tmva/src/evaluate.pyx":34
  *     if analysistype == kClassification:
- *         return evaluate_twoclass(_method, events)
+ *         return evaluate_twoclass(_method, events, aux)
  *     elif analysistype == kMulticlass:             # <<<<<<<<<<<<<<
  *         n_classes = _method.DataInfo().GetNClasses()
  *         if n_classes < 2:
@@ -5571,7 +5628,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
     case TMVA::Types::kMulticlass:
 
     /* "root_numpy/tmva/src/evaluate.pyx":35
- *         return evaluate_twoclass(_method, events)
+ *         return evaluate_twoclass(_method, events, aux)
  *     elif analysistype == kMulticlass:
  *         n_classes = _method.DataInfo().GetNClasses()             # <<<<<<<<<<<<<<
  *         if n_classes < 2:
@@ -5914,7 +5971,7 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
   /* "root_numpy/tmva/src/evaluate.pyx":22
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * cdef evaluate_method_dispatch(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef long n_features = events.shape[1]
  *     cdef unsigned int n_classes, n_targets
  */
@@ -5994,16 +6051,19 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_method_dispatch(TMVA::MethodBa
 /* "root_numpy/tmva/src/evaluate.pyx":52
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
+ *     cdef MethodCuts* mc
  *     cdef long size = events.shape[0]
- *     cdef long n_features = events.shape[1]
  */
 
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
 
 
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
-static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events) {
+static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events, double __pyx_v_aux) {
+  TMVA::MethodCuts *__pyx_v_mc
+#line 52 "root_numpy/tmva/src/evaluate.pyx"
+;
   long __pyx_v_size
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
 ;
@@ -6047,10 +6107,12 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *__p
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyArrayObject *__pyx_t_6 = NULL;
-  long __pyx_t_7;
-  long __pyx_t_8;
+  int __pyx_t_7;
+  TMVA::MethodCuts *__pyx_t_8;
   long __pyx_t_9;
   long __pyx_t_10;
+  long __pyx_t_11;
+  long __pyx_t_12;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -6097,29 +6159,29 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *__p
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
 
-  /* "root_numpy/tmva/src/evaluate.pyx":53
- * @cython.wraparound(False)
- * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):
+  /* "root_numpy/tmva/src/evaluate.pyx":54
+ * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):
+ *     cdef MethodCuts* mc
  *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
  *     cdef long n_features = events.shape[1]
  *     cdef long i, j
  */
 
-#line 53 "root_numpy/tmva/src/evaluate.pyx"
+#line 54 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_size = (__pyx_v_events->dimensions[0]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":54
- * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):
+  /* "root_numpy/tmva/src/evaluate.pyx":55
+ *     cdef MethodCuts* mc
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
  *     cdef long i, j
  *     cdef vector[float] features
  */
 
-#line 54 "root_numpy/tmva/src/evaluate.pyx"
+#line 55 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":57
+  /* "root_numpy/tmva/src/evaluate.pyx":58
  *     cdef long i, j
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
@@ -6127,174 +6189,260 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_twoclass(TMVA::MethodBase *__p
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
  */
 
-#line 57 "root_numpy/tmva/src/evaluate.pyx"
+#line 58 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":58
+  /* "root_numpy/tmva/src/evaluate.pyx":59
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
- *     for i from 0 <= i < size:
+ *     if _method.GetMethodType() == kCuts:
  */
 
-#line 58 "root_numpy/tmva/src/evaluate.pyx"
+#line 59 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":59
+  /* "root_numpy/tmva/src/evaluate.pyx":60
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)             # <<<<<<<<<<<<<<
+ *     if _method.GetMethodType() == kCuts:
+ *         mc = dynamic_cast["MethodCuts*"](_method)
+ */
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_3);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GIVEREF(__pyx_t_1);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_1);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_4);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_double); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_GOTREF(__pyx_t_5);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  {
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    } else {
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+__pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0];
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  }
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_6 = 0;
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_v_output = ((PyArrayObject *)__pyx_t_5);
+
+#line 60 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = 0;
+
+  /* "root_numpy/tmva/src/evaluate.pyx":61
+ *     _method.fTmpEvent = event
+ *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+ *     if _method.GetMethodType() == kCuts:             # <<<<<<<<<<<<<<
+ *         mc = dynamic_cast["MethodCuts*"](_method)
+ *         if mc != NULL:
+ */
+
+#line 61 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_7 = ((__pyx_v__method->GetMethodType() == TMVA::Types::kCuts) != 0);
+
+#line 61 "root_numpy/tmva/src/evaluate.pyx"
+  if (__pyx_t_7) {
+
+    /* "root_numpy/tmva/src/evaluate.pyx":62
+ *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+ *     if _method.GetMethodType() == kCuts:
+ *         mc = dynamic_cast["MethodCuts*"](_method)             # <<<<<<<<<<<<<<
+ *         if mc != NULL:
+ *             mc.SetTestSignalEfficiency(aux)
+ */
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+    try {
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_8 = dynamic_cast<TMVA::MethodCuts *>(__pyx_v__method);
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+    } catch(...) {
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+      __Pyx_CppExn2PyErr();
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 62; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+    }
+
+#line 62 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_v_mc = __pyx_t_8;
+
+    /* "root_numpy/tmva/src/evaluate.pyx":63
+ *     if _method.GetMethodType() == kCuts:
+ *         mc = dynamic_cast["MethodCuts*"](_method)
+ *         if mc != NULL:             # <<<<<<<<<<<<<<
+ *             mc.SetTestSignalEfficiency(aux)
+ *     for i from 0 <= i < size:
+ */
+
+#line 63 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_7 = ((__pyx_v_mc != NULL) != 0);
+
+#line 63 "root_numpy/tmva/src/evaluate.pyx"
+    if (__pyx_t_7) {
+
+      /* "root_numpy/tmva/src/evaluate.pyx":64
+ *         mc = dynamic_cast["MethodCuts*"](_method)
+ *         if mc != NULL:
+ *             mc.SetTestSignalEfficiency(aux)             # <<<<<<<<<<<<<<
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:
  */
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_mc->SetTestSignalEfficiency(__pyx_v_aux);
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_1);
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
+      goto __pyx_L4;
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_2);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_1);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_3);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GIVEREF(__pyx_t_1);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_1);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_4);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_double); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_5);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_GOTREF(__pyx_t_5);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  {
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-      __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    } else {
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-__pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0];
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_L4:;
+
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
+    goto __pyx_L3;
+
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_6 = 0;
+#line 64 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_L3:;
 
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_v_output = ((PyArrayObject *)__pyx_t_5);
-
-#line 59 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = 0;
-
-  /* "root_numpy/tmva/src/evaluate.pyx":60
- *     _method.fTmpEvent = event
- *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+  /* "root_numpy/tmva/src/evaluate.pyx":65
+ *         if mc != NULL:
+ *             mc.SetTestSignalEfficiency(aux)
  *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])
  */
 
-#line 60 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_7 = __pyx_v_size;
+#line 65 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_9 = __pyx_v_size;
 
-#line 60 "root_numpy/tmva/src/evaluate.pyx"
-  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_7; __pyx_v_i++) {
+#line 65 "root_numpy/tmva/src/evaluate.pyx"
+  for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_9; __pyx_v_i++) {
 
-    /* "root_numpy/tmva/src/evaluate.pyx":61
- *     cdef np.ndarray[np.double_t, ndim=1] output = np.empty(size, dtype=np.double)
+    /* "root_numpy/tmva/src/evaluate.pyx":66
+ *             mc.SetTestSignalEfficiency(aux)
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
  *             event.SetVal(j, events[i, j])
  *         output[i] = _method.GetMvaValue()
  */
 
-#line 61 "root_numpy/tmva/src/evaluate.pyx"
-    __pyx_t_8 = __pyx_v_n_features;
+#line 66 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_10 = __pyx_v_n_features;
 
-#line 61 "root_numpy/tmva/src/evaluate.pyx"
-    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_8; __pyx_v_j++) {
+#line 66 "root_numpy/tmva/src/evaluate.pyx"
+    for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_10; __pyx_v_j++) {
 
-      /* "root_numpy/tmva/src/evaluate.pyx":62
+      /* "root_numpy/tmva/src/evaluate.pyx":67
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
@@ -6302,19 +6450,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     _method.fTmpEvent = NULL
  */
 
-#line 62 "root_numpy/tmva/src/evaluate.pyx"
-      __pyx_t_9 = __pyx_v_i;
+#line 67 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_11 = __pyx_v_i;
 
-#line 62 "root_numpy/tmva/src/evaluate.pyx"
-      __pyx_t_10 = __pyx_v_j;
+#line 67 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_t_12 = __pyx_v_j;
 
-#line 62 "root_numpy/tmva/src/evaluate.pyx"
-      __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_events.diminfo[1].strides)));
+#line 67 "root_numpy/tmva/src/evaluate.pyx"
+      __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_11, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_12, __pyx_pybuffernd_events.diminfo[1].strides)));
 
-#line 62 "root_numpy/tmva/src/evaluate.pyx"
+#line 67 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-    /* "root_numpy/tmva/src/evaluate.pyx":63
+    /* "root_numpy/tmva/src/evaluate.pyx":68
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])
  *         output[i] = _method.GetMvaValue()             # <<<<<<<<<<<<<<
@@ -6322,16 +6470,16 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     del event
  */
 
-#line 63 "root_numpy/tmva/src/evaluate.pyx"
-    __pyx_t_8 = __pyx_v_i;
+#line 68 "root_numpy/tmva/src/evaluate.pyx"
+    __pyx_t_10 = __pyx_v_i;
 
-#line 63 "root_numpy/tmva/src/evaluate.pyx"
-    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_output.diminfo[0].strides) = __pyx_v__method->GetMvaValue();
+#line 68 "root_numpy/tmva/src/evaluate.pyx"
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_output.diminfo[0].strides) = __pyx_v__method->GetMvaValue();
 
-#line 63 "root_numpy/tmva/src/evaluate.pyx"
+#line 68 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-  /* "root_numpy/tmva/src/evaluate.pyx":64
+  /* "root_numpy/tmva/src/evaluate.pyx":69
  *             event.SetVal(j, events[i, j])
  *         output[i] = _method.GetMvaValue()
  *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
@@ -6339,10 +6487,10 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     return output
  */
 
-#line 64 "root_numpy/tmva/src/evaluate.pyx"
+#line 69 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = NULL;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":65
+  /* "root_numpy/tmva/src/evaluate.pyx":70
  *         output[i] = _method.GetMvaValue()
  *     _method.fTmpEvent = NULL
  *     del event             # <<<<<<<<<<<<<<
@@ -6350,10 +6498,10 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  * 
  */
 
-#line 65 "root_numpy/tmva/src/evaluate.pyx"
+#line 70 "root_numpy/tmva/src/evaluate.pyx"
   delete __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":66
+  /* "root_numpy/tmva/src/evaluate.pyx":71
  *     _method.fTmpEvent = NULL
  *     del event
  *     return output             # <<<<<<<<<<<<<<
@@ -6361,24 +6509,24 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  * 
  */
 
-#line 66 "root_numpy/tmva/src/evaluate.pyx"
+#line 71 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 66 "root_numpy/tmva/src/evaluate.pyx"
+#line 71 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_INCREF(((PyObject *)__pyx_v_output));
 
-#line 66 "root_numpy/tmva/src/evaluate.pyx"
+#line 71 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = ((PyObject *)__pyx_v_output);
 
-#line 66 "root_numpy/tmva/src/evaluate.pyx"
+#line 71 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L0;
 
   /* "root_numpy/tmva/src/evaluate.pyx":52
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * cdef evaluate_twoclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
+ *     cdef MethodCuts* mc
  *     cdef long size = events.shape[0]
- *     cdef long n_features = events.shape[1]
  */
 
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
@@ -6456,7 +6604,7 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
 #line 52 "root_numpy/tmva/src/evaluate.pyx"
 }
 
-/* "root_numpy/tmva/src/evaluate.pyx":71
+/* "root_numpy/tmva/src/evaluate.pyx":76
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef evaluate_multiclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
@@ -6464,46 +6612,46 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     cdef long n_features = events.shape[1]
  */
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_classes) {
   long __pyx_v_size
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_n_features
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_i
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_j
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   std::vector<float>  __pyx_v_features
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   TMVA::Event *__pyx_v_event
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   PyArrayObject *__pyx_v_output = 0
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_events
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_Buffer __pyx_pybuffer_events
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_output
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_Buffer __pyx_pybuffer_output
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 ;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6521,49 +6669,49 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannySetupContext("evaluate_multiclass", 0);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.pybuffer.buf = NULL;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.refcount = 0;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.data = NULL;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.rcbuffer = &__pyx_pybuffer_output;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.pybuffer.buf = NULL;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.refcount = 0;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.data = NULL;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 76; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
 
-  /* "root_numpy/tmva/src/evaluate.pyx":72
+  /* "root_numpy/tmva/src/evaluate.pyx":77
  * @cython.wraparound(False)
  * cdef evaluate_multiclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
  *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
@@ -6571,10 +6719,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
  *     cdef long i, j
  */
 
-#line 72 "root_numpy/tmva/src/evaluate.pyx"
+#line 77 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_size = (__pyx_v_events->dimensions[0]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":73
+  /* "root_numpy/tmva/src/evaluate.pyx":78
  * cdef evaluate_multiclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
@@ -6582,10 +6730,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
  *     cdef vector[float] features
  */
 
-#line 73 "root_numpy/tmva/src/evaluate.pyx"
+#line 78 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":76
+  /* "root_numpy/tmva/src/evaluate.pyx":81
  *     cdef long i, j
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
@@ -6593,10 +6741,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
  */
 
-#line 76 "root_numpy/tmva/src/evaluate.pyx"
+#line 81 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":77
+  /* "root_numpy/tmva/src/evaluate.pyx":82
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
@@ -6604,10 +6752,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
  *     for i from 0 <= i < size:
  */
 
-#line 77 "root_numpy/tmva/src/evaluate.pyx"
+#line 82 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":78
+  /* "root_numpy/tmva/src/evaluate.pyx":83
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)             # <<<<<<<<<<<<<<
@@ -6615,154 +6763,154 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_multiclass(TMVA::MethodBase *_
  *         for j from 0 <= j < n_features:
  */
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_classes); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_classes); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_3);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_1 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_3 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_4);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_4 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 78; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     } else {
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
 __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_output.diminfo[1].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_output.diminfo[1].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[1];
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_6 = 0;
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_output = ((PyArrayObject *)__pyx_t_5);
 
-#line 78 "root_numpy/tmva/src/evaluate.pyx"
+#line 83 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_5 = 0;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":79
+  /* "root_numpy/tmva/src/evaluate.pyx":84
  *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
  *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
@@ -6770,13 +6918,13 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *             event.SetVal(j, events[i, j])
  */
 
-#line 79 "root_numpy/tmva/src/evaluate.pyx"
+#line 84 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_7 = __pyx_v_size;
 
-#line 79 "root_numpy/tmva/src/evaluate.pyx"
+#line 84 "root_numpy/tmva/src/evaluate.pyx"
   for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_7; __pyx_v_i++) {
 
-    /* "root_numpy/tmva/src/evaluate.pyx":80
+    /* "root_numpy/tmva/src/evaluate.pyx":85
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_classes), dtype=np.float32)
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
@@ -6784,13 +6932,13 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
  */
 
-#line 80 "root_numpy/tmva/src/evaluate.pyx"
+#line 85 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_8 = __pyx_v_n_features;
 
-#line 80 "root_numpy/tmva/src/evaluate.pyx"
+#line 85 "root_numpy/tmva/src/evaluate.pyx"
     for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_8; __pyx_v_j++) {
 
-      /* "root_numpy/tmva/src/evaluate.pyx":81
+      /* "root_numpy/tmva/src/evaluate.pyx":86
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
@@ -6798,19 +6946,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     _method.fTmpEvent = NULL
  */
 
-#line 81 "root_numpy/tmva/src/evaluate.pyx"
+#line 86 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_9 = __pyx_v_i;
 
-#line 81 "root_numpy/tmva/src/evaluate.pyx"
+#line 86 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_10 = __pyx_v_j;
 
-#line 81 "root_numpy/tmva/src/evaluate.pyx"
+#line 86 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_events.diminfo[1].strides)));
 
-#line 81 "root_numpy/tmva/src/evaluate.pyx"
+#line 86 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-    /* "root_numpy/tmva/src/evaluate.pyx":82
+    /* "root_numpy/tmva/src/evaluate.pyx":87
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])
  *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)             # <<<<<<<<<<<<<<
@@ -6818,19 +6966,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     del event
  */
 
-#line 82 "root_numpy/tmva/src/evaluate.pyx"
+#line 87 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_8 = __pyx_v_i;
 
-#line 82 "root_numpy/tmva/src/evaluate.pyx"
+#line 87 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_11 = 0;
 
-#line 82 "root_numpy/tmva/src/evaluate.pyx"
+#line 87 "root_numpy/tmva/src/evaluate.pyx"
     memcpy((&(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_output.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_output.diminfo[1].strides))), (&(__pyx_v__method->GetMulticlassValues()[0])), ((sizeof(__pyx_t_5numpy_float32_t)) * __pyx_v_n_classes));
 
-#line 82 "root_numpy/tmva/src/evaluate.pyx"
+#line 87 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-  /* "root_numpy/tmva/src/evaluate.pyx":83
+  /* "root_numpy/tmva/src/evaluate.pyx":88
  *             event.SetVal(j, events[i, j])
  *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
  *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
@@ -6838,10 +6986,10 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     return output
  */
 
-#line 83 "root_numpy/tmva/src/evaluate.pyx"
+#line 88 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = NULL;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":84
+  /* "root_numpy/tmva/src/evaluate.pyx":89
  *         memcpy(&output[i, 0], &(_method.GetMulticlassValues()[0]), sizeof(np.float32_t) * n_classes)
  *     _method.fTmpEvent = NULL
  *     del event             # <<<<<<<<<<<<<<
@@ -6849,10 +6997,10 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  * 
  */
 
-#line 84 "root_numpy/tmva/src/evaluate.pyx"
+#line 89 "root_numpy/tmva/src/evaluate.pyx"
   delete __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":85
+  /* "root_numpy/tmva/src/evaluate.pyx":90
  *     _method.fTmpEvent = NULL
  *     del event
  *     return output             # <<<<<<<<<<<<<<
@@ -6860,19 +7008,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  * 
  */
 
-#line 85 "root_numpy/tmva/src/evaluate.pyx"
+#line 90 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 85 "root_numpy/tmva/src/evaluate.pyx"
+#line 90 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_INCREF(((PyObject *)__pyx_v_output));
 
-#line 85 "root_numpy/tmva/src/evaluate.pyx"
+#line 90 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = ((PyObject *)__pyx_v_output);
 
-#line 85 "root_numpy/tmva/src/evaluate.pyx"
+#line 90 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":71
+  /* "root_numpy/tmva/src/evaluate.pyx":76
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef evaluate_multiclass(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_classes):             # <<<<<<<<<<<<<<
@@ -6880,82 +7028,82 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     cdef long n_features = events.shape[1]
  */
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   /* function exit code */
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L1_error:;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_AddTraceback("_libtmvanumpy.evaluate_multiclass", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = 0;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L2;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L0:;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L2:;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_output);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
   return __pyx_r;
 
-#line 71 "root_numpy/tmva/src/evaluate.pyx"
+#line 76 "root_numpy/tmva/src/evaluate.pyx"
 }
 
-/* "root_numpy/tmva/src/evaluate.pyx":90
+/* "root_numpy/tmva/src/evaluate.pyx":95
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef evaluate_regression(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
@@ -6963,46 +7111,46 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     cdef long n_features = events.shape[1]
  */
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *__pyx_v__method, PyArrayObject *__pyx_v_events, unsigned int __pyx_v_n_targets) {
   long __pyx_v_size
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_n_features
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_i
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   long __pyx_v_j
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   std::vector<float>  __pyx_v_features
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   TMVA::Event *__pyx_v_event
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   PyArrayObject *__pyx_v_output = 0
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_events
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_Buffer __pyx_pybuffer_events
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_output
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
   __Pyx_Buffer __pyx_pybuffer_output
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 ;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -7020,49 +7168,49 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannySetupContext("evaluate_regression", 0);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.pybuffer.buf = NULL;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_output.refcount = 0;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.data = NULL;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_output.rcbuffer = &__pyx_pybuffer_output;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.pybuffer.buf = NULL;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffer_events.refcount = 0;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.data = NULL;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.rcbuffer = &__pyx_pybuffer_events;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_events.rcbuffer->pybuffer, (PyObject*)__pyx_v_events, &__Pyx_TypeInfo_nn___pyx_t_5numpy_double_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_pybuffernd_events.diminfo[0].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_events.diminfo[0].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_events.diminfo[1].strides = __pyx_pybuffernd_events.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_events.diminfo[1].shape = __pyx_pybuffernd_events.rcbuffer->pybuffer.shape[1];
 
-  /* "root_numpy/tmva/src/evaluate.pyx":91
+  /* "root_numpy/tmva/src/evaluate.pyx":96
  * @cython.wraparound(False)
  * cdef evaluate_regression(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
  *     cdef long size = events.shape[0]             # <<<<<<<<<<<<<<
@@ -7070,10 +7218,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
  *     cdef long i, j
  */
 
-#line 91 "root_numpy/tmva/src/evaluate.pyx"
+#line 96 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_size = (__pyx_v_events->dimensions[0]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":92
+  /* "root_numpy/tmva/src/evaluate.pyx":97
  * cdef evaluate_regression(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):
  *     cdef long size = events.shape[0]
  *     cdef long n_features = events.shape[1]             # <<<<<<<<<<<<<<
@@ -7081,10 +7229,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
  *     cdef vector[float] features
  */
 
-#line 92 "root_numpy/tmva/src/evaluate.pyx"
+#line 97 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_n_features = (__pyx_v_events->dimensions[1]);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":95
+  /* "root_numpy/tmva/src/evaluate.pyx":100
  *     cdef long i, j
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)             # <<<<<<<<<<<<<<
@@ -7092,10 +7240,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
  */
 
-#line 95 "root_numpy/tmva/src/evaluate.pyx"
+#line 100 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_event = new TMVA::Event(__pyx_v_features, 0);
 
-  /* "root_numpy/tmva/src/evaluate.pyx":96
+  /* "root_numpy/tmva/src/evaluate.pyx":101
  *     cdef vector[float] features
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event             # <<<<<<<<<<<<<<
@@ -7103,10 +7251,10 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
  *     for i from 0 <= i < size:
  */
 
-#line 96 "root_numpy/tmva/src/evaluate.pyx"
+#line 101 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":97
+  /* "root_numpy/tmva/src/evaluate.pyx":102
  *     cdef Event* event = new Event(features, 0)
  *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)             # <<<<<<<<<<<<<<
@@ -7114,154 +7262,154 @@ static PyObject *__pyx_f_13_libtmvanumpy_evaluate_regression(TMVA::MethodBase *_
  *         for j from 0 <= j < n_features:
  */
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_v_size); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_targets); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_n_targets); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_3);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_1 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_3 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GIVEREF(__pyx_t_4);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_4 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   {
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_BufFmt_StackElem __pyx_stack[1];
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_output.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float32_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_v_output = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_output.rcbuffer->pybuffer.buf = NULL;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     } else {
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
 __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_output.diminfo[0].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_output.diminfo[1].strides = __pyx_pybuffernd_output.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_output.diminfo[1].shape = __pyx_pybuffernd_output.rcbuffer->pybuffer.shape[1];
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_6 = 0;
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v_output = ((PyArrayObject *)__pyx_t_5);
 
-#line 97 "root_numpy/tmva/src/evaluate.pyx"
+#line 102 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_5 = 0;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":98
+  /* "root_numpy/tmva/src/evaluate.pyx":103
  *     _method.fTmpEvent = event
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
  *     for i from 0 <= i < size:             # <<<<<<<<<<<<<<
@@ -7269,13 +7417,13 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *             event.SetVal(j, events[i, j])
  */
 
-#line 98 "root_numpy/tmva/src/evaluate.pyx"
+#line 103 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_t_7 = __pyx_v_size;
 
-#line 98 "root_numpy/tmva/src/evaluate.pyx"
+#line 103 "root_numpy/tmva/src/evaluate.pyx"
   for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_7; __pyx_v_i++) {
 
-    /* "root_numpy/tmva/src/evaluate.pyx":99
+    /* "root_numpy/tmva/src/evaluate.pyx":104
  *     cdef np.ndarray[np.float32_t, ndim=2] output = np.empty((size, n_targets), dtype=np.float32)
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:             # <<<<<<<<<<<<<<
@@ -7283,13 +7431,13 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
  */
 
-#line 99 "root_numpy/tmva/src/evaluate.pyx"
+#line 104 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_8 = __pyx_v_n_features;
 
-#line 99 "root_numpy/tmva/src/evaluate.pyx"
+#line 104 "root_numpy/tmva/src/evaluate.pyx"
     for (__pyx_v_j = 0; __pyx_v_j < __pyx_t_8; __pyx_v_j++) {
 
-      /* "root_numpy/tmva/src/evaluate.pyx":100
+      /* "root_numpy/tmva/src/evaluate.pyx":105
  *     for i from 0 <= i < size:
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])             # <<<<<<<<<<<<<<
@@ -7297,19 +7445,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     _method.fTmpEvent = NULL
  */
 
-#line 100 "root_numpy/tmva/src/evaluate.pyx"
+#line 105 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_9 = __pyx_v_i;
 
-#line 100 "root_numpy/tmva/src/evaluate.pyx"
+#line 105 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_t_10 = __pyx_v_j;
 
-#line 100 "root_numpy/tmva/src/evaluate.pyx"
+#line 105 "root_numpy/tmva/src/evaluate.pyx"
       __pyx_v_event->SetVal(__pyx_v_j, (*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_double_t *, __pyx_pybuffernd_events.rcbuffer->pybuffer.buf, __pyx_t_9, __pyx_pybuffernd_events.diminfo[0].strides, __pyx_t_10, __pyx_pybuffernd_events.diminfo[1].strides)));
 
-#line 100 "root_numpy/tmva/src/evaluate.pyx"
+#line 105 "root_numpy/tmva/src/evaluate.pyx"
     }
 
-    /* "root_numpy/tmva/src/evaluate.pyx":101
+    /* "root_numpy/tmva/src/evaluate.pyx":106
  *         for j from 0 <= j < n_features:
  *             event.SetVal(j, events[i, j])
  *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)             # <<<<<<<<<<<<<<
@@ -7317,19 +7465,19 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     del event
  */
 
-#line 101 "root_numpy/tmva/src/evaluate.pyx"
+#line 106 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_8 = __pyx_v_i;
 
-#line 101 "root_numpy/tmva/src/evaluate.pyx"
+#line 106 "root_numpy/tmva/src/evaluate.pyx"
     __pyx_t_11 = 0;
 
-#line 101 "root_numpy/tmva/src/evaluate.pyx"
+#line 106 "root_numpy/tmva/src/evaluate.pyx"
     memcpy((&(*__Pyx_BufPtrStrided2d(__pyx_t_5numpy_float32_t *, __pyx_pybuffernd_output.rcbuffer->pybuffer.buf, __pyx_t_8, __pyx_pybuffernd_output.diminfo[0].strides, __pyx_t_11, __pyx_pybuffernd_output.diminfo[1].strides))), (&(__pyx_v__method->GetRegressionValues()[0])), ((sizeof(__pyx_t_5numpy_float32_t)) * __pyx_v_n_targets));
 
-#line 101 "root_numpy/tmva/src/evaluate.pyx"
+#line 106 "root_numpy/tmva/src/evaluate.pyx"
   }
 
-  /* "root_numpy/tmva/src/evaluate.pyx":102
+  /* "root_numpy/tmva/src/evaluate.pyx":107
  *             event.SetVal(j, events[i, j])
  *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
  *     _method.fTmpEvent = NULL             # <<<<<<<<<<<<<<
@@ -7337,38 +7485,38 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     return output
  */
 
-#line 102 "root_numpy/tmva/src/evaluate.pyx"
+#line 107 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_v__method->fTmpEvent = NULL;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":103
+  /* "root_numpy/tmva/src/evaluate.pyx":108
  *         memcpy(&output[i, 0], &(_method.GetRegressionValues()[0]), sizeof(np.float32_t) * n_targets)
  *     _method.fTmpEvent = NULL
  *     del event             # <<<<<<<<<<<<<<
  *     return output
  */
 
-#line 103 "root_numpy/tmva/src/evaluate.pyx"
+#line 108 "root_numpy/tmva/src/evaluate.pyx"
   delete __pyx_v_event;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":104
+  /* "root_numpy/tmva/src/evaluate.pyx":109
  *     _method.fTmpEvent = NULL
  *     del event
  *     return output             # <<<<<<<<<<<<<<
  */
 
-#line 104 "root_numpy/tmva/src/evaluate.pyx"
+#line 109 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 104 "root_numpy/tmva/src/evaluate.pyx"
+#line 109 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_INCREF(((PyObject *)__pyx_v_output));
 
-#line 104 "root_numpy/tmva/src/evaluate.pyx"
+#line 109 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = ((PyObject *)__pyx_v_output);
 
-#line 104 "root_numpy/tmva/src/evaluate.pyx"
+#line 109 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/tmva/src/evaluate.pyx":90
+  /* "root_numpy/tmva/src/evaluate.pyx":95
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
  * cdef evaluate_regression(MethodBase* _method, np.ndarray[np.double_t, ndim=2] events, unsigned int n_targets):             # <<<<<<<<<<<<<<
@@ -7376,79 +7524,79 @@ __pyx_pybuffernd_output.diminfo[0].strides = __pyx_pybuffernd_output.rcbuffer->p
  *     cdef long n_features = events.shape[1]
  */
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   /* function exit code */
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L1_error:;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_AddTraceback("_libtmvanumpy.evaluate_regression", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_r = 0;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   goto __pyx_L2;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L0:;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_events.rcbuffer->pybuffer);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_output.rcbuffer->pybuffer);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __pyx_L2:;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_output);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
   return __pyx_r;
 
-#line 90 "root_numpy/tmva/src/evaluate.pyx"
+#line 95 "root_numpy/tmva/src/evaluate.pyx"
 }
 
 /* "array.pxd":91
@@ -12301,6 +12449,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_b_Signal, __pyx_k_Signal, sizeof(__pyx_k_Signal), 0, 0, 0, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
+  {&__pyx_n_s_aux, __pyx_k_aux, sizeof(__pyx_k_aux), 0, 0, 1, 1},
   {&__pyx_n_s_double, __pyx_k_double, sizeof(__pyx_k_double), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
@@ -12585,13 +12734,13 @@ static int __Pyx_InitCachedConstants(void) {
   /* "root_numpy/tmva/src/evaluate.pyx":3
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
  *     cdef IMethod* imeth = _reader.FindMVA(name)
  */
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_tuple__16 = PyTuple_Pack(6, __pyx_n_s_reader, __pyx_n_s_name, __pyx_n_s_events, __pyx_n_s_reader_2, __pyx_n_s_imeth, __pyx_n_s_method); if (unlikely(!__pyx_tuple__16)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__16 = PyTuple_Pack(7, __pyx_n_s_reader, __pyx_n_s_name, __pyx_n_s_events, __pyx_n_s_aux, __pyx_n_s_reader_2, __pyx_n_s_imeth, __pyx_n_s_method); if (unlikely(!__pyx_tuple__16)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_tuple__16);
@@ -12600,18 +12749,18 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__16);
 
 #line 3 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(3, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_reader, 3, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_reader, 3, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 3; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
   /* "root_numpy/tmva/src/evaluate.pyx":15
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
- *     return evaluate_method_dispatch(_method, events)
+ *     return evaluate_method_dispatch(_method, events, aux)
  */
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_tuple__18 = PyTuple_Pack(3, __pyx_n_s_method, __pyx_n_s_events, __pyx_n_s_method_2); if (unlikely(!__pyx_tuple__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__18 = PyTuple_Pack(4, __pyx_n_s_method, __pyx_n_s_events, __pyx_n_s_aux, __pyx_n_s_method_2); if (unlikely(!__pyx_tuple__18)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_GOTREF(__pyx_tuple__18);
@@ -12620,7 +12769,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__18);
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_method, 15, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_evaluate_method, 15, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
   __Pyx_RefNannyFinishContext();
@@ -12841,7 +12990,7 @@ PyMODINIT_FUNC PyInit__libtmvanumpy(void)
   /* "root_numpy/tmva/src/evaluate.pyx":3
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_reader(reader, name, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef Reader* _reader = <Reader*> PyCObject_AsVoidPtr(reader)
  *     cdef IMethod* imeth = _reader.FindMVA(name)
  */
@@ -12861,9 +13010,9 @@ PyMODINIT_FUNC PyInit__libtmvanumpy(void)
   /* "root_numpy/tmva/src/evaluate.pyx":15
  * @cython.boundscheck(False)
  * @cython.wraparound(False)
- * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events):             # <<<<<<<<<<<<<<
+ * def evaluate_method(method, np.ndarray[np.double_t, ndim=2] events, double aux):             # <<<<<<<<<<<<<<
  *     cdef MethodBase* _method = <MethodBase*> PyCObject_AsVoidPtr(method)
- *     return evaluate_method_dispatch(_method, events)
+ *     return evaluate_method_dispatch(_method, events, aux)
  */
 
 #line 15 "root_numpy/tmva/src/evaluate.pyx"
