@@ -10,19 +10,23 @@ __all__ = [
 ]
 
 
-def evaluate_reader(reader, name, events):
+def evaluate_reader(reader, name, events, aux=0.):
     """Evaluate a TMVA::Reader over a NumPy array.
 
     Parameters
     ----------
     reader : TMVA::Reader
-        A TMVA::Factory instance with variables booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::Factory instance with variables booked in exactly the same
+        order as the columns in ``events``.
     name : string
         The method name.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
+    aux : float, optional (default=0.)
+        Auxiliary value used by MethodCuts to set the desired signal
+        efficiency.
 
     Returns
     -------
@@ -44,10 +48,11 @@ def evaluate_reader(reader, name, events):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    return _libtmvanumpy.evaluate_reader(ROOT.AsCObject(reader), name, events)
+    return _libtmvanumpy.evaluate_reader(
+        ROOT.AsCObject(reader), name, events, aux)
 
 
-def evaluate_method(method, events):
+def evaluate_method(method, events, aux=0.):
     """Evaluate a TMVA::MethodBase over a NumPy array.
 
     .. warning:: TMVA::Reader has known problems with thread safety in versions
@@ -59,11 +64,15 @@ def evaluate_method(method, events):
     Parameters
     ----------
     method : TMVA::MethodBase
-        A TMVA::MethodBase instance with variables booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::MethodBase instance with variables booked in exactly the same
+        order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
+    aux : float, optional (default=0.)
+        Auxiliary value used by MethodCuts to set the desired signal
+        efficiency.
 
     Returns
     -------
@@ -85,4 +94,4 @@ def evaluate_method(method, events):
         raise ValueError(
             "events must be a two-dimensional array "
             "with one event per row")
-    return _libtmvanumpy.evaluate_method(ROOT.AsCObject(method), events)
+    return _libtmvanumpy.evaluate_method(ROOT.AsCObject(method), events, aux)

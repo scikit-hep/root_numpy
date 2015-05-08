@@ -75,20 +75,28 @@ class TMVA_Estimator(object):
         assert_raises(ValueError, func, self.factory, [[1, 2]], [[[1]]])
 
         func(self.factory, X, y, weights=weights, **extra_kwargs)
-        if X_test is not None and y_test is not None:
-            func(self.factory, X_test, y_test,
-                 weights=weights_test, test=True, **extra_kwargs)
+        if X_test is None:
+            X_test = X
+            y_test = y
+            weights_test = weights
+        func(self.factory, X_test, y_test,
+             weights=weights_test, test=True, **extra_kwargs)
 
         self.factory.PrepareTrainingAndTestTree(
             TCut('1'), 'NormMode=EqualNumEvents')
-        options = ':'.join(['{0}={1}'.format(param, value)
-                            for param, value in kwargs.items()])
-        if options:
-            options = ':' + options
+        options = []
+        for param, value in kwargs.items():
+            if value is True:
+                options.append(param)
+            elif value is False:
+                options.append('!{0}'.format(param))
+            else:
+                options.append('{0}={1}'.format(param, value))
+        options = ':'.join(options)
         self.factory.BookMethod(self.method, self.method, options)
         self.factory.TrainAllMethods()
 
-    def predict(self, X):
+    def predict(self, X, aux=0.):
         reader = TMVA.Reader()
         for n in range(self.n_vars):
             reader.AddVariable('X_{0}'.format(n), array('f', [0.]))
@@ -105,32 +113,54 @@ class TMVA_Estimator(object):
         if self.task != 'Regression':
             assert_raises(ValueError, rnp.tmva.evaluate_reader,
                           reader, self.method, [1, 2, 3])
-        output = rnp.tmva.evaluate_reader(reader, self.method, X)
+        output = rnp.tmva.evaluate_reader(reader, self.method, X, aux)
         if ROOT.gROOT.GetVersionInt() >= 60300:
             method = reader.FindMVA(self.method)
             assert_raises(TypeError, rnp.tmva.evaluate_method,
                           object(), X)
             assert_raises(ValueError, rnp.tmva.evaluate_method,
                           method, [[[1]]])
-            output_method = rnp.tmva.evaluate_method(method, X)
+            output_method = rnp.tmva.evaluate_method(method, X, aux)
             assert_array_equal(output, output_method)
         return output
 
 
-def test_tmva_twoclass():
-    n_vars = 5
-    n_events = 1000
-    signal = RNG.multivariate_normal(
-        np.ones(n_vars), np.diag(np.ones(n_vars)), n_events)
-    background = RNG.multivariate_normal(
-        np.ones(n_vars) * -1, np.diag(np.ones(n_vars)), n_events)
-    X = np.concatenate([signal, background])
-    y = np.ones(signal.shape[0] + background.shape[0])
-    w = RNG.randint(1, 10, n_events * 2)
-    y[signal.shape[0]:] *= -1
+def make_classification(n_features, n_events_per_class, n_classes):
+    blobs = []
+    for idx in range(n_classes):
+        blob = RNG.multivariate_normal(
+            np.ones(n_features) * idx * 5,
+            np.diag(np.ones(n_features)),
+            n_events_per_class)
+        blobs.append(blob)
+    X = np.concatenate(blobs)
+    # class labels
+    y = np.repeat(np.arange(n_classes), n_events_per_class) * 2 - 1
+    # event weights
+    w = RNG.randint(1, 10, n_events_per_class * n_classes)
+    # shuffle
     permute = RNG.permutation(y.shape[0])
     X = X[permute]
     y = y[permute]
+    return X, y, w
+
+
+def test_tmva_methodcuts():
+    X, y, w = make_classification(2, 300, 2)
+    est = TMVA_Estimator('Cuts', 2, method='Cuts')
+    est.fit(X, y,
+            FitMethod='MC', EffSel=True, SampleSize=100,
+            VarProp='FSmart')
+    y_predict_1 = est.predict(X, 0.1)
+    y_predict_9 = est.predict(X, 0.9)
+    assert_true((y_predict_1 != y_predict_9).any())
+    assert_true((y_predict_1 <= y_predict_9).all())
+
+
+def test_tmva_twoclass():
+    n_vars = 2
+    n_events = 1000
+    X, y, w = make_classification(n_vars, n_events, 2)
     X_train, y_train, w_train = X[:n_events], y[:n_events], w[:n_events]
     X_test, y_test, w_test = X[n_events:], y[n_events:], w[n_events:]
 
@@ -172,21 +202,8 @@ def test_tmva_twoclass():
 
 def test_tmva_multiclass():
     n_vars = 2
-    n_events = 1000
-    class_0 = RNG.multivariate_normal(
-        np.ones(n_vars) * -10, np.diag(np.ones(n_vars)), n_events)
-    class_1 = RNG.multivariate_normal(
-        np.zeros(n_vars), np.diag(np.ones(n_vars)), n_events)
-    class_2 = RNG.multivariate_normal(
-        np.ones(n_vars) * 10, np.diag(np.ones(n_vars)), n_events)
-    X = np.concatenate([class_0, class_1, class_2])
-    y = np.ones(X.shape[0])
-    w = RNG.randint(1, 10, n_events * 3)
-    y[:class_0.shape[0]] *= 0
-    y[-class_2.shape[0]:] *= 2
-    permute = RNG.permutation(y.shape[0])
-    X = X[permute]
-    y = y[permute]
+    n_events = 500
+    X, y, w = make_classification(n_vars, n_events, 3)
 
     # Split into training and test datasets
     X_train, y_train, w_train = X[:n_events], y[:n_events], w[:n_events]

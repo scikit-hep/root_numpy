@@ -17,22 +17,28 @@ def add_classification_events(factory, events, labels, signal_label=None,
     Parameters
     ----------
     factory : TMVA::Factory
-        A TMVA::Factory instance with variables already booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::Factory instance with variables already booked in exactly the
+        same order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
     labels : numpy array of shape [n_events]
-        The class labels (signal or background) corresponding to each event
-        in ``events``.
+        The class labels (signal or background) corresponding to each event in
+        ``events``.
     signal_label : float or int, optional (default=None)
         The value in ``labels`` for signal events, if ``labels`` contains only
         two classes. If None, the highest value in ``labels`` is used.
     weights : numpy array of shape [n_events], optional
         Event weights.
     test : bool, optional (default=False)
-        If True, then the events will be added as test events, otherwise
-        they are added as training events by default.
+        If True, then the events will be added as test events, otherwise they
+        are added as training events by default.
+
+    Notes
+    -----
+    A TMVA::Factory requires you to add both training and test events even if
+    you don't intend to call ``TestAllMethods()``.
 
     """
     if not isinstance(factory, TMVA.Factory):
@@ -78,18 +84,26 @@ def add_regression_events(factory, events, targets, weights=None, test=False):
     Parameters
     ----------
     factory : TMVA::Factory
-        A TMVA::Factory instance with variables already booked in
-        exactly the same order as the columns in ``events``.
+        A TMVA::Factory instance with variables already booked in exactly the
+        same order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
-        A two-dimensional NumPy array containing the rows of events
-        and columns of variables.
+        A two-dimensional NumPy array containing the rows of events and columns
+        of variables. The order of the columns must match the order in which
+        you called ``AddVariable()`` for each variable.
     targets : numpy array of shape [n_events] or [n_events, n_targets]
-        The target value(s) for each event in ``events``.
+        The target value(s) for each event in ``events``. For multiple target
+        values, ``targets`` must be a two-dimensional array with a column for
+        each target in the same order in which you called ``AddTarget()``.
     weights : numpy array of shape [n_events], optional
         Event weights.
     test : bool, optional (default=False)
-        If True, then the events will be added as test events, otherwise
-        they are added as training events by default.
+        If True, then the events will be added as test events, otherwise they
+        are added as training events by default.
+
+    Notes
+    -----
+    A TMVA::Factory requires you to add both training and test events even if
+    you don't intend to call ``TestAllMethods()``.
 
     """
     if not isinstance(factory, TMVA.Factory):
