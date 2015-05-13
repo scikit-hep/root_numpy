@@ -1,23 +1,25 @@
 #ifndef __TREE_CHAIN_H
 #define __TREE_CHAIN_H
 
-#include <string>
-#include <iostream>
+#include <TObject.h>
+#include <TObjArray.h>
 #include <TTree.h>
 #include <TFile.h>
 #include <TChain.h>
+#include <TBranch.h>
 #include <TLeaf.h>
 #include <TTreeFormula.h>
-#include <TObject.h>
 
-#include <map>
-#include <vector>
-#include <cassert>
-#include <set>
+#include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
+#include <cassert>
+#include <string>
+#include <map>
+#include <vector>
+#include <set>
 
 #include "Column.h"
 #include "util.h"
@@ -56,21 +58,9 @@ class TreeChain
 
         ~TreeChain()
         {
-            if (!fChain)
-            {
-                // Copied from MakeClass
-                return;
-            }
-
             fChain->SetNotify(notifier->oldnotify);
 
-            LeafCache::iterator it;
-            for(it = leafcache.begin(); it != leafcache.end(); ++it)
-            {
-                delete it->second;
-            }
-
-            // TreeChain owns the formulae and so we delete them here
+            // Delete TTreeFormula
             std::vector<TTreeFormula*>::iterator fit;
             for (fit = formulae.begin(); fit != formulae.end(); ++fit)
             {
@@ -97,10 +87,6 @@ class TreeChain
 
         long long LoadTree(long entry)
         {
-            if (!fChain)
-            {
-                return -5;
-            }
             long long load = fChain->LoadTree(entry);
             if (load < 0)
             {
@@ -110,7 +96,7 @@ class TreeChain
             {
                 fCurrent = fChain->GetTreeNumber();
             }
-            if(notifier->notified)
+            if (notifier->notified)
             {
                 Notify();
                 notifier->notified = false;
@@ -121,10 +107,6 @@ class TreeChain
         void AddFormula(TTreeFormula* formula)
         {
             // The TreeChain will take ownership of the formula
-            if (formula == NULL)
-            {
-                return;
-            }
             formulae.push_back(formula);
         }
 
@@ -201,13 +183,7 @@ class TreeChain
             membership, and it won't cost us anything since TTreeFormula won't
             reload them.
             */
-            long load;
-            // Read contents of entry.
-            if (!fChain)
-            {
-                return 0;
-            }
-            load = LoadTree(entry);
+            long load = LoadTree(entry);
             if (load < 0)
             {
                 return (int)load;
@@ -251,19 +227,19 @@ class TreeChain
         {
             TBranch* branch;
             TLeaf* leaf;
+            std::string bname, lname;
 
-            // Handle all the leaves
+            // Update all BranchColumn leaves
             LeafCache::iterator it;
             for(it = leafcache.begin(); it != leafcache.end(); ++it)
             {
-                std::string bname = it->first.first;
-                std::string lname = it->first.second;
+                bname = it->first.first;
+                lname = it->first.second;
                 branch = fChain->FindBranch(bname.c_str());
                 if (branch == NULL)
                 {
                     std::cerr << "WARNING: cannot find branch " << bname
                               << std::endl;
-                    it->second->skipped = true;
                     continue;
                 }
                 leaf = branch->FindLeaf(lname.c_str());
@@ -271,11 +247,9 @@ class TreeChain
                 {
                     std::cerr << "WARNING: cannot find leaf " << lname
                               << " for branch " << bname << std::endl;
-                    it->second->skipped = true;
                     continue;
                 }
                 it->second->SetLeaf(leaf, true);
-                it->second->skipped = false;
             }
 
             // Update all formula leaves and activate all object subbranches
@@ -296,45 +270,12 @@ class TreeChain
             }
         }
 
-        long long GetEntries()
+        void AddColumn(const std::string& branch_name,
+                       const std::string& leaf_name,
+                       BranchColumn* column)
         {
-            return fChain->GetEntries();
-        }
-
-        double GetWeight()
-        {
-            return fChain->GetWeight();
-        }
-
-        Column* MakeColumn(const std::string& bname,
-                           const std::string& lname,
-                           const std::string& colname)
-        {
-            TBranch* branch = fChain->GetBranch(bname.c_str());
-            if (branch == NULL)
-            {
-                PyErr_SetString(PyExc_IOError,
-                    format("cannot find branch %s", bname.c_str()).c_str());
-                return NULL;
-            }
-
-            TLeaf* leaf = branch->FindLeaf(lname.c_str());
-            if (leaf == NULL)
-            {
-                PyErr_SetString(PyExc_IOError,
-                    format("cannot find leaf %s for branch %s", lname.c_str(),
-                           bname.c_str()).c_str());
-                return NULL;
-            }
-
-            BL bl = make_pair(bname, lname);
-            BranchColumn* ret = BranchColumn::build(leaf, colname);
-            if (ret == NULL)
-            {
-                return NULL;
-            }
-            leafcache.insert(make_pair(bl, ret));
-            return ret;
+            BL bl = make_pair(branch_name, leaf_name);
+            leafcache.insert(make_pair(bl, column));
         }
 
         class MiniNotify: public TObject
@@ -365,11 +306,11 @@ class TreeChain
         MiniNotify* notifier;
         std::vector<TTreeFormula*> formulae;
 
-        // Branch name to leaf name conversion
+        // Branch name to leaf name association
         typedef std::pair<std::string, std::string> BL;
         typedef std::map<BL, BranchColumn*> LeafCache;
 
-        // Column pointer cache since the leaf inside needs to be updated
+        // Column pointer cache to update leaves
         // when new file is loaded in the chain
         LeafCache leafcache;
 };

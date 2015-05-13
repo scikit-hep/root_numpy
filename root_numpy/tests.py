@@ -119,7 +119,7 @@ def test_single_filename_not_exist():
 
 @raises(ValueError)
 def test_double_tree_name_not_specified():
-    f = load('doubletree1.root')
+    f = load('trees.root')
     a = rnp.root2array(f)
 
 
@@ -164,21 +164,39 @@ def test_no_supported_branches():
     assert_raises(RuntimeError, rnp.tree2array, tree)
 
 
-def test_fixed():
+def test_preserve_branch_order():
+    a = rnp.root2array(load('test.root'))
+    assert_equal(a.dtype.names, ('i', 'x', 'y', 'z'))
+
+    a = rnp.root2array(load('test.root'), branches=['y', 'x', 'z'])
+    assert_equal(a.dtype.names, ('y', 'x', 'z'))
+
+
+def test_fixed_length_arrays():
     f = load(['fixed1.root', 'fixed2.root'])
     a = rnp.root2array(f)
     assert_equal(
         a.dtype,
         [('n_int', '<i4', (5,)),
-            ('f_float', '<f4', (7,)),
-            ('d_double', '<f8', (10,))])
-    #TODO: Write a proper check method
-    assert_equal(a[0][0][0], 1)
-    assert_equal(a[0][0][1], 2)
-    assert_almost_equal(a[-1][2][-1], 1514.5)
+         ('f_float', '<f4', (7,)),
+         ('d_double', '<f8', (10,)),
+         ('n2_int', '<i4', (5, 2)),
+         ('f2_float', '<f4', (7, 3)),
+         ('d2_double', '<f8', (10, 4))])
+
+    # Check values
+    assert_equal(a['n_int'][0][0], 1)
+    assert_equal(a['n_int'][0][1], 2)
+    assert_almost_equal(a['d_double'][-1][-1], 1514.5)
+    assert_array_equal(a['n2_int'][0],
+                       np.array([[1, 2],
+                                 [2, 3],
+                                 [3, 4],
+                                 [4, 5],
+                                 [5, 6]]))
 
 
-def test_vary():
+def test_variable_length_arrays():
     f = load(['vary1.root', 'vary2.root'])
     a = rnp.root2rec(f)
     assert_equal(
@@ -188,14 +206,20 @@ def test_vary():
          ('n_short', 'O'), ('n_ushort', 'O'),
          ('n_int', 'O'), ('n_uint', 'O'),
          ('n_long', 'O'), ('n_ulong', 'O'),
-         ('f_float', 'O'), ('d_double', 'O')])
+         ('f_float', 'O'), ('d_double', 'O'),
+         ('n2_int', 'O'), ('f2_float', 'O'), ('d2_double', 'O')])
 
-    #check length
+    # check lengths
     for i in range(len(a)):
         assert_equal(a.len_n[i], len(a.n_int[i]))
         assert_equal(a.len_f[i], len(a.f_float[i]))
         assert_equal(a.len_d[i], len(a.d_double[i]))
-    #couple element check
+
+        assert_equal((a.len_n[i], 2), a.n2_int[i].shape)
+        assert_equal((a.len_f[i], 3), a.f2_float[i].shape)
+        assert_equal((a.len_d[i], 4), a.d2_double[i].shape)
+
+    # check elements
     assert_equal(a.len_n[0], 0)
     assert_equal(a.len_f[0], 1)
     assert_equal(a.len_d[0], 2)
@@ -228,6 +252,8 @@ def test_selection():
     chain = TChain('tree')
     chain.Add(load('single1.root'))
     chain.Add(load('single2.root'))
+    a = rnp.tree2rec(chain)
+    assert_equal((a['d_double'] <= 100).any(), True)
     a = rnp.tree2rec(chain, selection="d_double > 100")
     assert_equal((a['d_double'] <= 100).any(), False)
 
@@ -413,7 +439,8 @@ def test_weights():
     assert_array_equal(rec['treeweight'], np.ones(100) * 5)
     f = load(['single1.root', 'single2.root'])
     a = rnp.root2array(f, include_weight=True)
-    assert_array_equal(a['weight'],
+    assert_array_equal(
+        a['weight'],
         np.concatenate((np.ones(100) * 2., np.ones(100) * 3.)))
 
 

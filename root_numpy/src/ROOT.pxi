@@ -46,16 +46,19 @@ cdef extern from "TBranch.h":
 
 cdef extern from "TLeaf.h":
     cdef cppclass TLeaf:
-        const_char* GetTypeName()
-        TLeaf* GetLeafCounter(int&)
         const_char* GetName()
-
+        const_char* GetTitle()
+        const_char* GetTypeName()
+        TLeaf* GetLeafCount()
+        TLeaf* GetLeafCounter(int&)
+        TBranch* GetBranch()
+        
 cdef extern from "TTree.h":
     cdef cppclass TTree:
         TTree()
         TTree(const_char*,  const_char*)
-        void GetEntry(int i)
-        int GetEntries()
+        int GetEntry(long_long entry)
+        long_long GetEntries()
         void SetBranchAddress(const_char* bname, void* addr)
         void SetBranchStatus(const_char* bname, bool status)
         void Print()
@@ -66,7 +69,8 @@ cdef extern from "TTree.h":
         int Fill()
         int Scan()
         void Delete(void*)
-        long SetEntries(long)
+        long_long SetEntries(long_long)
+        double GetWeight()
         int Write()
         int Write(const_char* name, int option)
 
@@ -74,7 +78,7 @@ cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
         TChain()
         TChain(const_char*)
-        int Add(const_char*, long)
+        int Add(const_char*, long_long)
         void Print()
 
 cdef extern from "TFormula.h":
