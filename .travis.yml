@@ -4,7 +4,7 @@ python:
     - "2.7"
     - "3.4"
 env:
-    - ROOT=v5-34-18
+    - ROOT=5.34.18
     - ROOT=master COVERAGE=1
 install: source ci/install.sh
 script: bash ci/test.sh

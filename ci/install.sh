@@ -17,12 +17,12 @@ sudo apt-get -qq install python-nose python-pip
 pip install coverage coveralls
 
 # Install the ROOT binary
-build=root${ROOT}_python${TRAVIS_PYTHON_VERSION}_gcc4.8_x86_64
+ROOT_BUILD=ROOT-${ROOT}_Python-${TRAVIS_PYTHON_VERSION}_GCC-4.8_x86_64
 if [ ! -z ${NOTMVA+x} ]; then
     # Use a build without TMVA
-    build+=_notmva
+    ROOT_BUILD+=_notmva
 fi
-time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/${build}.tar.gz
-time tar zxf ${build}.tar.gz
-mv ${build} root
+time wget --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/${ROOT_BUILD}.tar.gz
+time tar zxf ${ROOT_BUILD}.tar.gz
+mv ${ROOT_BUILD} root
 source root/bin/thisroot.sh
