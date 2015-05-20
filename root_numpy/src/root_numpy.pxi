@@ -8,11 +8,9 @@ cdef extern from "util.h":
     cdef cppclass TypeName[T]:
         TypeName()
         const_char* name
-
-cdef extern from "Vector2Array.h":
     cdef cppclass Vector2Array[T]:
         T* convert(vector[T]* v)
-
+ 
 cdef extern from "<memory>" namespace "std": 
     cdef cppclass auto_ptr[T]:
         auto_ptr() 
@@ -21,26 +19,30 @@ cdef extern from "<memory>" namespace "std":
         T* get()
 
 cdef extern from "Column.h":
-    cdef enum ColumnType:
-        SINGLE, FIXED, VARY
     cdef cppclass Column:
-        bool skipped
-        ColumnType coltype
-        string colname
-        int countval
-        string rttype
+        string name
+        string type
+        int GetLen()
+        int GetCountLen()
+        int GetSize()
+        void* GetValuePointer()
+        const_char* GetTypeName()
+
+    cdef cppclass FormulaColumn(Column):
+        FormulaColumn(string, TTreeFormula*)
+        string name
+        string type
         int GetLen()
         int GetSize()
         void* GetValuePointer()
         const_char* GetTypeName()
-    cdef cppclass FormulaColumn(Column):
-        FormulaColumn(string, TTreeFormula*)
-        bool skipped
-        ColumnType coltype
-        string colname
-        int countval
-        string rttype
+    
+    cdef cppclass BranchColumn(Column):
+        BranchColumn(string, TLeaf*)
+        string name
+        string type
         int GetLen()
+        int GetCountLen()
         int GetSize()
         void* GetValuePointer()
         const_char* GetTypeName()
@@ -50,10 +52,8 @@ cdef extern from "TreeChain.h":
         TreeChain(TTree*)
         long Prepare()
         int Next()
-        Column* MakeColumn(string bname, string lname, string colname)
-        int GetEntries()
+        void AddColumn(string bname, string lname, BranchColumn* column)
         int GetEntry(int i)
-        double GetWeight()
         TTree* fChain
         void AddFormula(TTreeFormula* formula)
         void InitBranches()

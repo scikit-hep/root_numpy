@@ -114,11 +114,10 @@ def root2array(filenames,
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
-    branches : list of str, optional (default=None)
-        List of branch names to include as columns of the array. If None or
-        empty then include all branches than can be converted in the first
-        tree. If branches contains duplicate branches, only the first one is
-        used.
+    branches : list of strings or single string, optional (default=None)
+        List of branch names to include as columns of the array or a single
+        branch name to convert into a one-dimensional array. If None then
+        include all branches that can be converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
@@ -189,15 +188,26 @@ def root2array(filenames,
         elif not trees:
             raise IOError(
                 "no trees present in {0}".format(filenames[0]))
-        else:
-            treename = trees[0]
+        treename = trees[0]
 
-    return _librootnumpy.root2array_fromFname(
+    if isinstance(branches, string_types):
+        # single branch selected
+        branches = [branches]
+        flatten = True
+    else:
+        flatten = False
+
+    arr = _librootnumpy.root2array_fromFname(
         filenames, treename, branches,
         selection,
         start, stop, step,
         include_weight,
         weight_name)
+
+    if flatten:
+        # select single column
+        return arr[branches[0]]
+    return arr
 
 
 def root2rec(filenames,
@@ -245,11 +255,10 @@ def tree2array(tree,
     ----------
     tree : ROOT TTree instance
         The ROOT TTree to convert into an array.
-    branches : list of str, optional (default=None)
-        List of branch names to include as columns of the array. If None or
-        empty then include all branches than can be converted in the first
-        tree. If branches contains duplicate branches, only the first one is
-        used.
+    branches : list of strings or single string, optional (default=None)
+        List of branch names to include as columns of the array or a single
+        branch name to convert into a one-dimensional array. If None then
+        include all branches that can be converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
@@ -271,13 +280,24 @@ def tree2array(tree,
     import ROOT
     if not isinstance(tree, ROOT.TTree):
         raise TypeError("tree must be a ROOT.TTree")
-    # will need AsCapsule for Python 3
     cobj = ROOT.AsCObject(tree)
+
+    if isinstance(branches, string_types):
+        # single branch selected
+        branches = [branches]
+        flatten = True
+    else:
+        flatten = False
+
     arr = _librootnumpy.root2array_fromCObj(
         cobj, branches, selection,
         start, stop, step,
         include_weight,
         weight_name)
+
+    if flatten:
+        # select single column
+        return arr[branches[0]]
     return arr
 
 

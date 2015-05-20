@@ -46,10 +46,10 @@ At the core of root_numpy are powerful and flexible functions for converting
 or `structured arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_
 as well as converting NumPy arrays back into ROOT TTrees. root_numpy can
 convert branches of strings and basic types such as bool, int, float, double,
-etc. as well as variable and fixed-length 1D arrays and 1D or 2D vectors of
-basic types and strings. root_numpy can also create columns in the output array
-that are expressions involving the TTree branches (i.e. ``'vect.Pt() / 1000'``)
-similar to ``TTree::Draw()``.
+etc. as well as variable-length and fixed-length multidimensional arrays and 1D
+or 2D vectors of basic types and strings. root_numpy can also create columns in
+the output array that are expressions involving the TTree branches (i.e.
+``'vect.Pt() / 1000'``) similar to ``TTree::Draw()``.
 
 For example, get a NumPy structured or record array from a TTree
 (copy and paste the following examples into your Python prompt):

@@ -6,32 +6,20 @@
 #include <string>
 
 
-enum ColumnType
-{
-    SINGLE = 1,
-    FIXED = 2,
-    VARY = 3
-};
-
-
 class Column
 {
     public:
         virtual ~Column() {}
         virtual int GetLen() = 0;
+        virtual int GetCountLen() = 0;
         virtual int GetSize() = 0;
         virtual void* GetValuePointer() = 0;
         virtual const char* GetTypeName() = 0;
 
-        bool skipped;
-        // single fixed vary?
-        ColumnType coltype;
-        // column name
-        std::string colname;
-        // useful in case of fixed element
-        int countval;
-        // name of the roottype
-        std::string rttype;
+        // Column name
+        std::string name;
+        // Name of the ROOT type
+        std::string type;
 };
 
 
@@ -39,12 +27,11 @@ class FormulaColumn: public Column
 {
     public:
 
-        FormulaColumn(std::string _colname, TTreeFormula* _formula)
+        FormulaColumn(std::string _name, TTreeFormula* _formula)
         {
-            colname = _colname;
-            coltype = SINGLE;
+            name = _name;
             formula = _formula;
-            rttype = "Double_t";
+            type = "Double_t";
             value = new double[1];
         }
 
@@ -54,6 +41,11 @@ class FormulaColumn: public Column
         }
 
         int GetLen()
+        {
+            return 1;
+        }
+
+        int GetCountLen()
         {
             return 1;
         }
@@ -81,58 +73,15 @@ class FormulaColumn: public Column
 };
 
 
-// This describes the structure of the tree
-// Converter should take this and make the appropriate data structure
 class BranchColumn: public Column
 {
     public:
 
-        static int find_coltype(TLeaf* leaf,
-                                ColumnType& coltype,
-                                int& countval)
+        BranchColumn(std::string& _name, TLeaf* _leaf)
         {
-            // Check whether it's array if so of which type
-            TLeaf* len_leaf = leaf->GetLeafCounter(countval);
-            if (countval == 1)
-            {
-                if (len_leaf == 0)
-                { // single element
-                    coltype = SINGLE;
-                }
-                else
-                { // variable length
-                    coltype = VARY;
-                }
-            }
-            else if (countval > 0)
-            {
-                // fixed multiple array
-                coltype = FIXED;
-            }
-            else
-            {
-                // negative
-                std::string msg("Unable to understand the structure of leaf ");
-                msg += leaf->GetName();
-                PyErr_SetString(PyExc_IOError, msg.c_str());
-                return 0;
-            }
-            return 1;
-        }
-
-        static BranchColumn* build(TLeaf* leaf, const std::string& colname)
-        {
-            BranchColumn* ret = new BranchColumn();
-            ret->leaf = leaf;
-            ret->colname = colname;
-            ret->skipped = false;
-            if (!find_coltype(leaf, ret->coltype, ret->countval))
-            {
-                delete ret;
-                return NULL;
-            }
-            ret->rttype = leaf->GetTypeName();
-            return ret;
+            name = _name;
+            leaf = _leaf;
+            type = leaf->GetTypeName();
         }
 
         void SetLeaf(TLeaf* newleaf, bool check=false)
@@ -140,14 +89,8 @@ class BranchColumn: public Column
             leaf = newleaf;
             if (check)
             {
-                assert(leaf->GetTypeName() == rttype);
-                int cv;
-                ColumnType ct;
-                if (find_coltype(leaf, ct, cv) == 0)
-                    abort();
-                if (ct != coltype)
-                    abort();
-                //if(ct==FIXED){assert(cv==countval);}
+                assert(leaf->GetTypeName() == type);
+                // TODO: compare shape
             }
         }
 
@@ -155,6 +98,17 @@ class BranchColumn: public Column
         {
             // get len of this block (in unit of element)
             return leaf->GetLen();
+        }
+
+        int GetCountLen()
+        {
+            // get count leaf value
+            TLeaf* count_leaf = leaf->GetLeafCount();
+            if (count_leaf != NULL)
+            {
+                return int(count_leaf->GetValue());
+            }
+            return 1;
         }
 
         int GetSize()

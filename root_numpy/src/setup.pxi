@@ -40,6 +40,7 @@ ctypedef unsigned int unsigned_int
 ctypedef unsigned long unsigned_long
 ctypedef long long long_long
 ctypedef unsigned long long unsigned_long_long
+ctypedef np.npy_intp SIZE_t
 
 include "ROOT.pxi"
 include "root_numpy.pxi"

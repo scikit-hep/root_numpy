@@ -37,8 +37,19 @@ def add_classification_events(factory, events, labels, signal_label=None,
 
     Notes
     -----
-    A TMVA::Factory requires you to add both training and test events even if
-    you don't intend to call ``TestAllMethods()``.
+    * A TMVA::Factory requires you to add both training and test events even if
+      you don't intend to call ``TestAllMethods()``.
+
+    * When using MethodCuts, the first event added must be a signal event,
+      otherwise TMVA will fail with ``<FATAL> Interval : maximum lower than
+      minimum``. To place a signal event first::
+
+        # Get index of first signal event
+        first_signal = np.nonzero(labels == signal_label)[0][0]
+        # Swap this with first event
+        events[0], events[first_signal] = events[first_signal].copy(), events[0].copy()
+        labels[0], labels[first_signal] = labels[first_signal], labels[0]
+        weights[0], weights[first_signal] = weights[first_signal], weights[0]
 
     """
     if not isinstance(factory, TMVA.Factory):

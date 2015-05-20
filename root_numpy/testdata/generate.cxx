@@ -13,18 +13,19 @@ using std::vector;
 using std::string;
 
 
-void makentuple()
+void make_ntuple()
 {
     TFile f("ntuple.root", "RECREATE");
     TNtuple ntuple("ntuple", "ntuple", "x:y:z");
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i)
+    {
         ntuple.Fill(gRandom->Gaus(), gRandom->Gaus(), gRandom->Gaus());
     }
     ntuple.Write();
     f.Close();
 }
 
-void makevector()
+void make_vector()
 {
     TFile f("vector.root", "RECREATE");
     TTree t("tree", "tree with vectors");
@@ -63,7 +64,8 @@ void makevector()
     t.Branch("vv_c", "std::vector<std::vector<char> >", &vv_c);
     t.Branch("vv_b", "std::vector<std::vector<bool> >", &vv_b);
 
-    for (int i = 1; i <= 10; ++i) {
+    for (int i = 1; i <= 10; ++i)
+    {
         v_i.clear();
         v_f.clear();
         v_F.clear();
@@ -80,7 +82,8 @@ void makevector()
         vv_c.clear();
         vv_b.clear();
 
-        for (int j = 0; j < i % 10; ++j) {
+        for (int j = 0; j < i % 10; ++j)
+        {
             v_i.push_back(i+j);
             v_f.push_back(2*i+j);
             v_F.push_back(2*i+j);
@@ -104,7 +107,7 @@ void makevector()
     f.Close();
 }
 
-void makesingle(int id, double weight)
+void make_single(int id, double weight)
 {
     char buffer[255];
     sprintf(buffer, "single%d.root", id);
@@ -114,7 +117,8 @@ void makesingle(int id, double weight)
     int n; tree.Branch("n_int", &n, "n_int/I");
     float f; tree.Branch("f_float", &f, "f_float/F");
     double d; tree.Branch("d_double", &d, "d_double/D");
-    for(int i=0; i<100; i++) {
+    for(int i=0; i<100; i++)
+    {
         n = i+id;
         f = i*2.0+id;
         d = i*3.0+id;
@@ -124,31 +128,53 @@ void makesingle(int id, double weight)
     file.Close();
 }
 
-void makefixed(int id)
+void make_fixed_length(int id)
 {
     char buffer[255];
     sprintf(buffer, "fixed%d.root", id);
     TFile file(buffer, "RECREATE");
     TTree tree("tree", "tree");
+    // 1D
     int n[5]; tree.Branch("n_int", &n, "n_int[5]/I");
     float f[7]; tree.Branch("f_float", &f, "f_float[7]/F");
     double d[10]; tree.Branch("d_double", &d, "d_double[10]/D");
-    for(int i=0; i<100; i++) {
-        for(int i_n=0; i_n<5; i_n++) {
+    // 2D
+    int n2[5][2]; tree.Branch("n2_int", &n2, "n2_int[5][2]/I");
+    float f2[7][3]; tree.Branch("f2_float", &f2, "f2_float[7][3]/F");
+    double d2[10][4]; tree.Branch("d2_double", &d2, "d2_double[10][4]/D");
+
+    for (int i=0; i<100; ++i)
+    {
+        for (int i_n=0; i_n<5; ++i_n)
+        {
             n[i_n] = 5*i+i_n+id;
+            for (int i_n2=0; i_n2<2; ++i_n2)
+            {
+                n2[i_n][i_n2] = n[i_n] + i_n2;
+            }
         }
-        for(int i_f=0; i_f<7; i_f++) {
+        for (int i_f=0; i_f<7; ++i_f)
+        {
             f[i_f] = 2*(5*i+i_f)+0.5+id;
+            for (int i_f2=0; i_f2<3; ++i_f2)
+            {
+                f2[i_f][i_f2] = f[i_f] + i_f2;
+            }
         }
-        for(int i_d=0; i_d<10; i_d++) {
+        for (int i_d=0; i_d<10; ++i_d)
+        {
             d[i_d] = 3*(5*i+i_d)+0.5+id;
+            for (int i_d2=0; i_d2<4; ++i_d2)
+            {
+                d2[i_d][i_d2] = d[i_d] + i_d2;
+            }
         }
         tree.Fill();
     }
     tree.Write();
 }
 
-void makevary(int id)
+void make_variable_length(int id)
 {
     char c[100];
     unsigned char uc[100];
@@ -175,23 +201,33 @@ void makevary(int id)
     tree.Branch("len_f", &len_f, "len_f/I");
     tree.Branch("len_d", &len_d, "len_d/I");
 
-    tree.Branch("n_char", &c, "n_char[len_n]/B");
-    tree.Branch("n_uchar", &uc, "n_uchar[len_n]/b");
-    tree.Branch("n_short", &s, "n_short[len_n]/S");
+    tree.Branch("n_char",   &c,  "n_char[len_n]/B");
+    tree.Branch("n_uchar",  &uc, "n_uchar[len_n]/b");
+    tree.Branch("n_short",  &s,  "n_short[len_n]/S");
     tree.Branch("n_ushort", &us, "n_ushort[len_n]/s");
-    tree.Branch("n_int", &n, "n_int[len_n]/I");
-    tree.Branch("n_uint", &un, "n_uint[len_n]/i");
-    tree.Branch("n_long", &l, "n_long[len_n]/L");
-    tree.Branch("n_ulong", &ul, "n_ulong[len_n]/l");
+    tree.Branch("n_int",    &n,  "n_int[len_n]/I");
+    tree.Branch("n_uint",   &un, "n_uint[len_n]/i");
+    tree.Branch("n_long",   &l,  "n_long[len_n]/L");
+    tree.Branch("n_ulong",  &ul, "n_ulong[len_n]/l");
 
-    tree.Branch("f_float", &f, "f_float[len_f]/F");
-    tree.Branch("d_double", &d, "d_double[len_d]/D");
+    tree.Branch("f_float",  &f,  "f_float[len_f]/F");
+    tree.Branch("d_double", &d,  "d_double[len_d]/D");
 
-    for(int i=0; i<20; i++) {
+    // 2D with variable-length first axis
+    int n2[100][2];
+    float f2[100][3];
+    double d2[100][4];
+    tree.Branch("n2_int",    &n2, "n2_int[len_n][2]/I");
+    tree.Branch("f2_float",  &f2, "f2_float[len_f][3]/F");
+    tree.Branch("d2_double", &d2, "d2_double[len_d][4]/D");
+
+    for (int i=0; i<20; i++)
+    {
         len_n = i*id;
         len_f = i*id+1;
         len_d = i*id+2;
-        for(int i_n=0; i_n<len_n; ++i_n) {
+        for (int i_n=0; i_n<len_n; ++i_n)
+        {
             c[i_n] = i_n;
             uc[i_n] = i_n;
             s[i_n] = i_n;
@@ -200,38 +236,52 @@ void makevary(int id)
             un[i_n] = 20*i+i_n;
             l[i_n] = 20*i+i_n;
             ul[i_n] = 20*i+i_n;
+            for (int i_n2=0; i_n2<2; ++i_n2)
+            {
+                n2[i_n][i_n2] = n[i_n] + i_n2;
+            }
         }
-        for(int i_f=0; i_f<len_f; ++i_f) {
+        for (int i_f=0; i_f<len_f; ++i_f)
+        {
             f[i_f] = 20*i+2.*i_f+0.5;
+            for (int i_f2=0; i_f2<3; ++i_f2)
+            {
+                f2[i_f][i_f2] = f[i_f] + i_f2;
+            }
         }
-        for(int i_d=0; i_d<len_d; ++i_d) {
+        for (int i_d=0; i_d<len_d; ++i_d)
+        {
             d[i_d] = 20*i+3.*i_d+0.25;
+            for (int i_d2=0; i_d2<4; ++i_d2)
+            {
+                d2[i_d][i_d2] = d[i_d] + i_d2;
+            }
         }
         tree.Fill();
     }
     tree.Write();
 }
 
-void make2tree(int id)
+void make_trees()
 {
-    char buffer[255];
-    sprintf(buffer,"doubletree%d.root",id);
-    TFile file(buffer,"RECREATE");
-    TTree tree("tree","tree");
+    TFile file("trees.root", "RECREATE");
+    TTree tree("tree", "tree");
     double x, y;
     tree.Branch("x", &x);
     tree.Branch("y", &y);
-    for(int i=0; i<10; ++i) {
+    for (int i=0; i<10; ++i)
+    {
         x = i;
         y = 2*i;
         tree.Fill();
     }
     tree.Write();
-    TTree tree2("tree2","tree2");
+    TTree tree2("tree2", "tree2");
     double x2, y2;
     tree2.Branch("x2", &x2);
     tree2.Branch("y2", &y2);
-    for(int i=0; i<10; ++i) {
+    for (int i=0; i<10; ++i)
+    {
         x2 = i;
         y2 = 2*i;
         tree2.Fill();
@@ -239,9 +289,10 @@ void make2tree(int id)
     tree2.Write();
 }
 
-void makestruct()
+void make_struct()
 {
-    struct branchstruct {
+    struct branchstruct
+    {
         int intleaf;
         float floatleaf;
     };
@@ -270,7 +321,7 @@ void makestruct()
     delete br2;
 }
 
-void makerandom()
+void make_random()
 {
     TFile file("test.root", "RECREATE");
     TTree tree("tree", "tree");
@@ -279,7 +330,8 @@ void makerandom()
     float y; tree.Branch("y", &y, "y/F");
     float z; tree.Branch("z", &z, "z/F");
 
-    for(i=0; i<100; ++i) {
+    for (i=0; i<100; ++i)
+    {
         x = gRandom->Gaus();
         y = gRandom->Gaus();
         z = gRandom->Gaus();
@@ -289,7 +341,7 @@ void makerandom()
     file.Close();
 }
 
-void makestring()
+void make_string()
 {
     TFile file("string.root", "RECREATE");
     TTree tree("tree", "tree with string branches");
@@ -299,10 +351,12 @@ void makestring()
     tree.Branch("message", &message);
     tree.Branch("vect", "std::vector<std::string>", &vect);
     tree.Branch("vect2d", "std::vector<std::vector<std::string> >", &vect2d);
-    for (int i=0; i<10; ++i) {
+    for (int i=0; i<10; ++i)
+    {
         vect.clear();
         vect2d.clear();
-        for (int j=0; j<5; ++j) {
+        for (int j=0; j<5; ++j)
+        {
             vect.push_back("Hello!");
             vect2d.push_back(vect);
         }
@@ -312,7 +366,7 @@ void makestring()
     file.Close();
 }
 
-void makeobject(int id)
+void make_object(int id)
 {
     char buffer[255];
     sprintf(buffer, "object%d.root", id);
@@ -323,7 +377,8 @@ void makeobject(int id)
     tree.Branch("entry", &entry, "i/I");
     // TLorentzVector is split across multiple subbranches
     tree.Branch("vect", &vect);
-    for (entry=0; entry<10; ++entry) {
+    for (entry=0; entry<10; ++entry)
+    {
         vect.SetPtEtaPhiM(entry + id, entry + id, 0, 0);
         tree.Fill();
     }
@@ -333,19 +388,19 @@ void makeobject(int id)
 
 int main(void)
 {
-    makentuple();
-    makesingle(1, 2.);
-    makesingle(2, 3.);
-    makefixed(1);
-    makefixed(2);
-    makevary(1);
-    makevary(2);
-    make2tree(1);
-    makevector();
-    makestruct();
-    makerandom();
-    makestring();
-    makeobject(1);
-    makeobject(2);
+    make_ntuple();
+    make_single(1, 2.);
+    make_single(2, 3.);
+    make_fixed_length(1);
+    make_fixed_length(2);
+    make_variable_length(1);
+    make_variable_length(2);
+    make_trees();
+    make_vector();
+    make_struct();
+    make_random();
+    make_string();
+    make_object(1);
+    make_object(2);
     return 0;
 }
