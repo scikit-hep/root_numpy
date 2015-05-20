@@ -245,7 +245,16 @@ def test_tree2array():
 def test_tree2rec():
     chain = TChain('tree')
     chain.Add(load('single1.root'))
-    check_single(rnp.tree2array(chain))
+    check_single(rnp.tree2rec(chain))
+
+
+def test_single_branch():
+    f = get_file('single1.root')
+    tree = f.Get('tree')
+    arr1_1d = rnp.tree2array(tree, branches='n_int')
+    arr2_1d = rnp.root2array(load('single1.root'), branches='n_int')
+    assert_equal(arr1_1d.dtype, np.dtype('<i4'))
+    assert_equal(arr2_1d.dtype, np.dtype('<i4'))
 
 
 def test_selection():
