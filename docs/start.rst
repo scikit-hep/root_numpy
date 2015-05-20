@@ -3,8 +3,8 @@
 Getting Started
 ===============
 
-Try `root_numpy` on `CERN's LXPLUS <http://information-technology.web.cern.ch/services/lxplus-service>`_
-========================================================================================================
+Try root_numpy on `CERN's LXPLUS <http://information-technology.web.cern.ch/services/lxplus-service>`_
+======================================================================================================
 
 First `set up ROOT <http://root.cern.ch/drupal/content/starting-root>`_::
 
