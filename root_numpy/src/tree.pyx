@@ -16,6 +16,8 @@ def list_trees(fname):
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
             ret[str(key.GetName())] = None
+    rfile.Close()
+    del rfile
     return list(ret.keys())
 
 
@@ -32,7 +34,10 @@ def list_structures(fname, tree=None):
     cdef TTree* rtree = <TTree*> rfile.Get(tree)
     if rtree == NULL:
         raise IOError("tree '{0}' not found in {1}".format(tree, fname))
-    return get_tree_structure(rtree)
+    structure = get_tree_structure(rtree)
+    rfile.Close()
+    del rfile
+    return structure
 
 
 def list_branches(fname, tree=None):
