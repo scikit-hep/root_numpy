@@ -17,10 +17,6 @@ __all__ = [
 VLEN = np.vectorize(len)
 
 
-def _is_object_field(arr, col):
-    return arr.dtype[col] == 'O'
-
-
 def rec2array(rec, fields=None):
     """Convert a record array into a ndarray with a homogeneous data type.
 
@@ -103,45 +99,50 @@ def stretch(arr, fields=None):
         dtype=[('scalar', '<i8'), ('array', '<f8')])
 
     """
-    dt = []
-    has_array_field = False
-    first_array = None
+    dtype = []
+    len_array = None
 
     if fields is None:
         fields = arr.dtype.names
 
-    # Construct dtype
+    # Construct dtype and check consistency
     for field in fields:
-        if _is_object_field(arr, field):
-            dt.append((field, arr[field][0].dtype))
-            has_array_field = True
-            if first_array is None:
-                first_array = field
-        else:
-            # Assume scalar
-            dt.append((field, arr[field].dtype))
-
-    if not has_array_field:
-        raise RuntimeError("No array column specified")
-
-    len_array = VLEN(arr[first_array])
-    numrec = np.sum(len_array)
-    ret = np.empty(numrec, dtype=dt)
-
-    for field in fields:
-        if _is_object_field(arr, field):
-            # FIXME: this is rather inefficient since the stack
-            # is copied over to the return value
-            stack = np.hstack(arr[field])
-            if len(stack) != numrec:
+        dt = arr.dtype[field]
+        if dt == 'O' or len(dt.shape):
+            if dt == 'O':
+                # Variable-length array field
+                lengths = VLEN(arr[field])
+            else:
+                lengths = np.repeat(dt.shape[0], arr.shape[0])
+            # Fixed-length array field
+            if len_array is None:
+                len_array = lengths
+            elif not np.array_equal(lengths, len_array):
                 raise ValueError(
-                    "Array lengths do not match: "
-                    "expected %d but found %d in %s" %
-                    (numrec, len(stack), field))
-            ret[field] = stack
+                    "inconsistent lengths of array columns in input")
+            if dt == 'O':
+                dtype.append((field, arr[field][0].dtype))
+            else:
+                dtype.append((field, arr[field].dtype, dt.shape[1:]))
         else:
-            # FIXME: this is rather inefficient since the repeat result
-            # is copied over to the return value
+            # Scalar field
+            dtype.append((field, dt))
+
+    if len_array is None:
+        raise RuntimeError("no array column in input")
+
+    # Build stretched output
+    ret = np.empty(np.sum(len_array), dtype=dtype)
+    for field in fields:
+        dt = arr.dtype[field]
+        if dt == 'O' or len(dt.shape) == 1:
+            # Variable-length or 1D fixed-length array field
+            ret[field] = np.hstack(arr[field])
+        elif len(dt.shape):
+            # Multidimensional fixed-length array field
+            ret[field] = np.vstack(arr[field])
+        else:
+            # Scalar field
             ret[field] = np.repeat(arr[field], len_array)
 
     return ret

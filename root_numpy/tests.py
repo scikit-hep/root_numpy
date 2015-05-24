@@ -574,56 +574,53 @@ def test_fill_graph():
 
 
 def test_stretch():
-    nrec = 5
-    arr = np.empty(nrec,
+    arr = np.empty(5,
         dtype=[
             ('scalar', np.int),
-            ('df1', 'O'),
-            ('df2', 'O'),
-            ('df3', 'O')])
+            ('vl1', 'O'),
+            ('vl2', 'O'),
+            ('vl3', 'O'),
+            ('fl1', np.int, (2, 2)),
+            ('fl2', np.float, (2, 3)),
+            ('fl3', np.double, (3, 2))])
 
-    for i in range(nrec):
-        df1 = np.array(range(i + 1), dtype=np.float)
-        df2 = np.array(range(i + 1), dtype=np.int) * 2
-        df3 = np.array(range(i + 1), dtype=np.double) * 3
-        arr[i] = (i, df1, df2, df3)
+    for i in range(arr.shape[0]):
+        vl1 = np.array(range(i + 1), dtype=np.int)
+        vl2 = np.array(range(i + 2), dtype=np.float) * 2
+        vl3 = np.array(range(2), dtype=np.double) * 3
+        fl1 = np.array(range(4), dtype=np.int).reshape((2, 2))
+        fl2 = np.array(range(6), dtype=np.float).reshape((2, 3))
+        fl3 = np.array(range(6), dtype=np.double).reshape((3, 2))
+        arr[i] = (i, vl1, vl2, vl3, fl1, fl2, fl3)
 
-    stretched = rnp.stretch(
-        arr, ['scalar', 'df1', 'df2', 'df3'])
-
-    assert_equal(stretched.dtype,
-        [('scalar', np.int),
-         ('df1', np.float),
-         ('df2', np.int),
-         ('df3', np.double)])
-    assert_equal(stretched.size, 15)
-
-    assert_almost_equal(stretched['df1'][14], 4.0)
-    assert_almost_equal(stretched['df2'][14], 8)
-    assert_almost_equal(stretched['df3'][14], 12.0)
-    assert_almost_equal(stretched['scalar'][14], 4)
-    assert_almost_equal(stretched['scalar'][13], 4)
-    assert_almost_equal(stretched['scalar'][12], 4)
-    assert_almost_equal(stretched['scalar'][11], 4)
-    assert_almost_equal(stretched['scalar'][10], 4)
-    assert_almost_equal(stretched['scalar'][9], 3)
-
-    arr = np.empty(1, dtype=[('scalar', np.int),])
-    arr[0] = (1,)
+    # no array columns included
     assert_raises(RuntimeError, rnp.stretch, arr, ['scalar',])
 
-    nrec = 5
-    arr = np.empty(nrec,
-        dtype=[
-            ('scalar', np.int),
-            ('df1', 'O'),
-            ('df2', 'O')])
+    # lengths don't match
+    assert_raises(ValueError, rnp.stretch, arr, ['scalar', 'vl1', 'vl2',])
+    assert_raises(ValueError, rnp.stretch, arr, ['scalar', 'fl1', 'fl3',])
+    assert_raises(ValueError, rnp.stretch, arr)
 
-    for i in range(nrec):
-        df1 = np.array(range(i + 1), dtype=np.float)
-        df2 = np.array(range(i + 2), dtype=np.int) * 2
-        arr[i] = (i, df1, df2)
-    assert_raises(ValueError, rnp.stretch, arr, ['scalar', 'df1', 'df2'])
+    # variable-length stretch
+    stretched = rnp.stretch(arr, ['scalar', 'vl1',])
+    assert_equal(stretched.dtype,
+                 [('scalar', np.int),
+                  ('vl1', np.int)])
+    assert_equal(stretched.shape[0], 15)
+    assert_array_equal(
+        stretched['scalar'],
+        np.repeat(arr['scalar'], np.vectorize(len)(arr['vl1'])))
+
+    # fixed-length stretch
+    stretched = rnp.stretch(arr, ['scalar', 'vl3', 'fl1', 'fl2',])
+    assert_equal(stretched.dtype,
+                 [('scalar', np.int),
+                  ('vl3', np.double),
+                  ('fl1', np.int, (2,)),
+                  ('fl2', np.float, (3,))])
+    assert_equal(stretched.shape[0], 10)
+    assert_array_equal(
+        stretched['scalar'], np.repeat(arr['scalar'], 2))
 
 
 def test_blockwise_inner_join():
