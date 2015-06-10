@@ -219,6 +219,11 @@ def array2hist(array, hist):
     hist : ROOT TH1, TH2, or TH3
         A ROOT histogram.
 
+    Returns
+    -------
+    hist : ROOT TH1, TH2, or TH3
+        The ROOT histogram with bin contents set from the array.
+
     Raises
     ------
     TypeError
@@ -258,7 +263,7 @@ def array2hist(array, hist):
            [2, 0, 5, 6, 8],
            [0, 0, 6, 5, 2],
            [2, 2, 1, 5, 4]])
-    >>> array2hist(array, hist)
+    >>> _ = array2hist(array, hist)
     >>> # dtype matches histogram type (D, F, I, S, C)
     >>> hist2array(hist)
     array([[ 9.,  7.,  6.],
@@ -347,3 +352,4 @@ def array2hist(array, hist):
         ROOT.AsCObject(hist), np.ravel(np.transpose(_array)))
     # Set the number of entries to the number of array elements
     hist.SetEntries(_array.size)
+    return hist
