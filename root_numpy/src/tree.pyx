@@ -375,21 +375,26 @@ cdef cppclass NP2CConverter:
 
 
 cdef cppclass ScalarNP2CConverter(NP2CConverter):
+    int length
     int nbytes
     string roottype
     string name
     void* value
     TBranch* branch
 
-    __init__(TTree* tree, string name, string roottype, int nbytes):
+    __init__(TTree* tree, string name, string roottype, int length, int elembytes):
         cdef string leaflist
-        this.nbytes = nbytes
+        this.length = length
+        this.nbytes = length * elembytes
         this.roottype = roottype
         this.name = name
         this.value = malloc(nbytes)
         this.branch = tree.GetBranch(this.name.c_str())
         if this.branch == NULL:
-            leaflist = this.name + '/' + this.roottype
+            if length > 1:
+                leaflist = this.name + ('[{0:d}]/'.format(length)) + this.roottype
+            else:
+                leaflist = this.name + '/' + this.roottype
             this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
         else:
             # check type compatibility of existing branch
@@ -399,10 +404,11 @@ cdef cppclass ScalarNP2CConverter(NP2CConverter):
                     "field '{0}' of type '{1}' is not compatible "
                     "with existing branch of type '{2}'".format(
                         name, roottype, existing_type))
+            # TODO: check length if present
             this.branch.SetAddress(this.value)
         this.branch.SetStatus(1)
 
-    __del__(self): # does this do what I want?
+    __del__(self):
         free(this.value)
 
     void fill_from(void* source):
@@ -415,8 +421,10 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
     # Handle np.object (array) columns
     if dtype in TYPES_NUMPY2ROOT:
-        nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
-        return new ScalarNP2CConverter(tree, name, roottype, nbytes)
+        elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
+        return new ScalarNP2CConverter(tree, name, roottype, 1, elembytes)
+    elif dtype.kind == 'S':
+        return new ScalarNP2CConverter(tree, name, 'B', dtype.itemsize, 1)
     warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
     return NULL
 
