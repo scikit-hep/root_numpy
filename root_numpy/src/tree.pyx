@@ -150,6 +150,9 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef string column_name
     cdef const_char* branch_name
     cdef const_char* leaf_name
+    cdef string branch_title
+    cdef int type_sep_idx
+    cdef char type_code
 
     if num_requested_branches > 0:
         columns.reserve(num_requested_branches)
@@ -191,13 +194,20 @@ cdef object tree2array(TTree* tree, branches, string selection,
                     # This branch was not selected by the user
                     continue
 
+            branch_title = string(tbranch.GetTitle())
+            type_sep_idx = branch_title.rfind('/')
+            if type_sep_idx > 0 and (type_sep_idx == (<int> branch_title.size()) - 2):
+                type_code = branch_title[type_sep_idx + 1]
+            else:
+                type_code = '\0'
             leaf_array = tbranch.GetListOfLeaves()
             shortname = leaf_array.GetEntries() == 1
+
 
             for ileaf in range(leaf_array.GetEntries()):
                 tleaf = <TLeaf*> leaf_array.At(ileaf)
                 leaf_name = tleaf.GetName()
-                conv = get_converter(tleaf)
+                conv = get_converter(tleaf, type_code)
                 if conv != NULL:
                     # A converter exists for this leaf
                     column_name = string(branch_name)
@@ -359,74 +369,6 @@ def root2array_fromCObj(tree, branches, selection,
         chain, branches,
         selection or '', start, stop, step,
         include_weight, weight_name)
-
-
-####################################
-# array -> TTree conversion follows:
-####################################
-
-cdef cppclass NP2CConverter:
-
-    void fill_from(void* source):
-        pass
-
-    __dealloc__():
-        pass
-
-
-cdef cppclass ScalarNP2CConverter(NP2CConverter):
-    int length
-    int nbytes
-    string roottype
-    string name
-    void* value
-    TBranch* branch
-
-    __init__(TTree* tree, string name, string roottype, int length, int elembytes):
-        cdef string leaflist
-        this.length = length
-        this.nbytes = length * elembytes
-        this.roottype = roottype
-        this.name = name
-        this.value = malloc(nbytes)
-        this.branch = tree.GetBranch(this.name.c_str())
-        if this.branch == NULL:
-            if length > 1:
-                leaflist = this.name + ('[{0:d}]/'.format(length)) + this.roottype
-            else:
-                leaflist = this.name + '/' + this.roottype
-            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
-        else:
-            # check type compatibility of existing branch
-            existing_type = this.branch.GetTitle().rpartition('/')[-1]
-            if str(roottype) != existing_type:
-                raise TypeError(
-                    "field '{0}' of type '{1}' is not compatible "
-                    "with existing branch of type '{2}'".format(
-                        name, roottype, existing_type))
-            # TODO: check length if present
-            this.branch.SetAddress(this.value)
-        this.branch.SetStatus(1)
-
-    __del__(self):
-        free(this.value)
-
-    void fill_from(void* source):
-        memcpy(this.value, source, this.nbytes)
-        this.branch.Fill()
-
-
-cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
-    # TODO:
-    # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
-    # Handle np.object (array) columns
-    if dtype in TYPES_NUMPY2ROOT:
-        elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
-        return new ScalarNP2CConverter(tree, name, roottype, 1, elembytes)
-    elif dtype.kind == 'S':
-        return new ScalarNP2CConverter(tree, name, 'B', dtype.itemsize, 1)
-    warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
-    return NULL
 
 
 cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:

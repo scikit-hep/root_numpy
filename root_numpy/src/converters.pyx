@@ -20,18 +20,18 @@ TYPES = {
 }
 
 TYPES_NUMPY2ROOT = {
-    np.dtype(np.bool):      (1, 'O'),
-    np.dtype(np.int8):      (1, 'B'),
-    np.dtype(np.int16):     (2, 'S'),
-    np.dtype(np.int32):     (4, 'I'),
-    np.dtype(np.int64):     (8, 'L'),
-    np.dtype(np.uint8):     (1, 'b'),
-    np.dtype(np.uint16):    (2, 's'),
-    np.dtype(np.uint32):    (4, 'i'),
-    np.dtype(np.uint64):    (8, 'l'),
-    np.dtype(np.float):     (8, 'D'),
-    np.dtype(np.float32):   (4, 'F'),
-    np.dtype(np.float64):   (8, 'D'),
+    np.dtype(np.bool):    (1, 'O'),
+    np.dtype(np.int8):    (1, 'B'),
+    np.dtype(np.int16):   (2, 'S'),
+    np.dtype(np.int32):   (4, 'I'),
+    np.dtype(np.int64):   (8, 'L'),
+    np.dtype(np.uint8):   (1, 'b'),
+    np.dtype(np.uint16):  (2, 's'),
+    np.dtype(np.uint32):  (4, 'i'),
+    np.dtype(np.uint64):  (8, 'l'),
+    np.dtype(np.float):   (8, 'D'),
+    np.dtype(np.float32): (4, 'F'),
+    np.dtype(np.float64): (8, 'D'),
 }
 
 SPECIAL_TYPEDEFS = {
@@ -194,6 +194,26 @@ cdef cppclass FixedArrayConverter(Converter):
 
     object get_nptype():
         return (np.dtype(this.conv.nptype), <object> this.shape)
+
+    int get_nptypecode():
+        return this.conv.nptypecode
+
+
+cdef cppclass CharArrayConverter(Converter):
+    BasicConverter* conv # converter for single element
+    int size
+
+    __init__(int size):
+        this.conv = <BasicConverter*> CONVERTERS['char']
+        this.size = size
+
+    int write(Column* col, void* buffer):
+        cdef int nbytes = col.GetSize()
+        memcpy(buffer, col.GetValuePointer(), nbytes)
+        return nbytes
+
+    object get_nptype():
+        return 'S{0:d}'.format(this.size)
 
     int get_nptypecode():
         return this.conv.nptypecode
@@ -435,7 +455,7 @@ cdef enum LeafShapeType:
     FIXED_LENGTH_ARRAY = 3
 
 
-cdef Converter* get_converter(TLeaf* leaf):
+cdef Converter* get_converter(TLeaf* leaf, char type_code):
     # Find existing converter or attempt to create a new one
     cdef Converter* conv
     cdef Converter* basic_conv
@@ -485,6 +505,14 @@ cdef Converter* get_converter(TLeaf* leaf):
             CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + arraydef, conv))
         return conv
 
+    # special case for 1D char[] -> string
+    if type_code == 'C' and len(leaf_shape) == 1:
+        conv = find_converter_by_typename(leaf_type + 'C')
+        if conv == NULL:
+            conv = new CharArrayConverter(leaf_shape[0])
+            CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + 'C', conv))
+        return conv
+
     # Fixed-length array
     conv = find_converter_by_typename(leaf_type + arraydef)
     if conv == NULL:
@@ -505,3 +533,71 @@ def cleanup():
     while it != CONVERTERS.end():
         del deref(it).second
         inc(it)
+
+
+####################################
+# array -> TTree conversion follows:
+####################################
+
+cdef cppclass NP2CConverter:
+
+    void fill_from(void* source):
+        pass
+
+    __dealloc__():
+        pass
+
+
+cdef cppclass FixedNP2CConverter(NP2CConverter):
+    int length
+    int nbytes
+    string roottype
+    string name
+    void* value
+    TBranch* branch
+
+    __init__(TTree* tree, string name, string roottype, int length, int elembytes):
+        cdef string leaflist
+        this.length = length
+        this.nbytes = length * elembytes
+        this.roottype = roottype
+        this.name = name
+        this.value = malloc(nbytes)
+        this.branch = tree.GetBranch(this.name.c_str())
+        if this.branch == NULL:
+            if length > 1:
+                leaflist = this.name + ('[{0:d}]/'.format(length)) + this.roottype
+            else:
+                leaflist = this.name + '/' + this.roottype
+            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+        else:
+            # check type compatibility of existing branch
+            existing_type = this.branch.GetTitle().rpartition('/')[-1]
+            if str(roottype) != existing_type:
+                raise TypeError(
+                    "field '{0}' of type '{1}' is not compatible "
+                    "with existing branch of type '{2}'".format(
+                        name, roottype, existing_type))
+            # TODO: check length if present
+            this.branch.SetAddress(this.value)
+        this.branch.SetStatus(1)
+
+    __del__(self):
+        free(this.value)
+
+    void fill_from(void* source):
+        memcpy(this.value, source, this.nbytes)
+        this.branch.Fill()
+
+
+cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
+    # TODO:
+    # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
+    # Handle np.object (array) columns
+    if dtype in TYPES_NUMPY2ROOT:
+        elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
+        return new FixedNP2CConverter(tree, name, roottype, 1, elembytes)
+    elif dtype.kind == 'S':
+        return new FixedNP2CConverter(tree, name, 'C', dtype.itemsize, 1)
+    warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
+    return NULL
