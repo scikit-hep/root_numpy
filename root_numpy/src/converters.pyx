@@ -208,7 +208,7 @@ cdef cppclass CharArrayConverter(Converter):
         this.size = size
 
     int write(Column* col, void* buffer):
-        cdef int nbytes = col.GetSize()
+        cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
         memcpy(buffer, col.GetValuePointer(), nbytes)
         return nbytes
 
@@ -462,14 +462,23 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code):
     cdef TLeaf* leaf_count = leaf.GetLeafCount()
     cdef LeafShapeType leaf_shape_type = SINGLE_VALUE
     cdef SIZE_t* dims
-    cdef int ndim, idim
+    cdef int ndim, idim, leaf_length
 
     leaf_name = leaf.GetName()
     leaf_title = leaf.GetTitle()
     leaf_type = resolve_type(leaf.GetTypeName())
-    leaf_shape = ()
+
+    # Special case for null-terminated char array string
+    if type_code == 'C':
+        leaf_length = leaf.GetLenStatic()
+        conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
+        if conv == NULL:
+            conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination
+            CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
+        return conv
 
     # Determine shape of this leaf
+    leaf_shape = ()
     match = re.match(LEAF_PATTERN, leaf_title)
     if match is not None:
         arraydef = match.group(1)
@@ -503,14 +512,6 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code):
             conv = new VaryArrayConverter(
                 <BasicConverter*> basic_conv, ndim, dims)
             CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + arraydef, conv))
-        return conv
-
-    # special case for 1D char[] -> string
-    if type_code == 'C' and len(leaf_shape) == 1:
-        conv = find_converter_by_typename(leaf_type + 'C')
-        if conv == NULL:
-            conv = new CharArrayConverter(leaf_shape[0])
-            CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + 'C', conv))
         return conv
 
     # Fixed-length array
@@ -562,10 +563,15 @@ cdef cppclass FixedNP2CConverter(NP2CConverter):
         this.nbytes = length * elembytes
         this.roottype = roottype
         this.name = name
-        this.value = malloc(nbytes)
+        if roottype.compare('C') == 0:
+            # include null-termination
+            this.value = malloc(nbytes + 1)
+            (<char*> this.value)[nbytes] = '\0'
+        else:
+            this.value = malloc(nbytes)
         this.branch = tree.GetBranch(this.name.c_str())
         if this.branch == NULL:
-            if length > 1:
+            if length > 1 and roottype.compare('C') != 0:
                 leaflist = this.name + ('[{0:d}]/'.format(length)) + this.roottype
             else:
                 leaflist = this.name + '/' + this.roottype

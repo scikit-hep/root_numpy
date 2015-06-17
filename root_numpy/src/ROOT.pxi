@@ -52,6 +52,8 @@ cdef extern from "TLeaf.h":
         TLeaf* GetLeafCount()
         TLeaf* GetLeafCounter(int&)
         TBranch* GetBranch()
+        int GetLen()
+        int GetLenStatic()
         
 cdef extern from "TTree.h":
     cdef cppclass TTree:
