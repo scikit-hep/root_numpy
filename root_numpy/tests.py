@@ -117,6 +117,7 @@ def test_no_filename():
 
 def test_no_trees_in_file():
     with temp() as tmp:
+        tmp.Close()
         assert_raises(IOError, rnp.root2array, [tmp.GetName()], treename=None)
 
 
