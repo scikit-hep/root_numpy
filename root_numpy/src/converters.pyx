@@ -52,9 +52,9 @@ cdef inline unicode resolve_type(const char* typename):
 # and write it to buffer
 cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
                                   unsigned long numele, int elesize,
-                                  int ndim = 1, np.npy_intp* dims = NULL):
-    cdef np.npy_intp* _dims = dims
-    cdef np.npy_intp default_dims[1]
+                                  int ndim = 1, SIZE_t* dims = NULL):
+    cdef SIZE_t* _dims = dims
+    cdef SIZE_t default_dims[1]
     if dims == NULL:
         _dims = default_dims
         _dims[0] = numele;
@@ -73,7 +73,7 @@ cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
 # special treatment for vector<bool>
 cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     cdef unsigned long numele = src.size()
-    cdef np.npy_intp dims[1]
+    cdef SIZE_t dims[1]
     dims[0] = numele;
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
@@ -90,7 +90,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
 
 cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src):
     cdef unsigned long numele = src.size()
-    cdef np.npy_intp dims[1]
+    cdef SIZE_t dims[1]
     dims[0] = numele;
     cdef int objsize = np.dtype('O').itemsize
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
@@ -153,12 +153,12 @@ cdef cppclass ObjectConverterBase(Converter):
 
 cdef cppclass VaryArrayConverter(ObjectConverterBase):
     BasicConverter* conv # converter for single element
-    np.npy_intp* dims
+    SIZE_t* dims
     int ndim
     int typecode
     int elesize
 
-    __init__(BasicConverter* conv, int ndim, np.npy_intp* dims):
+    __init__(BasicConverter* conv, int ndim, SIZE_t* dims):
         this.conv = conv
         this.dims = dims
         this.ndim = ndim
@@ -262,7 +262,7 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         # create an outer array container that dataptr points to,
         # containing pointers from create_numpyarray().
         # define an (numele)-dimensional outer array to hold our subvectors fa
-        cdef np.npy_intp dims[1]
+        cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
@@ -302,7 +302,7 @@ cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
         # create an outer array container that dataptr points to,
         # containing pointers from create_numpyarray().
         # define an (numele)-dimensional outer array to hold our subvectors fa
-        cdef np.npy_intp dims[1]
+        cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
@@ -350,7 +350,7 @@ cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
         # create an outer array container that dataptr points to,
         # containing pointers from create_numpyarray().
         # define an (numele)-dimensional outer array to hold our subvectors fa
-        cdef np.npy_intp dims[1]
+        cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
@@ -507,6 +507,8 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code):
                 return NULL
             ndim = len(leaf_shape) + 1
             dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
+            if dims == NULL:
+                raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
             for idim from 1 <= idim < ndim:
                 dims[idim] = leaf_shape[idim - 1]
             conv = new VaryArrayConverter(
@@ -550,41 +552,44 @@ cdef cppclass NP2CConverter:
 
 
 cdef cppclass FixedNP2CConverter(NP2CConverter):
-    int length
     int nbytes
-    string roottype
-    string name
     void* value
     TBranch* branch
 
-    __init__(TTree* tree, string name, string roottype, int length, int elembytes):
+    __init__(TTree* tree, string name, string roottype,
+             int length, int elembytes,
+             int ndim = 0, SIZE_t* dims = NULL):
         cdef string leaflist
-        this.length = length
+        cdef int axis
         this.nbytes = length * elembytes
-        this.roottype = roottype
-        this.name = name
         if roottype.compare('C') == 0:
             # include null-termination
             this.value = malloc(nbytes + 1)
+            if this.value == NULL:
+                raise MemoryError("could not allocate %d bytes" % (nbytes + 1))
             (<char*> this.value)[nbytes] = '\0'
         else:
             this.value = malloc(nbytes)
-        this.branch = tree.GetBranch(this.name.c_str())
+            if this.value == NULL:
+                raise MemoryError("could not allocate %d bytes" % nbytes)
+        # Construct leaflist name
+        leaflist = name
+        if ndim > 0 and roottype.compare('C') != 0:
+            for axis in range(ndim):
+                token = bytes('[{0:d}]'.format(dims[axis]))
+                leaflist.append(token)
+        leaflist.append(b'/')
+        leaflist.append(roottype)
+        this.branch = tree.GetBranch(name.c_str())
         if this.branch == NULL:
-            if length > 1 and roottype.compare('C') != 0:
-                leaflist = this.name + ('[{0:d}]/'.format(length)) + this.roottype
-            else:
-                leaflist = this.name + '/' + this.roottype
-            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
+            this.branch = tree.Branch(name.c_str(), this.value, leaflist.c_str())
         else:
             # check type compatibility of existing branch
-            existing_type = this.branch.GetTitle().rpartition('/')[-1]
-            if str(roottype) != existing_type:
+            if leaflist.compare(string(this.branch.GetTitle())) != 0:
                 raise TypeError(
                     "field '{0}' of type '{1}' is not compatible "
                     "with existing branch of type '{2}'".format(
-                        name, roottype, existing_type))
-            # TODO: check length if present
+                        name, leaflist, str(this.branch.GetTitle())))
             this.branch.SetAddress(this.value)
         this.branch.SetStatus(1)
 
@@ -600,10 +605,27 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
     # TODO:
     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
     # Handle np.object (array) columns
+    cdef NP2CConverter* conv = NULL
+    cdef int axis, ndim = 0
+    cdef int length = 1
+    cdef SIZE_t* dims = NULL
+    subdtype = dtype.subdtype
+    if subdtype is not None:
+        # Fixed-size subarray type
+        dtype, shape = subdtype
+        ndim = len(shape)
+        dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
+        if dims == NULL:
+            raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
+        for axis in range(ndim):
+            dims[axis] = shape[axis]
+            length *= dims[axis]
     if dtype in TYPES_NUMPY2ROOT:
         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
-        return new FixedNP2CConverter(tree, name, roottype, 1, elembytes)
+        conv = new FixedNP2CConverter(tree, name, roottype, length, elembytes, ndim, dims)
     elif dtype.kind == 'S':
-        return new FixedNP2CConverter(tree, name, 'C', dtype.itemsize, 1)
-    warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
-    return NULL
+        conv = new FixedNP2CConverter(tree, name, 'C', dtype.itemsize, 1)
+    else:
+        warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
+    free(dims)
+    return conv

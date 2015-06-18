@@ -151,7 +151,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef const_char* branch_name
     cdef const_char* leaf_name
     cdef string branch_title
-    cdef int type_sep_idx
+    cdef int branch_title_size
     cdef char type_code
 
     if num_requested_branches > 0:
@@ -195,14 +195,13 @@ cdef object tree2array(TTree* tree, branches, string selection,
                     continue
 
             branch_title = string(tbranch.GetTitle())
-            type_sep_idx = branch_title.rfind('/')
-            if type_sep_idx > 0 and (type_sep_idx == (<int> branch_title.size()) - 2):
-                type_code = branch_title[type_sep_idx + 1]
+            branch_title_size = branch_title.size()
+            if branch_title_size > 2 and branch_title[branch_title_size - 2] == '/':
+                type_code = branch_title[branch_title_size - 1]
             else:
                 type_code = '\0'
             leaf_array = tbranch.GetListOfLeaves()
             shortname = leaf_array.GetEntries() == 1
-
 
             for ileaf in range(leaf_array.GetEntries()):
                 tleaf = <TLeaf*> leaf_array.At(ileaf)
@@ -391,7 +390,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
         fieldnames = arr.dtype.names
         fields = arr.dtype.fields
 
-        # determine the structure
+        # Determine the structure
         for icol in range(len(fieldnames)):
             fieldname = fieldnames[icol]
             # roffset is an offset of particular field in each record
@@ -402,7 +401,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
                 converters.push_back(cvt)
                 posarray.push_back(icol)
 
-        # fill in data
+        # Fill the data
         pos_len = posarray.size()
         for idata in range(arr_len):
             thisrow = np.PyArray_GETPTR1(arr, idata)
@@ -411,7 +410,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
                 source = shift(thisrow, roffset)
                 converters[ipos].fill_from(source)
 
-        # need to update the number of entries in the tree to match
+        # Need to update the number of entries in the tree to match
         # the number in the branches since each branch is filled separately.
         tree.SetEntries(-1)
 
