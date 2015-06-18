@@ -210,6 +210,7 @@ cdef cppclass CharArrayConverter(Converter):
     int write(Column* col, void* buffer):
         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
         memcpy(buffer, col.GetValuePointer(), nbytes)
+        memset(col.GetValuePointer(), '\0', nbytes)
         return nbytes
 
     object get_nptype():
