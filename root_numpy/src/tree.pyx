@@ -371,7 +371,7 @@ def root2array_fromCObj(tree, branches, selection,
 
 
 cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:
-    cdef vector[NP2CConverter*] converters
+    cdef vector[NP2ROOTConverter*] converters
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef unsigned int icv
@@ -395,7 +395,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
             fieldname = fieldnames[icol]
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname]
-            cvt = find_np2c_converter(tree, fieldname, dtype)
+            cvt = find_np2root_converter(tree, fieldname, dtype)
             if cvt != NULL:
                 roffsetarray.push_back(roffset)
                 converters.push_back(cvt)

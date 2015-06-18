@@ -374,9 +374,8 @@ def array2tree(arr, name='tree', tree=None):
 def array2root(arr, filename, treename='tree', mode='update'):
     """Convert a numpy array into a ROOT TTree and save it in a ROOT TFile.
 
-    .. warning::
-       This function is experimental. Please report problems.
-       Not all data types are supported (``np.object`` and ``np.float16``).
+    Fields of basic types, strings, and fixed-size subarrays of basic types are
+    supported. ``np.object`` and ``np.float16`` are currently not supported.
 
     Parameters
     ----------

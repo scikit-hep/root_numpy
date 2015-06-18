@@ -52,7 +52,7 @@ cdef inline unicode resolve_type(const char* typename):
 # and write it to buffer
 cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
                                   unsigned long numele, int elesize,
-                                  int ndim = 1, SIZE_t* dims = NULL):
+                                  int ndim=1, SIZE_t* dims=NULL):
     cdef SIZE_t* _dims = dims
     cdef SIZE_t default_dims[1]
     if dims == NULL:
@@ -209,8 +209,10 @@ cdef cppclass CharArrayConverter(Converter):
 
     int write(Column* col, void* buffer):
         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
+        cdef int length = strlen(<char*> col.GetValuePointer())
         memcpy(buffer, col.GetValuePointer(), nbytes)
-        memset(col.GetValuePointer(), '\0', nbytes)
+        if length < nbytes:
+            memset((<char*> buffer) + length, '\0', nbytes - length)
         return nbytes
 
     object get_nptype():
@@ -543,7 +545,7 @@ def cleanup():
 # array -> TTree conversion follows:
 ####################################
 
-cdef cppclass NP2CConverter:
+cdef cppclass NP2ROOTConverter:
 
     void fill_from(void* source):
         pass
@@ -552,14 +554,14 @@ cdef cppclass NP2CConverter:
         pass
 
 
-cdef cppclass FixedNP2CConverter(NP2CConverter):
+cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):
     int nbytes
     void* value
     TBranch* branch
 
     __init__(TTree* tree, string name, string roottype,
              int length, int elembytes,
-             int ndim = 0, SIZE_t* dims = NULL):
+             int ndim=0, SIZE_t* dims=NULL):
         cdef string leaflist
         cdef int axis
         this.nbytes = length * elembytes
@@ -602,11 +604,11 @@ cdef cppclass FixedNP2CConverter(NP2CConverter):
         this.branch.Fill()
 
 
-cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
+cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):
     # TODO:
     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
     # Handle np.object (array) columns
-    cdef NP2CConverter* conv = NULL
+    cdef NP2ROOTConverter* conv = NULL
     cdef int axis, ndim = 0
     cdef int length = 1
     cdef SIZE_t* dims = NULL
@@ -623,9 +625,9 @@ cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
             length *= dims[axis]
     if dtype in TYPES_NUMPY2ROOT:
         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
-        conv = new FixedNP2CConverter(tree, name, roottype, length, elembytes, ndim, dims)
+        conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
     elif dtype.kind == 'S':
-        conv = new FixedNP2CConverter(tree, name, 'C', dtype.itemsize, 1)
+        conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
     else:
         warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
     free(dims)

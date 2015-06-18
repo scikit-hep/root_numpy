@@ -2,6 +2,7 @@ import os
 from os.path import dirname, join
 import tempfile
 import warnings
+from contextlib import contextmanager
 
 import numpy as np
 from numpy.lib import recfunctions
@@ -40,6 +41,16 @@ def load(data):
         return [get_filepath(x) for x in data]
     else:
         return get_filepath(data)
+
+
+@contextmanager
+def temp():
+    tmp_fd, tmp_path = tempfile.mkstemp(suffix='.root')
+    tmp_root = ROOT.TFile.Open(tmp_path, 'recreate')
+    yield tmp_root
+    tmp_root.Close()
+    os.close(tmp_fd)
+    os.remove(tmp_path)
 
 
 def check_single(single, n=100, offset=1):
@@ -95,7 +106,7 @@ def test_single():
 
 @raises(IOError)
 def test_single_pattern_not_exist():
-    f = load(['single1.root','does_not_exist.root'])
+    f = load(['single1.root', 'does_not_exist.root'])
     a = rnp.root2array(f)
 
 
@@ -105,10 +116,8 @@ def test_no_filename():
 
 
 def test_no_trees_in_file():
-    f = ROOT.TFile.Open('temp_file.root', 'recreate')
-    f.Close()
-    assert_raises(IOError, rnp.root2array, ['temp_file.root'], treename=None)
-    os.remove('temp_file.root')
+    with temp() as tmp:
+        assert_raises(IOError, rnp.root2array, [tmp.GetName()], treename=None)
 
 
 @raises(IOError)
@@ -703,18 +712,37 @@ def test_array2tree():
             ('y', np.float32),
             ('z', np.float64),
             ('w', np.bool)])
-    tmp = ROOT.TFile.Open('test_array2tree_temp_file.root', 'recreate')
-    tree = rnp.array2tree(a)
-    a_conv = rnp.tree2array(tree)
-    assert_array_equal(a, a_conv)
-    # extend the tree
-    tree2 = rnp.array2tree(a, tree=tree)
-    assert_equal(tree2.GetEntries(), len(a) * 2)
-    a_conv2 = rnp.tree2array(tree2)
-    assert_array_equal(np.hstack([a, a]), a_conv2)
-    tmp.Close()
-    os.remove(tmp.GetName())
+
+    with temp() as tmp:
+        tree = rnp.array2tree(a)
+        a_conv = rnp.tree2array(tree)
+        assert_array_equal(a, a_conv)
+        # extend the tree
+        tree2 = rnp.array2tree(a, tree=tree)
+        assert_equal(tree2.GetEntries(), len(a) * 2)
+        a_conv2 = rnp.tree2array(tree2)
+        assert_array_equal(np.hstack([a, a]), a_conv2)
+
     assert_raises(TypeError, rnp.array2tree, a, tree=object)
+
+
+def test_array2tree_charstar():
+    a = np.array(['', 'a', 'ab', 'abc', 'xyz', ''],
+                 dtype=[('string', 'S3')])
+
+    with temp() as tmp:
+        rnp.array2root(a, tmp.GetName(), mode='recreate')
+        a_conv = rnp.root2array(tmp.GetName())
+        assert_array_equal(a, a_conv)
+
+
+def test_array2tree_fixed_length_arrays():
+    f = load(['fixed1.root', 'fixed2.root'])
+    a = rnp.root2array(f)
+    with temp() as tmp:
+        rnp.array2root(a, tmp.GetName(), mode='recreate')
+        a_conv = rnp.root2array(tmp.GetName())
+        assert_array_equal(a, a_conv)
 
 
 def test_array2root():
@@ -726,16 +754,14 @@ def test_array2root():
             ('y', np.float32),
             ('z', np.float64),
             ('w', np.bool)])
-    tmp_fd, tmp_path = tempfile.mkstemp(suffix='.root')
-    rnp.array2root(a, tmp_path, mode='recreate')
-    a_conv = rnp.root2array(tmp_path)
-    assert_array_equal(a, a_conv)
-    # extend the tree
-    rnp.array2root(a, tmp_path, mode='update')
-    a_conv2 = rnp.root2array(tmp_path)
-    assert_array_equal(np.hstack([a, a]), a_conv2)
-    os.close(tmp_fd)
-    os.remove(tmp_path)
+    with temp() as tmp:
+        rnp.array2root(a, tmp.GetName(), mode='recreate')
+        a_conv = rnp.root2array(tmp.GetName())
+        assert_array_equal(a, a_conv)
+        # extend the tree
+        rnp.array2root(a, tmp.GetName(), mode='update')
+        a_conv2 = rnp.root2array(tmp.GetName())
+        assert_array_equal(np.hstack([a, a]), a_conv2)
 
 
 def check_random_sample(obj):
