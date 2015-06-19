@@ -15,6 +15,8 @@ root_numpy
    :target: https://landscape.io/github/rootpy/root_numpy/master
 .. image:: https://img.shields.io/pypi/dm/root_numpy.svg
    :target: https://pypi.python.org/pypi/root_numpy
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.18750.svg
+   :target: http://dx.doi.org/10.5281/zenodo.18750
 
 root_numpy is a Python extension module that provides an efficient interface
 between `ROOT <http://root.cern.ch/>`_ and `NumPy <http://www.numpy.org/>`_.
