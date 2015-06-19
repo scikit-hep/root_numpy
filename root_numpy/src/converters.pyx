@@ -579,8 +579,8 @@ cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):
         leaflist = name
         if ndim > 0 and roottype.compare('C') != 0:
             for axis in range(ndim):
-                token = bytes('[{0:d}]'.format(dims[axis]))
-                leaflist.append(token)
+                token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
+                leaflist.append(<char*> token)
         leaflist.append(b'/')
         leaflist.append(roottype)
         this.branch = tree.GetBranch(name.c_str())
