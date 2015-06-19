@@ -335,9 +335,8 @@ def tree2rec(tree,
 def array2tree(arr, name='tree', tree=None):
     """Convert a numpy structured array into a ROOT TTree.
 
-    .. warning::
-       This function is experimental. Please report problems.
-       Not all data types are supported (``np.object`` and ``np.float16``).
+    Fields of basic types, strings, and fixed-size subarrays of basic types are
+    supported. ``np.object`` and ``np.float16`` are currently not supported.
 
     Parameters
     ----------
@@ -359,6 +358,26 @@ def array2tree(arr, name='tree', tree=None):
     --------
     array2root
 
+    Examples
+    --------
+
+    >>> from root_numpy import array2tree
+    >>> import numpy as np
+    >>>
+    >>> a = np.array([(1, 2.5, 3.4),
+    ...               (4, 5, 6.8)],
+    ...              dtype=[('a', np.int32),
+    ...                     ('b', np.float32),
+    ...                     ('c', np.float64)])
+    >>> tree = array2tree(a)
+    >>> tree.Scan()
+    ************************************************
+    *    Row   *         a *         b *         c *
+    ************************************************
+    *        0 *         1 *       2.5 *       3.4 *
+    *        1 *         4 *         5 *       6.8 *
+    ************************************************
+
     """
     import ROOT
     if tree is not None:
@@ -374,9 +393,8 @@ def array2tree(arr, name='tree', tree=None):
 def array2root(arr, filename, treename='tree', mode='update'):
     """Convert a numpy array into a ROOT TTree and save it in a ROOT TFile.
 
-    .. warning::
-       This function is experimental. Please report problems.
-       Not all data types are supported (``np.object`` and ``np.float16``).
+    Fields of basic types, strings, and fixed-size subarrays of basic types are
+    supported. ``np.object`` and ``np.float16`` are currently not supported.
 
     Parameters
     ----------
@@ -395,6 +413,37 @@ def array2root(arr, filename, treename='tree', mode='update'):
     See Also
     --------
     array2tree
+
+    Examples
+    --------
+
+    >>> from root_numpy import array2root, root2array
+    >>> import numpy as np
+    >>>
+    >>> a = np.array([(1, 2.5, 3.4),
+    ...               (4, 5, 6.8)],
+    ...              dtype=[('a', np.int32),
+    ...                     ('b', np.float32),
+    ...                     ('c', np.float64)])
+    >>> array2root(a, 'test.root', mode='recreate')
+    >>> root2array('test.root')
+    array([(1, 2.5, 3.4), (4, 5.0, 6.8)],
+          dtype=[('a', '<i4'), ('b', '<f4'), ('c', '<f8')])
+    >>>
+    >>> a = np.array(['', 'a', 'ab', 'abc', 'xyz', ''],
+    ...              dtype=[('string', 'S3')])
+    >>> array2root(a, 'test.root', mode='recreate')
+    >>> root2array('test.root')
+    array([('',), ('a',), ('ab',), ('abc',), ('xyz',), ('',)],
+          dtype=[('string', 'S3')])
+    >>>
+    >>> a = np.array([([1, 2, 3],),
+    ...               ([4, 5, 6],)],
+    ...              dtype=[('array', np.int32, (3,))])
+    >>> array2root(a, 'test.root', mode='recreate')
+    >>> root2array('test.root')
+    array([([1, 2, 3],), ([4, 5, 6],)],
+          dtype=[('array', '<i4', (3,))])
 
     """
     _librootnumpy.array2root(arr, filename, treename, mode)

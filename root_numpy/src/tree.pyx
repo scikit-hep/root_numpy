@@ -150,6 +150,9 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef string column_name
     cdef const_char* branch_name
     cdef const_char* leaf_name
+    cdef string branch_title
+    cdef int branch_title_size
+    cdef char type_code
 
     if num_requested_branches > 0:
         columns.reserve(num_requested_branches)
@@ -191,13 +194,19 @@ cdef object tree2array(TTree* tree, branches, string selection,
                     # This branch was not selected by the user
                     continue
 
+            branch_title = string(tbranch.GetTitle())
+            branch_title_size = branch_title.size()
+            if branch_title_size > 2 and branch_title[branch_title_size - 2] == '/':
+                type_code = branch_title[branch_title_size - 1]
+            else:
+                type_code = '\0'
             leaf_array = tbranch.GetListOfLeaves()
             shortname = leaf_array.GetEntries() == 1
 
             for ileaf in range(leaf_array.GetEntries()):
                 tleaf = <TLeaf*> leaf_array.At(ileaf)
                 leaf_name = tleaf.GetName()
-                conv = get_converter(tleaf)
+                conv = get_converter(tleaf, type_code)
                 if conv != NULL:
                     # A converter exists for this leaf
                     column_name = string(branch_name)
@@ -361,68 +370,8 @@ def root2array_fromCObj(tree, branches, selection,
         include_weight, weight_name)
 
 
-####################################
-# array -> TTree conversion follows:
-####################################
-
-cdef cppclass NP2CConverter:
-
-    void fill_from(void* source):
-        pass
-
-    __dealloc__():
-        pass
-
-
-cdef cppclass ScalarNP2CConverter(NP2CConverter):
-    int nbytes
-    string roottype
-    string name
-    void* value
-    TBranch* branch
-
-    __init__(TTree* tree, string name, string roottype, int nbytes):
-        cdef string leaflist
-        this.nbytes = nbytes
-        this.roottype = roottype
-        this.name = name
-        this.value = malloc(nbytes)
-        this.branch = tree.GetBranch(this.name.c_str())
-        if this.branch == NULL:
-            leaflist = this.name + '/' + this.roottype
-            this.branch = tree.Branch(this.name.c_str(), this.value, leaflist.c_str())
-        else:
-            # check type compatibility of existing branch
-            existing_type = this.branch.GetTitle().rpartition('/')[-1]
-            if str(roottype) != existing_type:
-                raise TypeError(
-                    "field '{0}' of type '{1}' is not compatible "
-                    "with existing branch of type '{2}'".format(
-                        name, roottype, existing_type))
-            this.branch.SetAddress(this.value)
-        this.branch.SetStatus(1)
-
-    __del__(self): # does this do what I want?
-        free(this.value)
-
-    void fill_from(void* source):
-        memcpy(this.value, source, this.nbytes)
-        this.branch.Fill()
-
-
-cdef NP2CConverter* find_np2c_converter(TTree* tree, name, dtype):
-    # TODO:
-    # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
-    # Handle np.object (array) columns
-    if dtype in TYPES_NUMPY2ROOT:
-        nbytes, roottype = TYPES_NUMPY2ROOT[dtype]
-        return new ScalarNP2CConverter(tree, name, roottype, nbytes)
-    warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
-    return NULL
-
-
 cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:
-    cdef vector[NP2CConverter*] converters
+    cdef vector[NP2ROOTConverter*] converters
     cdef vector[int] posarray
     cdef vector[int] roffsetarray
     cdef unsigned int icv
@@ -441,18 +390,18 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
         fieldnames = arr.dtype.names
         fields = arr.dtype.fields
 
-        # determine the structure
+        # Determine the structure
         for icol in range(len(fieldnames)):
             fieldname = fieldnames[icol]
             # roffset is an offset of particular field in each record
             dtype, roffset = fields[fieldname]
-            cvt = find_np2c_converter(tree, fieldname, dtype)
+            cvt = find_np2root_converter(tree, fieldname, dtype)
             if cvt != NULL:
                 roffsetarray.push_back(roffset)
                 converters.push_back(cvt)
                 posarray.push_back(icol)
 
-        # fill in data
+        # Fill the data
         pos_len = posarray.size()
         for idata in range(arr_len):
             thisrow = np.PyArray_GETPTR1(arr, idata)
@@ -461,7 +410,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
                 source = shift(thisrow, roffset)
                 converters[ipos].fill_from(source)
 
-        # need to update the number of entries in the tree to match
+        # Need to update the number of entries in the tree to match
         # the number in the branches since each branch is filled separately.
         tree.SetEntries(-1)
 

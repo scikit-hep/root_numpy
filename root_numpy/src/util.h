@@ -20,7 +20,8 @@ inline std::string format(const char* fmt, ...)
     if(size<=nsize)
     {
         // Delete buffer and try again
-        delete buffer; buffer = 0;
+        delete buffer;
+        buffer = 0;
         buffer = new char[nsize + 1]; // +1 for /0
         nsize = vsnprintf(buffer, size, fmt, vl);
     }
@@ -44,21 +45,23 @@ inline void printaddr(void* v)
 template<typename T> class TypeName
 {
     public:
-        TypeName():
-            name(typeid(T).name())
-        {}
 
-        const char* name;
+    TypeName():
+        name(typeid(T).name())
+    {}
+
+    const char* name;
 };
 
 // Workaround Cython's lack of template and pointer deref
 template<typename T> class Vector2Array
 {
     public:
-        inline T* convert(std::vector<T>* v)
-        {
-            return v->size() > 0 ? &((*v)[0]) : NULL;
-        }
+
+    inline T* convert(std::vector<T>* v)
+    {
+        return v->size() > 0 ? &((*v)[0]) : NULL;
+    }
 };
 
 #endif

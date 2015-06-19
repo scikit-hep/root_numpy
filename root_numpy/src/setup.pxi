@@ -21,7 +21,7 @@ from libcpp.vector cimport vector
 from libcpp.map cimport map as cpp_map
 from libcpp.pair cimport pair
 from libcpp.string cimport string, const_char
-from libc.string cimport memcpy
+from libc.string cimport memcpy, memset, strlen
 from libc.stdlib cimport malloc, free, realloc
 
 try:
