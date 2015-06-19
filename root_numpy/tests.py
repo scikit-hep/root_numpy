@@ -728,7 +728,7 @@ def test_array2tree():
 
 
 def test_array2tree_charstar():
-    a = np.array(['', 'a', 'ab', 'abc', 'xyz', ''],
+    a = np.array([b'', b'a', b'ab', b'abc', b'xyz', b''],
                  dtype=[('string', 'S3')])
 
     with temp() as tmp:
