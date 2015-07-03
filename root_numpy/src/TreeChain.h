@@ -9,17 +9,13 @@
 #include <TBranch.h>
 #include <TLeaf.h>
 #include <TTreeFormula.h>
+#include <TTreeCache.h>
 
 #include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
 #include <string>
 #include <map>
 #include <vector>
-#include <set>
+#include <utility>
 
 #include "Column.h"
 #include "util.h"
@@ -47,20 +43,21 @@ class TreeChain
 {
     public:
 
-    TreeChain(TTree* fChain):
-        fChain(fChain),
-        ientry(0)
+    TreeChain(TTree* tree, long long cache_size):
+        tree(tree),
+        itree(-1),
+        ientry(0),
+        cache_size(cache_size)
     {
-        fCurrent = -1;
-        notifier = new MiniNotify(fChain->GetNotify());
-        fChain->SetNotify(notifier);
+        notifier = new MiniNotify(tree->GetNotify());
+        tree->SetNotify(notifier);
     }
 
     ~TreeChain()
     {
-        fChain->SetNotify(notifier->oldnotify);
+        tree->SetNotify(notifier->oldnotify);
 
-        // Delete TTreeFormula
+        // Delete all TTreeFormula
         std::vector<TTreeFormula*>::iterator fit;
         for (fit = formulae.begin(); fit != formulae.end(); ++fit)
         {
@@ -78,22 +75,21 @@ class TreeChain
             // Enable all branches since we don't know yet which branches are
             // required by the formulae. The branches must be activated when a
             // TTreeFormula is initially created.
-            fChain->SetBranchStatus("*", true);
-            //fChain->SetCacheSize(10000000);
+            tree->SetBranchStatus("*", true);
         }
         return (int)load;
     }
 
     long long LoadTree(long long entry)
     {
-        long long load = fChain->LoadTree(entry);
+        long long load = tree->LoadTree(entry);
         if (load < 0)
         {
             return load;
         }
-        if (fChain->GetTreeNumber() != fCurrent)
+        if (tree->GetTreeNumber() != itree)
         {
-            fCurrent = fChain->GetTreeNumber();
+            itree = tree->GetTreeNumber();
         }
         if (notifier->notified)
         {
@@ -111,27 +107,43 @@ class TreeChain
 
     void InitBranches()
     {
-        // The branches must be activated when a TTreeFormula is initially created.
+        // Prepare() must be called before InitBranches()
+        TFile* file = NULL;
+        TTreeCache* cache = NULL;
         TBranch* branch;
         TLeaf* leaf;
         std::string bname, lname;
         LeafCache::iterator it;
 
-        // Only the required branches will be added to the cache below
-        fChain->DropBranchFromCache("*", true);
+        // Set the cache size. This should create a new cache if one does not
+        // already exist.
+        tree->SetCacheSize(cache_size);
+
+        // Get and set up the cache
+        file = tree->GetCurrentFile();
+        if (file)
+        {
+            cache = dynamic_cast<TTreeCache*>(file->GetCacheRead(tree));
+        }
+        if (cache)
+        {
+            cache->ResetCache();
+            cache->StartLearningPhase();
+        }
 
         for (it = leafcache.begin(); it != leafcache.end(); ++it)
         {
-            bname = it->first.first;
-            lname = it->first.second;
-            branch = fChain->GetBranch(bname.c_str());
-            leaf = branch->FindLeaf(lname.c_str());
+            leaf = it->second->leaf;
+            branch = leaf->GetBranch();
 
             // Make the branch active and cache it
             branch->SetStatus(true);
-            fChain->AddBranchToCache(branch, true);
-            // and the length leaf as well
+            if (cache)
+            {
+                tree->AddBranchToCache(branch, true);
+            }
 
+            // ... and the length leaf as well
             // TODO: Does this work if user doesn't want the length column
             // in the output structure?
             TLeaf* leafCount = leaf->GetLeafCount();
@@ -139,24 +151,36 @@ class TreeChain
             {
                 branch = leafCount->GetBranch();
                 branch->SetStatus(true);
-                fChain->AddBranchToCache(branch, true);
+                if (cache)
+                {
+                    tree->AddBranchToCache(branch, true);
+                }
             }
         }
 
         // Activate all branches used by the formulae
-        int ncodes, n;
+        int ncodes, icode;
         std::vector<TTreeFormula*>::iterator fit;
         for (fit = formulae.begin(); fit != formulae.end(); ++fit)
         {
             ncodes = (*fit)->GetNcodes();
-            for (n = 0; n < ncodes; ++n)
+            for (icode = 0; icode < ncodes; ++icode)
             {
-                branch = (*fit)->GetLeaf(n)->GetBranch();
+                branch = (*fit)->GetLeaf(icode)->GetBranch();
                 // Branch may be a TObject split across multiple
                 // subbranches. These must be activated recursively.
                 activate_branch_recursive(branch);
-                fChain->AddBranchToCache(branch, true);
+                if (cache)
+                {
+                    tree->AddBranchToCache(branch, true);
+                }
             }
+        }
+        if (cache)
+        {
+            // Stop the cache learning phase since we have included a fixed set
+            // of branches
+            cache->StopLearningPhase();
         }
     }
 
@@ -234,18 +258,19 @@ class TreeChain
         {
             bname = it->first.first;
             lname = it->first.second;
-            branch = fChain->FindBranch(bname.c_str());
+            branch = tree->FindBranch(bname.c_str());
             if (branch == NULL)
             {
                 std::cerr << "WARNING: cannot find branch " << bname
-                            << std::endl;
+                          << std::endl;
                 continue;
             }
             leaf = branch->FindLeaf(lname.c_str());
             if (leaf == NULL)
             {
                 std::cerr << "WARNING: cannot find leaf " << lname
-                            << " for branch " << bname << std::endl;
+                          << " for branch " << bname
+                          << std::endl;
                 continue;
             }
             it->second->SetLeaf(leaf, true);
@@ -273,7 +298,7 @@ class TreeChain
                    const std::string& leaf_name,
                    BranchColumn* column)
     {
-        BL bl = make_pair(branch_name, leaf_name);
+        BranchLeaf bl = make_pair(branch_name, leaf_name);
         leafcache.insert(make_pair(bl, column));
     }
 
@@ -299,15 +324,16 @@ class TreeChain
             TObject* oldnotify;
     };
 
-    TTree* fChain;
-    int fCurrent;
+    TTree* tree;
+    int itree;
     long long ientry;
+    long long cache_size;
     MiniNotify* notifier;
     std::vector<TTreeFormula*> formulae;
 
     // Branch name to leaf name association
-    typedef std::pair<std::string, std::string> BL;
-    typedef std::map<BL, BranchColumn*> LeafCache;
+    typedef std::pair<std::string, std::string> BranchLeaf;
+    typedef std::map<BranchLeaf, BranchColumn*> LeafCache;
 
     // Column pointer cache to update leaves
     // when new file is loaded in the chain

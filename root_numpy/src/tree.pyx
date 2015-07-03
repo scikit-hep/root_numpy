@@ -117,7 +117,8 @@ cdef handle_load(int load, bool ignore_index=False):
 
 cdef object tree2array(TTree* tree, branches, string selection,
                        start, stop, step,
-                       bool include_weight, string weight_name):
+                       bool include_weight, string weight_name,
+                       long cache_size):
 
     if tree.GetNbranches() == 0:
         raise ValueError("tree has no branches")
@@ -132,7 +133,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef long long num_entries_selected = 0
     cdef long long ientry
 
-    cdef TreeChain* chain = new TreeChain(tree)
+    cdef TreeChain* chain = new TreeChain(tree, cache_size)
     handle_load(chain.Prepare(), True)
 
     cdef TObjArray* branch_array = tree.GetListOfBranches()
@@ -297,7 +298,6 @@ cdef object tree2array(TTree* tree, branches, string selection,
             raise RuntimeError("unable to convert any branches in this tree")
 
         # Activate branches used by formulae and columns
-        # and deactivate all others
         chain.InitBranches()
 
         # Now that we have all the columns we can
@@ -367,9 +367,10 @@ cdef object tree2array(TTree* tree, branches, string selection,
     return arr
 
 
-def root2array_fromFname(fnames, string treename, branches,
-                         selection, start, stop, step,
-                         bool include_weight, string weight_name):
+def root2array_fromfile(fnames, string treename, branches,
+                        selection, start, stop, step,
+                        bool include_weight, string weight_name,
+                        long cache_size):
     cdef TChain* ttree = NULL
     try:
         ttree = new TChain(treename.c_str())
@@ -380,20 +381,21 @@ def root2array_fromFname(fnames, string treename, branches,
         ret = tree2array(
             <TTree*> ttree, branches,
             selection or '', start, stop, step,
-            include_weight, weight_name)
+            include_weight, weight_name, cache_size)
     finally:
         del ttree
     return ret
 
 
-def root2array_fromCObj(tree, branches, selection,
+def root2array_fromtree(tree, branches, selection,
                         start, stop, step,
-                        bool include_weight, string weight_name):
+                        bool include_weight, string weight_name,
+                        long cache_size):
     cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
     return tree2array(
         chain, branches,
         selection or '', start, stop, step,
-        include_weight, weight_name)
+        include_weight, weight_name, cache_size)
 
 
 cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:

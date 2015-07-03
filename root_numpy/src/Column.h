@@ -58,8 +58,7 @@ class FormulaColumn: public Column
 
     void* GetValuePointer()
     {
-        // required, as in TTreePlayer
-        formula->GetNdata();
+        formula->GetNdata(); // required, as in TTreePlayer
         value[0] = formula->EvalInstance(0);
         return value;
     }
@@ -97,13 +96,13 @@ class BranchColumn: public Column
 
     int GetLen()
     {
-        // get len of this block (in unit of element)
+        // Get length of this block (number of elements)
         return leaf->GetLen();
     }
 
     int GetCountLen()
     {
-        // get count leaf value
+        // Get count leaf value
         TLeaf* count_leaf = leaf->GetLeafCount();
         if (count_leaf != NULL)
         {
@@ -114,7 +113,7 @@ class BranchColumn: public Column
 
     int GetSize()
     {
-        // get size of this block in bytes
+        // Get size of this block in bytes
         return leaf->GetLenType() * leaf->GetLen();
     }
 

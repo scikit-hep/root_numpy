@@ -101,7 +101,8 @@ def root2array(filenames,
                stop=None,
                step=None,
                include_weight=False,
-               weight_name='weight'):
+               weight_name='weight',
+               cache_size=-1):
     """Convert trees in ROOT files into a numpy structured array.
 
     Refer to the type conversion table :ref:`here <conversion_table>`.
@@ -130,6 +131,10 @@ def root2array(filenames,
         Include a column containing the tree weight.
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
+    cache_size : int, optional (default=-1)
+        Set the size (in bytes) of the TTreeCache used while reading a TTree. A
+        value of -1 uses ROOT's default cache size. A value of 0 disables the
+        cache.
 
     Examples
     --------
@@ -197,12 +202,13 @@ def root2array(filenames,
     else:
         flatten = False
 
-    arr = _librootnumpy.root2array_fromFname(
+    arr = _librootnumpy.root2array_fromfile(
         filenames, treename, branches,
         selection,
         start, stop, step,
         include_weight,
-        weight_name)
+        weight_name,
+        cache_size)
 
     if flatten:
         # select single column
@@ -218,7 +224,8 @@ def root2rec(filenames,
              stop=None,
              step=None,
              include_weight=False,
-             weight_name='weight'):
+             weight_name='weight',
+             cache_size=-1):
     """View the result of :func:`root2array` as a record array.
 
     Notes
@@ -236,7 +243,8 @@ def root2rec(filenames,
                       branches, selection,
                       start, stop, step,
                       include_weight,
-                      weight_name).view(np.recarray)
+                      weight_name,
+                      cache_size).view(np.recarray)
 
 
 def tree2array(tree,
@@ -246,7 +254,8 @@ def tree2array(tree,
                stop=None,
                step=None,
                include_weight=False,
-               weight_name='weight'):
+               weight_name='weight',
+               cache_size=-1):
     """Convert a tree into a numpy structured array.
 
     Refer to the type conversion table :ref:`here <conversion_table>`.
@@ -271,6 +280,10 @@ def tree2array(tree,
         Include a column containing the tree weight.
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
+    cache_size : int, optional (default=-1)
+        Set the size (in bytes) of the TTreeCache used while reading a TTree. A
+        value of -1 uses ROOT's default cache size. A value of 0 disables the
+        cache.
 
     See Also
     --------
@@ -289,11 +302,12 @@ def tree2array(tree,
     else:
         flatten = False
 
-    arr = _librootnumpy.root2array_fromCObj(
+    arr = _librootnumpy.root2array_fromtree(
         cobj, branches, selection,
         start, stop, step,
         include_weight,
-        weight_name)
+        weight_name,
+        cache_size)
 
     if flatten:
         # select single column
@@ -308,7 +322,8 @@ def tree2rec(tree,
              stop=None,
              step=None,
              include_weight=False,
-             weight_name='weight'):
+             weight_name='weight',
+             cache_size=-1):
     """View the result of :func:`tree2array` as a record array.
 
     Notes
@@ -329,7 +344,8 @@ def tree2rec(tree,
                       stop=stop,
                       step=step,
                       include_weight=include_weight,
-                      weight_name=weight_name).view(np.recarray)
+                      weight_name=weight_name,
+                      cache_size=cache_size).view(np.recarray)
 
 
 def array2tree(arr, name='tree', tree=None):
