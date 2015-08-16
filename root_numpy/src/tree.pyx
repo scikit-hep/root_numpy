@@ -293,6 +293,10 @@ cdef object tree2array(TTree* tree, branches, string selection,
         if include_weight:
             dtype.append((weight_name, np.dtype('d')))
 
+        # Determine indices in slice
+        indices = xrange(*(slice(start, stop, step).indices(num_entries)))
+        num_entries = len(indices)
+
         # Initialize the array
         arr = np.empty(num_entries, dtype=dtype)
 
@@ -300,8 +304,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
         num_columns = columns.size()
 
         # Loop on entries in the tree and write the data in the array
-        indices = slice(start, stop, step).indices(num_entries)
-        for ientry in xrange(*indices):
+        for ientry in indices:
             entry_size = chain.GetEntry(ientry)
             handle_load(entry_size)
             if entry_size == 0:
