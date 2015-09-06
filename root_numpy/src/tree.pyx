@@ -83,6 +83,22 @@ cdef get_tree_structure(TTree* tree, branches=None):
     return ret
 
 
+cdef humanize_bytes(long value, int precision=1):
+    abbrevs = (
+        (1<<50, 'PB'),
+        (1<<40, 'TB'),
+        (1<<30, 'GB'),
+        (1<<20, 'MB'),
+        (1<<10, 'kB'),
+        (1, 'bytes'))
+    if value == 1:
+        return '1 byte'
+    for factor, suffix in abbrevs:
+        if value >= factor:
+            break
+    return '%.*f %s' % (precision, value / float(factor), suffix)
+
+
 cdef handle_load(int load, bool ignore_index=False):
     if load >= 0:
         return
@@ -285,20 +301,26 @@ cdef object tree2array(TTree* tree, branches, string selection,
 
         # Now that we have all the columns we can
         # make an appropriate array structure
-        dtype = []
+        dtype_fields = []
         for icol in range(columns.size()):
             this_col = columns[icol]
             this_conv = converters[icol]
-            dtype.append((this_col.name, this_conv.get_nptype()))
+            dtype_fields.append((this_col.name, this_conv.get_nptype()))
         if include_weight:
-            dtype.append((weight_name, np.dtype('d')))
+            dtype_fields.append((weight_name, np.dtype('d')))
+        dtype = np.dtype(dtype_fields)
 
         # Determine indices in slice
         indices = xrange(*(slice(start, stop, step).indices(num_entries)))
         num_entries = len(indices)
 
         # Initialize the array
-        arr = np.empty(num_entries, dtype=dtype)
+        try:
+            arr = np.empty(num_entries, dtype=dtype)
+        except MemoryError as ex:
+            # Raise a more informative exception
+            raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(
+                humanize_bytes(dtype.itemsize * num_entries), num_entries, len(dtype_fields)))
 
         # Exclude weight column in num_columns
         num_columns = columns.size()
