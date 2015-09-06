@@ -6,9 +6,9 @@ def fill_h1(hist,
             bool return_indices=False):
     # perform type checking on python side
     cdef TH1* _hist = <TH1*> PyCObject_AsVoidPtr(hist)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)
@@ -34,9 +34,9 @@ def fill_h2(hist,
             bool return_indices=False):
     # perform type checking on python side
     cdef TH2* _hist = <TH2*> PyCObject_AsVoidPtr(hist)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)
@@ -62,9 +62,9 @@ def fill_h3(hist,
             bool return_indices=False):
     # perform type checking on python side
     cdef TH3* _hist = <TH3*> PyCObject_AsVoidPtr(hist)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)
@@ -90,9 +90,9 @@ def fill_p1(profile,
             bool return_indices=False):
     # perform type checking on python side
     cdef TProfile* _profile = <TProfile*> PyCObject_AsVoidPtr(profile)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)
@@ -118,9 +118,9 @@ def fill_p2(profile,
             bool return_indices=False):
     # perform type checking on python side
     cdef TProfile2D* _profile = <TProfile2D*> PyCObject_AsVoidPtr(profile)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)
@@ -146,9 +146,9 @@ def fill_p3(profile,
             bool return_indices=False):
     # perform type checking on python side
     cdef TProfile3D* _profile = <TProfile3D*> PyCObject_AsVoidPtr(profile)
-    cdef long size = array.shape[0]
+    cdef SIZE_t size = array.shape[0]
     cdef np.ndarray[np.int_t, ndim=1] idx = np.empty(0, dtype=np.int)
-    cdef long i
+    cdef SIZE_t i
     cdef int bin_idx
     if return_indices:
         idx = np.empty(size, dtype=np.int)

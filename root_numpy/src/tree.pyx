@@ -128,8 +128,9 @@ cdef object tree2array(TTree* tree, branches, string selection,
         if num_requested_branches == 0:
             raise ValueError("branches is an empty list")
 
-    cdef int num_entries = tree.GetEntries()
-    cdef int num_entries_selected = 0
+    cdef long long num_entries = tree.GetEntries()
+    cdef long long num_entries_selected = 0
+    cdef long long ientry
 
     cdef TreeChain* chain = new TreeChain(tree)
     handle_load(chain.Prepare(), True)
@@ -152,7 +153,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef TTreeFormula* selection_formula = NULL
     cdef TTreeFormula* formula = NULL
 
-    cdef int ibranch, ileaf, ientry, branch_idx = 0
+    cdef int ibranch, ileaf, branch_idx = 0
     cdef int num_branches = branch_array.GetEntries()
     cdef unsigned int icol, num_columns
 
@@ -401,8 +402,8 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
     cdef vector[int] roffsetarray
     cdef unsigned int icv
     cdef int icol
-    cdef long arr_len = arr.shape[0]
-    cdef long idata
+    cdef SIZE_t arr_len = arr.shape[0]
+    cdef SIZE_t idata
     cdef unsigned long pos_len
     cdef unsigned long ipos
     cdef void* source = NULL
