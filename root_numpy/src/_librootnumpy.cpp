@@ -15836,9 +15836,6 @@ static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *__pyx_v_tree, PyObjec
   PyObject *__pyx_v_indices = NULL
 #line 118 "root_numpy/src/tree.pyx"
 ;
-  CYTHON_UNUSED PyObject *__pyx_v_ex = NULL
-#line 118 "root_numpy/src/tree.pyx"
-;
   PyObject *__pyx_v_idx = NULL
 #line 118 "root_numpy/src/tree.pyx"
 ;
@@ -18972,7 +18969,7 @@ __pyx_t_20 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_20)) {__pyx_file
  *         # Initialize the array
  *         try:             # <<<<<<<<<<<<<<
  *             arr = np.empty(num_entries, dtype=dtype)
- *         except MemoryError as ex:
+ *         except MemoryError:
  */
 
 #line 319 "root_numpy/src/tree.pyx"
@@ -18989,7 +18986,7 @@ __pyx_t_20 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_20)) {__pyx_file
  *         # Initialize the array
  *         try:
  *             arr = np.empty(num_entries, dtype=dtype)             # <<<<<<<<<<<<<<
- *         except MemoryError as ex:
+ *         except MemoryError:
  *             # Raise a more informative exception
  */
 
@@ -19110,7 +19107,7 @@ __pyx_t_20 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_20)) {__pyx_file
       /* "root_numpy/src/tree.pyx":321
  *         try:
  *             arr = np.empty(num_entries, dtype=dtype)
- *         except MemoryError as ex:             # <<<<<<<<<<<<<<
+ *         except MemoryError:             # <<<<<<<<<<<<<<
  *             # Raise a more informative exception
  *             raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(
  */
@@ -19136,14 +19133,8 @@ __pyx_t_20 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_20)) {__pyx_file
 #line 321 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_9);
 
-#line 321 "root_numpy/src/tree.pyx"
-        __Pyx_INCREF(__pyx_t_2);
-
-#line 321 "root_numpy/src/tree.pyx"
-        __pyx_v_ex = __pyx_t_2;
-
         /* "root_numpy/src/tree.pyx":323
- *         except MemoryError as ex:
+ *         except MemoryError:
  *             # Raise a more informative exception
  *             raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(             # <<<<<<<<<<<<<<
  *                 humanize_bytes(dtype.itemsize * num_entries), num_entries, len(dtype_fields)))
@@ -19306,7 +19297,7 @@ __pyx_t_20 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_20)) {__pyx_file
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
         /* "root_numpy/src/tree.pyx":323
- *         except MemoryError as ex:
+ *         except MemoryError:
  *             # Raise a more informative exception
  *             raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(             # <<<<<<<<<<<<<<
  *                 humanize_bytes(dtype.itemsize * num_entries), num_entries, len(dtype_fields)))
@@ -20218,9 +20209,6 @@ __pyx_t_9 = PyObject_GetIter(__pyx_v_indices); if (unlikely(!__pyx_t_9)) {__pyx_
 
 #line 118 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_indices);
-
-#line 118 "root_numpy/src/tree.pyx"
-  __Pyx_XDECREF(__pyx_v_ex);
 
 #line 118 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_idx);
