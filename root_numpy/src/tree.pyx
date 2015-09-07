@@ -318,7 +318,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
         # Initialize the array
         try:
             arr = np.empty(num_entries, dtype=dtype)
-        except MemoryError as ex:
+        except MemoryError:
             # Raise a more informative exception
             raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(
                 humanize_bytes(dtype.itemsize * num_entries), num_entries, len(dtype_fields)))
