@@ -70,22 +70,21 @@ class TreeChain
         delete notifier;
     }
 
-    long Prepare()
+    int Prepare()
     {
-        long load = LoadTree(0);
-        if (load < 0)
+        long long load = LoadTree(0);
+        if (load >= 0)
         {
-            return load;
+            // Enable all branches since we don't know yet which branches are
+            // required by the formulae. The branches must be activated when a
+            // TTreeFormula is initially created.
+            fChain->SetBranchStatus("*", true);
+            //fChain->SetCacheSize(10000000);
         }
-        // Enable all branches since we don't know yet which branches are
-        // required by the formulae. The branches must be activated when a
-        // TTreeFormula is initially created.
-        fChain->SetBranchStatus("*", true);
-        //fChain->SetCacheSize(10000000);
-        return load;
+        return (int)load;
     }
 
-    long long LoadTree(long entry)
+    long long LoadTree(long long entry)
     {
         long long load = fChain->LoadTree(entry);
         if (load < 0)
@@ -161,7 +160,7 @@ class TreeChain
         }
     }
 
-    int GetEntry(long entry)
+    int GetEntry(long long entry)
     {
         /*
         In order to get performance comparable to TTreeFormula, we manually
@@ -183,7 +182,7 @@ class TreeChain
         membership, and it won't cost us anything since TTreeFormula won't
         reload them.
         */
-        long load = LoadTree(entry);
+        long long load = LoadTree(entry);
         if (load < 0)
         {
             return (int)load;
@@ -271,8 +270,8 @@ class TreeChain
     }
 
     void AddColumn(const std::string& branch_name,
-                    const std::string& leaf_name,
-                    BranchColumn* column)
+                   const std::string& leaf_name,
+                   BranchColumn* column)
     {
         BL bl = make_pair(branch_name, leaf_name);
         leafcache.insert(make_pair(bl, column));
@@ -302,7 +301,7 @@ class TreeChain
 
     TTree* fChain;
     int fCurrent;
-    long ientry;
+    long long ientry;
     MiniNotify* notifier;
     std::vector<TTreeFormula*> formulae;
 
