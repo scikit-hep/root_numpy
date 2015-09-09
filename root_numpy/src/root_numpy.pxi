@@ -50,10 +50,10 @@ cdef extern from "Column.h":
 cdef extern from "TreeChain.h":
     cdef cppclass TreeChain:
         TreeChain(TTree*)
-        long Prepare()
+        int Prepare()
         int Next()
         void AddColumn(string bname, string lname, BranchColumn* column)
-        int GetEntry(int i)
+        int GetEntry(long_long)
         TTree* fChain
         void AddFormula(TTreeFormula* formula)
         void InitBranches()
