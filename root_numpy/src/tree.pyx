@@ -400,14 +400,13 @@ def root2array_fromtree(tree, branches, selection,
 
 cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:
     cdef vector[NP2ROOTConverter*] converters
-    cdef vector[int] posarray
+    cdef NP2ROOTConverter* cvt
     cdef vector[int] roffsetarray
-    cdef unsigned int icv
-    cdef int icol
+    cdef int roffset
+    cdef unsigned int icol
+    cdef unsigned int num_cols
     cdef SIZE_t arr_len = arr.shape[0]
     cdef SIZE_t idata
-    cdef unsigned long pos_len
-    cdef unsigned long ipos
     cdef void* source = NULL
     cdef void* thisrow = NULL
 
@@ -427,16 +426,18 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
             if cvt != NULL:
                 roffsetarray.push_back(roffset)
                 converters.push_back(cvt)
-                posarray.push_back(icol)
+            else:
+                warnings.warn("converter for {!r} is not "
+                              "implemented (skipping)".format(dtype))
 
         # Fill the data
-        pos_len = posarray.size()
+        num_cols = converters.size()
         for idata in range(arr_len):
             thisrow = np.PyArray_GETPTR1(arr, idata)
-            for ipos in range(pos_len):
-                roffset = roffsetarray[ipos]
+            for icol in range(num_cols):
+                roffset = roffsetarray[icol]
                 source = shift(thisrow, roffset)
-                converters[ipos].fill_from(source)
+                converters[icol].fill_from(source)
 
         # Need to update the number of entries in the tree to match
         # the number in the branches since each branch is filled separately.
@@ -446,8 +447,8 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
         raise
 
     finally:
-        for icv in range(converters.size()):
-            del converters[icv]
+        for icol in range(converters.size()):
+            del converters[icol]
         # TODO: clean up tree
 
     return tree

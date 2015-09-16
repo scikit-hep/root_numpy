@@ -628,7 +628,5 @@ cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):
         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
     elif dtype.kind == 'S':
         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
-    else:
-        warnings.warn("converter for {!r} is not implemented (skipping)".format(dtype))
     free(dims)
     return conv
