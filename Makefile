@@ -108,7 +108,7 @@ trailing-spaces:
 doc-clean:
 	@make -C docs/ clean
 
-doc: clean doc-clean inplace
+doc: doc-clean inplace
 	@make -C docs/ html
 
 check-rst:

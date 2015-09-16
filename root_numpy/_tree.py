@@ -105,8 +105,6 @@ def root2array(filenames,
                cache_size=-1):
     """Convert trees in ROOT files into a numpy structured array.
 
-    Refer to the type conversion table :ref:`here <conversion_table>`.
-
     Parameters
     ----------
     filenames : str or list
@@ -136,47 +134,13 @@ def root2array(filenames,
         value of -1 uses ROOT's default cache size. A value of 0 disables the
         cache.
 
-    Examples
-    --------
-
-    Read all branches from the tree named ``mytree`` in ``a.root``
-    Remember that ``mytree`` is optional if ``a.root`` has one tree::
-
-        root2array('a.root', 'mytree')
-
-    Read all branches starting from entry 5 and include 10 entries or up to the
-    end of the file::
-
-        root2array('a.root', 'mytree', start=5, stop=11)
-
-    Read all branches in reverse order::
-
-        root2array('a.root', 'mytree', step=-1)
-
-    Read every second entry::
-
-        root2array('a.root', 'mytree', step=2)
-
-    Read all branches from the tree named ``mytree`` in ``a*.root``::
-
-        root2array('a*.root', 'mytree')
-
-    Read all branches from the tree named ``mytree`` in ``a*.root`` and
-    ``b*.root``::
-
-        root2array(['a*.root', 'b*.root'], 'mytree')
-
-    Read branch ``x`` and ``y`` from the tree named ``mytree`` in ``a.root``::
-
-        root2array('a.root', 'mytree', ['x', 'y'])
-
     Notes
     -----
+    * Refer to the :ref:`type conversion table <conversion_table>`.
 
-    Due to the way TChain works, if the trees specified in the input files have
-    different structures, only the branch in the first tree will be
-    automatically extracted. You can work around this by either reordering the
-    input file or specifying the branches manually.
+    See Also
+    --------
+    tree2array
 
     """
     filenames = _glob(filenames)
@@ -230,9 +194,11 @@ def root2rec(filenames,
 
     Notes
     -----
-    This is equivalent to::
+    * This is equivalent to::
 
         root2array(filenames, treename, branches).view(np.recarray)
+
+    * Refer to the :ref:`type conversion table <conversion_table>`.
 
     See Also
     --------
@@ -258,8 +224,6 @@ def tree2array(tree,
                cache_size=-1):
     """Convert a tree into a numpy structured array.
 
-    Refer to the type conversion table :ref:`here <conversion_table>`.
-
     Parameters
     ----------
     tree : ROOT TTree instance
@@ -284,6 +248,39 @@ def tree2array(tree,
         Set the size (in bytes) of the TTreeCache used while reading a TTree. A
         value of -1 uses ROOT's default cache size. A value of 0 disables the
         cache.
+
+    Notes
+    -----
+    Types are converted according to:
+
+    .. _conversion_table:
+
+    ========================  ===============================
+    ROOT                      NumPy
+    ========================  ===============================
+    ``Bool_t``                ``np.bool``
+    ``Char_t``                ``np.int8``
+    ``UChar_t``               ``np.uint8``
+    ``Short_t``               ``np.int16``
+    ``UShort_t``              ``np.uint16``
+    ``Int_t``                 ``np.int32``
+    ``UInt_t``                ``np.uint32``
+    ``Float_t``               ``np.float32``
+    ``Double_t``              ``np.float64``
+    ``Long64_t``              ``np.int64``
+    ``ULong64_t``             ``np.uint64``
+    ``<type>[2][3]...``       ``(<nptype>, (2, 3, ...))``
+    ``<type>[nx][2]...``      ``np.object``
+    ``string``                ``np.object``
+    ``vector<t>``             ``np.object``
+    ``vector<vector<t> >``    ``np.object``
+    ========================  ===============================
+
+    * Variable-length arrays (such as ``x[nx][2]``) and vectors (such as
+      ``vector<int>``) are converted to NumPy arrays of the corresponding
+      types.
+
+    * Fixed-length arrays are converted to fixed-length NumPy array fields.
 
     See Also
     --------
@@ -328,9 +325,11 @@ def tree2rec(tree,
 
     Notes
     -----
-    This is equivalent to::
+    * This is equivalent to::
 
         tree2array(treename, branches).view(np.recarray)
+
+    * Refer to the :ref:`type conversion table <conversion_table>`.
 
     See Also
     --------

@@ -36,7 +36,7 @@ The ``plot`` directive supports the options
 
     include-source : bool
         Whether to display the source code. Default can be changed in conf.py
-    
+
 and the ``image`` directive options ``alt``, ``height``, ``width``,
 ``scale``, ``align``, ``class``.
 
@@ -74,9 +74,15 @@ TODO
   to make them appear side-by-side, or in floats.
 
 """
+from __future__ import division, absolute_import, print_function
 
-import sys, os, glob, shutil, imp, warnings, cStringIO, re, textwrap, traceback
+import sys, os, glob, shutil, imp, warnings, re, textwrap, traceback
 import sphinx
+
+if sys.version_info[0] >= 3:
+    from io import StringIO
+else:
+    from io import StringIO
 
 import warnings
 warnings.warn("A plot_directive module is also available under "
@@ -94,7 +100,7 @@ def setup(app):
     setup.app = app
     setup.config = app.config
     setup.confdir = app.confdir
-    
+
     app.add_config_value('plot_pre_code', '', True)
     app.add_config_value('plot_include_source', False, True)
     app.add_config_value('plot_formats', ['png', 'hires.png', 'pdf'], True)
@@ -257,7 +263,7 @@ def run(arguments, content, options, state_machine, state, lineno):
 
     # is it in doctest format?
     is_doctest = contains_doctest(code)
-    if options.has_key('format'):
+    if 'format' in options:
         if options['format'] == 'python':
             is_doctest = False
         else:
@@ -291,7 +297,7 @@ def run(arguments, content, options, state_machine, state, lineno):
         results = makefig(code, source_file_name, build_dir, output_base,
                           config)
         errors = []
-    except PlotError, err:
+    except PlotError as err:
         reporter = state.memo.reporter
         sm = reporter.system_message(
             2, "Exception occurred in plotting %s: %s" % (output_base, err),
@@ -314,7 +320,7 @@ def run(arguments, content, options, state_machine, state, lineno):
         else:
             source_code = ""
 
-        opts = [':%s: %s' % (key, val) for key, val in options.items()
+        opts = [':%s: %s' % (key, val) for key, val in list(options.items())
                 if key in ('alt', 'height', 'width', 'scale', 'align', 'class')]
 
         only_html = ".. only:: html"
@@ -444,7 +450,7 @@ def run_code(code, code_path, ns=None):
 
     # Redirect stdout
     stdout = sys.stdout
-    sys.stdout = cStringIO.StringIO()
+    sys.stdout = StringIO()
 
     # Reset sys.argv
     old_sys_argv = sys.argv
@@ -456,9 +462,9 @@ def run_code(code, code_path, ns=None):
             if ns is None:
                 ns = {}
             if not ns:
-                exec setup.config.plot_pre_code in ns
-            exec code in ns
-        except (Exception, SystemExit), err:
+                exec(setup.config.plot_pre_code, ns)
+            exec(code, ns)
+        except (Exception, SystemExit) as err:
             raise PlotError(traceback.format_exc())
     finally:
         os.chdir(pwd)
@@ -520,7 +526,7 @@ def makefig(code, code_path, output_dir, output_base, config):
     all_exists = True
     for i, code_piece in enumerate(code_pieces):
         images = []
-        for j in xrange(1000):
+        for j in range(1000):
             img = ImageFile('%s_%02d_%02d' % (output_base, i, j), output_dir)
             for format, dpi in formats:
                 if out_of_date(code_path, img.filename(format)):
@@ -565,7 +571,7 @@ def makefig(code, code_path, output_dir, output_base, config):
             for format, dpi in formats:
                 try:
                     figman.canvas.figure.savefig(img.filename(format), dpi=dpi)
-                except exceptions.BaseException, err:
+                except exceptions.BaseException as err:
                     raise PlotError(traceback.format_exc())
                 img.formats.append(format)
 
@@ -582,38 +588,55 @@ def makefig(code, code_path, output_dir, output_base, config):
 try:
     from os.path import relpath
 except ImportError:
-    def relpath(target, base=os.curdir):
-        """
-        Return a relative path to the target from either the current
-        dir or an optional base dir.  Base can be a directory
-        specified either as absolute or relative to current dir.
-        """
+    # Copied from Python 2.7
+    if 'posix' in sys.builtin_module_names:
+        def relpath(path, start=os.path.curdir):
+            """Return a relative version of a path"""
+            from os.path import sep, curdir, join, abspath, commonprefix, \
+                 pardir
 
-        if not os.path.exists(target):
-            raise OSError, 'Target does not exist: '+target
+            if not path:
+                raise ValueError("no path specified")
 
-        if not os.path.isdir(base):
-            raise OSError, 'Base is not a directory or does not exist: '+base
+            start_list = abspath(start).split(sep)
+            path_list = abspath(path).split(sep)
 
-        base_list = (os.path.abspath(base)).split(os.sep)
-        target_list = (os.path.abspath(target)).split(os.sep)
+            # Work out how much of the filepath is shared by start and path.
+            i = len(commonprefix([start_list, path_list]))
 
-        # On the windows platform the target may be on a completely
-        # different drive from the base.
-        if os.name in ['nt','dos','os2'] and base_list[0] <> target_list[0]:
-            raise OSError, 'Target is on a different drive to base. Target: '+target_list[0].upper()+', base: '+base_list[0].upper()
+            rel_list = [pardir] * (len(start_list)-i) + path_list[i:]
+            if not rel_list:
+                return curdir
+            return join(*rel_list)
+    elif 'nt' in sys.builtin_module_names:
+        def relpath(path, start=os.path.curdir):
+            """Return a relative version of a path"""
+            from os.path import sep, curdir, join, abspath, commonprefix, \
+                 pardir, splitunc
 
-        # Starting from the filepath root, work out how much of the
-        # filepath is shared by base and target.
-        for i in range(min(len(base_list), len(target_list))):
-            if base_list[i] <> target_list[i]: break
-        else:
-            # If we broke out of the loop, i is pointing to the first
-            # differing path elements.  If we didn't break out of the
-            # loop, i is pointing to identical path elements.
-            # Increment i so that in all cases it points to the first
-            # differing path elements.
-            i+=1
+            if not path:
+                raise ValueError("no path specified")
+            start_list = abspath(start).split(sep)
+            path_list = abspath(path).split(sep)
+            if start_list[0].lower() != path_list[0].lower():
+                unc_path, rest = splitunc(path)
+                unc_start, rest = splitunc(start)
+                if bool(unc_path) ^ bool(unc_start):
+                    raise ValueError("Cannot mix UNC and non-UNC paths (%s and %s)"
+                                                                        % (path, start))
+                else:
+                    raise ValueError("path is on drive %s, start on drive %s"
+                                                        % (path_list[0], start_list[0]))
+            # Work out how much of the filepath is shared by start and path.
+            for i in range(min(len(start_list), len(path_list))):
+                if start_list[i].lower() != path_list[i].lower():
+                    break
+            else:
+                i += 1
 
-        rel_list = [os.pardir] * (len(base_list)-i) + target_list[i:]
-        return os.path.join(*rel_list)
+            rel_list = [pardir] * (len(start_list)-i) + path_list[i:]
+            if not rel_list:
+                return curdir
+            return join(*rel_list)
+    else:
+        raise RuntimeError("Unsupported platform (no relpath available!)")
