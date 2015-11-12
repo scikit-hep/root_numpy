@@ -82,6 +82,7 @@ cdef extern from "TChain.h":
         TChain(const_char*)
         int Add(const_char*, long_long)
         void Print()
+        int GetNtrees()
 
 cdef extern from "TFormula.h":
     cdef cppclass TFormula:

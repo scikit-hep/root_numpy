@@ -42,6 +42,10 @@ clean: clean-build clean-pyc clean-so
 
 cython: $(CYTHON_CORE_CPP) $(CYTHON_TMVA_CPP)
 
+clean-cython:
+	@rm -f $(CYTHON_CORE_CPP)
+	@rm -f $(CYTHON_TMVA_CPP)
+
 show-cython: clean-html
 	@tmp=`mktemp -d`; \
 	for pyx in $(CYTHON_PYX_SRC); do \

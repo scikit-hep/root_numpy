@@ -115,7 +115,7 @@ cdef handle_load(int load, bool ignore_index=False):
     raise RuntimeError("the chain is not initialized")
 
 
-cdef object tree2array(TTree* tree, branches, string selection,
+cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                        start, stop, step,
                        bool include_weight, string weight_name,
                        long cache_size):
@@ -133,7 +133,7 @@ cdef object tree2array(TTree* tree, branches, string selection,
     cdef long long num_entries_selected = 0
     cdef long long ientry
 
-    cdef TreeChain* chain = new TreeChain(tree, cache_size)
+    cdef TreeChain* chain = new TreeChain(tree, ischain, cache_size)
     handle_load(chain.Prepare(), True)
 
     cdef TObjArray* branch_array = tree.GetListOfBranches()
@@ -370,20 +370,38 @@ cdef object tree2array(TTree* tree, branches, string selection,
 def root2array_fromfile(fnames, string treename, branches,
                         selection, start, stop, step,
                         bool include_weight, string weight_name,
-                        long cache_size):
-    cdef TChain* ttree = NULL
+                        long cache_size, bool warn_missing_tree):
+    cdef TChain* chain = NULL
+    cdef TFile* file = NULL
+    cdef TTree* tree = NULL
     try:
-        ttree = new TChain(treename.c_str())
+        chain = new TChain(treename.c_str())
         for fn in fnames:
-            if ttree.Add(fn, -1) == 0:
+            if warn_missing_tree:
+                file = Open(fn, 'read')
+                if file == NULL:
+                    raise IOError("cannot open file {0}".format(fn))
+                tree = <TTree*> file.Get(treename.c_str())
+                if tree == NULL:
+                    # skip this file
+                    warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
+                                  RuntimeWarning)
+                    file.Close()
+                    continue
+                del tree
+                file.Close()
+            if chain.Add(fn, -1) == 0:
                 raise IOError("unable to access tree '{0}' in {1}".format(
                     treename, fn))
+        if chain.GetNtrees() == 0:
+            raise IOError("none of the input files contain "
+                          "the requested tree '{0}'".format(treename))
         ret = tree2array(
-            <TTree*> ttree, branches,
+            <TTree*> chain, True, branches,
             selection or '', start, stop, step,
             include_weight, weight_name, cache_size)
     finally:
-        del ttree
+        del chain
     return ret
 
 
@@ -391,9 +409,9 @@ def root2array_fromtree(tree, branches, selection,
                         start, stop, step,
                         bool include_weight, string weight_name,
                         long cache_size):
-    cdef TTree* chain = <TTree*> PyCObject_AsVoidPtr(tree)
+    cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
     return tree2array(
-        chain, branches,
+        rtree, False, branches,
         selection or '', start, stop, step,
         include_weight, weight_name, cache_size)
 
