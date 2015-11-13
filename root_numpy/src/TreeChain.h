@@ -43,8 +43,9 @@ class TreeChain
 {
     public:
 
-    TreeChain(TTree* tree, long long cache_size):
+    TreeChain(TTree* tree, bool ischain, long long cache_size):
         tree(tree),
+        ischain(ischain),
         itree(-1),
         ientry(0),
         cache_size(cache_size)
@@ -261,8 +262,12 @@ class TreeChain
             branch = tree->FindBranch(bname.c_str());
             if (branch == NULL)
             {
-                std::cerr << "WARNING: cannot find branch " << bname
-                          << std::endl;
+                std::cerr << "WARNING: cannot find branch " << bname;
+                if (ischain)
+                {
+                    std::cerr << " in file " << ((TChain*) tree)->GetFile()->GetName();
+                }
+                std::cerr << std::endl;
                 continue;
             }
             leaf = branch->FindLeaf(lname.c_str());
@@ -325,6 +330,7 @@ class TreeChain
     };
 
     TTree* tree;
+    bool ischain;
     int itree;
     long long ientry;
     long long cache_size;

@@ -102,7 +102,8 @@ def root2array(filenames,
                step=None,
                include_weight=False,
                weight_name='weight',
-               cache_size=-1):
+               cache_size=-1,
+               warn_missing_tree=False):
     """Convert trees in ROOT files into a numpy structured array.
 
     Parameters
@@ -133,6 +134,9 @@ def root2array(filenames,
         Set the size (in bytes) of the TTreeCache used while reading a TTree. A
         value of -1 uses ROOT's default cache size. A value of 0 disables the
         cache.
+    warn_missing_tree : bool, optional (default=False)
+        If True, then warn when a tree is missing from an input file instead of
+        raising an IOError.
 
     Notes
     -----
@@ -172,7 +176,8 @@ def root2array(filenames,
         start, stop, step,
         include_weight,
         weight_name,
-        cache_size)
+        cache_size,
+        warn_missing_tree)
 
     if flatten:
         # select single column
@@ -189,7 +194,8 @@ def root2rec(filenames,
              step=None,
              include_weight=False,
              weight_name='weight',
-             cache_size=-1):
+             cache_size=-1,
+             warn_missing_tree=False):
     """View the result of :func:`root2array` as a record array.
 
     Notes
@@ -210,7 +216,8 @@ def root2rec(filenames,
                       start, stop, step,
                       include_weight,
                       weight_name,
-                      cache_size).view(np.recarray)
+                      cache_size,
+                      warn_missing_tree).view(np.recarray)
 
 
 def tree2array(tree,
