@@ -21,6 +21,26 @@ def list_trees(fname):
     return list(ret.keys())
 
 
+def list_directories(fname):
+    cdef TFile* rfile = Open(fname, 'read')
+    if rfile == NULL:
+        raise IOError("cannot read{0}".format(fname))
+    cdef TList* keys = rfile.GetListOfKeys()
+    if keys == NULL:
+        raise IOError("unable to get keys in {0}".format(fname))
+    ret = dict()
+    cdef int nkeys = keys.GetEntries()
+    cdef TKey* key
+    for i in range(nkeys):
+        key = <TKey*> keys.At(i)
+        clsname = str(key.GetClassName())
+        if clsname == 'TDirectoryFile':
+            ret[str(key.GetName())]
+        rfile.Close()
+        del rfile
+        return list(ret.keys())
+
+
 def list_structures(fname, tree=None):
     if tree == None:
         # automatically select single tree
