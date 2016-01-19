@@ -54,6 +54,10 @@ cdef extern from "TLeaf.h":
         TBranch* GetBranch()
         int GetLen()
         int GetLenStatic()
+
+cdef extern from "TDirectory.h":
+    cdef cppclass TDirectory:
+        const_char* GetName()
         
 cdef extern from "TTree.h":
     cdef cppclass TTree:
