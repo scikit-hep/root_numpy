@@ -28,17 +28,17 @@ def list_directories(fname):
     cdef TList* keys = rfile.GetListOfKeys()
     if keys == NULL:
         raise IOError("unable to get keys in {0}".format(fname))
-    ret = dict()
+    ret = list()
     cdef int nkeys = keys.GetEntries()
     cdef TKey* key
     for i in range(nkeys):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
         if clsname == 'TDirectoryFile':
-            ret[str(key.GetName())]
-        rfile.Close()
-        del rfile
-        return list(ret.keys())
+            ret.append(key.GetName())
+    rfile.Close()
+    del rfile
+    return ret
 
 
 def list_structures(fname, tree=None):
