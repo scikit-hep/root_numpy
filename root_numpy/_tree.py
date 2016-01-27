@@ -11,6 +11,7 @@ __all__ = [
     'list_trees',
     'list_branches',
     'list_structures',
+    'list_directories',
     'tree2array',
     'tree2rec',
     'array2tree',
@@ -72,6 +73,22 @@ def list_branches(filename, treename=None):
     """
     return _librootnumpy.list_branches(filename, treename)
 
+
+def list_directories(filename):
+    """Get a list of the directories in a ROOT file.
+    
+    Parameters
+    ----------
+    filename : str
+        Path to ROOT file.
+    
+    Returns
+    -------
+    directories : list
+        List of directory names.
+     
+    """
+    return _librootnumpy.list_directories(filename)
 
 def list_structures(filename, treename=None):
     """Get a dictionary mapping branch names to leaf structures.

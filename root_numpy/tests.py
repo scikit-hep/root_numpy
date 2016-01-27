@@ -79,6 +79,11 @@ def test_list_branches():
     assert_equal(branches, ['n_int', 'f_float', 'd_double'])
 
 
+def test_list_directories():
+    directories = rnp.list_directories(load('directories.root'))
+    assert_equal(directories, ['Dir1', 'Dir2'])
+
+
 def test_list_structures():
     structure = rnp.list_structures(load('single1.root'))
     expected = OrderedDict([

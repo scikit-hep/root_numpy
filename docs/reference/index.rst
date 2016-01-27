@@ -34,6 +34,7 @@ root_numpy
    evaluate
    list_trees
    list_branches
+   list_directories
    list_structures
    rec2array
    stack
