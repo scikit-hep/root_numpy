@@ -641,7 +641,7 @@ def test_stretch():
     stretched, idx = rnp.stretch(arr, ['scalar', 'vl1'], return_indices=True)
     assert_equal(stretched.shape[0], idx.shape[0])
 
-    from_arr = map(lambda x: x['vl1'][0], arr)
+    from_arr = list(map(lambda x: x['vl1'][0], arr))
     from_stretched = stretched[idx == 0]['vl1']
     assert_array_equal(from_arr, from_stretched)
 
