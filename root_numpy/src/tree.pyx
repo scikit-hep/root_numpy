@@ -1,7 +1,7 @@
 include "converters.pyx"
 
 
-def list_trees(fname):
+def list_trees(fname, dname=None):
     cdef TFile* rfile = Open(fname, 'read')
     if rfile == NULL:
         raise IOError("cannot read {0}".format(fname))
@@ -15,7 +15,21 @@ def list_trees(fname):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
+            if dname is not None:
+                raise IOError("no directories found in {0}".format(fname))
             ret[str(key.GetName())] = None
+        elif clsname == 'TDirectoryFile':
+            if key.GetName() != dname:
+                continue
+            fdir = <TDirectoryFile*> key.ReadObj()
+            dkeys = fdir.GetListOfKeys()
+            ndkeys = dkeys.GetEntries()
+            for j in range(ndkeys):
+                dkey = <TKey*> dkeys.At(j)
+                clsname = str(dkey.GetClassName())
+                if clsname == 'TTree' or clsname == 'TNtuple':
+                    ret[str(dkey.GetName())] = None 
+                
     rfile.Close()
     del rfile
     return list(ret.keys())
