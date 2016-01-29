@@ -8,7 +8,7 @@ def list_trees(fname, dname=None):
     cdef TList* keys = rfile.GetListOfKeys()
     if keys == NULL:
         raise IOError("unable to get keys in {0}".format(fname))
-    ret = dict()
+    ret = list()
     cdef int nkeys = keys.GetEntries()
     cdef TKey* key
     for i in range(nkeys):
@@ -17,7 +17,7 @@ def list_trees(fname, dname=None):
         if clsname == 'TTree' or clsname == 'TNtuple':
             if dname is not None:
                 continue
-            ret[str(key.GetName())] = None
+            ret.append(str(key.GetName()))
         elif clsname == 'TDirectoryFile':
             if key.GetName() != dname:
                 continue
@@ -28,11 +28,12 @@ def list_trees(fname, dname=None):
                 dkey = <TKey*> dkeys.At(j)
                 clsname = str(dkey.GetClassName())
                 if clsname == 'TTree' or clsname == 'TNtuple':
-                    ret[str(dkey.GetName())] = None 
+                    ret.append(dkey.GetName()) 
                 
     rfile.Close()
     del rfile
-    return list(ret.keys())
+    ret.sort()
+    return ret 
 
 
 def list_directories(fname):
