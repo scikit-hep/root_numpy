@@ -2639,7 +2639,6 @@ static char __pyx_k_unable_to_get_keys_in_0[] = "unable to get keys in {0}";
 static char __pyx_k_vector_vector_long_long[] = "vector<vector<long long> >";
 static char __pyx_k_cannot_open_current_file[] = "cannot open current file";
 static char __pyx_k_branches_is_an_empty_list[] = "branches is an empty list";
-static char __pyx_k_no_directories_found_in_0[] = "no directories found in {0}";
 static char __pyx_k_vector_unsigned_long_long[] = "vector<unsigned long long>";
 static char __pyx_k_could_not_allocate_d_bytes[] = "could not allocate %d bytes";
 static char __pyx_k_vector_vector_unsigned_int[] = "vector<vector<unsigned int> >";
@@ -2912,7 +2911,6 @@ static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_n_s_ndkeys;
 static PyObject *__pyx_n_s_nkeys;
-static PyObject *__pyx_kp_s_no_directories_found_in_0;
 static PyObject *__pyx_kp_s_none_of_the_input_files_contain;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
@@ -12119,7 +12117,7 @@ static PyObject *__pyx_pf_13_librootnumpy_2list_trees(CYTHON_UNUSED PyObject *__
  *         clsname = str(key.GetClassName())
  *         if clsname == 'TTree' or clsname == 'TNtuple':             # <<<<<<<<<<<<<<
  *             if dname is not None:
- *                 raise IOError("no directories found in {0}".format(fname))
+ *                 continue
  */
 
 #line 17 "root_numpy/src/tree.pyx"
@@ -12156,7 +12154,7 @@ static PyObject *__pyx_pf_13_librootnumpy_2list_trees(CYTHON_UNUSED PyObject *__
  *         clsname = str(key.GetClassName())
  *         if clsname == 'TTree' or clsname == 'TNtuple':
  *             if dname is not None:             # <<<<<<<<<<<<<<
- *                 raise IOError("no directories found in {0}".format(fname))
+ *                 continue
  *             ret[str(key.GetName())] = None
  */
 
@@ -12172,131 +12170,20 @@ static PyObject *__pyx_pf_13_librootnumpy_2list_trees(CYTHON_UNUSED PyObject *__
         /* "root_numpy/src/tree.pyx":19
  *         if clsname == 'TTree' or clsname == 'TNtuple':
  *             if dname is not None:
- *                 raise IOError("no directories found in {0}".format(fname))             # <<<<<<<<<<<<<<
+ *                 continue             # <<<<<<<<<<<<<<
  *             ret[str(key.GetName())] = None
  *         elif clsname == 'TDirectoryFile':
  */
 
 #line 19 "root_numpy/src/tree.pyx"
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_no_directories_found_in_0, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_4);
-
-#line 19 "root_numpy/src/tree.pyx"
-        __pyx_t_5 = NULL;
-
-#line 19 "root_numpy/src/tree.pyx"
-        if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
-
-#line 19 "root_numpy/src/tree.pyx"
-          __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
-
-#line 19 "root_numpy/src/tree.pyx"
-          if (likely(__pyx_t_5)) {
-
-#line 19 "root_numpy/src/tree.pyx"
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
-
-#line 19 "root_numpy/src/tree.pyx"
-            __Pyx_INCREF(__pyx_t_5);
-
-#line 19 "root_numpy/src/tree.pyx"
-            __Pyx_INCREF(function);
-
-#line 19 "root_numpy/src/tree.pyx"
-            __Pyx_DECREF_SET(__pyx_t_4, function);
-
-#line 19 "root_numpy/src/tree.pyx"
-          }
-
-#line 19 "root_numpy/src/tree.pyx"
-        }
-
-#line 19 "root_numpy/src/tree.pyx"
-        if (!__pyx_t_5) {
-
-#line 19 "root_numpy/src/tree.pyx"
-          __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_fname); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_3);
-
-#line 19 "root_numpy/src/tree.pyx"
-        } else {
-
-#line 19 "root_numpy/src/tree.pyx"
-          __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_6);
-
-#line 19 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_INCREF(__pyx_v_fname);
-
-#line 19 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v_fname);
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_v_fname);
-
-#line 19 "root_numpy/src/tree.pyx"
-          __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_3);
-
-#line 19 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-#line 19 "root_numpy/src/tree.pyx"
-        }
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 19 "root_numpy/src/tree.pyx"
-        __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_4);
-
-#line 19 "root_numpy/src/tree.pyx"
-        PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_GIVEREF(__pyx_t_3);
-
-#line 19 "root_numpy/src/tree.pyx"
-        __pyx_t_3 = 0;
-
-#line 19 "root_numpy/src/tree.pyx"
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_3);
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_Raise(__pyx_t_3, 0, 0, 0);
-
-#line 19 "root_numpy/src/tree.pyx"
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-#line 19 "root_numpy/src/tree.pyx"
-        {__pyx_filename = __pyx_f[2]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        goto __pyx_L5_continue;
 
 #line 19 "root_numpy/src/tree.pyx"
       }
 
       /* "root_numpy/src/tree.pyx":20
  *             if dname is not None:
- *                 raise IOError("no directories found in {0}".format(fname))
+ *                 continue
  *             ret[str(key.GetName())] = None             # <<<<<<<<<<<<<<
  *         elif clsname == 'TDirectoryFile':
  *             if key.GetName() != dname:
@@ -12345,7 +12232,7 @@ static PyObject *__pyx_pf_13_librootnumpy_2list_trees(CYTHON_UNUSED PyObject *__
     }
 
     /* "root_numpy/src/tree.pyx":21
- *                 raise IOError("no directories found in {0}".format(fname))
+ *                 continue
  *             ret[str(key.GetName())] = None
  *         elif clsname == 'TDirectoryFile':             # <<<<<<<<<<<<<<
  *             if key.GetName() != dname:
@@ -66561,7 +66448,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_n_s_ndkeys, __pyx_k_ndkeys, sizeof(__pyx_k_ndkeys), 0, 0, 1, 1},
   {&__pyx_n_s_nkeys, __pyx_k_nkeys, sizeof(__pyx_k_nkeys), 0, 0, 1, 1},
-  {&__pyx_kp_s_no_directories_found_in_0, __pyx_k_no_directories_found_in_0, sizeof(__pyx_k_no_directories_found_in_0), 0, 0, 1, 0},
   {&__pyx_kp_s_none_of_the_input_files_contain, __pyx_k_none_of_the_input_files_contain, sizeof(__pyx_k_none_of_the_input_files_contain), 0, 0, 1, 0},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},

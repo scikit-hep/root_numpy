@@ -16,7 +16,7 @@ def list_trees(fname, dname=None):
         clsname = str(key.GetClassName())
         if clsname == 'TTree' or clsname == 'TNtuple':
             if dname is not None:
-                raise IOError("no directories found in {0}".format(fname))
+                continue
             ret[str(key.GetName())] = None
         elif clsname == 'TDirectoryFile':
             if key.GetName() != dname:
