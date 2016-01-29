@@ -74,6 +74,19 @@ def test_list_trees():
     assert_equal(trees, ['ntuple'])
 
 
+def test_list_trees_in_directory():
+    assert_equal(rnp.list_trees(load('directories.root'), 'Dir1'), ['Tree1', 'Tree2'])
+    assert_equal(rnp.list_trees(load('directories2.root'), 'Dir1'), ['Tree1', 'Tree2'])
+
+
+def test_list_trees_out_of_directory():
+    assert_equal(rnp.list_trees(load('directories.root')), ['Tree3'])
+
+
+def test_list_trees_directory_not_found():
+    assert_raises(rnp.list_trees(load('trees.root'), dirname='test'))
+
+
 def test_list_branches():
     branches = rnp.list_branches(load('single1.root'))
     assert_equal(branches, ['n_int', 'f_float', 'd_double'])
