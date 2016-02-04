@@ -637,6 +637,14 @@ def test_stretch():
     assert_array_equal(
         stretched['scalar'], np.repeat(arr['scalar'], 2))
 
+    # optional argument return_indices
+    stretched, idx = rnp.stretch(arr, ['scalar', 'vl1'], return_indices=True)
+    assert_equal(stretched.shape[0], idx.shape[0])
+
+    from_arr = list(map(lambda x: x['vl1'][0], arr))
+    from_stretched = stretched[idx == 0]['vl1']
+    assert_array_equal(from_arr, from_stretched)
+
 
 def test_blockwise_inner_join():
     test_data = np.array([

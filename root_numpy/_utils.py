@@ -68,7 +68,7 @@ def stack(recs, fields=None):
     return np.hstack([rec[fields] for rec in recs])
 
 
-def stretch(arr, fields=None):
+def stretch(arr, fields=None, return_indices=False):
     """Stretch an array.
 
     Stretch an array by ``hstack()``-ing  multiple array fields while
@@ -81,6 +81,11 @@ def stretch(arr, fields=None):
         The array to be stretched.
     fields : list of strings, optional (default=None)
         A list of column names to stretch. If None, then stretch all fields.
+    return_indices : bool, optional (default=False)
+        If True, the array index of each stretched array entry will be
+        returned in addition to the stretched array.
+        This changes the return type of this function to a tuple consisting
+        of a structured array and a numpy int64 array.
 
     Returns
     -------
@@ -145,6 +150,10 @@ def stretch(arr, fields=None):
             # Scalar field
             ret[field] = np.repeat(arr[field], len_array)
 
+    if return_indices:
+        idx = np.concatenate(list(map(np.arange, len_array)))
+        return ret, idx
+    
     return ret
 
 
