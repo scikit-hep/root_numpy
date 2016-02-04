@@ -37,13 +37,16 @@ def _glob(filenames):
     return matches
 
 
-def list_trees(filename):
+def list_trees(filename, dirname=None):
     """Get list of the tree names in a ROOT file.
 
     Parameters
     ----------
     filename : str
         Path to ROOT file.
+    dirname : str, optional (default=None)
+        Name of directory to search.
+        (Only required if multiple directories in file.)
 
     Returns
     -------
@@ -51,7 +54,7 @@ def list_trees(filename):
         List of tree names
 
     """
-    return _librootnumpy.list_trees(filename)
+    return _librootnumpy.list_trees(filename, dirname)
 
 
 def list_branches(filename, treename=None):

@@ -18,10 +18,15 @@ cdef extern from "TFile.h":
 cdef extern from "TFile.h" namespace "TFile":
     TFile* Open(const_char*, const_char*)
 
+cdef extern from "TDirectoryFile.h":
+    cdef cppclass TDirectoryFile:
+        TList* GetListOfKeys()
+
 cdef extern from "TKey.h":
     cdef cppclass TKey:
         const_char* GetName()
         const_char* GetClassName()
+        TObject* ReadObj()
 
 cdef extern from "TObjArray.h":
     cdef cppclass TObjArray:
