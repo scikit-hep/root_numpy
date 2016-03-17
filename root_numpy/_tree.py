@@ -76,17 +76,17 @@ def list_branches(filename, treename=None):
 
 def list_directories(filename):
     """Get a list of the directories in a ROOT file.
-    
+
     Parameters
     ----------
     filename : str
         Path to ROOT file.
-    
+
     Returns
     -------
     directories : list
         List of directory names.
-     
+
     """
     return _librootnumpy.list_directories(filename)
 
@@ -400,6 +400,8 @@ def array2tree(arr, name='tree', tree=None):
     Examples
     --------
 
+    Convert a numpy array into a tree:
+
     >>> from root_numpy import array2tree
     >>> import numpy as np
     >>>
@@ -416,6 +418,22 @@ def array2tree(arr, name='tree', tree=None):
     *        0 *         1 *       2.5 *       3.4 *
     *        1 *         4 *         5 *       6.8 *
     ************************************************
+
+    Add new branches to an existing tree (continuing from the example above):
+
+    >>> b = np.array([(4, 10),
+    ...               (3, 5)],
+    ...              dtype=[('d', np.int32),
+    ...                     ('e', np.int32)])
+    >>> array2tree(b, tree=tree)
+    <ROOT.TTree object ("tree") at 0x1449970>
+    >>> tree.Scan()
+    ************************************************************************
+    *    Row   *         a *         b *         c *         d *         e *
+    ************************************************************************
+    *        0 *         1 *       2.5 *       3.4 *         4 *        10 *
+    *        1 *         4 *         5 *       6.8 *         3 *         5 *
+    ************************************************************************
 
     """
     import ROOT
