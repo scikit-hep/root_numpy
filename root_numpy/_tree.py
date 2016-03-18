@@ -162,6 +162,8 @@ def root2array(filenames,
     See Also
     --------
     tree2array
+    array2tree
+    array2root
 
     """
     filenames = _glob(filenames)
@@ -306,9 +308,24 @@ def tree2array(tree,
 
     * Fixed-length arrays are converted to fixed-length NumPy array fields.
 
+    **Branches with different lengths:**
+
+    Note that when converting trees that have branches of different lengths
+    into numpy arrays, the shorter branches will be extended to match the
+    length of the longest branch by repeating their last values. If all
+    requested branches are shorter than the longest branch in the tree, this
+    will result in a "read failure" since beyond the end of the longest
+    requested branch no additional bytes will be read from the file and
+    root_numpy is unable to distinguish this from other ROOT errors that result
+    in no bytes being read. In this case, explicitly set the ``stop`` argument
+    to the length of the longest requested branch.
+
+
     See Also
     --------
     root2array
+    array2root
+    array2tree
 
     """
     import ROOT
@@ -393,9 +410,24 @@ def array2tree(arr, name='tree', tree=None):
     -------
     root_tree : a ROOT TTree
 
+    Notes
+    -----
+    When using the ``tree`` argument to extend and/or add new branches to an
+    existing tree, note that it is possible to create branches of different
+    lengths. This will result in a warning from ROOT when root_numpy calls the
+    tree's ``SetEntries()`` method. Beyond that, the tree should still be
+    usable. While it might not be generally recommended to create branches with
+    differing lengths, this behaviour could be required in certain situations.
+    root_numpy makes no attempt to prevent such behaviour as this would be
+    more strict than ROOT itself. Also see the note about converting trees
+    that have branches of different lengths into numpy arrays in the documentation
+    of :func:`tree2array`.
+
     See Also
     --------
     array2root
+    root2array
+    tree2array
 
     Examples
     --------
@@ -470,6 +502,8 @@ def array2root(arr, filename, treename='tree', mode='update'):
     See Also
     --------
     array2tree
+    tree2array
+    root2array
 
     Examples
     --------

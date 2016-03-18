@@ -351,7 +351,8 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
             entry_size = chain.GetEntry(ientry)
             handle_load(entry_size)
             if entry_size == 0:
-                raise IOError("read failure in current tree")
+                raise IOError("read failure in current tree or requested entry "
+                              "does not exist (branches have different lengths?)")
 
             # Determine if this entry passes the selection,
             # similar to the code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
