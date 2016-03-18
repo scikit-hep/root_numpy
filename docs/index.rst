@@ -21,5 +21,6 @@ root_numpy
 
    install
    start
+   faq
    reference/index
    examples
