@@ -175,7 +175,6 @@ def thn2array(hist, shape, dtype):
     cdef long long nbins = _hist.GetNbins()
     cdef np.ndarray array = np.zeros(shape, dtype=dtype)
     cdef np.ndarray array_ravel_view = np.ravel(array)
-    itemset = array.itemset
     for ibin in range(nbins):
         array_ravel_view[ibin] = _hist.GetBinContent(ibin)
     return array
