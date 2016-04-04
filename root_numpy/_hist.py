@@ -134,7 +134,7 @@ def hist2array(hist, include_overflow=False, copy=True):
 
     Parameters
     ----------
-    hist : ROOT TH1, TH2, TH3, or THn
+    hist : ROOT TH1, TH2, TH3, THn, or THnSparse
         The ROOT histogram to convert into an array
     include_overflow : bool, optional (default=False)
         If True, the over- and underflow bins will be included in the
