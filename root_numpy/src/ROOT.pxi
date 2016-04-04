@@ -177,6 +177,12 @@ cdef extern from "TH3.h":
     cdef cppclass TH3C:
         pass
 
+cdef extern from "THnBase.h":
+    cdef cppclass THnBase:
+        long long GetNbins()
+        double GetBinContent(long long bin)
+        double GetBinContent(long long bin, int* idx)
+
 cdef extern from "TProfile.h":
     cdef cppclass TProfile:
         int Fill(double x, double y)

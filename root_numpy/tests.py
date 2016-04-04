@@ -1010,6 +1010,26 @@ def check_hist2array(hist, include_overflow, copy):
     assert_true(np.any(array))
 
 
+def check_hist2array_THn(hist):
+    hist_thn = ROOT.THn.CreateHn("", "", hist)
+    array = rnp.hist2array(hist)
+    array_thn = rnp.hist2array(hist_thn)
+    # non-zero elements
+    assert_true(np.any(array))
+    # arrays should be identical
+    assert_array_equal(array, array_thn)
+
+
+def check_hist2array_THnSparse(hist):
+    hist_thnsparse = ROOT.THnSparse.CreateSparse("", "", hist)
+    array = rnp.hist2array(hist)
+    array_thnsparse = rnp.hist2array(hist_thnsparse)
+    # non-zero elements
+    assert_true(np.any(array))
+    # arrays should be identical
+    assert_array_equal(array, array_thnsparse)
+
+
 def test_hist2array():
     assert_raises(TypeError, rnp.hist2array, object())
     for ndim in (1, 2, 3):
@@ -1019,6 +1039,23 @@ def test_hist2array():
             yield check_hist2array, hist, False, True
             yield check_hist2array, hist, True, False
             yield check_hist2array, hist, True, True
+            yield check_hist2array_THn, hist
+
+
+def test_hist2array_THn():
+    assert_raises(TypeError, rnp.hist2array, object())
+    for ndim in (1, 2, 3):
+        for hist_type in 'DFISC':
+            hist = make_histogram(hist_type, shape=(5,) * ndim)
+            yield check_hist2array_THn, hist
+
+
+def test_hist2array_THnSparse():
+    assert_raises(TypeError, rnp.hist2array, object())
+    for ndim in (1, 2, 3):
+        for hist_type in 'DFISC':
+            hist = make_histogram(hist_type, shape=(5,) * ndim)
+            yield check_hist2array_THnSparse, hist
 
 
 def check_array2hist(hist):

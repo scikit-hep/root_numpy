@@ -17,26 +17,26 @@ be found, the installation aborts.
 
 root_numpy has been tested with:
 
-* ROOT 5.32, 5.34, 6.04
-* NumPy 1.6, 1.7, 1.8, 1.9
-* Python 2.6, 2.7, 3.4
+* ROOT 5.32, 5.34, 6.04, 6.06
+* NumPy 1.6, 1.7, 1.8, 1.9, 1.10
+* Python 2.6, 2.7, 3.4, 3.5
 * GNU/Linux, Mac OS
 
-.. warning:: **Mac OS:** the libstdc++ and libc++ ABIs are not compatible.
+.. warning:: **Mac OS:** libstdc++ and libc++ are not ABI-compatible.
 
-   If you’re compiling root_numpy with Clang and linking against libc++, you
-   will also need to compile ROOT with Clang and libc++. ROOT compiles with Clang
-   and libc++ since version 5.34/11, but PyROOT has a bug which was fixed after
-   that, so it is best to compile from the v5-34-00-patches branch of ROOT. You
-   can do this easily with Homebrew via::
+   If you're compiling root_numpy with Clang and linking against libc++, ROOT
+   should also have been compiled with Clang and libc++. ROOT compiles with
+   Clang and libc++ since version 5.34/11, but PyROOT had a bug that was fixed
+   after that tag, so it is best to compile a newer version. You can do this
+   easily with Homebrew via::
 
       brew install --HEAD root
 
    This issue also comes up if you're using a Python bundle such as Anaconda
    or Enthought Canopy. These bundles build against libstdc++, the GCC C++
-   standard library, which is used in Mac OSX 10.5 and later.  On Mac OSX 10.7 and
-   later, the default compiler links against libc++, the Clang C++ standard
-   library.
+   standard library, which is used on Mac OS 10.5 and later. On Mac OS 10.7 and
+   later, however, the default compiler links against libc++, the Clang C++
+   standard library.
 
 
 Getting the Latest Source
