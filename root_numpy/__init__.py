@@ -10,7 +10,7 @@ from ._sample import random_sample
 from ._array import array
 from ._matrix import matrix
 from ._evaluate import evaluate
-from ._warnings import RootNumpyWarning, RootNumpyUnconvertibleWarning
+from ._warnings import RootNumpyUnconvertibleWarning
 from ._utils import (
     stretch, blockwise_inner_join,
     rec2array, stack, dup_idx)
@@ -42,6 +42,12 @@ __all__ = [
     'stretch',
     'dup_idx',
     'blockwise_inner_join',
-    'RootNumpyWarning',
     'RootNumpyUnconvertibleWarning',
 ]
+
+import warnings
+import re
+
+# Make sure that DeprecationWarning within this package always gets printed
+warnings.filterwarnings('always', category=DeprecationWarning,
+                        module='^{0}\.'.format(re.escape(__name__)))
