@@ -1,3 +1,4 @@
+import warnings
 from glob import glob
 import numpy as np
 
@@ -230,6 +231,9 @@ def root2rec(filenames,
     root2array
 
     """
+    warnings.warn("root2rec is deprecated and will be removed in 4.5.0. "
+                  "Instead use root2array(...).view(np.recarray)",
+                  DeprecationWarning)
     return root2array(filenames, treename,
                       branches, selection,
                       start, stop, step,
@@ -377,6 +381,9 @@ def tree2rec(tree,
     tree2array
 
     """
+    warnings.warn("tree2rec is deprecated and will be removed in 4.5.0. "
+                  "Instead use tree2array(...).view(np.recarray)",
+                  DeprecationWarning)
     return tree2array(tree,
                       branches=branches,
                       selection=selection,
