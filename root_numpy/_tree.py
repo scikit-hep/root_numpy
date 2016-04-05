@@ -1,3 +1,4 @@
+import warnings
 from glob import glob
 import numpy as np
 
@@ -377,6 +378,9 @@ def tree2rec(tree,
     tree2array
 
     """
+    warnings.warn("tree2rec is deprecated and will be removed in 4.5.0. "
+                  "Instead use tree2array(...).view(np.recarray)",
+                  DeprecationWarning)
     return tree2array(tree,
                       branches=branches,
                       selection=selection,
