@@ -231,6 +231,9 @@ def root2rec(filenames,
     root2array
 
     """
+    warnings.warn("root2rec is deprecated and will be removed in 4.5.0. "
+                  "Instead use root2array(...).view(np.recarray)",
+                  DeprecationWarning)
     return root2array(filenames, treename,
                       branches, selection,
                       start, stop, step,
