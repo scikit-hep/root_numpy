@@ -11,7 +11,7 @@ root_numpy
 
 .. raw:: html
 
-   <h2 class="main-subtitle">An interface between ROOT and NumPy</h2>
+   <h2 class="main-subtitle">The interface between ROOT and NumPy</h2>
 
 .. include:: ../README.rst
    :start-line: 20
