@@ -33,6 +33,6 @@ install:
 script: bash ci/test.sh
 after_success:
     - time coveralls
-cache: apt
+
 notifications:
     email: false
