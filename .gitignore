@@ -1,5 +1,6 @@
 MANIFEST
 root_numpy/src/*.html
+root_numpy/config.json
 build
 dist
 coverage

@@ -1,3 +1,41 @@
+import warnings
+import re
+
+# Make sure that DeprecationWarning within this package always gets printed
+warnings.filterwarnings('always', category=DeprecationWarning,
+                        module='^{0}\.'.format(re.escape(__name__)))
+
+from .setup_utils import root_version_active, get_config
+
+ROOT_VERSION = root_version_active()
+config = get_config()
+
+if config is not None:
+    root_version_at_install = config['ROOT_version']
+    numpy_version_at_install = config['numpy_version']
+
+    if ROOT_VERSION != root_version_at_install:
+        warnings.warn(
+            "ROOT {0} is currently active but you "
+            "installed root_numpy against ROOT {1}. "
+            "Please consider reinstalling root_numpy "
+            "for this ROOT version.".format(
+                ROOT_VERSION, root_version_at_install),
+            RuntimeWarning)
+
+    import numpy
+    if numpy.__version__ != numpy_version_at_install:
+        warnings.warn(
+            "numpy {0} is currently installed but you "
+            "installed root_numpy against numpy {1}. "
+            "Please consider reinstalling root_numpy "
+            "for this numpy version.".format(
+                numpy.__version__, numpy_version_at_install),
+            RuntimeWarning)
+
+    del root_version_at_install
+    del numpy_version_at_install
+
 from ._tree import (
     root2array, root2rec,
     tree2array, tree2rec,
@@ -44,10 +82,3 @@ __all__ = [
     'blockwise_inner_join',
     'RootNumpyUnconvertibleWarning',
 ]
-
-import warnings
-import re
-
-# Make sure that DeprecationWarning within this package always gets printed
-warnings.filterwarnings('always', category=DeprecationWarning,
-                        module='^{0}\.'.format(re.escape(__name__)))
