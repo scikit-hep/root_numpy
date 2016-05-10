@@ -1,12 +1,38 @@
 # travis-ci.org build & test configuration
 language: python
-python:
-    - "2.7"
-    - "3.4"
-env:
-    - ROOT=5.34.18
-    - ROOT=master COVERAGE=1
-install: source ci/install.sh
+matrix:
+    include:
+        - python: 2.7
+          env: PYTHON=2.7 ROOT=5.34.32
+        - python: 2.7
+          env: PYTHON=2.7 ROOT=6.04
+        - python: 3.4
+          env: PYTHON=3.4 ROOT=5.34.32
+        - python: 3.4
+          env: PYTHON=3.4 ROOT=6.04 COVERAGE=1
+#install: source ci/install.sh
+install:
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then curl --silent http://repo.continuum.io/miniconda/Miniconda-latest-MacOSX-x86_64.sh -o miniconda.sh; fi
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then wget -nv http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+ 
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install g++-4.8
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a # Useful for debugging any issues with conda
+  - conda config --add channels http://conda.anaconda.org/NLeSC  
+  - conda config --set show_channel_urls yes
+  - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy nose sphinx
+  - source activate testenv
+  - pip install coverage coveralls
+
 script: bash ci/test.sh
 after_success:
     - time coveralls

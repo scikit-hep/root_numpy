@@ -19,7 +19,7 @@ python -c "from __future__ import print_function; import ROOT; print(ROOT.gROOT.
 export PYTHONPATH=/home/travis/.local/lib/python${TRAVIS_PYTHON_VERSION}/site-packages/:$PYTHONPATH
 
 # Install into the user site-packages directory and run tests on that
-time make install-user
+time make install
 time make test-installed
 
 # Run tests in the local directory with coverage
