@@ -29,7 +29,7 @@ install:
   - conda info -a # Useful for debugging any issues with conda
   - conda config --add channels http://conda.anaconda.org/NLeSC  
   - conda config --set show_channel_urls yes
-  - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy nose sphinx
+  - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy nose sphinx binutils
   - source activate testenv
   - pip install coverage coveralls
 
