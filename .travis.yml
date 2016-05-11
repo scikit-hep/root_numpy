@@ -1,7 +1,7 @@
+# travis-ci.org build & test configuration
 sudo: required
 dist: trusty
 #sudo: false
-# travis-ci.org build & test configuration
 language: python
 
 matrix:
@@ -13,7 +13,7 @@ matrix:
         - python: 3.4
           env: PYTHON=3.4 ROOT=5.34.32
         - python: 3.4
-          env: PYTHON=3.4 ROOT=6.04
+          env: PYTHON=3.4 ROOT=6.04 COVERAGE=1
 
 #install: source ci/install.sh
 install:
@@ -28,8 +28,9 @@ install:
   - conda info -a # Useful for debugging any issues with conda
   - conda config --add channels http://conda.anaconda.org/NLeSC  
   - conda config --set show_channel_urls yes
-  - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy matplotlib nose sphinx pytables
+  - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy nose sphinx
   - source activate testenv
+  - pip install coverage coveralls
 
 script: bash ci/test.sh
 after_success:
