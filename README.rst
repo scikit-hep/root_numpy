@@ -2,8 +2,8 @@
 
 `[see full documentation] <http://rootpy.github.com/root_numpy/>`_
 
-root_numpy
-==========
+root_numpy: The interface between ROOT and NumPy
+================================================
 
 .. image:: https://img.shields.io/pypi/v/root_numpy.svg
    :target: https://pypi.python.org/pypi/root_numpy

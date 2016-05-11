@@ -2,8 +2,15 @@
 
 from __future__ import print_function
 
+import sys
+
+# check Python version
+if sys.version_info < (2, 6):
+    sys.exit("root_numpy only supports python 2.6 and above")
+
+# check that NumPy is installed
 try:
-    import numpy as np
+    import numpy
 except ImportError:
     raise RuntimeError(
         "numpy cannot be imported. numpy must be installed "
@@ -21,8 +28,6 @@ except ImportError:
     from distutils.core import setup, Extension
 
 import os
-import sys
-import subprocess
 from glob import glob
 
 # Prevent setup from trying to create hard links
@@ -38,36 +43,13 @@ local_path = os.path.dirname(os.path.abspath(__file__))
 os.chdir(local_path)
 sys.path.insert(0, local_path)
 
-
-def root_flags(root_config='root-config'):
-    root_cflags = subprocess.Popen(
-        [root_config, '--cflags'],
-        stdout=subprocess.PIPE).communicate()[0].strip()
-    root_ldflags = subprocess.Popen(
-        [root_config, '--libs'],
-        stdout=subprocess.PIPE).communicate()[0].strip()
-    if sys.version > '3':
-        root_cflags = root_cflags.decode('utf-8')
-        root_ldflags = root_ldflags.decode('utf-8')
-    return root_cflags.split(), root_ldflags.split()
-
-
-def root_has_feature(feature, root_config='root-config'):
-    if os.getenv('NO_ROOT_NUMPY_{0}'.format(feature.upper())):
-        # override
-        return False
-    has_feature = subprocess.Popen(
-        [root_config, '--has-{0}'.format(feature)],
-        stdout=subprocess.PIPE).communicate()[0].strip()
-    if sys.version > '3':
-        has_feature = has_feature.decode('utf-8')
-    return has_feature == 'yes'
-
+exec(open('root_numpy/setup_utils.py').read())
 
 rootsys = os.getenv('ROOTSYS', None)
 if rootsys is not None:
     try:
         root_config = os.path.join(rootsys, 'bin', 'root-config')
+        root_version = root_version_installed(root_config)
         root_cflags, root_ldflags = root_flags(root_config)
         has_tmva = root_has_feature('tmva', root_config)
     except OSError:
@@ -76,6 +58,7 @@ if rootsys is not None:
                 rootsys, root_config))
 else:
     try:
+        root_version = root_version_installed()
         root_cflags, root_ldflags = root_flags()
         has_tmva = root_has_feature('tmva')
     except OSError:
@@ -91,7 +74,7 @@ librootnumpy = Extension(
     depends=glob('root_numpy/src/*.h'),
     language='c++',
     include_dirs=[
-        np.get_include(),
+        numpy.get_include(),
         'root_numpy/src',
     ],
     extra_compile_args=root_cflags + [
@@ -116,7 +99,7 @@ if has_tmva:
         depends=['root_numpy/src/2to3.h'],
         language='c++',
         include_dirs=[
-            np.get_include(),
+            numpy.get_include(),
             'root_numpy/src',
             'root_numpy/tmva/src',
         ],
@@ -131,6 +114,7 @@ if has_tmva:
 # check for custom args
 filtered_args = []
 release = False
+install = 'install' in sys.argv
 for arg in sys.argv:
     if arg == '--release':
         # --release sets the version number before installing
@@ -148,8 +132,18 @@ if release:
         dev_info.replace('.dev0', ''))
 
 exec(open('root_numpy/info.py').read())
-if 'install' in sys.argv:
+if install:
     print(__doc__)
+
+    config = {
+        'ROOT_version': root_version,
+        'numpy_version': numpy.__version__,
+        }
+
+    # write config.json
+    import json
+    with open('root_numpy/config.json', 'w') as config_file:
+        json.dump(config, config_file, indent=4)
 
 setup(
     name='root_numpy',
@@ -164,7 +158,7 @@ setup(
                  'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
     packages=packages,
     package_data={
-        'root_numpy': ['testdata/*.root'],
+        'root_numpy': ['testdata/*.root', 'config.json'],
     },
     ext_modules=ext_modules,
     zip_safe=False,
@@ -194,3 +188,6 @@ setup(
 if release:
     # revert root_numpy/info.py
     shutil.move('info.tmp', 'root_numpy/info.py')
+
+if install:
+    os.remove('root_numpy/config.json')
