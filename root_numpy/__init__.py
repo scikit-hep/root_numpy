@@ -11,8 +11,7 @@ ROOT_VERSION = root_version_active()
 config = get_config()
 
 if config is not None:  # pragma: no cover
-    root_version_at_install = config['ROOT_version']
-    numpy_version_at_install = config['numpy_version']
+    root_version_at_install = config.get('ROOT_version', ROOT_VERSION)
 
     if ROOT_VERSION != root_version_at_install:
         warnings.warn(
@@ -24,6 +23,8 @@ if config is not None:  # pragma: no cover
             RuntimeWarning)
 
     import numpy
+    numpy_version_at_install = config.get('numpy_version', numpy.__version__)
+
     if numpy.__version__ != numpy_version_at_install:
         warnings.warn(
             "numpy {0} is currently installed but you "
