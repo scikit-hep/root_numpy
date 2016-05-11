@@ -7,7 +7,12 @@ include = */root_numpy/*
 omit =
     */root/*
     */root_numpy/extern/*
+    */root_numpy/setup_utils.py
     */setup.py
 [report]
 exclude_lines =
+    # Enable the standard pragma
+    pragma: no cover
+    # Don't complain if tests don't hit defensive assertion code
     raise AssertionError
+    raise NotImplementedError

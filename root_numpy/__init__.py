@@ -10,7 +10,7 @@ from .setup_utils import root_version_active, get_config
 ROOT_VERSION = root_version_active()
 config = get_config()
 
-if config is not None:
+if config is not None:  # pragma: no cover
     root_version_at_install = config['ROOT_version']
     numpy_version_at_install = config['numpy_version']
 
