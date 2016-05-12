@@ -20,6 +20,11 @@ cdef extern from "TFile.h":
         bool IsOpen()
         bool IsWritable()
 
+cdef extern from "TDirectory.h":
+    cdef cppclass TDirectory:
+        TList* GetListOfKeys()
+        TObject* Get(const_char*)
+
 cdef extern from "TFile.h" namespace "TFile":
     TFile* Open(const_char*, const_char*)
 
