@@ -82,7 +82,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     # can't use memcpy here...
     cdef unsigned long i
     for i in range(numele):
-        tmp[i] = src.at(i)
+        tmp[i] = src[0][i]
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
@@ -102,7 +102,7 @@ cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src
     # can't use memcpy here...
     cdef unsigned long i
     for i in range(numele):
-        py_bytes = str(src.at(i))
+        py_bytes = str(src[0][i])
         Py_INCREF(py_bytes)
         tmpstrobj = <PyObject*> py_bytes
         memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
