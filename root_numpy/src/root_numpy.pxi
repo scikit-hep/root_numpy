@@ -27,8 +27,17 @@ cdef extern from "Column.h":
         int GetSize()
         void* GetValuePointer()
         const_char* GetTypeName()
+    
+    cdef cppclass MultiFormulaColumn(Column):
+        MultiFormulaColumn(string, TTreeFormula*)
+        string name
+        string type
+        int GetLen()
+        int GetSize()
+        void* GetValuePointer()
+        const_char* GetTypeName()
 
-    cdef cppclass FormulaColumn(Column):
+    cdef cppclass FormulaColumn(MultiFormulaColumn):
         FormulaColumn(string, TTreeFormula*)
         string name
         string type

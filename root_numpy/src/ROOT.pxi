@@ -5,6 +5,11 @@ cdef extern from "TObject.h":
         const_char* GetName()
         const_char* ClassName()
 
+cdef extern from "TObject.h" namespace "TObject":
+    ctypedef enum:
+        kOverwrite
+        kWriteDelete
+
 cdef extern from "TFile.h":
     cdef cppclass TFile:
         TFile(const_char*, const_char*)
@@ -43,6 +48,16 @@ cdef extern from "TBranch.h":
         void SetAddress(void* addr)
         void SetStatus(bool status)
         int Fill()
+
+cdef extern from "TBranchElement.h":
+    cdef cppclass TBranchElement(TBranch):
+        int GetType()
+
+cdef extern from "TBranchElement.h" namespace "TBranchElement":
+    ctypedef enum EBranchElementType "TBranchElement::EBranchElementType":
+        kLeafNode "TBranchElement::kLeafNode"
+        kClonesMemberNode "TBranchElement::kClonesMemberNode"
+        kSTLMemberNode "TBranchElement::kSTLMemberNode"
 
 cdef extern from "TLeaf.h":
     cdef cppclass TLeaf:
@@ -100,6 +115,7 @@ cdef extern from "TTreeFormula.h":
         TTreeFormula(const_char*, const_char*, TTree*)
         int GetNdim()
         int GetNdata()
+        int GetMultiplicity()
         double EvalInstance(int)
 
 cdef extern from "TClassEdit.h" namespace "TClassEdit":

@@ -24,21 +24,67 @@ class Column
 };
 
 
-class FormulaColumn: public Column
+class MultiFormulaColumn: public Column
 {
     public:
 
-    FormulaColumn(std::string _name, TTreeFormula* _formula)
+    MultiFormulaColumn(std::string _name, TTreeFormula* _formula)
     {
         name = _name;
         formula = _formula;
         type = "Double_t";
-        value = new double[1];
+        value = NULL;
     }
 
-    ~FormulaColumn()
+    ~MultiFormulaColumn()
     {
         delete[] value;
+    }
+
+    const char* GetTypeName()
+    {
+        return "double";
+    }
+
+    int GetLen()
+    {
+        return formula->GetNdata();
+    }
+
+    int GetCountLen()
+    {
+        return formula->GetNdata();
+    }
+
+    int GetSize()
+    {
+        return sizeof(double) * GetLen();
+    }
+
+    void* GetValuePointer()
+    {
+        delete[] value;
+        value = new double[formula->GetNdata()];
+        for (int i = 0; i < formula->GetNdata(); ++i)
+        {
+            value[i] = formula->EvalInstance(i);
+        }
+        return value;
+    }
+
+    TTreeFormula* formula;
+    double* value;
+};
+
+
+class FormulaColumn: public MultiFormulaColumn
+{
+    public:
+
+    FormulaColumn(std::string _name, TTreeFormula* _formula):
+        MultiFormulaColumn(_name, _formula)
+    {
+        value = new double[1];
     }
 
     int GetLen()
@@ -51,25 +97,12 @@ class FormulaColumn: public Column
         return 1;
     }
 
-    int GetSize()
-    {
-        return sizeof(double) * GetLen();
-    }
-
     void* GetValuePointer()
     {
         formula->GetNdata(); // required, as in TTreePlayer
         value[0] = formula->EvalInstance(0);
         return value;
     }
-
-    const char* GetTypeName()
-    {
-        return "double";
-    }
-
-    TTreeFormula* formula;
-    double* value;
 };
 
 
