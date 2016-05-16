@@ -153,7 +153,7 @@ def stretch(arr, fields=None, return_indices=False):
     if return_indices:
         idx = np.concatenate(list(map(np.arange, len_array)))
         return ret, idx
-    
+
     return ret
 
 

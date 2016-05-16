@@ -10,8 +10,10 @@ cdef list_objects_recursive(TDirectory* rdir, objects, types=None, path=""):
     for i in range(nkeys):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
-        if types is None or clsname in types:
-            objects.append(path + str(key.GetName()))
+        cl = ROOT.gROOT.GetClass(clsname)
+        if types is None or\
+                numpy.any([cl.InheritsFrom(ROOT.gROOT.GetClass(t)) for t in types]):
+                    objects.append(path + str(key.GetName()))
         if clsname == "TDirectoryFile":
             # recursively enter lower directory levels
             list_objects_recursive(<TDirectory*> rdir.Get(key.GetName()),
