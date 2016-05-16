@@ -81,7 +81,7 @@ def test_list_branches():
 
 def test_list_directories():
     directories = rnp.list_directories(load('directories.root'))
-    assert_equal(directories, ['Dir1', 'Dir2'])
+    assert_equal(set(directories), set(['Dir1', 'Dir2']))
 
 
 def test_list_structures():

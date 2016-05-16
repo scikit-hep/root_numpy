@@ -2,43 +2,19 @@ include "converters.pyx"
 
 
 def list_trees(fname):
-    cdef TFile* rfile = Open(fname, 'read')
-    if rfile == NULL:
-        raise IOError("cannot read {0}".format(fname))
-    cdef TList* keys = rfile.GetListOfKeys()
-    if keys == NULL:
-        raise IOError("unable to get keys in {0}".format(fname))
-    ret = dict()
-    cdef int nkeys = keys.GetEntries()
-    cdef TKey* key
-    for i in range(nkeys):
-        key = <TKey*> keys.At(i)
-        clsname = str(key.GetClassName())
-        if clsname == 'TTree' or clsname == 'TNtuple':
-            ret[str(key.GetName())] = None
-    rfile.Close()
-    del rfile
-    return list(ret.keys())
-
+    return list(list_objects(fname, types=['TTree', 'TNtuple']).keys())
 
 def list_directories(fname):
-    cdef TFile* rfile = Open(fname, 'read')
+    return list(list_objects(fname, types=['TDirectoryFile']).keys())
+
+def list_objects(fname, types=None):
+    cdef TDirectory* rfile = <TDirectory*>Open(fname, 'read')
     if rfile == NULL:
-        raise IOError("cannot read{0}".format(fname))
-    cdef TList* keys = rfile.GetListOfKeys()
-    if keys == NULL:
-        raise IOError("unable to get keys in {0}".format(fname))
-    ret = list()
-    cdef int nkeys = keys.GetEntries()
-    cdef TKey* key
-    for i in range(nkeys):
-        key = <TKey*> keys.At(i)
-        clsname = str(key.GetClassName())
-        if clsname == 'TDirectoryFile':
-            ret.append(key.GetName())
-    rfile.Close()
+        raise IOError("cannot read {0}".format(fname))
+    objects = {}
+    list_objects_recursive(rfile, objects, types=types)
     del rfile
-    return ret
+    return objects
 
 
 def list_structures(fname, tree=None):
@@ -63,6 +39,23 @@ def list_structures(fname, tree=None):
 def list_branches(fname, tree=None):
     return list(list_structures(fname, tree).keys())
 
+
+cdef list_objects_recursive(TDirectory* rDir, dic, types=None, path=""):
+    cdef TDirectory* next_dir
+    cdef TList* keys = rDir.GetListOfKeys()
+    if keys == NULL:
+        raise IOError("unable to get keys in {0}".format(path))
+    cdef int nkeys = keys.GetEntries()
+    cdef TKey* key
+    for i in range(nkeys):
+        key = <TKey*> keys.At(i)
+        clsname = str(key.GetClassName())
+        if clsname in types or types is None:
+            dic[path + str(key.GetName())] =  clsname
+        if clsname == "TDirectoryFile":
+            # recursively enter lower directory levels
+            next_dir = <TDirectory*> rDir.Get(key.GetName())
+            list_objects_recursive(next_dir, dic, types, path=path + key.GetName() + "/")
 
 cdef get_branch_structure(TBranch* branch):
     cdef TObjArray* leaves
