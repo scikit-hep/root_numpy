@@ -124,6 +124,8 @@ def root2array(filenames,
                warn_missing_tree=False):
     """Convert trees in ROOT files into a numpy structured array.
 
+    Refer to the documentation of :func:`tree2array`.
+
     Parameters
     ----------
     filenames : str or list
@@ -133,9 +135,10 @@ def root2array(filenames,
         Name of the tree to convert (optional if each file contains exactly one
         tree).
     branches : list of strings or single string, optional (default=None)
-        List of branch names to include as columns of the array or a single
-        branch name to convert into a one-dimensional array. If None then
-        include all branches that can be converted.
+        List of branch names and expressions to include as columns of the
+        array or a single branch name or expression to convert into a
+        one-dimensional array. If None then include all branches that can be
+        converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
@@ -254,14 +257,22 @@ def tree2array(tree,
                cache_size=-1):
     """Convert a tree into a numpy structured array.
 
+    Convert branches of strings and basic types such as bool, int, float,
+    double, etc. as well as variable-length and fixed-length multidimensional
+    arrays and 1D or 2D vectors of basic types and strings. ``tree2array`` can
+    also create columns in the output array that are expressions involving the
+    TTree branches (i.e. ``'vect.Pt() / 1000'``) similar to ``TTree::Draw()``.
+    See the notes below for important details.
+
     Parameters
     ----------
     tree : ROOT TTree instance
         The ROOT TTree to convert into an array.
     branches : list of strings or single string, optional (default=None)
-        List of branch names to include as columns of the array or a single
-        branch name to convert into a one-dimensional array. If None then
-        include all branches that can be converted.
+        List of branch names and expressions to include as columns of the
+        array or a single branch name or expression to convert into a
+        one-dimensional array. If None then include all branches that can be
+        converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     start, stop, step: int, optional (default=None)
@@ -281,7 +292,7 @@ def tree2array(tree,
 
     Notes
     -----
-    Types are converted according to:
+    Types are converted according to the following table:
 
     .. _conversion_table:
 
@@ -425,10 +436,10 @@ def array2tree(arr, name='tree', tree=None):
     tree's ``SetEntries()`` method. Beyond that, the tree should still be
     usable. While it might not be generally recommended to create branches with
     differing lengths, this behaviour could be required in certain situations.
-    root_numpy makes no attempt to prevent such behaviour as this would be
-    more strict than ROOT itself. Also see the note about converting trees
-    that have branches of different lengths into numpy arrays in the documentation
-    of :func:`tree2array`.
+    root_numpy makes no attempt to prevent such behaviour as this would be more
+    strict than ROOT itself. Also see the note about converting trees that have
+    branches of different lengths into numpy arrays in the documentation of
+    :func:`tree2array`.
 
     See Also
     --------

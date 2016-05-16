@@ -173,6 +173,8 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
 
     cdef TTreeFormula* selection_formula = NULL
     cdef TTreeFormula* formula = NULL
+    cdef int instance
+    cdef bool keep
 
     cdef int ibranch, ileaf, branch_idx = 0
     cdef int num_branches = branch_array.GetEntries()
@@ -295,13 +297,16 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 # The chain will take care of updating the formula leaves when
                 # rolling over to the next tree.
                 chain.AddFormula(formula)
-                col = new FormulaColumn(expression, formula)
-                conv = find_converter_by_typename('double')
+                if formula.GetMultiplicity() > 0:
+                    col = new MultiFormulaColumn(expression, formula)
+                    conv = get_array_converter('double', '[]')
+                else:
+                    col = new FormulaColumn(expression, formula)
+                    conv = find_converter_by_typename('double')
                 if conv == NULL:
                     # Oops, this should never happen
                     raise AssertionError(
-                        "could not find double converter for formula")
-
+                        "could not find formula converter")
                 column_buckets[branch_idx].push_back(col)
                 converter_buckets[branch_idx].push_back(conv)
 
@@ -357,8 +362,12 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
             # Determine if this entry passes the selection,
             # similar to the code in ROOT's tree/treeplayer/src/TTreePlayer.cxx
             if selection_formula != NULL:
-                selection_formula.GetNdata() # required, as in TTreePlayer
-                if selection_formula.EvalInstance(0) == 0:
+                keep = False
+                for instance in range(selection_formula.GetNdata()):
+                    if selection_formula.EvalInstance(instance) != 0:
+                        keep = True
+                        break
+                if not keep:
                     continue
 
             # Copy the values into the array
@@ -511,7 +520,7 @@ def array2root(arr, filename, treename='tree', mode='update'):
     # If a tree with that name exists, we want to update it
     cdef TTree* tree = <TTree*> rfile.Get(treename)
     tree = array2tree(arr, name=treename, tree=tree)
-    tree.Write(treename, 2) # TObject::kOverwrite
+    tree.Write(treename, kOverwrite)
     rfile.Close()
     # TODO: clean up tree
     del rfile

@@ -1,6 +1,6 @@
 import re
 
-# match leaf_name[length_leaf][N][M]...
+# match leaf_name[length_leaf][N][M]... or leaf_name[N][M]...
 LEAF_PATTERN = re.compile('^[^\[]+((?:\[[^\s\]]+\])(?:\[[0-9]+\])*)?$')
 
 TYPES = {
@@ -82,7 +82,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
     # can't use memcpy here...
     cdef unsigned long i
     for i in range(numele):
-        tmp[i] = src[0][i]
+        tmp[i] = deref(src)[i]
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
@@ -102,7 +102,7 @@ cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src
     # can't use memcpy here...
     cdef unsigned long i
     for i in range(numele):
-        py_bytes = str(src[0][i])
+        py_bytes = str(deref(src)[i])
         Py_INCREF(py_bytes)
         tmpstrobj = <PyObject*> py_bytes
         memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
@@ -169,6 +169,7 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         free(this.dims)
 
     int write(Column* col, void* buffer):
+        # only the first dimension can vary in length
         this.dims[0] = col.GetCountLen()
         return create_numpyarray(buffer, col.GetValuePointer(),
                                  this.typecode, col.GetLen(), this.elesize,
@@ -452,18 +453,54 @@ cdef Converter* find_converter_by_typename(string typename):
     return deref(it).second
 
 
-cdef enum LeafShapeType:
-    SINGLE_VALUE = 1
-    VARIABLE_LENGTH_ARRAY = 2
-    FIXED_LENGTH_ARRAY = 3
+cdef Converter* get_array_converter(string typename, arraydef):
+    # Determine shape ignoring possible variable first dimension
+    arraytokens = arraydef.strip('[]')
+    if arraytokens:
+        arraytokens = arraytokens.split('][')
+    shape = tuple([int(token) for token in arraytokens])
+
+    # Variable-length array
+    if arraydef.startswith('[]'):
+        conv = find_converter_by_typename(typename + arraydef)
+        if conv == NULL:
+            # Create new converter on demand
+            basic_conv = find_converter_by_typename(typename)
+            if basic_conv == NULL:
+                return NULL
+            # the variable-length dimension is excluded from leaf_shape above
+            # so add 1 here:
+            ndim = len(shape) + 1
+            dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
+            if dims == NULL:
+                raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
+            # only the first dimension can vary in length
+            # so dims[0] is set dynamically for each entry
+            for idim from 1 <= idim < ndim:
+                dims[idim] = shape[idim - 1]
+            conv = new VaryArrayConverter(
+                <BasicConverter*> basic_conv, ndim, dims)
+            CONVERTERS.insert(CONVERTERS_ITEM(typename + arraydef, conv))
+        return conv
+
+    # Fixed-length array
+    conv = find_converter_by_typename(typename + arraydef)
+    if conv == NULL:
+        # Create new converter on demand
+        basic_conv = find_converter_by_typename(typename)
+        if basic_conv == NULL:
+            return NULL
+        conv = new FixedArrayConverter(
+            <BasicConverter*> basic_conv, <PyObject*> shape)
+        CONVERTERS.insert(CONVERTERS_ITEM(typename + arraydef, conv))
+    return conv
 
 
-cdef Converter* get_converter(TLeaf* leaf, char type_code):
+cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):
     # Find existing converter or attempt to create a new one
     cdef Converter* conv
     cdef Converter* basic_conv
     cdef TLeaf* leaf_count = leaf.GetLeafCount()
-    cdef LeafShapeType leaf_shape_type = SINGLE_VALUE
     cdef SIZE_t* dims
     cdef int ndim, idim, leaf_length
 
@@ -480,56 +517,15 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code):
             CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
         return conv
 
-    # Determine shape of this leaf
-    leaf_shape = ()
     match = re.match(LEAF_PATTERN, leaf_title)
     if match is not None:
         arraydef = match.group(1)
         if arraydef is not None:
-            arraytokens = arraydef.strip('[]').split('][')
-            shape = []
-            # First group might be the name of the length-leaf
             if leaf_count != NULL:
-                # Ignore leaf name token
-                arraytokens.pop(0)
-                leaf_shape_type = VARIABLE_LENGTH_ARRAY
-            else:
-                leaf_shape_type = FIXED_LENGTH_ARRAY
-            shape.extend([int(token) for token in arraytokens])
-            leaf_shape = tuple(shape)
-
-    if leaf_shape_type == SINGLE_VALUE:
-        return find_converter_by_typename(leaf_type)
-
-    if leaf_shape_type == VARIABLE_LENGTH_ARRAY:
-        conv = find_converter_by_typename(leaf_type + arraydef)
-        if conv == NULL:
-            # Create new converter on demand
-            basic_conv = find_converter_by_typename(leaf_type)
-            if basic_conv == NULL:
-                return NULL
-            ndim = len(leaf_shape) + 1
-            dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
-            if dims == NULL:
-                raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
-            for idim from 1 <= idim < ndim:
-                dims[idim] = leaf_shape[idim - 1]
-            conv = new VaryArrayConverter(
-                <BasicConverter*> basic_conv, ndim, dims)
-            CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + arraydef, conv))
-        return conv
-
-    # Fixed-length array
-    conv = find_converter_by_typename(leaf_type + arraydef)
-    if conv == NULL:
-        # Create new converter on demand
-        basic_conv = find_converter_by_typename(leaf_type)
-        if basic_conv == NULL:
-            return NULL
-        conv = new FixedArrayConverter(
-            <BasicConverter*> basic_conv, <PyObject*> leaf_shape)
-        CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + arraydef, conv))
-    return conv
+                # Ignore length-leaf name and use [] to denote variable-length first dimension
+                arraydef = '[' + arraydef[arraydef.find(']'):]
+            return get_array_converter(leaf_type, arraydef)
+    return find_converter_by_typename(leaf_type)
 
 
 @atexit.register
