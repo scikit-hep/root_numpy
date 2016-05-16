@@ -10,20 +10,22 @@ cdef extern from "TObject.h" namespace "TObject":
         kOverwrite
         kWriteDelete
 
-cdef extern from "TFile.h":
-    cdef cppclass TFile:
-        TFile(const_char*, const_char*)
-        void Print()
-        TList* GetListOfKeys()
-        TObject* Get(const_char*)
-        void Close()
-        bool IsOpen()
-        bool IsWritable()
-
 cdef extern from "TDirectory.h":
     cdef cppclass TDirectory:
         TList* GetListOfKeys()
         TObject* Get(const_char*)
+
+cdef extern from "TDirectoryFile.h":
+    cdef cppclass TDirectoryFile(TDirectory):
+        pass
+
+cdef extern from "TFile.h":
+    cdef cppclass TFile(TDirectoryFile):
+        TFile(const_char*, const_char*)
+        void Print()
+        void Close()
+        bool IsOpen()
+        bool IsWritable()
 
 cdef extern from "TFile.h" namespace "TFile":
     TFile* Open(const_char*, const_char*)
