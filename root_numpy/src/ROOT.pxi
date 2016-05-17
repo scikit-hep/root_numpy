@@ -1,4 +1,12 @@
 
+cdef extern from "TClass.h":
+    cdef cppclass TClass:
+        bool InheritsFrom(const_char* name)
+        bool InheritsFrom(TClass* cl)
+        
+cdef extern from "TClass.h" namespace "TClass":
+    TClass* GetClass(const_char* name, bool load, bool silent)
+
 cdef extern from "TObject.h":
     cdef cppclass TObject:
         TObject()
