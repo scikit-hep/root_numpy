@@ -1,37 +1,57 @@
 include "converters.pyx"
 
 
-cdef list_objects_recursive(TDirectory* rdir, objects, types=None, path=""):
+cdef list_objects_recursive(TDirectory* rdir, objects, vector[TClass*]& classes, path=""):
     cdef TList* keys = rdir.GetListOfKeys()
     if keys == NULL:
         raise IOError("unable to get keys in {0}".format(path))
+    cdef TClass* tclass
+    cdef vector[TClass*].iterator it
     cdef int nkeys = keys.GetEntries()
     cdef TKey* key
     for i in range(nkeys):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
-        if types is None or clsname in types:
+        if not classes.empty():
+            tclass = GetClass(clsname, True, True)
+            if tclass != NULL:
+                it = classes.begin()
+                while it != classes.end():
+                    if tclass.InheritsFrom(deref(it)):
+                        objects.append(path + str(key.GetName()))
+                        break
+                    inc(it)
+        else:
             objects.append(path + str(key.GetName()))
         if clsname == "TDirectoryFile":
             # recursively enter lower directory levels
             list_objects_recursive(<TDirectory*> rdir.Get(key.GetName()),
-                                   objects, types,
+                                   objects, classes,
                                    path=path + key.GetName() + "/")
 
 
 def list_objects(fname, types=None):
+    cdef TClass* tclass
+    # ROOT owns these pointers
+    cdef vector[TClass*] classes
+    if types is not None:
+        for clsname in types:
+            tclass = GetClass(clsname, True, True)
+            if tclass == NULL:
+                raise ValueError("'{0}' is not a ROOT class".format(clsname))
+            classes.push_back(tclass)
     cdef TFile* rfile = Open(fname, 'read')
     if rfile == NULL:
         raise IOError("cannot read {0}".format(fname))
     objects = []
-    list_objects_recursive(rfile, objects, types=types)
+    list_objects_recursive(rfile, objects, classes)
     rfile.Close()
     del rfile
     return objects
 
 
 def list_trees(fname):
-    return list_objects(fname, types=['TTree', 'TNtuple'])
+    return list_objects(fname, types=['TTree'])
 
 
 def list_directories(fname):
