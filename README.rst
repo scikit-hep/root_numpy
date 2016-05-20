@@ -103,14 +103,14 @@ array:
 
 .. code-block:: python
 
-   from ROOT import TH2D, TCanvas
+   from ROOT import TH2D
    from root_numpy import fill_hist
    import numpy as np
 
    # Fill a ROOT histogram from a NumPy array
    hist = TH2D('name', 'title', 20, -3, 3, 20, -3, 3)
    fill_hist(hist, np.random.randn(1000000, 2))
-   canvas = TCanvas(); hist.Draw('LEGO2')
+   hist.Draw('LEGO2')
 
 and a function for creating a random NumPy array by sampling a ROOT function
 or histogram:
