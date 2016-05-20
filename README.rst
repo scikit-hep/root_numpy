@@ -35,9 +35,7 @@ numerical integration and optimization, `matplotlib <http://matplotlib.org/>`_
 for plotting, `pandas <http://pandas.pydata.org/>`_ for data analysis,
 `statsmodels <http://statsmodels.sourceforge.net/>`_ for statistical modelling,
 `scikit-learn <http://scikit-learn.org/>`_ for machine learning, and perform
-quick exploratory analysis in interactive environments like `IPython
-<http://ipython.org/>`_, especially IPython's popular `notebook
-<http://ipython.org/ipython-doc/dev/interactive/notebook.html>`_ feature.
+quick exploratory analysis in a `Jupyter notebook <https://jupyter.org/>`_.
 
 At the core of root_numpy are powerful and flexible functions for converting
 `ROOT TTrees <http://root.cern.ch/root/html/TTree.html>`_ into `structured
