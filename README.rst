@@ -109,7 +109,7 @@ array:
 
    # Fill a ROOT histogram from a NumPy array
    hist = TH2D('name', 'title', 20, -3, 3, 20, -3, 3)
-   fill_hist(hist, np.random.randn(1E6, 2))
+   fill_hist(hist, np.random.randn(1000000, 2))
    canvas = TCanvas(); hist.Draw('LEGO2')
 
 and a function for creating a random NumPy array by sampling a ROOT function
@@ -122,9 +122,9 @@ or histogram:
 
    # Sample a ROOT function
    func = TF2('func', 'sin(x)*sin(y)/(x*y)')
-   arr = random_sample(func, 1E6)
+   arr = random_sample(func, 1000000)
 
    # Sample a ROOT histogram
    hist = TH1D('hist', 'hist', 10, -3, 3)
    hist.FillRandom('gaus')
-   arr = random_sample(hist, 1E6)
+   arr = random_sample(hist, 1000000)

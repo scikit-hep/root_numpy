@@ -33,10 +33,10 @@ def random_sample(obj, n_samples, seed=None):
     --------
     >>> from root_numpy import random_sample
     >>> from ROOT import TF1, TF2, TF3
-    >>> random_sample(TF1("f1", "TMath::DiLog(x)"), 1E4, seed=1)
+    >>> random_sample(TF1("f1", "TMath::DiLog(x)"), 10000, seed=1)
     array([ 0.68307934,  0.9988919 ,  0.87198158, ...,  0.50331049,
             0.53895257,  0.57576984])
-    >>> random_sample(TF2("f2", "sin(x)*sin(y)/(x*y)"), 1E4, seed=1)
+    >>> random_sample(TF2("f2", "sin(x)*sin(y)/(x*y)"), 10000, seed=1)
     array([[ 0.93425084,  0.39990616],
            [ 0.00819315,  0.73108525],
            [ 0.00307176,  0.00427081],
@@ -44,7 +44,7 @@ def random_sample(obj, n_samples, seed=None):
            [ 0.66931215,  0.0421913 ],
            [ 0.06469985,  0.10253632],
            [ 0.31059832,  0.75892702]])
-    >>> random_sample(TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)"), 1E4, seed=1)
+    >>> random_sample(TF3("f3", "sin(x)*sin(y)*sin(z)/(x*y*z)"), 10000, seed=1)
     array([[ 0.03323949,  0.95734415,  0.39775191],
            [ 0.07093748,  0.01007775,  0.03330135],
            [ 0.80786963,  0.13641129,  0.14655269],
