@@ -38,13 +38,14 @@ for plotting, `pandas <http://pandas.pydata.org/>`_ for data analysis,
 quick exploratory analysis in a `Jupyter notebook <https://jupyter.org/>`_.
 
 At the core of root_numpy are powerful and flexible functions for converting
-`ROOT TTrees <http://root.cern.ch/root/html/TTree.html>`_ into `structured
-NumPy arrays <http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_ as well
-as converting NumPy arrays back into ROOT TTrees. root_numpy can convert
-branches of strings and basic types such as bool, int, float, double, etc. as
-well as variable-length and fixed-length multidimensional arrays and 1D or 2D
-vectors of basic types and strings. root_numpy can also create columns in the
-output array that are expressions involving the TTree branches similar to
+`ROOT TTrees <https://root.cern.ch/doc/master/classTTree.html>`_ into
+`structured NumPy arrays
+<http://docs.scipy.org/doc/numpy/user/basics.rec.html>`_ as well as converting
+NumPy arrays back into ROOT TTrees. root_numpy can convert branches of strings
+and basic types such as bool, int, float, double, etc. as well as
+variable-length and fixed-length multidimensional arrays and 1D or 2D vectors
+of basic types and strings. root_numpy can also create columns in the output
+array that are expressions involving the TTree branches similar to
 ``TTree::Draw()``.
 
 For example, get a structured NumPy array from a TTree (copy and paste the
