@@ -238,6 +238,8 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
             if len(branch_dict) != num_requested_branches:
                 raise ValueError("duplicate branches requested")
 
+        seen_branches = set()
+
         # Build vector of Converters for branches
         for ibranch in range(num_branches):
             tbranch = <TBranch*> branch_array.At(ibranch)
@@ -250,6 +252,13 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 if branch_idx == -1:
                     # This branch was not selected by the user
                     continue
+            elif branch_name in seen_branches:
+                warnings.warn("ignoring duplicate branch named '{0}'".format(branch_name),
+                              RuntimeWarning)
+                # Ignore duplicate branches
+                continue
+            else:
+                seen_branches.add(branch_name)
 
             branch_title = string(tbranch.GetTitle())
             branch_title_size = branch_title.size()
