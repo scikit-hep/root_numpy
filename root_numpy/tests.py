@@ -162,6 +162,26 @@ def test_empty_tree():
     rnp.tree2array(tree)
 
 
+def test_duplicate_branch_name():
+    from array import array
+    tree = TTree('tree', 'tree')
+    d = array('d', [0.])
+    tree.Branch('double', d, 'double/D')
+    tree.Branch('double', d, 'double/D')
+    tree.Fill()
+
+    # check that a warning was emitted
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        a = rnp.tree2array(tree)
+        assert_equal(len(w), 1)
+        assert_true(issubclass(w[-1].category, RuntimeWarning))
+        assert_true("ignoring duplicate branch named" in str(w[-1].message))
+    assert_equal(
+        a.dtype,
+        [('double', '<f8')])
+
+
 def test_unsupported_branch_in_branches():
     tree = TTree('test', 'test')
     vect = TLorentzVector()
