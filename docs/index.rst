@@ -14,7 +14,7 @@ root_numpy
    <h2 class="main-subtitle">The interface between ROOT and NumPy</h2>
 
 .. include:: ../README.rst
-   :start-line: 20
+   :start-line: 18
 
 .. toctree::
    :maxdepth: 2
