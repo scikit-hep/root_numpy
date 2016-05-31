@@ -91,8 +91,12 @@ def list_directories(filename):
     """
     return _librootnumpy.list_directories(filename)
 
+
 def list_structures(filename, treename=None):
     """Get a dictionary mapping branch names to leaf structures.
+
+    .. warning:: ``list_structures`` is deprecated and will be removed in
+       release 5.0.0.
 
     Parameters
     ----------
@@ -108,6 +112,8 @@ def list_structures(filename, treename=None):
         An ordered dictionary mapping branch names to leaf structures.
 
     """
+    warnings.warn("list_structures is deprecated and will be "
+                  "removed in 5.0.0.", DeprecationWarning)
     return _librootnumpy.list_structures(filename, treename)
 
 
@@ -221,6 +227,9 @@ def root2rec(filenames,
              warn_missing_tree=False):
     """View the result of :func:`root2array` as a record array.
 
+    .. warning:: ``root2rec`` is deprecated and will be removed in
+       release 5.0.0. Instead use ``root2array(...).view(np.recarray)``.
+
     Notes
     -----
     * This is equivalent to::
@@ -234,7 +243,7 @@ def root2rec(filenames,
     root2array
 
     """
-    warnings.warn("root2rec is deprecated and will be removed in 4.5.0. "
+    warnings.warn("root2rec is deprecated and will be removed in 5.0.0. "
                   "Instead use root2array(...).view(np.recarray)",
                   DeprecationWarning)
     return root2array(filenames, treename,
@@ -379,6 +388,9 @@ def tree2rec(tree,
              cache_size=-1):
     """View the result of :func:`tree2array` as a record array.
 
+    .. warning:: ``tree2rec`` is deprecated and will be removed in
+       release 5.0.0. Instead use ``tree2array(...).view(np.recarray)``.
+
     Notes
     -----
     * This is equivalent to::
@@ -392,7 +404,7 @@ def tree2rec(tree,
     tree2array
 
     """
-    warnings.warn("tree2rec is deprecated and will be removed in 4.5.0. "
+    warnings.warn("tree2rec is deprecated and will be removed in 5.0.0. "
                   "Instead use tree2array(...).view(np.recarray)",
                   DeprecationWarning)
     return tree2array(tree,
