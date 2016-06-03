@@ -90,7 +90,7 @@ packages = [
     'root_numpy.extern',
     ]
 
-if has_tmva:
+if has_tmva and not os.getenv('NOTMVA', None):
     librootnumpy_tmva = Extension(
         'root_numpy.tmva._libtmvanumpy',
         sources=[
