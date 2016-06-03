@@ -6,5 +6,5 @@
 |_|  \___/ \___/ \__|___|_| |_|\__,_|_| |_| |_| .__/ \__, |  {0}
                    |_____|                    |_|    |___/
 """
-__version__ = '4.5.0.dev0'
+__version__ = '4.5.1.dev0'
 __doc__ = __doc__.format(__version__)  # pylint:disable=redefined-builtin
