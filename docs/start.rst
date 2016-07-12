@@ -21,7 +21,7 @@ Install pip and virtualenv::
    python get-pip.py --user
    pip install --user virtualenv
 
-Then create and activate a virtualenv (change `my_env` at your will)::
+Then create and activate a virtualenv (change ``my_env`` at your will)::
 
    virtualenv my_env
    source my_env/bin/activate
@@ -31,7 +31,8 @@ Now install NumPy and root_numpy::
    pip install numpy
    pip install root_numpy
 
-Note that neither `sudo` nor `--user` is used, because we are in a virtualenv.
+Note that neither ``sudo`` nor ``--user`` is used, because we are in a
+virtualenv.
 
 root_numpy should now be ready to use::
 
