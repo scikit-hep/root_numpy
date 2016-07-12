@@ -6,27 +6,31 @@ Getting Started
 Try root_numpy on `CERN's LXPLUS <http://information-technology.web.cern.ch/services/lxplus-service>`_
 ======================================================================================================
 
-First `set up ROOT <http://root.cern.ch/drupal/content/starting-root>`_::
+First set up an environment with consistent GCC, ROOT and Python builds::
 
-   source /afs/cern.ch/sw/lcg/contrib/gcc/4.8/x86_64-slc6/setup.sh
-   source /afs/cern.ch/sw/lcg/app/releases/ROOT/5.34.18/x86_64-slc6-gcc48-opt/root/bin/thisroot.sh
+   export LCGENV_PATH=/afs/cern.ch/sw/lcg/releases
+   /cvmfs/sft.cern.ch/lcg/releases/lcgenv/latest/lcgenv -p LCG_84 x86_64-slc6-gcc49-opt ROOT > lcgenv.sh
+   source lcgenv.sh
 
-Then create and activate a `virtualenv <https://pypi.python.org/pypi/virtualenv>`_ (change `my_env` at your will)::
+In new terminal sessions, only the last line above will be required.
 
-   virtualenv my_env # necessary only the first time
-   source my_env/bin/activate
+Install pip::
+
+   curl -O https://bootstrap.pypa.io/get-pip.py
+   python get-pip.py --user
 
 Now install NumPy and root_numpy::
 
-   pip install numpy
-   pip install root_numpy
+   pip install --user numpy
+   pip install --user root_numpy
 
-Note that neither `sudo` nor `--user` is used, because we are in a virtualenv.
+Another option is to install all of this in a `virtualenv
+<https://virtualenv.pypa.io/en/stable/>`_.
 
-`root_numpy` should now be ready to use::
+root_numpy should now be ready to use::
 
-   >>> from root_numpy import root2rec, testdata
-   >>> root2rec(testdata.get_filepath('single1.root'))[:20] # doctest: +SKIP
+   >>> from root_numpy import root2array, testdata
+   >>> root2array(testdata.get_filepath('single1.root'))[:20] # doctest: +SKIP
    rec.array([(1, 1.0, 1.0), (2, 3.0, 4.0), (3, 5.0, 7.0), (4, 7.0, 10.0),
           (5, 9.0, 13.0), (6, 11.0, 16.0), (7, 13.0, 19.0), (8, 15.0, 22.0),
           (9, 17.0, 25.0), (10, 19.0, 28.0), (11, 21.0, 31.0),
