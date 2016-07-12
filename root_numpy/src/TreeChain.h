@@ -167,7 +167,12 @@ class TreeChain
             ncodes = (*fit)->GetNcodes();
             for (icode = 0; icode < ncodes; ++icode)
             {
-                branch = (*fit)->GetLeaf(icode)->GetBranch();
+                leaf = (*fit)->GetLeaf(icode);
+                if (leaf == NULL)
+                {
+                    continue;
+                }
+                branch = leaf->GetBranch();
                 // Branch may be a TObject split across multiple
                 // subbranches. These must be activated recursively.
                 activate_branch_recursive(branch);
@@ -225,13 +230,19 @@ class TreeChain
             }
             total_read += read;
         }
+        TLeaf* leaf;
         std::vector<TTreeFormula*>::iterator fit, fend = formulae.end();
         for (fit = formulae.begin(); fit != fend; ++fit)
         {
             ncodes = (*fit)->GetNcodes();
             for (int n = 0; n < ncodes; ++n)
             {
-                read = (*fit)->GetLeaf(n)->GetBranch()->GetEntry(load);
+                leaf = (*fit)->GetLeaf(n);
+                if (leaf == NULL)
+                {
+                    continue;
+                }
+                read = leaf->GetBranch()->GetEntry(load);
                 if (read < 0)
                 {
                     return read;
