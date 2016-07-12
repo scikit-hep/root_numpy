@@ -10,6 +10,7 @@ First set up an environment with consistent GCC, ROOT and Python builds::
 
    export LCGENV_PATH=/afs/cern.ch/sw/lcg/releases
    /cvmfs/sft.cern.ch/lcg/releases/lcgenv/latest/lcgenv -p LCG_84 x86_64-slc6-gcc49-opt ROOT > lcgenv.sh
+   echo 'export PATH=$HOME/.local/bin:$PATH' >> lcgenv.sh
    source lcgenv.sh
 
 In new terminal sessions, only the last line above will be required.
