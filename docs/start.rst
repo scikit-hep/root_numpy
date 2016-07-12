@@ -15,18 +15,23 @@ First set up an environment with consistent GCC, ROOT and Python builds::
 
 In new terminal sessions, only the last line above will be required.
 
-Install pip::
+Install pip and virtualenv::
 
    curl -O https://bootstrap.pypa.io/get-pip.py
    python get-pip.py --user
+   pip install --user virtualenv
+
+Then create and activate a virtualenv (change `my_env` at your will)::
+
+   virtualenv my_env
+   source my_env/bin/activate
 
 Now install NumPy and root_numpy::
 
-   pip install --user numpy
-   pip install --user root_numpy
+   pip install numpy
+   pip install root_numpy
 
-Another option is to install all of this in a `virtualenv
-<https://virtualenv.pypa.io/en/stable/>`_.
+Note that neither `sudo` nor `--user` is used, because we are in a virtualenv.
 
 root_numpy should now be ready to use::
 
