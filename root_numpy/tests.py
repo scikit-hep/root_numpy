@@ -6,7 +6,7 @@ from contextlib import contextmanager
 
 import numpy as np
 from numpy.lib import recfunctions
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_array_almost_equal
 from numpy.random import RandomState
 
 import ROOT
@@ -903,6 +903,21 @@ def test_rec2array():
     arr = rnp.rec2array(a, fields=['x'])
     assert_equal(arr.ndim, 1)
     assert_equal(arr.shape, (a.shape[0],))
+    # array fields
+    a = np.array([
+        ([1, 2, 3], [4.5, 6, 9.5],),
+        ([4, 5, 6], [3.3, 7.5, 8.4],),],
+        dtype=[
+            ('x', np.int32, (3,)),
+            ('y', np.float32, (3,))])
+    arr = rnp.rec2array(a)
+    assert_array_almost_equal(arr,
+        np.array([[[1, 4.5],
+                   [2, 6,],
+                   [3, 9.5]],
+                  [[4, 3.3],
+                   [5, 7.5],
+                   [6, 8.4]]]))
 
 
 def test_stack():

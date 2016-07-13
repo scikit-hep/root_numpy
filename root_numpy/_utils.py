@@ -26,7 +26,7 @@ def rec2array(rec, fields=None):
         A NumPy structured array that will be cast into a homogenous data type.
     fields : list of strings, optional (default=None)
         The fields to include as columns in the output array. If None, then all
-        columns will be included.
+        columns will be included. All fields must have the same shape.
 
     Returns
     -------
@@ -38,8 +38,8 @@ def rec2array(rec, fields=None):
         fields = rec.dtype.names
     if len(fields) == 1:
         return rec[fields[0]]
-    # Creates a copy and recasts data to a consistent datatype
-    return np.vstack([rec[field] for field in fields]).T
+    # Creates a copy and casts all data to the same type
+    return np.squeeze(np.dstack([rec[field] for field in fields]))
 
 
 def stack(recs, fields=None):
