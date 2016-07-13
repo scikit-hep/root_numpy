@@ -33,6 +33,53 @@ def rec2array(rec, fields=None):
     array : NumPy ndarray
         A new NumPy ndarray with homogeneous data types for all columns.
 
+    Notes
+    -----
+    If the fields are scalars the shape of the output ``array`` will be
+    ``(len(rec), num_fields)``. If the fields are arrays of length
+    ``num_things`` the shape of the output ``array`` will be ``(len(rec),
+    num_things, num_fields)``.
+
+    Examples
+    --------
+
+    >>> from root_numpy import rec2array
+    >>> import numpy as np
+    >>> a = np.array([
+    ...         (12345, 2., 2.1, True),
+    ...         (3, 4., 4.2, False),],
+    ...         dtype=[
+    ...             ('x', np.int32),
+    ...             ('y', np.float32),
+    ...             ('z', np.float64),
+    ...             ('w', np.bool)])
+    >>> arr = rec2array(a)
+    >>> arr
+    array([[  1.23450000e+04,   2.00000000e+00,   2.10000000e+00,
+              1.00000000e+00],
+           [  3.00000000e+00,   4.00000000e+00,   4.20000000e+00,
+              0.00000000e+00]])
+    >>> arr.dtype
+    dtype('float64')
+    >>>
+    >>> a = np.array([
+    ...         ([1, 2, 3], [4.5, 6, 9.5],),
+    ...         ([4, 5, 6], [3.3, 7.5, 8.4],),],
+    ...         dtype=[
+    ...             ('x', np.int32, (3,)),
+    ...             ('y', np.float32, (3,))])
+    >>> arr = rec2array(a)
+    >>> arr
+    array([[[ 1.        ,  4.5       ],
+            [ 2.        ,  6.        ],
+            [ 3.        ,  9.5       ]],
+    <BLANKLINE>
+           [[ 4.        ,  3.29999995],
+            [ 5.        ,  7.5       ],
+            [ 6.        ,  8.39999962]]])
+    >>> arr.shape
+    (2, 3, 2)
+
     """
     if fields is None:
         fields = rec.dtype.names
