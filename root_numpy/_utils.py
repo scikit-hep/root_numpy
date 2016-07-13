@@ -18,7 +18,7 @@ VLEN = np.vectorize(len)
 
 
 def rec2array(rec, fields=None):
-    """Convert a record array into a ndarray with a homogeneous data type.
+    """Convert a record/structured array into an ndarray with a homogeneous data type.
 
     Parameters
     ----------
@@ -153,7 +153,7 @@ def stretch(arr, fields=None, return_indices=False):
     if return_indices:
         idx = np.concatenate(list(map(np.arange, len_array)))
         return ret, idx
-    
+
     return ret
 
 
