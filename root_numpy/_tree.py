@@ -224,7 +224,7 @@ def root2rec(filenames,
              include_weight=False,
              weight_name='weight',
              cache_size=-1,
-             warn_missing_tree=False):
+             warn_missing_tree=False):  # pragma: no cover
     """View the result of :func:`root2array` as a record array.
 
     .. warning:: ``root2rec`` is deprecated and will be removed in
@@ -385,7 +385,7 @@ def tree2rec(tree,
              step=None,
              include_weight=False,
              weight_name='weight',
-             cache_size=-1):
+             cache_size=-1):  # pragma: no cover
     """View the result of :func:`tree2array` as a record array.
 
     .. warning:: ``tree2rec`` is deprecated and will be removed in

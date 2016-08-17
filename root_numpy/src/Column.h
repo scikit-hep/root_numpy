@@ -10,6 +10,9 @@ class Column
 {
     public:
 
+    Column(std::string _name, std::string _type):
+        name(_name),
+        type(_type){}
     virtual ~Column() {}
     virtual int GetLen() = 0;
     virtual int GetCountLen() = 0;
@@ -24,26 +27,24 @@ class Column
 };
 
 
-class MultiFormulaColumn: public Column
+template <typename T>
+class FormulaArrayColumn: public Column
 {
     public:
 
-    MultiFormulaColumn(std::string _name, TTreeFormula* _formula)
-    {
-        name = _name;
-        formula = _formula;
-        type = "Double_t";
-        value = NULL;
-    }
+    FormulaArrayColumn(std::string _name, std::string _type, TTreeFormula* _formula):
+        Column(_name, _type),
+        formula(_formula),
+        value(NULL){}
 
-    ~MultiFormulaColumn()
+    ~FormulaArrayColumn()
     {
         delete[] value;
     }
 
     const char* GetTypeName()
     {
-        return "double";
+        return type.c_str();
     }
 
     int GetLen()
@@ -58,33 +59,70 @@ class MultiFormulaColumn: public Column
 
     int GetSize()
     {
-        return sizeof(double) * GetLen();
+        return sizeof(T) * GetLen();
     }
 
     void* GetValuePointer()
     {
         delete[] value;
-        value = new double[formula->GetNdata()];
+        value = new T[formula->GetNdata()];
         for (int i = 0; i < formula->GetNdata(); ++i)
         {
-            value[i] = formula->EvalInstance(i);
+            value[i] = (T) formula->EvalInstance(i);
         }
         return value;
     }
 
     TTreeFormula* formula;
-    double* value;
+    T* value;
 };
 
 
-class FormulaColumn: public MultiFormulaColumn
+template <typename T>
+class FormulaFixedArrayColumn: public FormulaArrayColumn<T>
 {
     public:
 
-    FormulaColumn(std::string _name, TTreeFormula* _formula):
-        MultiFormulaColumn(_name, _formula)
+    FormulaFixedArrayColumn(std::string _name, std::string _type, TTreeFormula* _formula):
+        FormulaArrayColumn<T>(_name, _type, _formula)
     {
-        value = new double[1];
+        length = _formula->GetNdata();
+        this->value = new T[length];
+    }
+
+    int GetLen()
+    {
+        return length;
+    }
+
+    int GetCountLen()
+    {
+        return length;
+    }
+
+    void* GetValuePointer()
+    {
+        // Call to GetNdata() again required to update leaves
+        for (int i = 0; i < this->formula->GetNdata(); ++i)
+        {
+            this->value[i] = (T) this->formula->EvalInstance(i);
+        }
+        return this->value;
+    }
+
+    int length;
+};
+
+
+template <typename T>
+class FormulaColumn: public FormulaArrayColumn<T>
+{
+    public:
+
+    FormulaColumn(std::string _name, std::string _type, TTreeFormula* _formula):
+        FormulaArrayColumn<T>(_name, _type, _formula)
+    {
+        this->value = new T[1];
     }
 
     int GetLen()
@@ -99,9 +137,9 @@ class FormulaColumn: public MultiFormulaColumn
 
     void* GetValuePointer()
     {
-        formula->GetNdata(); // required, as in TTreePlayer
-        value[0] = formula->EvalInstance(0);
-        return value;
+        this->formula->GetNdata(); // required, as in TTreePlayer
+        this->value[0] = (T) this->formula->EvalInstance(0);
+        return this->value;
     }
 };
 
@@ -110,12 +148,9 @@ class BranchColumn: public Column
 {
     public:
 
-    BranchColumn(std::string& _name, TLeaf* _leaf)
-    {
-        name = _name;
-        leaf = _leaf;
-        type = leaf->GetTypeName();
-    }
+    BranchColumn(std::string _name, TLeaf* _leaf):
+        Column(_name, _leaf->GetTypeName()),
+        leaf(_leaf){}
 
     void SetLeaf(TLeaf* newleaf, bool check=false)
     {

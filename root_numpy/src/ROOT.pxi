@@ -132,6 +132,7 @@ cdef extern from "TTreeFormula.h":
         int GetNdata()
         int GetMultiplicity()
         double EvalInstance(int)
+        bool IsInteger(bool)
 
 cdef extern from "TClassEdit.h" namespace "TClassEdit":
     string ResolveTypedef(const_char*, bool)

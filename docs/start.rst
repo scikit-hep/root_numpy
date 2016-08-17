@@ -3,19 +3,19 @@
 Getting Started
 ===============
 
-Try root_numpy on `CERN's LXPLUS <http://information-technology.web.cern.ch/services/lxplus-service>`_
-======================================================================================================
+If you have access to CERN's CVMFS then you can activate an environment with
+compatible builds of python, ROOT, numpy and root_numpy with the following::
 
-First set up an environment with consistent GCC, ROOT and Python builds::
-
-   export LCGENV_PATH=/afs/cern.ch/sw/lcg/releases
-   /cvmfs/sft.cern.ch/lcg/releases/lcgenv/latest/lcgenv -p LCG_84 x86_64-slc6-gcc49-opt ROOT > lcgenv.sh
+   export LCGENV_PATH=/cvmfs/sft.cern.ch/lcg/releases
+   /cvmfs/sft.cern.ch/lcg/releases/lcgenv/latest/lcgenv -p LCG_85swan2 --ignore Grid x86_64-slc6-gcc49-opt root_numpy > lcgenv.sh
    echo 'export PATH=$HOME/.local/bin:$PATH' >> lcgenv.sh
    source lcgenv.sh
 
 In new terminal sessions, only the last line above will be required.
 
-Install pip and virtualenv::
+If you want to instead use your own installation of root_numpy along with any
+other packages you need, then continue with setting up a virtualenv. First
+install pip and virtualenv::
 
    curl -O https://bootstrap.pypa.io/get-pip.py
    python get-pip.py --user
