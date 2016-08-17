@@ -1034,7 +1034,7 @@ def make_histogram(hist_type, shape, fill=True):
                         shape[2], 0, 1, shape[1], 0, 1, shape[0], 0, 1)
         func = ROOT.TF3('func', 'x*y*z')
     else:
-        raise ValueError("ndim must be 1, 2, or 3")
+        raise ValueError("ndim must be 1, 2, or 3")  # pragma: no cover
     if fill:
         hist.FillRandom('func')
     return hist
