@@ -146,7 +146,7 @@ def test_single_chain():
 
 def test_tree_without_branches():
     tree = TTree('test', 'test')
-    assert_raises(ValueError, rnp.tree2rec, tree)
+    assert_raises(ValueError, rnp.tree2array, tree)
 
 
 def test_empty_branches():
@@ -233,7 +233,8 @@ def test_fixed_length_arrays():
 
 def test_variable_length_arrays():
     f = load(['vary1.root', 'vary2.root'])
-    a = rnp.root2rec(f)
+    a = rnp.root2array(f).view(np.recarray)
+
     assert_equal(
         a.dtype,
         [('len_n', '<i4'), ('len_f', '<i4'), ('len_d', '<i4'),
@@ -277,10 +278,10 @@ def test_tree2array():
     assert_raises(ValueError, get_file, 'file_does_not_exist.root')
 
 
-def test_tree2rec():
+def test_tree2array():
     chain = TChain('tree')
     chain.Add(load('single1.root'))
-    check_single(rnp.tree2rec(chain))
+    check_single(rnp.tree2array(chain))
 
 
 def test_single_branch():
@@ -296,9 +297,9 @@ def test_selection():
     chain = TChain('tree')
     chain.Add(load('single1.root'))
     chain.Add(load('single2.root'))
-    a = rnp.tree2rec(chain)
+    a = rnp.tree2array(chain)
     assert_equal((a['d_double'] <= 100).any(), True)
-    a = rnp.tree2rec(chain, selection="d_double > 100")
+    a = rnp.tree2array(chain, selection="d_double > 100")
     assert_equal((a['d_double'] <= 100).any(), False)
 
     # selection with differing variables in branches and expression
@@ -307,38 +308,52 @@ def test_selection():
         selection="f_float < 100 && n_int%2 == 1")
 
     # selection with TMath
-    a = rnp.tree2rec(chain,
+    a = rnp.tree2array(chain,
         selection="TMath::Erf(d_double) < 0.5")
 
 
 def test_expression():
-    rec = rnp.root2rec(load('single*.root'))
-    rec2 = rnp.root2rec(load('single*.root'), branches=['f_float*2'])
+    rec = rnp.root2array(load('single*.root'))
+    rec2 = rnp.root2array(load('single*.root'), branches=['f_float*2'])
     assert_array_equal(rec['f_float'] * 2, rec2['f_float*2'])
 
 
 def test_selection_and_expression():
-    ref = len(rnp.root2rec(
+    ref = len(rnp.root2array(
         load('test.root'), branches=['x', 'y'], selection='z>0'))
     assert_equal(ref,
-        len(rnp.root2rec(
+        len(rnp.root2array(
             load('test.root'), branches=['x', 'y', 'z'], selection='z>0')))
     assert_equal(ref,
-        len(rnp.root2rec(
+        len(rnp.root2array(
             load('test.root'), branches=['x', 'x*y'], selection='z>0')))
     assert_equal(ref,
-        len(rnp.root2rec(
+        len(rnp.root2array(
             load('test.root'), branches=['x', 'x*z'], selection='z>0')))
 
 
 def test_object_expression():
-    rec = rnp.root2rec(load(['object1.root', 'object2.root']),
+    rec = rnp.root2array(load(['object1.root', 'object2.root']),
                        branches=['vect.Pt()'])
     assert_array_equal(
         rec['vect.Pt()'],
         np.concatenate([
             np.arange(10, dtype='d') + 1,
             np.arange(10, dtype='d') + 2]))
+
+
+def test_variable_length_array_expression():
+    # variable length array
+    a = rnp.root2array(load('vary*.root'), branches='n_int * 2')
+    assert_equal(a.ndim, 1)
+    assert_equal(a.dtype, 'O')
+
+
+def test_fixed_length_array_expression():
+    # fixed length array
+    a = rnp.root2array(load('fixed*.root'), branches='n_int * 2')
+    assert_equal(a.ndim, 2)
+    assert_equal(a.shape[1], 5)
 
 
 @raises(ValueError)
@@ -354,12 +369,12 @@ def test_tree2array_wrong_type():
 
 
 def test_specific_branch():
-    a = rnp.root2rec(load('single1.root'), branches=['f_float'])
+    a = rnp.root2array(load('single1.root'), branches=['f_float'])
     assert_equal(a.dtype, [('f_float', '<f4')])
 
 
 def test_vector():
-    a = rnp.root2rec(load('vector.root'))
+    a = rnp.root2array(load('vector.root')).view(np.recarray)
     types = [
         ('v_i', 'O'),
         ('v_f', 'O'),
@@ -449,7 +464,7 @@ def test_vector():
 
 
 def test_string():
-    a = rnp.root2rec(load('string.root'))
+    a = rnp.root2array(load('string.root'))
     types = [
         ('message', 'O'),
         ('vect', 'O'),
@@ -462,15 +477,15 @@ def test_string():
 
 
 def test_slice():
-    a = rnp.root2rec(load('single1.root'), stop=10)
+    a = rnp.root2array(load('single1.root'), stop=10).view(np.recarray)
     assert_equal(len(a), 10)
     assert_equal(a.n_int[-1], 10)
 
-    a = rnp.root2rec(load('single1.root'), stop=11, start=1)
+    a = rnp.root2array(load('single1.root'), stop=11, start=1).view(np.recarray)
     assert_equal(len(a), 10)
     assert_equal(a.n_int[-1], 11)
 
-    a = rnp.root2rec(load('single1.root'), stop=105, start=95)
+    a = rnp.root2array(load('single1.root'), stop=105, start=95).view(np.recarray)
     assert_equal(len(a), 5)
     assert_equal(a.n_int[-1], 100)
 
@@ -479,7 +494,7 @@ def test_weights():
     f = TFile(load('test.root'))
     tree = f.Get('tree')
     tree.SetWeight(5.)
-    rec = rnp.tree2rec(tree, include_weight=True, weight_name='treeweight')
+    rec = rnp.tree2array(tree, include_weight=True, weight_name='treeweight')
     assert_array_equal(rec['treeweight'], np.ones(100) * 5)
     f = load(['single1.root', 'single2.root'])
     a = rnp.root2array(f, include_weight=True)
@@ -728,7 +743,7 @@ def test_blockwise_inner_join():
 
 
 def test_struct():
-    assert_array_equal(rnp.root2rec(load('struct.root')),
+    assert_array_equal(rnp.root2array(load('struct.root')),
         np.array([(10, 15.5, 20, 781.2)],
             dtype=[
                 ('branch1_intleaf', '<i4'),
@@ -921,7 +936,7 @@ def test_rec2array():
 
 
 def test_stack():
-    rec = rnp.root2rec(load('test.root'))
+    rec = rnp.root2array(load('test.root'))
     s = rnp.stack([rec, rec])
     assert_equal(s.shape[0], 2 * rec.shape[0])
     assert_equal(s.dtype.names, rec.dtype.names)

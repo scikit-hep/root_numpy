@@ -24,11 +24,11 @@ class Column
 };
 
 
-class MultiFormulaColumn: public Column
+class FormulaArrayColumn: public Column
 {
     public:
 
-    MultiFormulaColumn(std::string _name, TTreeFormula* _formula)
+    FormulaArrayColumn(std::string _name, TTreeFormula* _formula)
     {
         name = _name;
         formula = _formula;
@@ -36,7 +36,7 @@ class MultiFormulaColumn: public Column
         value = NULL;
     }
 
-    ~MultiFormulaColumn()
+    ~FormulaArrayColumn()
     {
         delete[] value;
     }
@@ -77,12 +77,47 @@ class MultiFormulaColumn: public Column
 };
 
 
-class FormulaColumn: public MultiFormulaColumn
+class FormulaFixedArrayColumn: public FormulaArrayColumn
+{
+    public:
+
+    FormulaFixedArrayColumn(std::string _name, TTreeFormula* _formula):
+        FormulaArrayColumn(_name, _formula)
+    {
+        length = _formula->GetNdata();
+        value = new double[length];
+    }
+
+    int GetLen()
+    {
+        return length;
+    }
+
+    int GetCountLen()
+    {
+        return length;
+    }
+
+    void* GetValuePointer()
+    {
+        // Call to GetNdata() again required to update leaves
+        for (int i = 0; i < formula->GetNdata(); ++i)
+        {
+            value[i] = formula->EvalInstance(i);
+        }
+        return value;
+    }
+
+    int length;
+};
+
+
+class FormulaColumn: public FormulaArrayColumn
 {
     public:
 
     FormulaColumn(std::string _name, TTreeFormula* _formula):
-        MultiFormulaColumn(_name, _formula)
+        FormulaArrayColumn(_name, _formula)
     {
         value = new double[1];
     }

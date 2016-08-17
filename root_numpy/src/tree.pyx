@@ -201,6 +201,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
     cdef void* data_ptr
     cdef int num_bytes
     cdef int entry_size
+    cdef bool raise_on_zero_read = False
 
     cdef char* c_string
     cdef bool shortname
@@ -291,6 +292,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
 
                     chain.AddColumn(string(branch_name), string(leaf_name),
                                     <BranchColumn*> col)
+                    raise_on_zero_read = True
 
                 elif num_requested_branches > 0:
                     # User explicitly requested this branch but there is no
@@ -323,16 +325,35 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 # The chain will take care of updating the formula leaves when
                 # rolling over to the next tree.
                 chain.AddFormula(formula)
-                if formula.GetMultiplicity() > 0:
-                    col = new MultiFormulaColumn(expression, formula)
-                    conv = get_array_converter('double', '[]')
-                else:
+                """
+                ROOT's definition of "multiplicity":
+
+                   -1: Only one or 0 element(s) per entry
+                    0: Only one element per entry
+                    1: Variable length array
+                    2: Fixed length array (nData is the same for all entries)
+                """
+                if formula.GetMultiplicity() == 0:
+                    # single value per entry
                     col = new FormulaColumn(expression, formula)
                     conv = find_converter_by_typename('double')
+                    raise_on_zero_read = True
+                elif formula.GetMultiplicity() == -1 or formula.GetMultiplicity() == 1:
+                    # variable number of values per entry
+                    col = new FormulaArrayColumn(expression, formula)
+                    conv = get_array_converter('double', '[]')
+                    # if this is the only branch requested, then don't raise if
+                    # IOError if no bytes were read
+                else:
+                    # fixed number of values per entry
+                    col = new FormulaFixedArrayColumn(expression, formula)
+                    conv = get_array_converter('double', '[{0:d}]'.format(formula.GetNdata()))
+                    raise_on_zero_read = True
                 if conv == NULL:
                     # Oops, this should never happen
                     raise AssertionError(
-                        "could not find formula converter")
+                        "could not find a formula converter for '{0}'. "
+                        "Please report this bug.".format(expression))
                 column_buckets[branch_idx].push_back(col)
                 converter_buckets[branch_idx].push_back(conv)
 
@@ -381,7 +402,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
         for ientry in indices:
             entry_size = chain.GetEntry(ientry)
             handle_load(entry_size)
-            if entry_size == 0:
+            if entry_size == 0 and raise_on_zero_read:
                 raise IOError("read failure in current tree or requested entry "
                               "does not exist (branches have different lengths?)")
 
