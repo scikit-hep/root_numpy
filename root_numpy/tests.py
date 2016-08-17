@@ -23,7 +23,7 @@ from root_numpy.testdata import get_filepath, get_file
 
 try:
     from collections import OrderedDict
-except ImportError:
+except ImportError:  # pragma: no cover
     from root_numpy.extern.ordereddict import OrderedDict
 
 from nose.tools import (raises, assert_raises, assert_true,
@@ -276,12 +276,6 @@ def test_tree2array():
     check_single(rnp.tree2array(tree))
 
     assert_raises(ValueError, get_file, 'file_does_not_exist.root')
-
-
-def test_tree2array():
-    chain = TChain('tree')
-    chain.Add(load('single1.root'))
-    check_single(rnp.tree2array(chain))
 
 
 def test_single_branch():
