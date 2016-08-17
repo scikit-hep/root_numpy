@@ -311,6 +311,10 @@ def test_expression():
     rec2 = rnp.root2array(load('single*.root'), branches=['f_float*2'])
     assert_array_equal(rec['f_float'] * 2, rec2['f_float*2'])
 
+    a = rnp.root2array(load('single*.root'), branches='Entry$')
+    assert_equal(a.dtype, np.int32)
+    assert_array_equal(a, np.arange(a.shape[0]))
+
 
 def test_selection_and_expression():
     ref = len(rnp.root2array(
@@ -348,6 +352,9 @@ def test_fixed_length_array_expression():
     a = rnp.root2array(load('fixed*.root'), branches='n_int * 2')
     assert_equal(a.ndim, 2)
     assert_equal(a.shape[1], 5)
+    assert_array_equal(
+	np.unique(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)')),
+	[5])
 
 
 @raises(ValueError)

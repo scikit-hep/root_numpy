@@ -302,7 +302,12 @@ class TreeChain
             ncodes = (*fit)->GetNcodes();
             for (n = 0; n < ncodes; ++n)
             {
-                branch = (*fit)->GetLeaf(n)->GetBranch();
+                leaf = (*fit)->GetLeaf(n);
+                if (leaf == NULL)
+                {
+                    continue;
+                }
+                branch = leaf->GetBranch();
                 // Branch may be a TObject split across multiple
                 // subbranches. These must be activated recursively.
                 activate_branch_recursive(branch);

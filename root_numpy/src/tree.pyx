@@ -335,20 +335,28 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 """
                 if formula.GetMultiplicity() == 0:
                     # single value per entry
-                    col = new FormulaColumn(expression, formula)
-                    conv = find_converter_by_typename('double')
-                    raise_on_zero_read = True
+                    if formula.IsInteger(False):
+                        col = new FormulaColumn['int'](expression, 'Int_t', formula)
+                        conv = find_converter_by_typename('int')
+                    else:
+                        col = new FormulaColumn['double'](expression, 'Double_t', formula)
+                        conv = find_converter_by_typename('double')
                 elif formula.GetMultiplicity() == -1 or formula.GetMultiplicity() == 1:
                     # variable number of values per entry
-                    col = new FormulaArrayColumn(expression, formula)
-                    conv = get_array_converter('double', '[]')
-                    # if this is the only branch requested, then don't raise if
-                    # IOError if no bytes were read
+                    if formula.IsInteger(False):
+                        col = new FormulaArrayColumn['int'](expression, 'Int_t', formula)
+                        conv = get_array_converter('int', '[]')
+                    else:
+                        col = new FormulaArrayColumn['double'](expression, 'Double_t', formula)
+                        conv = get_array_converter('double', '[]')
                 else:
                     # fixed number of values per entry
-                    col = new FormulaFixedArrayColumn(expression, formula)
-                    conv = get_array_converter('double', '[{0:d}]'.format(formula.GetNdata()))
-                    raise_on_zero_read = True
+                    if formula.IsInteger(False):
+                        col = new FormulaFixedArrayColumn['int'](expression, 'Int_t', formula)
+                        conv = get_array_converter('int', '[{0:d}]'.format(formula.GetNdata()))
+                    else:
+                        col = new FormulaFixedArrayColumn['double'](expression, 'Double_t', formula)
+                        conv = get_array_converter('double', '[{0:d}]'.format(formula.GetNdata()))
                 if conv == NULL:
                     # Oops, this should never happen
                     raise AssertionError(

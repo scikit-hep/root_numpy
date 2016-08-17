@@ -28,8 +28,8 @@ cdef extern from "Column.h":
         void* GetValuePointer()
         const_char* GetTypeName()
     
-    cdef cppclass FormulaArrayColumn(Column):
-        FormulaArrayColumn(string, TTreeFormula*)
+    cdef cppclass FormulaArrayColumn[T](Column):
+        FormulaArrayColumn(string, string, TTreeFormula*)
         string name
         string type
         int GetLen()
@@ -37,8 +37,8 @@ cdef extern from "Column.h":
         void* GetValuePointer()
         const_char* GetTypeName()
 
-    cdef cppclass FormulaFixedArrayColumn(FormulaArrayColumn):
-        FormulaFixedArrayColumn(string, TTreeFormula*)
+    cdef cppclass FormulaFixedArrayColumn[T](FormulaArrayColumn):
+        FormulaFixedArrayColumn(string, string, TTreeFormula*)
         string name
         string type
         int GetLen()
@@ -46,8 +46,8 @@ cdef extern from "Column.h":
         void* GetValuePointer()
         const_char* GetTypeName()
 
-    cdef cppclass FormulaColumn(FormulaArrayColumn):
-        FormulaColumn(string, TTreeFormula*)
+    cdef cppclass FormulaColumn[T](FormulaArrayColumn):
+        FormulaColumn(string, string, TTreeFormula*)
         string name
         string type
         int GetLen()
