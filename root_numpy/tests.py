@@ -352,9 +352,7 @@ def test_fixed_length_array_expression():
     a = rnp.root2array(load('fixed*.root'), branches='n_int * 2')
     assert_equal(a.ndim, 2)
     assert_equal(a.shape[1], 5)
-    assert_array_equal(
-	np.unique(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)')),
-	[5])
+    assert_true(np.all(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)') == 5))
 
 
 @raises(ValueError)
