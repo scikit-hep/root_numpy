@@ -59,10 +59,17 @@ class TreeChain
         tree->SetNotify(notifier->oldnotify);
 
         // Delete all TTreeFormula
-        std::vector<TTreeFormula*>::iterator fit;
-        for (fit = formulae.begin(); fit != formulae.end(); ++fit)
+        std::vector<TTreeFormula*>::iterator fit(formulae.begin());
+        for (; fit != formulae.end(); ++fit)
         {
             delete *fit;
+        }
+
+        // Delete all Selectors
+        std::vector<Selector*>::iterator sit(selectors.begin());
+        for (; sit != selectors.end(); ++sit)
+        {
+            delete *sit;
         }
 
         delete notifier;
@@ -104,6 +111,13 @@ class TreeChain
     {
         // The TreeChain will take ownership of the formula
         formulae.push_back(formula);
+    }
+
+    void AddSelector(Selector* selector)
+    {
+        selectors.push_back(selector);
+        // TreeChain owns Selector's TTreeFormula* selection
+        AddFormula(selector->selection);
     }
 
     void InitBranches()
@@ -258,6 +272,16 @@ class TreeChain
         return GetEntry(ientry++);
     }
 
+    void UpdateSelectors()
+    {
+        // Update Selectors after call to GetEntry()
+        std::vector<Selector*>::iterator it(selectors.begin());
+        for(; it != selectors.end(); ++it)
+        {
+            (*it)->Update();
+        }
+    }
+
     void Notify()
     {
         TBranch* branch;
@@ -352,6 +376,7 @@ class TreeChain
     long long cache_size;
     MiniNotify* notifier;
     std::vector<TTreeFormula*> formulae;
+    std::vector<Selector*> selectors;
 
     // Branch name to leaf name association
     typedef std::pair<std::string, std::string> BranchLeaf;

@@ -52,46 +52,89 @@ cdef inline unicode resolve_type(const char* typename):
 # and write it to buffer
 cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
                                   unsigned long numele, int elesize,
-                                  int ndim=1, SIZE_t* dims=NULL):
+                                  int ndim=1, SIZE_t* dims=NULL,
+                                  Selector* selector=NULL):
+    cdef unsigned long i = 0, j = 0
     cdef SIZE_t* _dims = dims
     cdef SIZE_t default_dims[1]
     if dims == NULL:
         _dims = default_dims
         _dims[0] = numele;
+    if selector != NULL:
+        # check that lengths match
+        if selector.selected.size() != <unsigned_long> dims[0]:
+            raise RuntimeError("length of object selection '{0}' "
+                               "and object array do not match".format(
+                                   selector.selection.GetTitle()))
+        _dims[0] = selector.num_selected
     cdef np.ndarray tmp = np.PyArray_EMPTY(ndim, _dims, typecode, 0)
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
     # incref since we are placing in buffer directly
     Py_INCREF(tmp)
     # copy to tmp.data
     cdef unsigned long nbytes = numele * elesize
-    memcpy(tmp.data, src, nbytes)
+    if selector != NULL:
+        # copy with selection
+        for i in range(selector.selected.size()):
+            if selector.selected[i]:
+                memcpy(static_cast['char*'](tmp.data) + j * elesize,
+                       static_cast['char*'](src) + i * elesize,
+                       elesize)
+                j += 1
+    else:
+        # quick copy
+        memcpy(tmp.data, src, nbytes)
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
 
 
 # special treatment for vector<bool>
-cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src):
+cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,
+                                             Selector* selector=NULL):
+    cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
     dims[0] = numele;
+    if selector != NULL:
+        # check that lengths match
+        if selector.selected.size() != <unsigned_long> dims[0]:
+            raise RuntimeError("length of object selection '{0}' "
+                               "and object array do not match".format(
+                                   selector.selection.GetTitle()))
+        dims[0] = selector.num_selected
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
     # incref since we are placing in buffer directly
     Py_INCREF(tmp)
-    # can't use memcpy here...
-    cdef unsigned long i
-    for i in range(numele):
-        tmp[i] = deref(src)[i]
+    if selector != NULL:
+        # copy with selection
+        for i in range(selector.selected.size()):
+            if selector.selected[i]:
+                tmp[j] = deref(src)[i]
+                j += 1
+    else:
+        # can't use memcpy here...
+        for i in range(numele):
+            tmp[i] = deref(src)[i]
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
 
 
-cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src):
+cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,
+                                               Selector* selector=NULL):
+    cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
     dims[0] = numele;
+    if selector != NULL:
+        # check that lengths match
+        if selector.selected.size() != <unsigned_long> dims[0]:
+            raise RuntimeError("length of object selection '{0}' "
+                               "and object array do not match".format(
+                                   selector.selection.GetTitle()))
+        dims[0] = selector.num_selected
     cdef int objsize = np.dtype('O').itemsize
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
@@ -99,13 +142,22 @@ cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src
     Py_INCREF(tmp)
     cdef PyObject* tmpstrobj
     cdef char* dataptr = <char*> tmp.data
-    # can't use memcpy here...
-    cdef unsigned long i
-    for i in range(numele):
-        py_bytes = str(deref(src)[i])
-        Py_INCREF(py_bytes)
-        tmpstrobj = <PyObject*> py_bytes
-        memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
+    if selector != NULL:
+        # copy with selection
+        for i in range(selector.selected.size()):
+            if selector.selected[i]:
+                py_bytes = str(deref(src)[i])
+                Py_INCREF(py_bytes)
+                tmpstrobj = <PyObject*> py_bytes
+                memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
+                j += 1
+    else:
+        # can't use memcpy here...
+        for i in range(numele):
+            py_bytes = str(deref(src)[i])
+            Py_INCREF(py_bytes)
+            tmpstrobj = <PyObject*> py_bytes
+            memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
     # now write PyObject* to buffer
     memcpy(buffer, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
@@ -117,6 +169,9 @@ cdef cppclass Converter:
         pass
 
     object get_nptype():
+        pass
+
+    int get_nptypecode():
         pass
 
 
@@ -147,7 +202,7 @@ cdef cppclass ObjectConverterBase(Converter):
     object get_nptype():
         return np.object
 
-    object get_nptypecode():
+    int get_nptypecode():
         return np.NPY_OBJECT
 
 
@@ -173,7 +228,7 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         this.dims[0] = col.GetCountLen()
         return create_numpyarray(buffer, col.GetValuePointer(),
                                  this.typecode, col.GetLen(), this.elesize,
-                                 this.ndim, this.dims)
+                                 this.ndim, this.dims, col.selector)
 
 
 cdef cppclass FixedArrayConverter(Converter):
@@ -240,7 +295,9 @@ cdef cppclass VectorConverter[T](ObjectConverterBase):
         # check cython auto-generated code
         # if it really does &((*tmp)[0])
         cdef T* fa = this.v2a.convert(tmp)
-        return create_numpyarray(buffer, fa, this.nptypecode, numele, this.elesize)
+        return create_numpyarray(buffer, fa, this.nptypecode,
+                                 numele, this.elesize, 1, NULL,
+                                 col.selector)
 
 
 cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
@@ -290,7 +347,7 @@ cdef cppclass VectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
     int write(Column* col, void* buffer):
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
-        return create_numpyarray_vectorbool(buffer, tmp)
+        return create_numpyarray_vectorbool(buffer, tmp, col.selector)
 
 
 cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
@@ -339,7 +396,7 @@ cdef cppclass StringConverter(ObjectConverterBase):
 cdef cppclass VectorStringConverter(ObjectConverterBase):
     int write(Column* col, void* buffer):
         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
-        return create_numpyarray_vectorstring(buffer, tmp)
+        return create_numpyarray_vectorstring(buffer, tmp, col.selector)
 
 
 cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
@@ -372,82 +429,83 @@ cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
         return sizeof(outerobj)
 
 
-cdef cpp_map[string, Converter*] CONVERTERS
-ctypedef pair[string, Converter*] CONVERTERS_ITEM
+ctypedef cpp_map[string, Converter*] CONVERTERS_TYPE
+ctypedef pair[string, Converter*] CONVERTERS_ITEM_TYPE
+cdef CONVERTERS_TYPE CONVERTERS
 
 # basic type converters
 for ctypename, (ctype, dtype, dtypecode) in TYPES.items():
-    CONVERTERS.insert(CONVERTERS_ITEM(
+    CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
         ctype, new BasicConverter(
             dtype.itemsize, dtype.name, dtypecode)))
 
 # vector<> converters
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<bool>', new VectorBoolConverter()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<char>', new VectorConverter[char]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<short>', new VectorConverter[short]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<int>', new VectorConverter[int]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<long>', new VectorConverter[long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<long long>', new VectorConverter[long_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<float>', new VectorConverter[float]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<double>', new VectorConverter[double]()))
 
 # vector<vector<> > converters
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<bool> >', new VectorVectorBoolConverter()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<char> >', new VectorVectorConverter[char]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<short> >', new VectorVectorConverter[short]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<int> >', new VectorVectorConverter[int]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<long> >', new VectorVectorConverter[long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<float> >', new VectorVectorConverter[float]()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<double> >', new VectorVectorConverter[double]()))
 
 # string converters
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'string', new StringConverter()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<string>', new VectorStringConverter()))
-CONVERTERS.insert(CONVERTERS_ITEM(
+CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
     'vector<vector<string> >', new VectorVectorStringConverter()))
 
 
 cdef Converter* find_converter_by_typename(string typename):
-    it = CONVERTERS.find(typename)
+    cdef cpp_map[string, Converter*].iterator it = CONVERTERS.find(typename)
     if it == CONVERTERS.end():
         return NULL
     return deref(it).second
@@ -480,7 +538,7 @@ cdef Converter* get_array_converter(string typename, arraydef):
                 dims[idim] = shape[idim - 1]
             conv = new VaryArrayConverter(
                 <BasicConverter*> basic_conv, ndim, dims)
-            CONVERTERS.insert(CONVERTERS_ITEM(typename + arraydef, conv))
+            CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
         return conv
 
     # Fixed-length array
@@ -492,7 +550,7 @@ cdef Converter* get_array_converter(string typename, arraydef):
             return NULL
         conv = new FixedArrayConverter(
             <BasicConverter*> basic_conv, <PyObject*> shape)
-        CONVERTERS.insert(CONVERTERS_ITEM(typename + arraydef, conv))
+        CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
     return conv
 
 
@@ -514,7 +572,7 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):
         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
         if conv == NULL:
             conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination
-            CONVERTERS.insert(CONVERTERS_ITEM(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
+            CONVERTERS.insert(CONVERTERS_ITEM_TYPE(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
         return conv
 
     match = re.match(LEAF_PATTERN, leaf_title)
@@ -531,7 +589,7 @@ cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):
 @atexit.register
 def cleanup():
     # Delete all converters when module is town down
-    it = CONVERTERS.begin()
+    cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
     while it != CONVERTERS.end():
         del deref(it).second
         inc(it)

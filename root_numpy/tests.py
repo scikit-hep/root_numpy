@@ -360,6 +360,19 @@ def test_fixed_length_array_expression():
     assert_true(np.all(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)') == 5))
 
 
+def test_object_selection():
+    a = rnp.root2array(load('vary*.root'), branches='n_int',
+                       object_selection={'n_int % 2 == 0': 'n_int'})
+    for suba in a:
+        assert_true((suba % 2 == 0).all())
+
+    assert_raises(ValueError, rnp.root2array, load('vary*.root'),
+                  branches='n_int', object_selection={'n_int % 2 == 0': 'DNE'})
+
+    assert_raises(ValueError, rnp.root2array, load('vary*.root'),
+                  branches='n_int', object_selection={'n_int % 2 == 0': ['n_int', 'n_int']})
+
+
 @raises(ValueError)
 def test_branch_DNE():
     chain = TChain('tree')

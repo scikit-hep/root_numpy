@@ -121,6 +121,7 @@ def root2array(filenames,
                treename=None,
                branches=None,
                selection=None,
+               object_selection=None,
                start=None,
                stop=None,
                step=None,
@@ -147,6 +148,11 @@ def root2array(filenames,
         converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+    object_selection : dict, optional (default=None)
+        A dictionary mapping selection strings to branch names or lists of
+        branch names. Only elements passing the selection strings will be
+        included in the output array per entry in the tree. The branches
+        specified must be variable-length array-type branches.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of
@@ -201,7 +207,7 @@ def root2array(filenames,
 
     arr = _librootnumpy.root2array_fromfile(
         filenames, treename, branches,
-        selection,
+        selection, object_selection,
         start, stop, step,
         include_weight,
         weight_name,
@@ -218,6 +224,7 @@ def root2rec(filenames,
              treename=None,
              branches=None,
              selection=None,
+             object_selection=None,
              start=None,
              stop=None,
              step=None,
@@ -247,7 +254,7 @@ def root2rec(filenames,
                   "Instead use root2array(...).view(np.recarray)",
                   DeprecationWarning)
     return root2array(filenames, treename,
-                      branches, selection,
+                      branches, selection, object_selection,
                       start, stop, step,
                       include_weight,
                       weight_name,
@@ -258,6 +265,7 @@ def root2rec(filenames,
 def tree2array(tree,
                branches=None,
                selection=None,
+               object_selection=None,
                start=None,
                stop=None,
                step=None,
@@ -284,6 +292,11 @@ def tree2array(tree,
         converted.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
+    object_selection : dict, optional (default=None)
+        A dictionary mapping selection strings to branch names or lists of
+        branch names. Only elements passing the selection strings will be
+        included in the output array per entry in the tree. The branches
+        specified must be variable-length array-type branches.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of
@@ -365,7 +378,7 @@ def tree2array(tree,
         flatten = False
 
     arr = _librootnumpy.root2array_fromtree(
-        cobj, branches, selection,
+        cobj, branches, selection, object_selection,
         start, stop, step,
         include_weight,
         weight_name,
@@ -380,6 +393,7 @@ def tree2array(tree,
 def tree2rec(tree,
              branches=None,
              selection=None,
+             object_selection=None,
              start=None,
              stop=None,
              step=None,
@@ -410,6 +424,7 @@ def tree2rec(tree,
     return tree2array(tree,
                       branches=branches,
                       selection=selection,
+                      object_selection=object_selection,
                       start=start,
                       stop=stop,
                       step=step,
