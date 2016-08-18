@@ -265,6 +265,11 @@ def test_variable_length_arrays():
     assert_equal(a.d_double[-1][0], 380.25)
     assert_equal(a.d_double[-1][-1], 497.25)
 
+    # read only array without "length leaf"
+    b = rnp.root2array(f, branches='n_int')
+    for i in range(len(b)):
+        assert_equal(len(b[i]), a.len_n[i])
+
 
 def test_tree2array():
     chain = TChain('tree')
