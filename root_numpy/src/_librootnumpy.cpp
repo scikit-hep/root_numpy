@@ -2941,6 +2941,7 @@ static const char __pyx_k_cannot_convert_leaf_0_of_branch[] = "cannot convert le
 static const char __pyx_k_failed_to_allocate_memory_for_0[] = "failed to allocate memory for {0} array of {1} records with {2} fields";
 static const char __pyx_k_ignoring_duplicate_branch_named[] = "ignoring duplicate branch named '{0}'";
 static const char __pyx_k_leaf_list_for_branch_0_is_empty[] = "leaf list for branch '{0}' is empty";
+static const char __pyx_k_lengths_of_object_selection_0_1[] = "lengths of object selection '{0}' ({1}) and object array '{2}' ({3}) are not equal";
 static const char __pyx_k_none_of_the_input_files_contain[] = "none of the input files contain the requested tree '{0}'";
 static const char __pyx_k_read_failure_in_current_tree_or[] = "read failure in current tree or requested entry does not exist (branches have different lengths?)";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
@@ -2960,7 +2961,6 @@ static const char __pyx_k_home_endw_workspace_root_numpy_5[] = "/home/endw/works
 static const char __pyx_k_home_endw_workspace_root_numpy_6[] = "/home/endw/workspace/root_numpy/root_numpy/src/hist.pyx";
 static const char __pyx_k_home_endw_workspace_root_numpy_7[] = "/home/endw/workspace/root_numpy/root_numpy/src/graph.pyx";
 static const char __pyx_k_home_endw_workspace_root_numpy_8[] = "/home/endw/workspace/root_numpy/root_numpy/src/evaluate.pyx";
-static const char __pyx_k_length_of_object_selection_0_1_a[] = "length of object selection '{0}' ({1})and object array '{2}' ({3}) are not equal";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static const char __pyx_k_object_selection_contains_branch[] = "object_selection contains branches that are not present in the tree or included in the output array";
 static const char __pyx_k_the_branch_or_expression_0_is_no[] = "the branch or expression '{0}' is not present or valid";
@@ -3190,7 +3190,7 @@ static PyObject *__pyx_n_s_kind;
 static PyObject *__pyx_n_s_l;
 static PyObject *__pyx_kp_s_leaf_list_for_branch_0_is_empty;
 static PyObject *__pyx_n_s_left;
-static PyObject *__pyx_kp_s_length_of_object_selection_0_1_a;
+static PyObject *__pyx_kp_s_lengths_of_object_selection_0_1;
 static PyObject *__pyx_n_s_librootnumpy;
 static PyObject *__pyx_n_s_list_branches;
 static PyObject *__pyx_n_s_list_directories;
@@ -4092,7 +4092,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(std::string _
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> _dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -4104,20 +4104,20 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(std::string _
 
       /* "root_numpy/src/converters.pyx":68
  *         if selector.selected.size() != <unsigned_long> _dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  *                                    name, _dims[0]))
  */
 
 #line 68 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_length_of_object_selection_0_1_a, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 68, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 68, __pyx_L1_error)
 
 #line 68 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
       /* "root_numpy/src/converters.pyx":69
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
  *                                    name, _dims[0]))
@@ -4258,7 +4258,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(std::string _
       /* "root_numpy/src/converters.pyx":67
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> _dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"             # <<<<<<<<<<<<<<
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  */
@@ -4300,7 +4300,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(std::string _
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> _dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -4753,7 +4753,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(st
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -4765,20 +4765,20 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(st
 
       /* "root_numpy/src/converters.pyx":106
  *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  *                                    name, dims[0]))
  */
 
 #line 106 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_length_of_object_selection_0_1_a, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 106, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 106, __pyx_L1_error)
 
 #line 106 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
       /* "root_numpy/src/converters.pyx":107
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
  *                                    name, dims[0]))
@@ -4919,7 +4919,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(st
       /* "root_numpy/src/converters.pyx":105
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"             # <<<<<<<<<<<<<<
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  */
@@ -4961,7 +4961,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(st
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -5456,7 +5456,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -5468,20 +5468,20 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
 
       /* "root_numpy/src/converters.pyx":140
  *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  *                                    name, dims[0]))
  */
 
 #line 140 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_length_of_object_selection_0_1_a, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 140, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 140, __pyx_L1_error)
 
 #line 140 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
       /* "root_numpy/src/converters.pyx":141
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
  *                                    name, dims[0]))
@@ -5622,7 +5622,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
       /* "root_numpy/src/converters.pyx":139
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("length of object selection '{0}' ({1})"             # <<<<<<<<<<<<<<
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  */
@@ -5664,7 +5664,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("length of object selection '{0}' ({1})"
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
@@ -75755,7 +75755,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_l, __pyx_k_l, sizeof(__pyx_k_l), 0, 0, 1, 1},
   {&__pyx_kp_s_leaf_list_for_branch_0_is_empty, __pyx_k_leaf_list_for_branch_0_is_empty, sizeof(__pyx_k_leaf_list_for_branch_0_is_empty), 0, 0, 1, 0},
   {&__pyx_n_s_left, __pyx_k_left, sizeof(__pyx_k_left), 0, 0, 1, 1},
-  {&__pyx_kp_s_length_of_object_selection_0_1_a, __pyx_k_length_of_object_selection_0_1_a, sizeof(__pyx_k_length_of_object_selection_0_1_a), 0, 0, 1, 0},
+  {&__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_k_lengths_of_object_selection_0_1, sizeof(__pyx_k_lengths_of_object_selection_0_1), 0, 0, 1, 0},
   {&__pyx_n_s_librootnumpy, __pyx_k_librootnumpy, sizeof(__pyx_k_librootnumpy), 0, 0, 1, 1},
   {&__pyx_n_s_list_branches, __pyx_k_list_branches, sizeof(__pyx_k_list_branches), 0, 0, 1, 1},
   {&__pyx_n_s_list_directories, __pyx_k_list_directories, sizeof(__pyx_k_list_directories), 0, 0, 1, 1},
