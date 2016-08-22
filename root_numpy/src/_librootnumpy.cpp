@@ -5931,7 +5931,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
 /* "root_numpy/src/converters.pyx":168
  * cdef cppclass Converter:
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         pass
  * 
  */
@@ -6101,7 +6101,7 @@ int __pyx_t_13_librootnumpy_Converter::get_nptypecode(void) {
  *         this.nptypecode = nptypecode
  *         this.nptype = nptype             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 186 "root_numpy/src/converters.pyx"
@@ -6130,7 +6130,7 @@ int __pyx_t_13_librootnumpy_Converter::get_nptypecode(void) {
 /* "root_numpy/src/converters.pyx":188
  *         this.nptype = nptype
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef void* src = col.GetValuePointer()
  *         memcpy(buffer, src, this.size)
  */
@@ -6155,7 +6155,7 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
 
   /* "root_numpy/src/converters.pyx":189
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef void* src = col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         memcpy(buffer, src, this.size)
  *         return this.size
@@ -6165,7 +6165,7 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
   __pyx_v_src = __pyx_v_col->GetValuePointer();
 
   /* "root_numpy/src/converters.pyx":190
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef void* src = col.GetValuePointer()
  *         memcpy(buffer, src, this.size)             # <<<<<<<<<<<<<<
  *         return this.size
@@ -6192,7 +6192,7 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
   /* "root_numpy/src/converters.pyx":188
  *         this.nptype = nptype
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef void* src = col.GetValuePointer()
  *         memcpy(buffer, src, this.size)
  */
@@ -6698,7 +6698,7 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_nptypecode(void) {
  *     __dealloc__():
  *         free(this.dims)             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 224 "root_numpy/src/converters.pyx"
@@ -6727,7 +6727,7 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_nptypecode(void) {
 /* "root_numpy/src/converters.pyx":226
  *         free(this.dims)
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         # only the first dimension can vary in length
  *         this.dims[0] = col.GetCountLen()
  */
@@ -6754,7 +6754,7 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
   __Pyx_RefNannySetupContext("write", 0);
 
   /* "root_numpy/src/converters.pyx":228
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         # only the first dimension can vary in length
  *         this.dims[0] = col.GetCountLen()             # <<<<<<<<<<<<<<
  *         return create_numpyarray(buffer, col.GetValuePointer(),
@@ -6796,7 +6796,7 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
   /* "root_numpy/src/converters.pyx":226
  *         free(this.dims)
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         # only the first dimension can vary in length
  *         this.dims[0] = col.GetCountLen()
  */
@@ -6811,10 +6811,10 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
   __pyx_L1_error:;
 
 #line 226 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VaryArrayConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VaryArrayConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 226 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 226 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -6926,7 +6926,7 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
  *     __dealloc__():
  *         Py_XDECREF(this.shape)             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 244 "root_numpy/src/converters.pyx"
@@ -6955,7 +6955,7 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
 /* "root_numpy/src/converters.pyx":246
  *         Py_XDECREF(this.shape)
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef int nbytes = col.GetSize()
  *         memcpy(buffer, col.GetValuePointer(), nbytes)
  */
@@ -6980,7 +6980,7 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
 
   /* "root_numpy/src/converters.pyx":247
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef int nbytes = col.GetSize()             # <<<<<<<<<<<<<<
  *         memcpy(buffer, col.GetValuePointer(), nbytes)
  *         return nbytes
@@ -6990,7 +6990,7 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
   __pyx_v_nbytes = __pyx_v_col->GetSize();
 
   /* "root_numpy/src/converters.pyx":248
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef int nbytes = col.GetSize()
  *         memcpy(buffer, col.GetValuePointer(), nbytes)             # <<<<<<<<<<<<<<
  *         return nbytes
@@ -7017,7 +7017,7 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
   /* "root_numpy/src/converters.pyx":246
  *         Py_XDECREF(this.shape)
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef int nbytes = col.GetSize()
  *         memcpy(buffer, col.GetValuePointer(), nbytes)
  */
@@ -7292,7 +7292,7 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_nptypecode(void) {
  *         this.conv = <BasicConverter*> CONVERTERS['char']
  *         this.size = size             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 264 "root_numpy/src/converters.pyx"
@@ -7333,7 +7333,7 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_nptypecode(void) {
 /* "root_numpy/src/converters.pyx":266
  *         this.size = size
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  */
@@ -7364,7 +7364,7 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
 
   /* "root_numpy/src/converters.pyx":267
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination             # <<<<<<<<<<<<<<
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  *         memcpy(buffer, col.GetValuePointer(), nbytes)
@@ -7374,7 +7374,7 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
   __pyx_v_nbytes = (__pyx_v_col->GetSize() - (sizeof(char)));
 
   /* "root_numpy/src/converters.pyx":268
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
  *         cdef int length = strlen(<char*> col.GetValuePointer())             # <<<<<<<<<<<<<<
  *         memcpy(buffer, col.GetValuePointer(), nbytes)
@@ -7448,7 +7448,7 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
   /* "root_numpy/src/converters.pyx":266
  *         this.size = size
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  */
@@ -7862,7 +7862,7 @@ template <typename T>
  *         this.elesize = info[1].itemsize
  *         this.nptypecode = info[2]             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 290 "root_numpy/src/converters.pyx"
@@ -7927,7 +7927,7 @@ template <typename T>
 /* "root_numpy/src/converters.pyx":292
  *         this.nptypecode = info[2]
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
  *         cdef unsigned long numele = tmp.size()
  */
@@ -7967,7 +7967,7 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
 
   /* "root_numpy/src/converters.pyx":293
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         cdef unsigned long numele = tmp.size()
  *         # check cython auto-generated code
@@ -7977,7 +7977,7 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
   __pyx_v_tmp = ((std::vector<T>  *)__pyx_v_col->GetValuePointer());
 
   /* "root_numpy/src/converters.pyx":294
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
  *         cdef unsigned long numele = tmp.size()             # <<<<<<<<<<<<<<
  *         # check cython auto-generated code
@@ -8030,7 +8030,7 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
   /* "root_numpy/src/converters.pyx":292
  *         this.nptypecode = info[2]
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
  *         cdef unsigned long numele = tmp.size()
  */
@@ -8045,10 +8045,10 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
   __pyx_L1_error:;
 
 #line 292 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 292 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 292 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8189,7 +8189,7 @@ template <typename T>
  *         this.elesize = info[1].itemsize
  *         this.nptypecode = info[2]             # <<<<<<<<<<<<<<
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  */
 
 #line 312 "root_numpy/src/converters.pyx"
@@ -8254,7 +8254,7 @@ template <typename T>
 /* "root_numpy/src/converters.pyx":314
  *         this.nptypecode = info[2]
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -8321,7 +8321,7 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
 
   /* "root_numpy/src/converters.pyx":315
  * 
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         # this will hold number of subvectors
  *         cdef unsigned long numele
@@ -8512,7 +8512,7 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
   /* "root_numpy/src/converters.pyx":314
  *         this.nptypecode = info[2]
  * 
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -8530,10 +8530,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
   __Pyx_XDECREF(__pyx_t_1);
 
 #line 314 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorVectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorVectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 314 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 314 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8553,7 +8553,7 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
 /* "root_numpy/src/converters.pyx":348
  * cdef cppclass VectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
  *         return create_numpyarray_vectorbool(buffer, tmp, col.selector)
  */
@@ -8584,7 +8584,7 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
 
   /* "root_numpy/src/converters.pyx":349
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         return create_numpyarray_vectorbool(buffer, tmp, col.selector)
  * 
@@ -8594,7 +8594,7 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
   __pyx_v_tmp = ((std::vector<bool>  *)__pyx_v_col->GetValuePointer());
 
   /* "root_numpy/src/converters.pyx":350
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
  *         return create_numpyarray_vectorbool(buffer, tmp, col.selector)             # <<<<<<<<<<<<<<
  * 
@@ -8619,7 +8619,7 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
   /* "root_numpy/src/converters.pyx":348
  * cdef cppclass VectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
  *         return create_numpyarray_vectorbool(buffer, tmp, col.selector)
  */
@@ -8634,10 +8634,10 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
   __pyx_L1_error:;
 
 #line 348 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 348 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 348 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8654,7 +8654,7 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
 /* "root_numpy/src/converters.pyx":355
  * cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -8715,7 +8715,7 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
 
   /* "root_numpy/src/converters.pyx":356
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         # this will hold number of subvectors
  *         cdef unsigned long numele
@@ -8895,7 +8895,7 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
   /* "root_numpy/src/converters.pyx":355
  * cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -8913,10 +8913,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
   __Pyx_XDECREF(__pyx_t_1);
 
 #line 355 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorVectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorVectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 355 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 355 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8936,7 +8936,7 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
 /* "root_numpy/src/converters.pyx":385
  * 
  * cdef cppclass StringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef string* s = <string*> col.GetValuePointer()
  *         py_bytes = str(s[0])
  */
@@ -8973,7 +8973,7 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
 
   /* "root_numpy/src/converters.pyx":386
  * cdef cppclass StringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef string* s = <string*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         py_bytes = str(s[0])
  *         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
@@ -8983,7 +8983,7 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
   __pyx_v_s = ((std::string *)__pyx_v_col->GetValuePointer());
 
   /* "root_numpy/src/converters.pyx":387
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef string* s = <string*> col.GetValuePointer()
  *         py_bytes = str(s[0])             # <<<<<<<<<<<<<<
  *         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
@@ -9076,7 +9076,7 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
   /* "root_numpy/src/converters.pyx":385
  * 
  * cdef cppclass StringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef string* s = <string*> col.GetValuePointer()
  *         py_bytes = str(s[0])
  */
@@ -9097,10 +9097,10 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
   __Pyx_XDECREF(__pyx_t_2);
 
 #line 385 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("StringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("StringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 385 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 385 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -9120,7 +9120,7 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
 /* "root_numpy/src/converters.pyx":397
  * 
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
  *         return create_numpyarray_vectorstring(buffer, tmp, col.selector)
  */
@@ -9151,7 +9151,7 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
 
   /* "root_numpy/src/converters.pyx":398
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         return create_numpyarray_vectorstring(buffer, tmp, col.selector)
  * 
@@ -9161,7 +9161,7 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
   __pyx_v_tmp = ((std::vector<std::string>  *)__pyx_v_col->GetValuePointer());
 
   /* "root_numpy/src/converters.pyx":399
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
  *         return create_numpyarray_vectorstring(buffer, tmp, col.selector)             # <<<<<<<<<<<<<<
  * 
@@ -9186,7 +9186,7 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
   /* "root_numpy/src/converters.pyx":397
  * 
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
  *         return create_numpyarray_vectorstring(buffer, tmp, col.selector)
  */
@@ -9201,10 +9201,10 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
   __pyx_L1_error:;
 
 #line 397 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 397 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 397 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -9221,7 +9221,7 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
 /* "root_numpy/src/converters.pyx":403
  * 
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -9282,7 +9282,7 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
 
   /* "root_numpy/src/converters.pyx":404
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):
+ *     int write(Column* col, void* buffer) except -1:
  *         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
  *         # this will hold number of subvectors
  *         cdef unsigned long numele
@@ -9462,7 +9462,7 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
   /* "root_numpy/src/converters.pyx":403
  * 
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
- *     int write(Column* col, void* buffer):             # <<<<<<<<<<<<<<
+ *     int write(Column* col, void* buffer) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()
  *         # this will hold number of subvectors
  */
@@ -9480,10 +9480,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
   __Pyx_XDECREF(__pyx_t_1);
 
 #line 403 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("VectorVectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("VectorVectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 403 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 403 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -26422,7 +26422,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_indices); if (unlikely(!__pyx_t_2)) __PYX_E
  */
 
 #line 504 "root_numpy/src/tree.pyx"
-        __pyx_v_num_bytes = __pyx_v_conv->write(__pyx_v_col, __pyx_v_data_ptr);
+        __pyx_t_22 = __pyx_v_conv->write(__pyx_v_col, __pyx_v_data_ptr); if (unlikely(__pyx_t_22 == -1)) __PYX_ERR(2, 504, __pyx_L9_error)
+
+#line 504 "root_numpy/src/tree.pyx"
+        __pyx_v_num_bytes = __pyx_t_22;
 
         /* "root_numpy/src/tree.pyx":505
  *                 conv = converters[icol]

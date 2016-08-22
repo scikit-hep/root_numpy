@@ -165,7 +165,7 @@ cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src
 
 cdef cppclass Converter:
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         pass
 
     object get_nptype():
@@ -185,7 +185,7 @@ cdef cppclass BasicConverter(Converter):
         this.nptypecode = nptypecode
         this.nptype = nptype
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef void* src = col.GetValuePointer()
         memcpy(buffer, src, this.size)
         return this.size
@@ -223,7 +223,7 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
     __dealloc__():
         free(this.dims)
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         # only the first dimension can vary in length
         this.dims[0] = col.GetCountLen()
         return create_numpyarray(buffer, col.GetValuePointer(),
@@ -243,7 +243,7 @@ cdef cppclass FixedArrayConverter(Converter):
     __dealloc__():
         Py_XDECREF(this.shape)
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef int nbytes = col.GetSize()
         memcpy(buffer, col.GetValuePointer(), nbytes)
         return nbytes
@@ -263,7 +263,7 @@ cdef cppclass CharArrayConverter(Converter):
         this.conv = <BasicConverter*> CONVERTERS['char']
         this.size = size
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
         cdef int length = strlen(<char*> col.GetValuePointer())
         memcpy(buffer, col.GetValuePointer(), nbytes)
@@ -289,7 +289,7 @@ cdef cppclass VectorConverter[T](ObjectConverterBase):
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef unsigned long numele = tmp.size()
         # check cython auto-generated code
@@ -311,7 +311,7 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
 
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
@@ -345,14 +345,14 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
 
 cdef cppclass VectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return create_numpyarray_vectorbool(buffer, tmp, col.selector)
 
 
 cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
@@ -382,7 +382,7 @@ cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
 
 
 cdef cppclass StringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef string* s = <string*> col.GetValuePointer()
         py_bytes = str(s[0])
         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
@@ -394,13 +394,13 @@ cdef cppclass StringConverter(ObjectConverterBase):
 
 
 cdef cppclass VectorStringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
         return create_numpyarray_vectorstring(buffer, tmp, col.selector)
 
 
 cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer):
+    int write(Column* col, void* buffer) except -1:
         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
