@@ -704,6 +704,10 @@ def test_stretch():
     from_stretched = stretched[idx == 0]['vl1']
     assert_array_equal(from_arr, from_stretched)
 
+    # stretch single field and produce unstructured output
+    stretched = rnp.stretch(arr, 'vl1')
+    assert_equal(stretched.dtype, np.int)
+
 
 def test_blockwise_inner_join():
     test_data = np.array([

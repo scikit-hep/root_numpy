@@ -126,8 +126,11 @@ def stretch(arr, fields=None, return_indices=False):
     ----------
     arr : NumPy structured or record array
         The array to be stretched.
-    fields : list of strings, optional (default=None)
-        A list of column names to stretch. If None, then stretch all fields.
+    fields : list of strings or single string, optional (default=None)
+        A list of column names or a single column name to stretch.
+        If ``fields`` is a string, then the output array is a one-dimensional
+        unstructured array containing only the stretched elements of that
+        field. If None, then stretch all fields.
     return_indices : bool, optional (default=False)
         If True, the array index of each stretched array entry will be
         returned in addition to the stretched array.
@@ -154,8 +157,12 @@ def stretch(arr, fields=None, return_indices=False):
     dtype = []
     len_array = None
 
+    flatten = False
     if fields is None:
         fields = arr.dtype.names
+    elif isinstance(fields, string_types):
+        fields = [fields]
+        flatten = True
 
     # Construct dtype and check consistency
     for field in fields:
@@ -196,6 +203,9 @@ def stretch(arr, fields=None, return_indices=False):
         else:
             # Scalar field
             ret[field] = np.repeat(arr[field], len_array)
+
+    if flatten:
+        ret = ret[fields[0]]
 
     if return_indices:
         idx = np.concatenate(list(map(np.arange, len_array)))
