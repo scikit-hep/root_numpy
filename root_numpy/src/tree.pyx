@@ -493,8 +493,9 @@ cdef object tree2array(TTree* tree, bool ischain, branches,
                 if not keep:
                     continue
 
-            # Update object selection vectors
-            chain.UpdateSelectors()
+            if perform_object_selection:
+                # Update object selection vectors
+                chain.UpdateSelectors()
 
             # Copy the values into the array
             data_ptr = np.PyArray_GETPTR1(arr, num_entries_selected)
