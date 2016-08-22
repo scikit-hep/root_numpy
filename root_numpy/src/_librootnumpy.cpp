@@ -1116,7 +1116,7 @@ struct __pyx_opt_args_13_librootnumpy_create_numpyarray {
  * 
  * # special treatment for vector<bool>
  * cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,             # <<<<<<<<<<<<<<
- *                                              Selector* selector=NULL):
+ *                                              Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -1136,7 +1136,7 @@ struct __pyx_opt_args_13_librootnumpy_create_numpyarray_vectorbool {
  * 
  * 
  * cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,             # <<<<<<<<<<<<<<
- *                                                Selector* selector=NULL):
+ *                                                Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -1801,11 +1801,6 @@ static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject 
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
-/* WriteUnraisableException.proto */
-static void __Pyx_WriteUnraisable(const char *name, int clineno,
-                                  int lineno, const char *filename,
-                                  int full_traceback, int nogil);
-
 /* SetItemInt.proto */
 #define __Pyx_SetItemInt(o, i, v, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
     (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
@@ -1815,6 +1810,11 @@ static void __Pyx_WriteUnraisable(const char *name, int clineno,
 static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v);
 static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v,
                                                int is_list, int wraparound, int boundscheck);
+
+/* WriteUnraisableException.proto */
+static void __Pyx_WriteUnraisable(const char *name, int clineno,
+                                  int lineno, const char *filename,
+                                  int full_traceback, int nogil);
 
 /* GetItemInt.proto */
 #define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
@@ -3882,7 +3882,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
  * cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
  *                                   unsigned long numele, int elesize,
  *                                   int ndim=1, SIZE_t* dims=NULL,             # <<<<<<<<<<<<<<
- *                                   Selector* selector=NULL):
+ *                                   Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -3892,7 +3892,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
   /* "root_numpy/src/converters.pyx":56
  *                                   unsigned long numele, int elesize,
  *                                   int ndim=1, SIZE_t* dims=NULL,
- *                                   Selector* selector=NULL):             # <<<<<<<<<<<<<<
+ *                                   Selector* selector=NULL) except -1:             # <<<<<<<<<<<<<<
  *     cdef unsigned long i = 0, j = 0
  *     cdef SIZE_t* _dims = dims
  */
@@ -3992,7 +3992,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
 
   /* "root_numpy/src/converters.pyx":57
  *                                   int ndim=1, SIZE_t* dims=NULL,
- *                                   Selector* selector=NULL):
+ *                                   Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0             # <<<<<<<<<<<<<<
  *     cdef SIZE_t* _dims = dims
  *     cdef SIZE_t default_dims[1]
@@ -4005,7 +4005,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
   __pyx_v_j = 0;
 
   /* "root_numpy/src/converters.pyx":58
- *                                   Selector* selector=NULL):
+ *                                   Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  *     cdef SIZE_t* _dims = dims             # <<<<<<<<<<<<<<
  *     cdef SIZE_t default_dims[1]
@@ -4502,10 +4502,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
   __Pyx_XDECREF(__pyx_t_6);
 
 #line 53 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("_librootnumpy.create_numpyarray", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("_librootnumpy.create_numpyarray", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 53 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 53 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -4526,7 +4526,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
  * 
  * # special treatment for vector<bool>
  * cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,             # <<<<<<<<<<<<<<
- *                                              Selector* selector=NULL):
+ *                                              Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -4539,7 +4539,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
   /* "root_numpy/src/converters.pyx":94
  * # special treatment for vector<bool>
  * cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,
- *                                              Selector* selector=NULL):             # <<<<<<<<<<<<<<
+ *                                              Selector* selector=NULL) except -1:             # <<<<<<<<<<<<<<
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()
  */
@@ -4621,7 +4621,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
 
   /* "root_numpy/src/converters.pyx":95
  * cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,
- *                                              Selector* selector=NULL):
+ *                                              Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0             # <<<<<<<<<<<<<<
  *     cdef unsigned long numele = src.size()
  *     cdef SIZE_t dims[1]
@@ -4634,7 +4634,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
   __pyx_v_j = 0;
 
   /* "root_numpy/src/converters.pyx":96
- *                                              Selector* selector=NULL):
+ *                                              Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()             # <<<<<<<<<<<<<<
  *     cdef SIZE_t dims[1]
@@ -5093,7 +5093,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
  * 
  * # special treatment for vector<bool>
  * cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,             # <<<<<<<<<<<<<<
- *                                              Selector* selector=NULL):
+ *                                              Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -5122,10 +5122,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
   __Pyx_XDECREF(__pyx_t_6);
 
 #line 93 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("_librootnumpy.create_numpyarray_vectorbool", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("_librootnumpy.create_numpyarray_vectorbool", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 93 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 93 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -5146,7 +5146,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(vo
  * 
  * 
  * cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,             # <<<<<<<<<<<<<<
- *                                                Selector* selector=NULL):
+ *                                                Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -5159,7 +5159,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
   /* "root_numpy/src/converters.pyx":126
  * 
  * cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,
- *                                                Selector* selector=NULL):             # <<<<<<<<<<<<<<
+ *                                                Selector* selector=NULL) except -1:             # <<<<<<<<<<<<<<
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()
  */
@@ -5256,7 +5256,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
 
   /* "root_numpy/src/converters.pyx":127
  * cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,
- *                                                Selector* selector=NULL):
+ *                                                Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0             # <<<<<<<<<<<<<<
  *     cdef unsigned long numele = src.size()
  *     cdef SIZE_t dims[1]
@@ -5269,7 +5269,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
   __pyx_v_j = 0;
 
   /* "root_numpy/src/converters.pyx":128
- *                                                Selector* selector=NULL):
+ *                                                Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()             # <<<<<<<<<<<<<<
  *     cdef SIZE_t dims[1]
@@ -5876,7 +5876,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
  * 
  * 
  * cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,             # <<<<<<<<<<<<<<
- *                                                Selector* selector=NULL):
+ *                                                Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  */
 
@@ -5905,10 +5905,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(
   __Pyx_XDECREF(__pyx_t_6);
 
 #line 125 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("_librootnumpy.create_numpyarray_vectorstring", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("_librootnumpy.create_numpyarray_vectorstring", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 125 "root_numpy/src/converters.pyx"
-  __pyx_r = 0;
+  __pyx_r = -1;
 
 #line 125 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -6785,7 +6785,7 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
   __pyx_t_2.selector = __pyx_v_col->selector;
 
 #line 229 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray(__pyx_v_buffer, __pyx_v_col->GetValuePointer(), this->typecode, __pyx_v_col->GetLen(), this->elesize, &__pyx_t_2); 
+  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray(__pyx_v_buffer, __pyx_v_col->GetValuePointer(), this->typecode, __pyx_v_col->GetLen(), this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 229, __pyx_L1_error)
 
 #line 229 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
@@ -6806,6 +6806,15 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
 
 #line 226 "root_numpy/src/converters.pyx"
   /* function exit code */
+
+#line 226 "root_numpy/src/converters.pyx"
+  __pyx_L1_error:;
+
+#line 226 "root_numpy/src/converters.pyx"
+  __Pyx_WriteUnraisable("VaryArrayConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+
+#line 226 "root_numpy/src/converters.pyx"
+  __pyx_r = 0;
 
 #line 226 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8010,7 +8019,7 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
   __pyx_t_2.selector = __pyx_v_col->selector;
 
 #line 298 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray(__pyx_v_buffer, __pyx_v_fa, this->nptypecode, __pyx_v_numele, this->elesize, &__pyx_t_2); 
+  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray(__pyx_v_buffer, __pyx_v_fa, this->nptypecode, __pyx_v_numele, this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 298, __pyx_L1_error)
 
 #line 298 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
@@ -8031,6 +8040,15 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
 
 #line 292 "root_numpy/src/converters.pyx"
   /* function exit code */
+
+#line 292 "root_numpy/src/converters.pyx"
+  __pyx_L1_error:;
+
+#line 292 "root_numpy/src/converters.pyx"
+  __Pyx_WriteUnraisable("VectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+
+#line 292 "root_numpy/src/converters.pyx"
+  __pyx_r = 0;
 
 #line 292 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8472,7 +8490,7 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  */
 
 #line 341 "root_numpy/src/converters.pyx"
-    __pyx_f_13_librootnumpy_create_numpyarray((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), __pyx_v_fa, this->nptypecode, ((__pyx_v_tmp[0])[__pyx_v_i]).size(), this->elesize, NULL);
+    __pyx_t_2 = __pyx_f_13_librootnumpy_create_numpyarray((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), __pyx_v_fa, this->nptypecode, ((__pyx_v_tmp[0])[__pyx_v_i]).size(), this->elesize, NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 341, __pyx_L1_error)
 
 #line 341 "root_numpy/src/converters.pyx"
   }
@@ -8590,7 +8608,7 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
   __pyx_t_2.selector = __pyx_v_col->selector;
 
 #line 350 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(__pyx_v_buffer, __pyx_v_tmp, &__pyx_t_2); 
+  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray_vectorbool(__pyx_v_buffer, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 350, __pyx_L1_error)
 
 #line 350 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
@@ -8611,6 +8629,15 @@ int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void
 
 #line 348 "root_numpy/src/converters.pyx"
   /* function exit code */
+
+#line 348 "root_numpy/src/converters.pyx"
+  __pyx_L1_error:;
+
+#line 348 "root_numpy/src/converters.pyx"
+  __Pyx_WriteUnraisable("VectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+
+#line 348 "root_numpy/src/converters.pyx"
+  __pyx_r = 0;
 
 #line 348 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -8846,7 +8873,7 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  */
 
 #line 380 "root_numpy/src/converters.pyx"
-    __pyx_f_13_librootnumpy_create_numpyarray_vectorbool((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL);
+    __pyx_t_2 = __pyx_f_13_librootnumpy_create_numpyarray_vectorbool((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 380, __pyx_L1_error)
 
 #line 380 "root_numpy/src/converters.pyx"
   }
@@ -9148,7 +9175,7 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
   __pyx_t_2.selector = __pyx_v_col->selector;
 
 #line 399 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(__pyx_v_buffer, __pyx_v_tmp, &__pyx_t_2); 
+  __pyx_t_1 = __pyx_f_13_librootnumpy_create_numpyarray_vectorstring(__pyx_v_buffer, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 399, __pyx_L1_error)
 
 #line 399 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
@@ -9169,6 +9196,15 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
 
 #line 397 "root_numpy/src/converters.pyx"
   /* function exit code */
+
+#line 397 "root_numpy/src/converters.pyx"
+  __pyx_L1_error:;
+
+#line 397 "root_numpy/src/converters.pyx"
+  __Pyx_WriteUnraisable("VectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+
+#line 397 "root_numpy/src/converters.pyx"
+  __pyx_r = 0;
 
 #line 397 "root_numpy/src/converters.pyx"
   __pyx_L0:;
@@ -9404,7 +9440,7 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  */
 
 #line 428 "root_numpy/src/converters.pyx"
-    __pyx_f_13_librootnumpy_create_numpyarray_vectorstring((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL);
+    __pyx_t_2 = __pyx_f_13_librootnumpy_create_numpyarray_vectorstring((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 428, __pyx_L1_error)
 
 #line 428 "root_numpy/src/converters.pyx"
   }
@@ -84703,48 +84739,6 @@ bad:
     return 0;
 }
 
-/* WriteUnraisableException */
-      static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
-    }
-    #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
-    #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
-    }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
-#endif
-}
-
 /* SetItemInt */
       static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
     int r;
@@ -84791,6 +84785,48 @@ static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObje
     }
 #endif
     return __Pyx_SetItemInt_Generic(o, PyInt_FromSsize_t(i), v);
+}
+
+/* WriteUnraisableException */
+        static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
 }
 
 /* GetItemInt */

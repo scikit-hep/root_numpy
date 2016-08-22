@@ -53,7 +53,7 @@ cdef inline unicode resolve_type(const char* typename):
 cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
                                   unsigned long numele, int elesize,
                                   int ndim=1, SIZE_t* dims=NULL,
-                                  Selector* selector=NULL):
+                                  Selector* selector=NULL) except -1:
     cdef unsigned long i = 0, j = 0
     cdef SIZE_t* _dims = dims
     cdef SIZE_t default_dims[1]
@@ -91,7 +91,7 @@ cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
 
 # special treatment for vector<bool>
 cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,
-                                             Selector* selector=NULL):
+                                             Selector* selector=NULL) except -1:
     cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
@@ -123,7 +123,7 @@ cdef inline int create_numpyarray_vectorbool(void* buffer, vector[bool]* src,
 
 
 cdef inline int create_numpyarray_vectorstring(void* buffer, vector[string]* src,
-                                               Selector* selector=NULL):
+                                               Selector* selector=NULL) except -1:
     cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
