@@ -265,6 +265,11 @@ def test_variable_length_arrays():
     assert_equal(a.d_double[-1][0], 380.25)
     assert_equal(a.d_double[-1][-1], 497.25)
 
+    # read only array without "length leaf"
+    b = rnp.root2array(f, branches='n_int')
+    for i in range(len(b)):
+        assert_equal(len(b[i]), a.len_n[i])
+
 
 def test_tree2array():
     chain = TChain('tree')
@@ -352,9 +357,20 @@ def test_fixed_length_array_expression():
     a = rnp.root2array(load('fixed*.root'), branches='n_int * 2')
     assert_equal(a.ndim, 2)
     assert_equal(a.shape[1], 5)
-    assert_array_equal(
-	np.unique(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)')),
-	[5])
+    assert_true(np.all(rnp.root2array(load('fixed*.root'), branches='Length$(n_int)') == 5))
+
+
+def test_object_selection():
+    a = rnp.root2array(load('vary*.root'), branches='n_int',
+                       object_selection={'n_int % 2 == 0': 'n_int'})
+    for suba in a:
+        assert_true((suba % 2 == 0).all())
+
+    assert_raises(ValueError, rnp.root2array, load('vary*.root'),
+                  branches='n_int', object_selection={'n_int % 2 == 0': 'DNE'})
+
+    assert_raises(ValueError, rnp.root2array, load('vary*.root'),
+                  branches='n_int', object_selection={'n_int % 2 == 0': ['n_int', 'n_int']})
 
 
 @raises(ValueError)

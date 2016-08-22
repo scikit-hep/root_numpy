@@ -148,8 +148,8 @@ if install:
 setup(
     name='root_numpy',
     version=__version__,
-    description='An interface between ROOT and NumPy',
-    long_description=''.join(open('README.rst').readlines()[7:]),
+    description='The interface between ROOT and NumPy',
+    long_description=''.join(open('README.rst').readlines()[7:-4]),
     author='the rootpy developers',
     author_email='rootpy-dev@googlegroups.com',
     license='MIT',

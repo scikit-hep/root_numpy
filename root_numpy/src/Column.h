@@ -1,6 +1,7 @@
 #ifndef __COLUMN_H_
 #define __COLUMN_H_
 
+#include <Selector.h>
 #include <TLeaf.h>
 #include <TTreeFormula.h>
 #include <string>
@@ -12,8 +13,10 @@ class Column
 
     Column(std::string _name, std::string _type):
         name(_name),
-        type(_type){}
-    virtual ~Column() {}
+        type(_type),
+        selector(NULL){}
+
+    virtual ~Column(){}
     virtual int GetLen() = 0;
     virtual int GetCountLen() = 0;
     virtual int GetSize() = 0;
@@ -24,6 +27,8 @@ class Column
     std::string name;
     // Name of the ROOT type
     std::string type;
+    // Optional selector
+    Selector* selector;
 };
 
 

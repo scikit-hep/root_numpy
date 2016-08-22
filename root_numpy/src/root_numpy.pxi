@@ -22,6 +22,7 @@ cdef extern from "Column.h":
     cdef cppclass Column:
         string name
         string type
+        Selector* selector
         int GetLen()
         int GetCountLen()
         int GetSize()
@@ -65,6 +66,13 @@ cdef extern from "Column.h":
         void* GetValuePointer()
         const_char* GetTypeName()
 
+cdef extern from "Selector.h":
+    cdef cppclass Selector:
+        vector[bool] selected
+        unsigned_int num_selected
+        TTreeFormula* selection
+        Selector(TTreeFormula*)
+
 cdef extern from "TreeChain.h":
     cdef cppclass TreeChain:
         TreeChain(TTree*, bool, long_long)
@@ -74,4 +82,6 @@ cdef extern from "TreeChain.h":
         int GetEntry(long_long)
         TTree* fChain
         void AddFormula(TTreeFormula*)
+        void AddSelector(Selector*)
         void InitBranches()
+        void UpdateSelectors()

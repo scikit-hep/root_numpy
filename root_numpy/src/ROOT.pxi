@@ -128,6 +128,8 @@ cdef extern from "TFormula.h":
 cdef extern from "TTreeFormula.h":
     cdef cppclass TTreeFormula:
         TTreeFormula(const_char*, const_char*, TTree*)
+        const_char* GetName()
+        const_char* GetTitle()
         int GetNdim()
         int GetNdata()
         int GetMultiplicity()

@@ -152,7 +152,12 @@ cdef handle_load(int load, bool ignore_index=False):
     raise RuntimeError("the chain is not initialized")
 
 
-cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
+ctypedef cpp_map[string, Selector*] selector_map_type
+ctypedef pair[string, Selector*] selector_map_item_type
+
+
+cdef object tree2array(TTree* tree, bool ischain, branches,
+                       string selection, object_selection,
                        start, stop, step,
                        bool include_weight, string weight_name,
                        long cache_size):
@@ -186,12 +191,21 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
     # Used to preserve branch order if user specified branches:
     cdef vector[vector['Column*']] column_buckets
     cdef vector[vector['Converter*']] converter_buckets
-    # Avoid calling FindBranch for each branch since that results in O(n^2)
+
+    # Note: Avoid calling FindBranch for each branch since that results in
+    # O(n^2) complexity.
 
     cdef TTreeFormula* selection_formula = NULL
     cdef TTreeFormula* formula = NULL
     cdef int instance
     cdef bool keep
+
+    cdef bool perform_object_selection = False
+    if object_selection:
+        perform_object_selection = True
+    cdef Selector* selector = NULL
+    cdef selector_map_type selector_map
+    cdef cpp_map[string, Selector*].iterator selector_map_it
 
     cdef int ibranch, ileaf, branch_idx = 0
     cdef int num_branches = branch_array.GetEntries()
@@ -222,7 +236,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
         converters.reserve(num_branches)
 
     try:
-        # Set up the selection if we have one
+        # Set up the entry selection if present
         if selection.size():
             selection_formula = new TTreeFormula("selection", selection.c_str(), tree)
             if selection_formula == NULL or selection_formula.GetNdim() == 0:
@@ -239,6 +253,29 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
             if len(branch_dict) != num_requested_branches:
                 raise ValueError("duplicate branches requested")
 
+        # Set up object selection if present
+        # Create reverse lookup dictionary mapping field names to Selectors
+        if perform_object_selection:
+            for subselection, subselection_branches in object_selection.items():
+                if not isinstance(subselection_branches, (list, tuple)):
+                    subselection_branches = [subselection_branches]
+                formula = new TTreeFormula(subselection, subselection, tree)
+                if formula == NULL or formula.GetNdim() == 0:
+                    del formula
+                    raise ValueError(
+                        "the expression '{0}' "
+                        "is not valid".format(subselection))
+                selector = new Selector(formula)
+                chain.AddSelector(selector)
+                for subselection_branch in subselection_branches:
+                    if selector_map.find(subselection_branch) != selector_map.end():
+                        # branch shows up under more than one object selection
+                        raise ValueError(
+                            "attempting to apply multiple object selections "
+                            "on branch or expression '{0}'".format(subselection_branch))
+                    selector_map.insert(selector_map_item_type(subselection_branch, selector))
+
+        # Keep track of branches seen in tree and warn of duplicates
         seen_branches = set()
 
         # Build vector of Converters for branches
@@ -270,6 +307,18 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
             leaf_array = tbranch.GetListOfLeaves()
             shortname = leaf_array.GetEntries() == 1
 
+            if perform_object_selection:
+                # Find selector for this branch is present
+                selector_map_it = selector_map.find(string(branch_name))
+                if selector_map_it != selector_map.end():
+                    selector = deref(selector_map_it).second
+                    # Remove this item from the map to check for branches
+                    # present in the object_selection but not in the tree or
+                    # any fields of the output array
+                    selector_map.erase(selector_map_it)
+                else:
+                    selector = NULL
+
             for ileaf in range(leaf_array.GetEntries()):
                 tleaf = <TLeaf*> leaf_array.At(ileaf)
                 leaf_name = tleaf.GetName()
@@ -280,8 +329,20 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                     if not shortname:
                         column_name.append(<string> '_')
                         column_name.append(leaf_name)
+
+                    if conv.get_nptypecode() != np.NPY_OBJECT:
+                        if selector != NULL:
+                            raise TypeError(
+                                "attempting to apply selection on column '{0}' "
+                                "that is not of type object".format(column_name))
+                        # We may not read any bytes for empty arrays
+                        # otherwise reading zero bytes can be a sign of a
+                        # corrupt ROOT file.
+                        raise_on_zero_read = True
+
                     # Create a column for this branch/leaf pair
                     col = new BranchColumn(column_name, tleaf)
+                    col.selector = selector
 
                     if num_requested_branches > 0:
                         column_buckets[branch_idx].push_back(col)
@@ -292,7 +353,6 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
 
                     chain.AddColumn(string(branch_name), string(leaf_name),
                                     <BranchColumn*> col)
-                    raise_on_zero_read = True
 
                 elif num_requested_branches > 0:
                     # User explicitly requested this branch but there is no
@@ -325,6 +385,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 # The chain will take care of updating the formula leaves when
                 # rolling over to the next tree.
                 chain.AddFormula(formula)
+
                 """
                 ROOT's definition of "multiplicity":
 
@@ -341,6 +402,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                     else:
                         col = new FormulaColumn['double'](expression, 'Double_t', formula)
                         conv = find_converter_by_typename('double')
+
                 elif formula.GetMultiplicity() == -1 or formula.GetMultiplicity() == 1:
                     # variable number of values per entry
                     if formula.IsInteger(False):
@@ -349,6 +411,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                     else:
                         col = new FormulaArrayColumn['double'](expression, 'Double_t', formula)
                         conv = get_array_converter('double', '[]')
+
                 else:
                     # fixed number of values per entry
                     if formula.IsInteger(False):
@@ -357,11 +420,13 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                     else:
                         col = new FormulaFixedArrayColumn['double'](expression, 'Double_t', formula)
                         conv = get_array_converter('double', '[{0:d}]'.format(formula.GetNdata()))
+
                 if conv == NULL:
                     # Oops, this should never happen
                     raise AssertionError(
                         "could not find a formula converter for '{0}'. "
                         "Please report this bug.".format(expression))
+
                 column_buckets[branch_idx].push_back(col)
                 converter_buckets[branch_idx].push_back(conv)
 
@@ -377,6 +442,11 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
         elif columns.size() == 0:
             raise RuntimeError("unable to convert any branches in this tree")
 
+        if selector_map.size() > 0:
+            raise ValueError(
+                "object_selection contains branches that are not "
+                "present in the tree or included in the output array")
+
         # Activate branches used by formulae and columns
         chain.InitBranches()
 
@@ -384,9 +454,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
         # make an appropriate array structure
         dtype_fields = []
         for icol in range(columns.size()):
-            this_col = columns[icol]
-            this_conv = converters[icol]
-            dtype_fields.append((this_col.name, this_conv.get_nptype()))
+            dtype_fields.append((columns[icol].name, converters[icol].get_nptype()))
         if include_weight:
             dtype_fields.append((weight_name, np.dtype('d')))
         dtype = np.dtype(dtype_fields)
@@ -425,6 +493,9 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
                 if not keep:
                     continue
 
+            # Update object selection vectors
+            chain.UpdateSelectors()
+
             # Copy the values into the array
             data_ptr = np.PyArray_GETPTR1(arr, num_entries_selected)
             for icol in range(num_columns):
@@ -453,7 +524,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches, string selection,
 
 
 def root2array_fromfile(fnames, string treename, branches,
-                        selection, start, stop, step,
+                        selection, object_selection, start, stop, step,
                         bool include_weight, string weight_name,
                         long cache_size, bool warn_missing_tree):
     cdef TChain* chain = NULL
@@ -483,21 +554,23 @@ def root2array_fromfile(fnames, string treename, branches,
                           "the requested tree '{0}'".format(treename))
         ret = tree2array(
             <TTree*> chain, True, branches,
-            selection or '', start, stop, step,
+            selection or '', object_selection,
+            start, stop, step,
             include_weight, weight_name, cache_size)
     finally:
         del chain
     return ret
 
 
-def root2array_fromtree(tree, branches, selection,
+def root2array_fromtree(tree, branches, selection, object_selection,
                         start, stop, step,
                         bool include_weight, string weight_name,
                         long cache_size):
     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
     return tree2array(
         rtree, False, branches,
-        selection or '', start, stop, step,
+        selection or '', object_selection,
+        start, stop, step,
         include_weight, weight_name, cache_size)
 
 
