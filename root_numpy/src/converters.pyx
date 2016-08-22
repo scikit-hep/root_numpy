@@ -64,7 +64,7 @@ cdef inline int create_numpyarray(string name,
     if selector != NULL:
         # check that lengths match
         if selector.selected.size() != <unsigned_long> _dims[0]:
-            raise RuntimeError("length of object selection '{0}' ({1})"
+            raise RuntimeError("lengths of object selection '{0}' ({1}) "
                                "and object array '{2}' ({3}) are not equal".format(
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, _dims[0]))
@@ -102,7 +102,7 @@ cdef inline int create_numpyarray_vectorbool(string name,
     if selector != NULL:
         # check that lengths match
         if selector.selected.size() != <unsigned_long> dims[0]:
-            raise RuntimeError("length of object selection '{0}' ({1})"
+            raise RuntimeError("lengths of object selection '{0}' ({1}) "
                                "and object array '{2}' ({3}) are not equal".format(
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, dims[0]))
@@ -136,7 +136,7 @@ cdef inline int create_numpyarray_vectorstring(string name,
     if selector != NULL:
         # check that lengths match
         if selector.selected.size() != <unsigned_long> dims[0]:
-            raise RuntimeError("length of object selection '{0}' ({1})"
+            raise RuntimeError("lengths of object selection '{0}' ({1}) "
                                "and object array '{2}' ({3}) are not equal".format(
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, dims[0]))
