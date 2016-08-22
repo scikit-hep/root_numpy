@@ -62,7 +62,7 @@ cdef inline int create_numpyarray(void* buffer, void* src, int typecode,
         _dims[0] = numele;
     if selector != NULL:
         # check that lengths match
-        if selector.selected.size() != <unsigned_long> dims[0]:
+        if selector.selected.size() != <unsigned_long> _dims[0]:
             raise RuntimeError("length of object selection '{0}' "
                                "and object array do not match".format(
                                    selector.selection.GetTitle()))

@@ -4067,7 +4067,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
  *         _dims[0] = numele;
  *     if selector != NULL:             # <<<<<<<<<<<<<<
  *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:
  */
 
 #line 63 "root_numpy/src/converters.pyx"
@@ -4079,19 +4079,19 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
     /* "root_numpy/src/converters.pyx":65
  *     if selector != NULL:
  *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:             # <<<<<<<<<<<<<<
  *             raise RuntimeError("length of object selection '{0}' "
  *                                "and object array do not match".format(
  */
 
 #line 65 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = ((__pyx_v_selector->selected.size() != ((__pyx_t_13_librootnumpy_unsigned_long)(__pyx_v_dims[0]))) != 0);
+    __pyx_t_1 = ((__pyx_v_selector->selected.size() != ((__pyx_t_13_librootnumpy_unsigned_long)(__pyx_v__dims[0]))) != 0);
 
 #line 65 "root_numpy/src/converters.pyx"
     if (__pyx_t_1) {
 
       /* "root_numpy/src/converters.pyx":67
- *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:
  *             raise RuntimeError("length of object selection '{0}' "
  *                                "and object array do not match".format(             # <<<<<<<<<<<<<<
  *                                    selector.selection.GetTitle()))
@@ -4198,7 +4198,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
 
       /* "root_numpy/src/converters.pyx":66
  *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:
  *             raise RuntimeError("length of object selection '{0}' "             # <<<<<<<<<<<<<<
  *                                "and object array do not match".format(
  *                                    selector.selection.GetTitle()))
@@ -4240,7 +4240,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
       /* "root_numpy/src/converters.pyx":65
  *     if selector != NULL:
  *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:             # <<<<<<<<<<<<<<
  *             raise RuntimeError("length of object selection '{0}' "
  *                                "and object array do not match".format(
  */
@@ -4267,7 +4267,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_create_numpyarray(void *__pyx_v
  *         _dims[0] = numele;
  *     if selector != NULL:             # <<<<<<<<<<<<<<
  *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *         if selector.selected.size() != <unsigned_long> _dims[0]:
  */
 
 #line 63 "root_numpy/src/converters.pyx"
