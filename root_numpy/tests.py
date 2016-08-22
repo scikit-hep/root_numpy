@@ -372,6 +372,13 @@ def test_object_selection():
     assert_raises(ValueError, rnp.root2array, load('vary*.root'),
                   branches='n_int', object_selection={'n_int % 2 == 0': ['n_int', 'n_int']})
 
+    # test with vectors
+    a = rnp.root2array(load('vector.root'), branches='v_i',
+                       object_selection={'v_i % 2 == 0': 'v_i'})
+
+    for suba in a:
+        assert_true((suba % 2 == 0).all())
+
 
 @raises(ValueError)
 def test_branch_DNE():
