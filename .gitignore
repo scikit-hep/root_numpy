@@ -12,6 +12,7 @@ coverage
 *.o
 *.d
 *.pcm
+*.log
 .DS_Store
 .coverage
 .project

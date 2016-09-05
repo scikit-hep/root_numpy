@@ -9,6 +9,7 @@ import timeit
 import pickle
 import platform
 import matplotlib.pyplot as plt
+import os
 
 with open('hardware.pkl', 'r') as pkl:
     info = pickle.load(pkl)
@@ -87,4 +88,8 @@ ax2.text(0.05, 0.95, 'tree contains 1M entries per branch',
          transform=ax2.transAxes, fontsize=12)
 
 fig.tight_layout()
-fig.savefig('bench_tree2array.png', transparent=True)
+fname = 'bench_tree2array_{0}.png'
+ipng = 0
+while os.path.exists(fname.format(ipng)):
+    ipng += 1
+fig.savefig(fname.format(ipng), transparent=True)

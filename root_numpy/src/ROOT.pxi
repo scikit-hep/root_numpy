@@ -109,6 +109,7 @@ cdef extern from "TTree.h":
         double GetWeight()
         int Write()
         int Write(const_char* name, int option)
+        void ResetBranchAddresses()
 
 cdef extern from "TChain.h":
     cdef cppclass TChain(TTree):
