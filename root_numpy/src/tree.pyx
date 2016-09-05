@@ -632,6 +632,7 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
         for icol in range(converters.size()):
             del converters[icol]
 
+    tree.ResetBranchAddresses()
     return tree
 
 
