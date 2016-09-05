@@ -82,6 +82,12 @@ register:
 upload: clean
 	@$(PYTHON) setup.py sdist upload --release
 
+valgrind: inplace
+	valgrind --log-file=valgrind.log --tool=memcheck --leak-check=full \
+		 --suppressions=etc/valgrind-python.supp \
+		 --suppressions=etc/valgrind-root-python.supp \
+		 --suppressions=etc/valgrind-root.supp $(NOSETESTS) -s -v root_numpy
+
 test-code: inplace
 	@$(NOSETESTS) -s -v root_numpy
 

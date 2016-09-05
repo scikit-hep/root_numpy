@@ -560,7 +560,7 @@ cdef Converter* get_array_converter(string typename, arraydef):
     return conv
 
 
-cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):
+cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:
     # Find existing converter or attempt to create a new one
     cdef Converter* conv
     cdef Converter* basic_conv
@@ -610,9 +610,6 @@ cdef cppclass NP2ROOTConverter:
     void fill_from(void* source):
         pass
 
-    __dealloc__():
-        pass
-
 
 cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):
     int nbytes
@@ -656,7 +653,7 @@ cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):
             this.branch.SetAddress(this.value)
         this.branch.SetStatus(1)
 
-    __del__(self):
+    __dealloc__():
         free(this.value)
 
     void fill_from(void* source):

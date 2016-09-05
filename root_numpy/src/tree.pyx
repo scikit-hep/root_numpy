@@ -528,25 +528,26 @@ def root2array_fromfile(fnames, string treename, branches,
                         selection, object_selection, start, stop, step,
                         bool include_weight, string weight_name,
                         long cache_size, bool warn_missing_tree):
-    cdef TChain* chain = NULL
-    cdef TFile* file = NULL
+    cdef TFile* rfile = NULL
     cdef TTree* tree = NULL
+    cdef TChain* chain = new TChain(treename.c_str())
     try:
-        chain = new TChain(treename.c_str())
         for fn in fnames:
             if warn_missing_tree:
-                file = Open(fn, 'read')
-                if file == NULL:
+                rfile = Open(fn, 'read')
+                if rfile == NULL:
                     raise IOError("cannot open file {0}".format(fn))
-                tree = <TTree*> file.Get(treename.c_str())
+                tree = <TTree*> rfile.Get(treename.c_str())
                 if tree == NULL:
                     # skip this file
                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
                                   RuntimeWarning)
-                    file.Close()
+                    rfile.Close()
+                    del rfile
                     continue
                 del tree
-                file.Close()
+                rfile.Close()
+                del rfile
             if chain.Add(fn, -1) == 0:
                 raise IOError("unable to access tree '{0}' in {1}".format(
                     treename, fn))
@@ -586,11 +587,13 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
     cdef SIZE_t idata
     cdef void* source = NULL
     cdef void* thisrow = NULL
+    cdef bool own_tree = False
+
+    if tree == NULL:
+        own_tree = True
+        tree = new TTree(name.c_str(), name.c_str())
 
     try:
-        if tree == NULL:
-            tree = new TTree(name.c_str(), name.c_str())
-
         fieldnames = arr.dtype.names
         fields = arr.dtype.fields
 
@@ -621,12 +624,13 @@ cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) exc
         tree.SetEntries(-1)
 
     except:
+        if own_tree:
+            del tree
         raise
 
     finally:
         for icol in range(converters.size()):
             del converters[icol]
-        # TODO: clean up tree
 
     return tree
 
@@ -650,6 +654,6 @@ def array2root(arr, filename, treename='tree', mode='update'):
     cdef TTree* tree = <TTree*> rfile.Get(treename)
     tree = array2tree(arr, name=treename, tree=tree)
     tree.Write(treename, kOverwrite)
+    del tree
     rfile.Close()
-    # TODO: clean up tree
     del rfile

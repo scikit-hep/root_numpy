@@ -1453,7 +1453,7 @@ typedef std::pair<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_t_13_l
 /* "root_numpy/src/converters.pyx":563
  * 
  * 
- * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):             # <<<<<<<<<<<<<<
+ * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
  *     # Find existing converter or attempt to create a new one
  *     cdef Converter* conv
  */
@@ -1475,25 +1475,14 @@ struct __pyx_t_13_librootnumpy_NP2ROOTConverter
   virtual 
 #line 563 "root_numpy/src/converters.pyx"
 void fill_from(void *);
-  virtual 
+  virtual ~__pyx_t_13_librootnumpy_NP2ROOTConverter() { }
 #line 563 "root_numpy/src/converters.pyx"
- ~__pyx_t_13_librootnumpy_NP2ROOTConverter(void);
-
-  /* "root_numpy/src/converters.pyx":608
- * ####################################
- * 
- * cdef cppclass NP2ROOTConverter:             # <<<<<<<<<<<<<<
- * 
- *     void fill_from(void* source):
- */
-
-#line 608 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_FixedNP2ROOTConverter : public __pyx_t_13_librootnumpy_NP2ROOTConverter
-#line 608 "root_numpy/src/converters.pyx"
+#line 563 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":617
+  /* "root_numpy/src/converters.pyx":614
  * 
  * 
  * cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):             # <<<<<<<<<<<<<<
@@ -1501,28 +1490,28 @@ struct __pyx_t_13_librootnumpy_FixedNP2ROOTConverter : public __pyx_t_13_libroot
  *     void* value
  */
 
-#line 617 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   int nbytes;
 
-#line 617 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   void *value;
 
-#line 617 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   TBranch *branch;
 
-#line 617 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(TTree *, std::string, std::string, int, int, struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ *__pyx_optional_args);
   virtual 
-#line 617 "root_numpy/src/converters.pyx"
-PyObject *__del__(PyObject *);
+#line 614 "root_numpy/src/converters.pyx"
+ ~__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(void);
   virtual 
-#line 617 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
 void fill_from(void *);
-  virtual ~__pyx_t_13_librootnumpy_FixedNP2ROOTConverter() { }
-#line 617 "root_numpy/src/converters.pyx"
+
+#line 614 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":622
+/* "root_numpy/src/converters.pyx":619
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -1530,19 +1519,19 @@ void fill_from(void *);
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
 struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ {
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   int __pyx_n;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   int ndim;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t *dims;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
 };
 
 /* "root_numpy/src/tree.pyx":4
@@ -1647,7 +1636,7 @@ typedef std::map<std::string,Selector *>  __pyx_t_13_librootnumpy_selector_map_t
 #line 156 "root_numpy/src/tree.pyx"
 typedef std::pair<std::string,Selector *>  __pyx_t_13_librootnumpy_selector_map_item_type;
 
-/* "root_numpy/src/tree.pyx":578
+/* "root_numpy/src/tree.pyx":579
  * 
  * 
  * cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:             # <<<<<<<<<<<<<<
@@ -1655,19 +1644,19 @@ typedef std::pair<std::string,Selector *>  __pyx_t_13_librootnumpy_selector_map_
  *     cdef NP2ROOTConverter* cvt
  */
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 struct __pyx_opt_args_13_librootnumpy_array2tree {
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   int __pyx_n;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   std::string name;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   TTree *tree;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 };
 
 /* --- Runtime support code (head) --- */
@@ -2664,7 +2653,6 @@ static const char __pyx_k_data[] = "data";
 static const char __pyx_k_f1_2[] = "f1_";
 static const char __pyx_k_f2_2[] = "f2_";
 static const char __pyx_k_f3_2[] = "f3_";
-static const char __pyx_k_file[] = "file";
 static const char __pyx_k_find[] = "find";
 static const char __pyx_k_fk_d[] = "fk%d";
 static const char __pyx_k_func[] = "func";
@@ -3102,7 +3090,6 @@ static PyObject *__pyx_kp_s_f_s;
 static PyObject *__pyx_kp_s_failed_to_allocate_memory_for_0;
 static PyObject *__pyx_kp_s_field_0_of_type_1_is_not_compati;
 static PyObject *__pyx_n_s_fields;
-static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_kp_s_file_0_is_not_writable;
 static PyObject *__pyx_n_s_filename;
 static PyObject *__pyx_n_s_fill_g1;
@@ -10904,7 +10891,7 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
 /* "root_numpy/src/converters.pyx":563
  * 
  * 
- * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):             # <<<<<<<<<<<<<<
+ * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
  *     # Find existing converter or attempt to create a new one
  *     cdef Converter* conv
  */
@@ -11719,7 +11706,7 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
   /* "root_numpy/src/converters.pyx":563
  * 
  * 
- * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0'):             # <<<<<<<<<<<<<<
+ * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
  *     # Find existing converter or attempt to create a new one
  *     cdef Converter* conv
  */
@@ -11752,7 +11739,7 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
   __Pyx_XDECREF(__pyx_t_10);
 
 #line 563 "root_numpy/src/converters.pyx"
-  __Pyx_WriteUnraisable("_librootnumpy.get_converter", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_AddTraceback("_librootnumpy.get_converter", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
 #line 563 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
@@ -11963,39 +11950,7 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
 #line 610 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":613
- *         pass
- * 
- *     __dealloc__():             # <<<<<<<<<<<<<<
- *         pass
- * 
- */
-
-#line 613 "root_numpy/src/converters.pyx"
-
-
-#line 613 "root_numpy/src/converters.pyx"
- __pyx_t_13_librootnumpy_NP2ROOTConverter::~__pyx_t_13_librootnumpy_NP2ROOTConverter(void) {
-
-#line 613 "root_numpy/src/converters.pyx"
-  __Pyx_RefNannyDeclarations
-
-#line 613 "root_numpy/src/converters.pyx"
-  __Pyx_RefNannySetupContext("<del>", 0);
-
-#line 613 "root_numpy/src/converters.pyx"
-
-
-#line 613 "root_numpy/src/converters.pyx"
-  /* function exit code */
-
-#line 613 "root_numpy/src/converters.pyx"
-  __Pyx_RefNannyFinishContext();
-
-#line 613 "root_numpy/src/converters.pyx"
-}
-
-/* "root_numpy/src/converters.pyx":622
+/* "root_numpy/src/converters.pyx":619
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -12003,16 +11958,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
 
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(TTree *__pyx_v_tree, std::string __pyx_v_name, std::string __pyx_v_roottype, int __pyx_v_length, int __pyx_v_elembytes, struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ *__pyx_optional_args) {
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   int __pyx_v_ndim = ((int)0);
 
-  /* "root_numpy/src/converters.pyx":624
+  /* "root_numpy/src/converters.pyx":621
  *     __init__(TTree* tree, string name, string roottype,
  *              int length, int elembytes,
  *              int ndim=0, SIZE_t* dims=NULL):             # <<<<<<<<<<<<<<
@@ -12020,91 +11975,91 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         cdef int axis
  */
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims = ((__pyx_t_13_librootnumpy_SIZE_t *)NULL);
   std::string __pyx_v_leaflist
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_axis
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_token = NULL
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
 ;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   std::string __pyx_t_1;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   int __pyx_t_5;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   int __pyx_t_6;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   int __pyx_t_7;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_8 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_9 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_10 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   char *__pyx_t_11;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_12 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   Py_ssize_t __pyx_t_13;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_14 = NULL;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   if (__pyx_optional_args) {
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
     if (__pyx_optional_args->__pyx_n > 0) {
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
       __pyx_v_ndim = __pyx_optional_args->ndim;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
       if (__pyx_optional_args->__pyx_n > 1) {
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
         __pyx_v_dims = __pyx_optional_args->dims;
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
       }
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
     }
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 621 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":627
+  /* "root_numpy/src/converters.pyx":624
  *         cdef string leaflist
  *         cdef int axis
  *         this.nbytes = length * elembytes             # <<<<<<<<<<<<<<
@@ -12112,10 +12067,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             # include null-termination
  */
 
-#line 627 "root_numpy/src/converters.pyx"
+#line 624 "root_numpy/src/converters.pyx"
   this->nbytes = (__pyx_v_length * __pyx_v_elembytes);
 
-  /* "root_numpy/src/converters.pyx":628
+  /* "root_numpy/src/converters.pyx":625
  *         cdef int axis
  *         this.nbytes = length * elembytes
  *         if roottype.compare('C') == 0:             # <<<<<<<<<<<<<<
@@ -12123,16 +12078,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes + 1)
  */
 
-#line 628 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 625 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 625, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 625 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((__pyx_v_roottype.compare(__pyx_t_1) == 0) != 0);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 625 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":630
+    /* "root_numpy/src/converters.pyx":627
  *         if roottype.compare('C') == 0:
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)             # <<<<<<<<<<<<<<
@@ -12140,10 +12095,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))
  */
 
-#line 630 "root_numpy/src/converters.pyx"
+#line 627 "root_numpy/src/converters.pyx"
     this->value = malloc((nbytes + 1));
 
-    /* "root_numpy/src/converters.pyx":631
+    /* "root_numpy/src/converters.pyx":628
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -12151,13 +12106,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             (<char*> this.value)[nbytes] = '\0'
  */
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 628 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((this->value == NULL) != 0);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 628 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":632
+      /* "root_numpy/src/converters.pyx":629
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))             # <<<<<<<<<<<<<<
@@ -12165,55 +12120,55 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 632 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyInt_From_long((nbytes + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 632, __pyx_L1_error)
+#line 629 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyInt_From_long((nbytes + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 629, __pyx_L1_error)
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 632 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 632, __pyx_L1_error)
+#line 629 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 629, __pyx_L1_error)
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 632 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 632, __pyx_L1_error)
+#line 629 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 629, __pyx_L1_error)
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_4);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __pyx_t_4 = 0;
 
-#line 632 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 632, __pyx_L1_error)
+#line 629 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 629, __pyx_L1_error)
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_4, 0, 0, 0);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 629 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 632 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 632, __pyx_L1_error)
+#line 629 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 629, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":631
+      /* "root_numpy/src/converters.pyx":628
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -12221,10 +12176,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             (<char*> this.value)[nbytes] = '\0'
  */
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 628 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":633
+    /* "root_numpy/src/converters.pyx":630
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))
  *             (<char*> this.value)[nbytes] = '\0'             # <<<<<<<<<<<<<<
@@ -12232,10 +12187,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes)
  */
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 630 "root_numpy/src/converters.pyx"
     (((char *)this->value)[nbytes]) = '\x00';
 
-    /* "root_numpy/src/converters.pyx":628
+    /* "root_numpy/src/converters.pyx":625
  *         cdef int axis
  *         this.nbytes = length * elembytes
  *         if roottype.compare('C') == 0:             # <<<<<<<<<<<<<<
@@ -12243,13 +12198,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes + 1)
  */
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 625 "root_numpy/src/converters.pyx"
     goto __pyx_L3;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 625 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":635
+  /* "root_numpy/src/converters.pyx":632
  *             (<char*> this.value)[nbytes] = '\0'
  *         else:
  *             this.value = malloc(nbytes)             # <<<<<<<<<<<<<<
@@ -12257,13 +12212,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)
  */
 
-#line 635 "root_numpy/src/converters.pyx"
+#line 632 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 635 "root_numpy/src/converters.pyx"
+#line 632 "root_numpy/src/converters.pyx"
     this->value = malloc(nbytes);
 
-    /* "root_numpy/src/converters.pyx":636
+    /* "root_numpy/src/converters.pyx":633
  *         else:
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -12271,13 +12226,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         # Construct leaflist name
  */
 
-#line 636 "root_numpy/src/converters.pyx"
+#line 633 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((this->value == NULL) != 0);
 
-#line 636 "root_numpy/src/converters.pyx"
+#line 633 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":637
+      /* "root_numpy/src/converters.pyx":634
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)             # <<<<<<<<<<<<<<
@@ -12285,55 +12240,55 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist = name
  */
 
-#line 637 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyInt_From_int(nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 634 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyInt_From_int(nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 634, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 637 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 634 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 634, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 634 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 634, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_3);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 634 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 634, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 637, __pyx_L1_error)
+#line 634 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 634, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":636
+      /* "root_numpy/src/converters.pyx":633
  *         else:
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -12341,16 +12296,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         # Construct leaflist name
  */
 
-#line 636 "root_numpy/src/converters.pyx"
+#line 633 "root_numpy/src/converters.pyx"
     }
 
-#line 636 "root_numpy/src/converters.pyx"
+#line 633 "root_numpy/src/converters.pyx"
   }
 
-#line 636 "root_numpy/src/converters.pyx"
+#line 633 "root_numpy/src/converters.pyx"
   __pyx_L3:;
 
-  /* "root_numpy/src/converters.pyx":639
+  /* "root_numpy/src/converters.pyx":636
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)
  *         # Construct leaflist name
  *         leaflist = name             # <<<<<<<<<<<<<<
@@ -12358,10 +12313,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             for axis in range(ndim):
  */
 
-#line 639 "root_numpy/src/converters.pyx"
+#line 636 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist = __pyx_v_name;
 
-  /* "root_numpy/src/converters.pyx":640
+  /* "root_numpy/src/converters.pyx":637
  *         # Construct leaflist name
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:             # <<<<<<<<<<<<<<
@@ -12369,40 +12324,40 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  */
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   __pyx_t_5 = ((__pyx_v_ndim > 0) != 0);
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   if (__pyx_t_5) {
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   } else {
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
     __pyx_t_2 = __pyx_t_5;
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
     goto __pyx_L7_bool_binop_done;
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   }
 
-#line 640 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 640, __pyx_L1_error)
+#line 637 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 637, __pyx_L1_error)
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   __pyx_t_5 = ((__pyx_v_roottype.compare(__pyx_t_1) != 0) != 0);
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   __pyx_t_2 = __pyx_t_5;
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   __pyx_L7_bool_binop_done:;
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":641
+    /* "root_numpy/src/converters.pyx":638
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):             # <<<<<<<<<<<<<<
@@ -12410,16 +12365,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 leaflist.append(<char*> token)
  */
 
-#line 641 "root_numpy/src/converters.pyx"
+#line 638 "root_numpy/src/converters.pyx"
     __pyx_t_6 = __pyx_v_ndim;
 
-#line 641 "root_numpy/src/converters.pyx"
+#line 638 "root_numpy/src/converters.pyx"
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
 
-#line 641 "root_numpy/src/converters.pyx"
+#line 638 "root_numpy/src/converters.pyx"
       __pyx_v_axis = __pyx_t_7;
 
-      /* "root_numpy/src/converters.pyx":642
+      /* "root_numpy/src/converters.pyx":639
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')             # <<<<<<<<<<<<<<
@@ -12427,121 +12382,121 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist.append(b'/')
  */
 
-#line 642 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 642 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[__pyx_v_axis])); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[__pyx_v_axis])); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __pyx_t_9 = NULL;
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_4);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_9)) {
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_9);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_4, function);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         }
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       }
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       if (!__pyx_t_9) {
 
-#line 642 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       } else {
 
-#line 642 "root_numpy/src/converters.pyx"
-        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_10);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_8);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_10, 0+1, __pyx_t_8);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __pyx_t_8 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       }
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF_SET(__pyx_v_token, __pyx_t_3);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-      /* "root_numpy/src/converters.pyx":643
+      /* "root_numpy/src/converters.pyx":640
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  *                 leaflist.append(<char*> token)             # <<<<<<<<<<<<<<
@@ -12549,16 +12504,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist.append(roottype)
  */
 
-#line 643 "root_numpy/src/converters.pyx"
-      __pyx_t_11 = __Pyx_PyObject_AsString(__pyx_v_token); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(1, 643, __pyx_L1_error)
+#line 640 "root_numpy/src/converters.pyx"
+      __pyx_t_11 = __Pyx_PyObject_AsString(__pyx_v_token); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(1, 640, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 640 "root_numpy/src/converters.pyx"
       __pyx_v_leaflist.append(((char *)__pyx_t_11));
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 640 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":640
+    /* "root_numpy/src/converters.pyx":637
  *         # Construct leaflist name
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:             # <<<<<<<<<<<<<<
@@ -12566,10 +12521,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  */
 
-#line 640 "root_numpy/src/converters.pyx"
+#line 637 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":644
+  /* "root_numpy/src/converters.pyx":641
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  *                 leaflist.append(<char*> token)
  *         leaflist.append(b'/')             # <<<<<<<<<<<<<<
@@ -12577,10 +12532,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         this.branch = tree.GetBranch(name.c_str())
  */
 
-#line 644 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist.append(((char *)"/"));
 
-  /* "root_numpy/src/converters.pyx":645
+  /* "root_numpy/src/converters.pyx":642
  *                 leaflist.append(<char*> token)
  *         leaflist.append(b'/')
  *         leaflist.append(roottype)             # <<<<<<<<<<<<<<
@@ -12588,10 +12543,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         if this.branch == NULL:
  */
 
-#line 645 "root_numpy/src/converters.pyx"
+#line 642 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist.append(__pyx_v_roottype);
 
-  /* "root_numpy/src/converters.pyx":646
+  /* "root_numpy/src/converters.pyx":643
  *         leaflist.append(b'/')
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())             # <<<<<<<<<<<<<<
@@ -12599,10 +12554,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.branch = tree.Branch(name.c_str(), this.value, leaflist.c_str())
  */
 
-#line 646 "root_numpy/src/converters.pyx"
+#line 643 "root_numpy/src/converters.pyx"
   this->branch = __pyx_v_tree->GetBranch(__pyx_v_name.c_str());
 
-  /* "root_numpy/src/converters.pyx":647
+  /* "root_numpy/src/converters.pyx":644
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:             # <<<<<<<<<<<<<<
@@ -12610,13 +12565,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 647 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((this->branch == NULL) != 0);
 
-#line 647 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":648
+    /* "root_numpy/src/converters.pyx":645
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:
  *             this.branch = tree.Branch(name.c_str(), this.value, leaflist.c_str())             # <<<<<<<<<<<<<<
@@ -12624,10 +12579,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             # check type compatibility of existing branch
  */
 
-#line 648 "root_numpy/src/converters.pyx"
+#line 645 "root_numpy/src/converters.pyx"
     this->branch = __pyx_v_tree->Branch(__pyx_v_name.c_str(), this->value, __pyx_v_leaflist.c_str());
 
-    /* "root_numpy/src/converters.pyx":647
+    /* "root_numpy/src/converters.pyx":644
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:             # <<<<<<<<<<<<<<
@@ -12635,13 +12590,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 647 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
     goto __pyx_L11;
 
-#line 647 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":651
+  /* "root_numpy/src/converters.pyx":648
  *         else:
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:             # <<<<<<<<<<<<<<
@@ -12649,34 +12604,34 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "field '{0}' of type '{1}' is not compatible "
  */
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     try {
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
       __pyx_t_1 = std::string(this->branch->GetTitle());
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 651 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 651, __pyx_L1_error)
+#line 648 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 648, __pyx_L1_error)
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     }
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((__pyx_v_leaflist.compare(__pyx_t_1) != 0) != 0);
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":654
+      /* "root_numpy/src/converters.pyx":651
  *                 raise TypeError(
  *                     "field '{0}' of type '{1}' is not compatible "
  *                     "with existing branch of type '{2}'".format(             # <<<<<<<<<<<<<<
@@ -12684,13 +12639,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.branch.SetAddress(this.value)
  */
 
-#line 654 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_field_0_of_type_1_is_not_compati, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 654, __pyx_L1_error)
+#line 651 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_field_0_of_type_1_is_not_compati, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 651, __pyx_L1_error)
 
-#line 654 "root_numpy/src/converters.pyx"
+#line 651 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "root_numpy/src/converters.pyx":655
+      /* "root_numpy/src/converters.pyx":652
  *                     "field '{0}' of type '{1}' is not compatible "
  *                     "with existing branch of type '{2}'".format(
  *                         name, leaflist, str(this.branch.GetTitle())))             # <<<<<<<<<<<<<<
@@ -12698,139 +12653,139 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         this.branch.SetStatus(1)
  */
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 655, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 652, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_10);
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_leaflist); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 655, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_leaflist); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 652, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = __Pyx_PyStr_FromString(this->branch->GetTitle()); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 655, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = __Pyx_PyStr_FromString(this->branch->GetTitle()); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 652, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_12 = PyTuple_New(1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 655, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_12 = PyTuple_New(1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 652, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_12);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_9 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_12, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 655, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_12, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 652, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_13 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
         __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_4);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_12)) {
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_12);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_4, function);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
           __pyx_t_13 = 1;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
         }
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       }
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_14 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 654, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_14 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 651, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_14);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       if (__pyx_t_12) {
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_12); __pyx_t_12 = NULL;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       }
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_10);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_13, __pyx_t_10);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_8);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_13, __pyx_t_8);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_14, 2+__pyx_t_13, __pyx_t_9);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_10 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_8 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __pyx_t_9 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 654, __pyx_L1_error)
+#line 652 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 651, __pyx_L1_error)
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 655 "root_numpy/src/converters.pyx"
+#line 652 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "root_numpy/src/converters.pyx":652
+      /* "root_numpy/src/converters.pyx":649
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:
  *                 raise TypeError(             # <<<<<<<<<<<<<<
@@ -12838,40 +12793,40 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "with existing branch of type '{2}'".format(
  */
 
-#line 652 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 652, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 649, __pyx_L1_error)
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_3);
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-#line 652 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 652, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 649, __pyx_L1_error)
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
 
-#line 652 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 652 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 652, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 649, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":651
+      /* "root_numpy/src/converters.pyx":648
  *         else:
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:             # <<<<<<<<<<<<<<
@@ -12879,10 +12834,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "field '{0}' of type '{1}' is not compatible "
  */
 
-#line 651 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":656
+    /* "root_numpy/src/converters.pyx":653
  *                     "with existing branch of type '{2}'".format(
  *                         name, leaflist, str(this.branch.GetTitle())))
  *             this.branch.SetAddress(this.value)             # <<<<<<<<<<<<<<
@@ -12890,27 +12845,27 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  * 
  */
 
-#line 656 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
     this->branch->SetAddress(this->value);
 
-#line 656 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
   }
 
-#line 656 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
   __pyx_L11:;
 
-  /* "root_numpy/src/converters.pyx":657
+  /* "root_numpy/src/converters.pyx":654
  *                         name, leaflist, str(this.branch.GetTitle())))
  *             this.branch.SetAddress(this.value)
  *         this.branch.SetStatus(1)             # <<<<<<<<<<<<<<
  * 
- *     __del__(self):
+ *     __dealloc__():
  */
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 654 "root_numpy/src/converters.pyx"
   this->branch->SetStatus(1);
 
-  /* "root_numpy/src/converters.pyx":622
+  /* "root_numpy/src/converters.pyx":619
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -12918,118 +12873,106 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
 
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_8);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_9);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_10);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_12);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_14);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("FixedNP2ROOTConverter.<init>", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_token);
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 622 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":659
+/* "root_numpy/src/converters.pyx":656
  *         this.branch.SetStatus(1)
  * 
- *     __del__(self):             # <<<<<<<<<<<<<<
+ *     __dealloc__():             # <<<<<<<<<<<<<<
  *         free(this.value)
  * 
  */
 
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
 
 
-#line 659 "root_numpy/src/converters.pyx"
-PyObject *__pyx_t_13_librootnumpy_FixedNP2ROOTConverter::__del__(CYTHON_UNUSED PyObject *__pyx_v_self) {
+#line 656 "root_numpy/src/converters.pyx"
+ __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::~__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(void) {
 
-#line 659 "root_numpy/src/converters.pyx"
-  PyObject *__pyx_r = NULL;
-
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 659 "root_numpy/src/converters.pyx"
-  __Pyx_RefNannySetupContext("__del__", 0);
+#line 656 "root_numpy/src/converters.pyx"
+  __Pyx_RefNannySetupContext("<del>", 0);
 
-  /* "root_numpy/src/converters.pyx":660
+  /* "root_numpy/src/converters.pyx":657
  * 
- *     __del__(self):
+ *     __dealloc__():
  *         free(this.value)             # <<<<<<<<<<<<<<
  * 
  *     void fill_from(void* source):
  */
 
-#line 660 "root_numpy/src/converters.pyx"
+#line 657 "root_numpy/src/converters.pyx"
   free(this->value);
 
-  /* "root_numpy/src/converters.pyx":659
+  /* "root_numpy/src/converters.pyx":656
  *         this.branch.SetStatus(1)
  * 
- *     __del__(self):             # <<<<<<<<<<<<<<
+ *     __dealloc__():             # <<<<<<<<<<<<<<
  *         free(this.value)
  * 
  */
 
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
 
 
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 659 "root_numpy/src/converters.pyx"
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-
-#line 659 "root_numpy/src/converters.pyx"
-  __Pyx_XGIVEREF(__pyx_r);
-
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 659 "root_numpy/src/converters.pyx"
-  return __pyx_r;
-
-#line 659 "root_numpy/src/converters.pyx"
+#line 656 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":662
+/* "root_numpy/src/converters.pyx":659
  *         free(this.value)
  * 
  *     void fill_from(void* source):             # <<<<<<<<<<<<<<
@@ -13037,19 +12980,19 @@ PyObject *__pyx_t_13_librootnumpy_FixedNP2ROOTConverter::__del__(CYTHON_UNUSED P
  *         this.branch.Fill()
  */
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_source) {
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("fill_from", 0);
 
-  /* "root_numpy/src/converters.pyx":663
+  /* "root_numpy/src/converters.pyx":660
  * 
  *     void fill_from(void* source):
  *         memcpy(this.value, source, this.nbytes)             # <<<<<<<<<<<<<<
@@ -13057,10 +13000,10 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  * 
  */
 
-#line 663 "root_numpy/src/converters.pyx"
+#line 660 "root_numpy/src/converters.pyx"
   memcpy(this->value, __pyx_v_source, this->nbytes);
 
-  /* "root_numpy/src/converters.pyx":664
+  /* "root_numpy/src/converters.pyx":661
  *     void fill_from(void* source):
  *         memcpy(this.value, source, this.nbytes)
  *         this.branch.Fill()             # <<<<<<<<<<<<<<
@@ -13068,10 +13011,10 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  * 
  */
 
-#line 664 "root_numpy/src/converters.pyx"
+#line 661 "root_numpy/src/converters.pyx"
   this->branch->Fill();
 
-  /* "root_numpy/src/converters.pyx":662
+  /* "root_numpy/src/converters.pyx":659
  *         free(this.value)
  * 
  *     void fill_from(void* source):             # <<<<<<<<<<<<<<
@@ -13079,19 +13022,19 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  *         this.branch.Fill()
  */
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 662 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":667
+/* "root_numpy/src/converters.pyx":664
  * 
  * 
  * cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):             # <<<<<<<<<<<<<<
@@ -13099,97 +13042,97 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  */
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np2root_converter(TTree *__pyx_v_tree, PyObject *__pyx_v_name, PyObject *__pyx_v_dtype) {
   __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_v_conv
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_axis
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_ndim
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_length
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_subdtype = NULL
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_shape = NULL
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_elembytes = NULL
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_roottype = NULL
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 ;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_r;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   int __pyx_t_3;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   PyObject *(*__pyx_t_6)(PyObject *);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   Py_ssize_t __pyx_t_7;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   int __pyx_t_8;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   int __pyx_t_9;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t __pyx_t_10;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_11 = NULL;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   std::string __pyx_t_12;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   std::string __pyx_t_13;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_FixedNP2ROOTConverter *__pyx_t_14;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ __pyx_t_15;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("find_np2root_converter", 0);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_INCREF(__pyx_v_dtype);
 
-  /* "root_numpy/src/converters.pyx":671
+  /* "root_numpy/src/converters.pyx":668
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  *     # Handle np.object (array) columns
  *     cdef NP2ROOTConverter* conv = NULL             # <<<<<<<<<<<<<<
@@ -13197,10 +13140,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     cdef int length = 1
  */
 
-#line 671 "root_numpy/src/converters.pyx"
+#line 668 "root_numpy/src/converters.pyx"
   __pyx_v_conv = NULL;
 
-  /* "root_numpy/src/converters.pyx":672
+  /* "root_numpy/src/converters.pyx":669
  *     # Handle np.object (array) columns
  *     cdef NP2ROOTConverter* conv = NULL
  *     cdef int axis, ndim = 0             # <<<<<<<<<<<<<<
@@ -13208,10 +13151,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     cdef SIZE_t* dims = NULL
  */
 
-#line 672 "root_numpy/src/converters.pyx"
+#line 669 "root_numpy/src/converters.pyx"
   __pyx_v_ndim = 0;
 
-  /* "root_numpy/src/converters.pyx":673
+  /* "root_numpy/src/converters.pyx":670
  *     cdef NP2ROOTConverter* conv = NULL
  *     cdef int axis, ndim = 0
  *     cdef int length = 1             # <<<<<<<<<<<<<<
@@ -13219,10 +13162,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     subdtype = dtype.subdtype
  */
 
-#line 673 "root_numpy/src/converters.pyx"
+#line 670 "root_numpy/src/converters.pyx"
   __pyx_v_length = 1;
 
-  /* "root_numpy/src/converters.pyx":674
+  /* "root_numpy/src/converters.pyx":671
  *     cdef int axis, ndim = 0
  *     cdef int length = 1
  *     cdef SIZE_t* dims = NULL             # <<<<<<<<<<<<<<
@@ -13230,10 +13173,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     if subdtype is not None:
  */
 
-#line 674 "root_numpy/src/converters.pyx"
+#line 671 "root_numpy/src/converters.pyx"
   __pyx_v_dims = NULL;
 
-  /* "root_numpy/src/converters.pyx":675
+  /* "root_numpy/src/converters.pyx":672
  *     cdef int length = 1
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype             # <<<<<<<<<<<<<<
@@ -13241,19 +13184,19 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         # Fixed-size subarray type
  */
 
-#line 675 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_subdtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 675, __pyx_L1_error)
+#line 672 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_subdtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 672, __pyx_L1_error)
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 672 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 672 "root_numpy/src/converters.pyx"
   __pyx_v_subdtype = __pyx_t_1;
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 672 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":676
+  /* "root_numpy/src/converters.pyx":673
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype
  *     if subdtype is not None:             # <<<<<<<<<<<<<<
@@ -13261,16 +13204,16 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         dtype, shape = subdtype
  */
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   __pyx_t_2 = (__pyx_v_subdtype != Py_None);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   __pyx_t_3 = (__pyx_t_2 != 0);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/converters.pyx":678
+    /* "root_numpy/src/converters.pyx":675
  *     if subdtype is not None:
  *         # Fixed-size subarray type
  *         dtype, shape = subdtype             # <<<<<<<<<<<<<<
@@ -13278,163 +13221,163 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  */
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_v_subdtype))) || (PyList_CheckExact(__pyx_v_subdtype))) {
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_v_subdtype;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #else
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #endif
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       if (unlikely(size != 2)) {
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 678 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       }
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         __pyx_t_4 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       } else {
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
         __pyx_t_4 = PyList_GET_ITEM(sequence, 1); 
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       }
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_1);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_4);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #else
 
-#line 678 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 678 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       #endif
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     } else {
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 678 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = PyObject_GetIter(__pyx_v_subdtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = PyObject_GetIter(__pyx_v_subdtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
       index = 0; __pyx_t_1 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_1)) 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
 goto __pyx_L4_unpacking_failed;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
       index = 1; __pyx_t_4 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_4)) 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
 goto __pyx_L4_unpacking_failed;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 678 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       goto __pyx_L5_unpacking_done;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __pyx_L4_unpacking_failed:;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 678 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 678, __pyx_L1_error)
+#line 675 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 675, __pyx_L1_error)
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
       __pyx_L5_unpacking_done:;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     }
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     __Pyx_DECREF_SET(__pyx_v_dtype, __pyx_t_1);
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     __pyx_t_1 = 0;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     __pyx_v_shape = __pyx_t_4;
 
-#line 678 "root_numpy/src/converters.pyx"
+#line 675 "root_numpy/src/converters.pyx"
     __pyx_t_4 = 0;
 
-    /* "root_numpy/src/converters.pyx":679
+    /* "root_numpy/src/converters.pyx":676
  *         # Fixed-size subarray type
  *         dtype, shape = subdtype
  *         ndim = len(shape)             # <<<<<<<<<<<<<<
@@ -13442,13 +13385,13 @@ goto __pyx_L4_unpacking_failed;
  *         if dims == NULL:
  */
 
-#line 679 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = PyObject_Length(__pyx_v_shape); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(1, 679, __pyx_L1_error)
+#line 676 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = PyObject_Length(__pyx_v_shape); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(1, 676, __pyx_L1_error)
 
-#line 679 "root_numpy/src/converters.pyx"
+#line 676 "root_numpy/src/converters.pyx"
     __pyx_v_ndim = __pyx_t_7;
 
-    /* "root_numpy/src/converters.pyx":680
+    /* "root_numpy/src/converters.pyx":677
  *         dtype, shape = subdtype
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))             # <<<<<<<<<<<<<<
@@ -13456,10 +13399,10 @@ goto __pyx_L4_unpacking_failed;
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  */
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
     __pyx_v_dims = ((__pyx_t_13_librootnumpy_SIZE_t *)malloc((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))));
 
-    /* "root_numpy/src/converters.pyx":681
+    /* "root_numpy/src/converters.pyx":678
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:             # <<<<<<<<<<<<<<
@@ -13467,13 +13410,13 @@ goto __pyx_L4_unpacking_failed;
  *         for axis in range(ndim):
  */
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 678 "root_numpy/src/converters.pyx"
     __pyx_t_3 = ((__pyx_v_dims == NULL) != 0);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 678 "root_numpy/src/converters.pyx"
     if (__pyx_t_3) {
 
-      /* "root_numpy/src/converters.pyx":682
+      /* "root_numpy/src/converters.pyx":679
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))             # <<<<<<<<<<<<<<
@@ -13481,55 +13424,55 @@ goto __pyx_L4_unpacking_failed;
  *             dims[axis] = shape[axis]
  */
 
-#line 682 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyInt_FromSize_t((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 682, __pyx_L1_error)
+#line 679 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyInt_FromSize_t((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 679, __pyx_L1_error)
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 682 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 682, __pyx_L1_error)
+#line 679 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 679, __pyx_L1_error)
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 682 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 682, __pyx_L1_error)
+#line 679 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 679, __pyx_L1_error)
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_1);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __pyx_t_1 = 0;
 
-#line 682 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 682, __pyx_L1_error)
+#line 679 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 679, __pyx_L1_error)
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
 
-#line 682 "root_numpy/src/converters.pyx"
+#line 679 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 682 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 682, __pyx_L1_error)
+#line 679 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 679, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":681
+      /* "root_numpy/src/converters.pyx":678
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:             # <<<<<<<<<<<<<<
@@ -13537,10 +13480,10 @@ goto __pyx_L4_unpacking_failed;
  *         for axis in range(ndim):
  */
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 678 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":683
+    /* "root_numpy/src/converters.pyx":680
  *         if dims == NULL:
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  *         for axis in range(ndim):             # <<<<<<<<<<<<<<
@@ -13548,16 +13491,16 @@ goto __pyx_L4_unpacking_failed;
  *             length *= dims[axis]
  */
 
-#line 683 "root_numpy/src/converters.pyx"
+#line 680 "root_numpy/src/converters.pyx"
     __pyx_t_8 = __pyx_v_ndim;
 
-#line 683 "root_numpy/src/converters.pyx"
+#line 680 "root_numpy/src/converters.pyx"
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
 
-#line 683 "root_numpy/src/converters.pyx"
+#line 680 "root_numpy/src/converters.pyx"
       __pyx_v_axis = __pyx_t_9;
 
-      /* "root_numpy/src/converters.pyx":684
+      /* "root_numpy/src/converters.pyx":681
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  *         for axis in range(ndim):
  *             dims[axis] = shape[axis]             # <<<<<<<<<<<<<<
@@ -13565,22 +13508,22 @@ goto __pyx_L4_unpacking_failed;
  *     if dtype in TYPES_NUMPY2ROOT:
  */
 
-#line 684 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_shape, __pyx_v_axis, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 684, __pyx_L1_error)
+#line 681 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_shape, __pyx_v_axis, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 681, __pyx_L1_error)
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 681 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 684 "root_numpy/src/converters.pyx"
-      __pyx_t_10 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_1); if (unlikely((__pyx_t_10 == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(1, 684, __pyx_L1_error)
+#line 681 "root_numpy/src/converters.pyx"
+      __pyx_t_10 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_1); if (unlikely((__pyx_t_10 == (npy_intp)-1) && PyErr_Occurred())) __PYX_ERR(1, 681, __pyx_L1_error)
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 681 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 681 "root_numpy/src/converters.pyx"
       (__pyx_v_dims[__pyx_v_axis]) = __pyx_t_10;
 
-      /* "root_numpy/src/converters.pyx":685
+      /* "root_numpy/src/converters.pyx":682
  *         for axis in range(ndim):
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]             # <<<<<<<<<<<<<<
@@ -13588,13 +13531,13 @@ goto __pyx_L4_unpacking_failed;
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  */
 
-#line 685 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
       __pyx_v_length = (__pyx_v_length * (__pyx_v_dims[__pyx_v_axis]));
 
-#line 685 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":676
+    /* "root_numpy/src/converters.pyx":673
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype
  *     if subdtype is not None:             # <<<<<<<<<<<<<<
@@ -13602,10 +13545,10 @@ goto __pyx_L4_unpacking_failed;
  *         dtype, shape = subdtype
  */
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":686
+  /* "root_numpy/src/converters.pyx":683
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:             # <<<<<<<<<<<<<<
@@ -13613,25 +13556,25 @@ goto __pyx_L4_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  */
 
-#line 686 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 683 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 683, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 686 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_dtype, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 683 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_dtype, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 683, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
   __pyx_t_2 = (__pyx_t_3 != 0);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":687
+    /* "root_numpy/src/converters.pyx":684
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]             # <<<<<<<<<<<<<<
@@ -13639,184 +13582,184 @@ goto __pyx_L4_unpacking_failed;
  *     elif dtype.kind == 'S':
  */
 
-#line 687 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 687 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = PyObject_GetItem(__pyx_t_1, __pyx_v_dtype); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = PyObject_GetItem(__pyx_t_1, __pyx_v_dtype); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_t_4))) || (PyList_CheckExact(__pyx_t_4))) {
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_t_4;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #else
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #endif
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       if (unlikely(size != 2)) {
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 687 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       }
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         __pyx_t_5 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       } else {
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         __pyx_t_5 = PyList_GET_ITEM(sequence, 1); 
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       }
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_1);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_5);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #else
 
-#line 687 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 687 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       #endif
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     } else {
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 687 "root_numpy/src/converters.pyx"
-      __pyx_t_11 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+      __pyx_t_11 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_11);
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_t_6 = Py_TYPE(__pyx_t_11)->tp_iternext;
       index = 0; __pyx_t_1 = __pyx_t_6(__pyx_t_11); if (unlikely(!__pyx_t_1)) 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
 goto __pyx_L10_unpacking_failed;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
       index = 1; __pyx_t_5 = __pyx_t_6(__pyx_t_11); if (unlikely(!__pyx_t_5)) 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
 goto __pyx_L10_unpacking_failed;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 687 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_11), 2) < 0) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_11), 2) < 0) __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       goto __pyx_L11_unpacking_done;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_L10_unpacking_failed:;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 687 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 687, __pyx_L1_error)
+#line 684 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 684, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_L11_unpacking_done:;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     }
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __pyx_v_elembytes = __pyx_t_1;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __pyx_t_1 = 0;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __pyx_v_roottype = __pyx_t_5;
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     __pyx_t_5 = 0;
 
-    /* "root_numpy/src/converters.pyx":688
+    /* "root_numpy/src/converters.pyx":685
  *     if dtype in TYPES_NUMPY2ROOT:
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)             # <<<<<<<<<<<<<<
@@ -13824,31 +13767,31 @@ goto __pyx_L10_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  */
 
-#line 688 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 688, __pyx_L1_error)
+#line 685 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 685, __pyx_L1_error)
 
-#line 688 "root_numpy/src/converters.pyx"
-    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_roottype); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 688, __pyx_L1_error)
+#line 685 "root_numpy/src/converters.pyx"
+    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_roottype); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 685, __pyx_L1_error)
 
-#line 688 "root_numpy/src/converters.pyx"
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_elembytes); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 688, __pyx_L1_error)
+#line 685 "root_numpy/src/converters.pyx"
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_elembytes); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 685, __pyx_L1_error)
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 685 "root_numpy/src/converters.pyx"
     __pyx_t_15.__pyx_n = 2;
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 685 "root_numpy/src/converters.pyx"
     __pyx_t_15.ndim = __pyx_v_ndim;
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 685 "root_numpy/src/converters.pyx"
     __pyx_t_15.dims = __pyx_v_dims;
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 685 "root_numpy/src/converters.pyx"
     __pyx_t_14 = new __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(__pyx_v_tree, __pyx_t_12, __pyx_t_13, __pyx_v_length, __pyx_t_8, &__pyx_t_15); 
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 685 "root_numpy/src/converters.pyx"
     __pyx_v_conv = __pyx_t_14;
 
-    /* "root_numpy/src/converters.pyx":686
+    /* "root_numpy/src/converters.pyx":683
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:             # <<<<<<<<<<<<<<
@@ -13856,13 +13799,13 @@ goto __pyx_L10_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  */
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
     goto __pyx_L9;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 683 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":689
+  /* "root_numpy/src/converters.pyx":686
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':             # <<<<<<<<<<<<<<
@@ -13870,22 +13813,22 @@ goto __pyx_L10_unpacking_failed;
  *     free(dims)
  */
 
-#line 689 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_kind); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 689, __pyx_L1_error)
+#line 686 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_kind); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 686, __pyx_L1_error)
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 686 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 689 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 689, __pyx_L1_error)
+#line 686 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 686, __pyx_L1_error)
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 686 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 686 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":690
+    /* "root_numpy/src/converters.pyx":687
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)             # <<<<<<<<<<<<<<
@@ -13893,28 +13836,28 @@ goto __pyx_L10_unpacking_failed;
  *     return conv
  */
 
-#line 690 "root_numpy/src/converters.pyx"
-    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 690, __pyx_L1_error)
+#line 687 "root_numpy/src/converters.pyx"
+    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 687, __pyx_L1_error)
 
-#line 690 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 690, __pyx_L1_error)
+#line 687 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 687, __pyx_L1_error)
 
-#line 690 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 690, __pyx_L1_error)
+#line 687 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 687, __pyx_L1_error)
 
-#line 690 "root_numpy/src/converters.pyx"
+#line 687 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 690 "root_numpy/src/converters.pyx"
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 690, __pyx_L1_error)
+#line 687 "root_numpy/src/converters.pyx"
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 687, __pyx_L1_error)
 
-#line 690 "root_numpy/src/converters.pyx"
+#line 687 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 690 "root_numpy/src/converters.pyx"
+#line 687 "root_numpy/src/converters.pyx"
     __pyx_v_conv = new __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(__pyx_v_tree, __pyx_t_13, __pyx_t_12, __pyx_t_8, 1, NULL);
 
-    /* "root_numpy/src/converters.pyx":689
+    /* "root_numpy/src/converters.pyx":686
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':             # <<<<<<<<<<<<<<
@@ -13922,35 +13865,35 @@ goto __pyx_L10_unpacking_failed;
  *     free(dims)
  */
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 686 "root_numpy/src/converters.pyx"
   }
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 686 "root_numpy/src/converters.pyx"
   __pyx_L9:;
 
-  /* "root_numpy/src/converters.pyx":691
+  /* "root_numpy/src/converters.pyx":688
  *     elif dtype.kind == 'S':
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  *     free(dims)             # <<<<<<<<<<<<<<
  *     return conv
  */
 
-#line 691 "root_numpy/src/converters.pyx"
+#line 688 "root_numpy/src/converters.pyx"
   free(__pyx_v_dims);
 
-  /* "root_numpy/src/converters.pyx":692
+  /* "root_numpy/src/converters.pyx":689
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  *     free(dims)
  *     return conv             # <<<<<<<<<<<<<<
  */
 
-#line 692 "root_numpy/src/converters.pyx"
+#line 689 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_v_conv;
 
-#line 692 "root_numpy/src/converters.pyx"
+#line 689 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":667
+  /* "root_numpy/src/converters.pyx":664
  * 
  * 
  * cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):             # <<<<<<<<<<<<<<
@@ -13958,58 +13901,58 @@ goto __pyx_L10_unpacking_failed;
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  */
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_11);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("_librootnumpy.find_np2root_converter", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_subdtype);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_shape);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_elembytes);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_roottype);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_dtype);
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 667 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
 }
 
 /* "root_numpy/src/tree.pyx":4
@@ -22922,7 +22865,7 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_subselection_branches); if (unlikely(!__pyx
         __pyx_t_30.type_code = __pyx_v_type_code;
 
 #line 325 "root_numpy/src/tree.pyx"
-        __pyx_t_29 = __pyx_f_13_librootnumpy_get_converter(__pyx_v_tleaf, &__pyx_t_30); 
+        __pyx_t_29 = __pyx_f_13_librootnumpy_get_converter(__pyx_v_tleaf, &__pyx_t_30); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 325, __pyx_L9_error)
 
 #line 325 "root_numpy/src/tree.pyx"
         __pyx_v_conv = __pyx_t_29;
@@ -27672,13 +27615,13 @@ __pyx_pf_13_librootnumpy_12root2array_fromfile(__pyx_self, __pyx_v_fnames, __pyx
 
 #line 527 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pf_13_librootnumpy_12root2array_fromfile(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_fnames, std::string __pyx_v_treename, PyObject *__pyx_v_branches, PyObject *__pyx_v_selection, PyObject *__pyx_v_object_selection, PyObject *__pyx_v_start, PyObject *__pyx_v_stop, PyObject *__pyx_v_step, bool __pyx_v_include_weight, std::string __pyx_v_weight_name, long __pyx_v_cache_size, bool __pyx_v_warn_missing_tree) {
-  TChain *__pyx_v_chain
-#line 527 "root_numpy/src/tree.pyx"
-;
-  TFile *__pyx_v_file
+  TFile *__pyx_v_rfile
 #line 527 "root_numpy/src/tree.pyx"
 ;
   TTree *__pyx_v_tree
+#line 527 "root_numpy/src/tree.pyx"
+;
+  TChain *__pyx_v_chain
 #line 527 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_fn = NULL
@@ -27772,450 +27715,528 @@ static PyObject *__pyx_pf_13_librootnumpy_12root2array_fromfile(CYTHON_UNUSED Py
   /* "root_numpy/src/tree.pyx":531
  *                         bool include_weight, string weight_name,
  *                         long cache_size, bool warn_missing_tree):
- *     cdef TChain* chain = NULL             # <<<<<<<<<<<<<<
- *     cdef TFile* file = NULL
+ *     cdef TFile* rfile = NULL             # <<<<<<<<<<<<<<
  *     cdef TTree* tree = NULL
+ *     cdef TChain* chain = new TChain(treename.c_str())
  */
 
 #line 531 "root_numpy/src/tree.pyx"
-  __pyx_v_chain = NULL;
+  __pyx_v_rfile = NULL;
 
   /* "root_numpy/src/tree.pyx":532
  *                         long cache_size, bool warn_missing_tree):
- *     cdef TChain* chain = NULL
- *     cdef TFile* file = NULL             # <<<<<<<<<<<<<<
- *     cdef TTree* tree = NULL
+ *     cdef TFile* rfile = NULL
+ *     cdef TTree* tree = NULL             # <<<<<<<<<<<<<<
+ *     cdef TChain* chain = new TChain(treename.c_str())
  *     try:
  */
 
 #line 532 "root_numpy/src/tree.pyx"
-  __pyx_v_file = NULL;
+  __pyx_v_tree = NULL;
 
   /* "root_numpy/src/tree.pyx":533
- *     cdef TChain* chain = NULL
- *     cdef TFile* file = NULL
- *     cdef TTree* tree = NULL             # <<<<<<<<<<<<<<
+ *     cdef TFile* rfile = NULL
+ *     cdef TTree* tree = NULL
+ *     cdef TChain* chain = new TChain(treename.c_str())             # <<<<<<<<<<<<<<
  *     try:
- *         chain = new TChain(treename.c_str())
+ *         for fn in fnames:
  */
 
 #line 533 "root_numpy/src/tree.pyx"
-  __pyx_v_tree = NULL;
+  __pyx_v_chain = new TChain(__pyx_v_treename.c_str());
 
   /* "root_numpy/src/tree.pyx":534
- *     cdef TFile* file = NULL
  *     cdef TTree* tree = NULL
+ *     cdef TChain* chain = new TChain(treename.c_str())
  *     try:             # <<<<<<<<<<<<<<
- *         chain = new TChain(treename.c_str())
  *         for fn in fnames:
+ *             if warn_missing_tree:
  */
 
 #line 534 "root_numpy/src/tree.pyx"
   /*try:*/ {
 
     /* "root_numpy/src/tree.pyx":535
- *     cdef TTree* tree = NULL
+ *     cdef TChain* chain = new TChain(treename.c_str())
  *     try:
- *         chain = new TChain(treename.c_str())             # <<<<<<<<<<<<<<
- *         for fn in fnames:
+ *         for fn in fnames:             # <<<<<<<<<<<<<<
  *             if warn_missing_tree:
+ *                 rfile = Open(fn, 'read')
  */
 
 #line 535 "root_numpy/src/tree.pyx"
-    __pyx_v_chain = new TChain(__pyx_v_treename.c_str());
-
-    /* "root_numpy/src/tree.pyx":536
- *     try:
- *         chain = new TChain(treename.c_str())
- *         for fn in fnames:             # <<<<<<<<<<<<<<
- *             if warn_missing_tree:
- *                 file = Open(fn, 'read')
- */
-
-#line 536 "root_numpy/src/tree.pyx"
     if (likely(PyList_CheckExact(__pyx_v_fnames)) || PyTuple_CheckExact(__pyx_v_fnames)) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __pyx_t_1 = __pyx_v_fnames; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __pyx_t_3 = NULL;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
     } else {
       __pyx_t_2 = -1; 
-#line 536 "root_numpy/src/tree.pyx"
-__pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+__pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 536 "root_numpy/src/tree.pyx"
-      __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+      __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
     }
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
     for (;;) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       if (likely(!__pyx_t_3)) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         if (likely(PyList_CheckExact(__pyx_t_1))) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 536 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #else
 
-#line 536 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           __Pyx_GOTREF(__pyx_t_4);
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #endif
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         } else {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 536 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #else
 
-#line 536 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           __Pyx_GOTREF(__pyx_t_4);
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           #endif
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         }
       } else 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
 {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         __pyx_t_4 = __pyx_t_3(__pyx_t_1);
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         if (unlikely(!__pyx_t_4)) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           PyObject* exc_type = PyErr_Occurred();
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           if (exc_type) {
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
             if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
 
-#line 536 "root_numpy/src/tree.pyx"
-            else __PYX_ERR(2, 536, __pyx_L4_error)
+#line 535 "root_numpy/src/tree.pyx"
+            else __PYX_ERR(2, 535, __pyx_L4_error)
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           }
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
           break;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         }
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_4);
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       }
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF_SET(__pyx_v_fn, __pyx_t_4);
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __pyx_t_4 = 0;
 
-      /* "root_numpy/src/tree.pyx":537
- *         chain = new TChain(treename.c_str())
+      /* "root_numpy/src/tree.pyx":536
+ *     try:
  *         for fn in fnames:
  *             if warn_missing_tree:             # <<<<<<<<<<<<<<
- *                 file = Open(fn, 'read')
- *                 if file == NULL:
+ *                 rfile = Open(fn, 'read')
+ *                 if rfile == NULL:
  */
 
-#line 537 "root_numpy/src/tree.pyx"
+#line 536 "root_numpy/src/tree.pyx"
       __pyx_t_5 = (__pyx_v_warn_missing_tree != 0);
 
-#line 537 "root_numpy/src/tree.pyx"
+#line 536 "root_numpy/src/tree.pyx"
       if (__pyx_t_5) {
 
-        /* "root_numpy/src/tree.pyx":538
+        /* "root_numpy/src/tree.pyx":537
  *         for fn in fnames:
  *             if warn_missing_tree:
- *                 file = Open(fn, 'read')             # <<<<<<<<<<<<<<
- *                 if file == NULL:
+ *                 rfile = Open(fn, 'read')             # <<<<<<<<<<<<<<
+ *                 if rfile == NULL:
  *                     raise IOError("cannot open file {0}".format(fn))
  */
 
-#line 538 "root_numpy/src/tree.pyx"
-        __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_fn); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(2, 538, __pyx_L4_error)
+#line 537 "root_numpy/src/tree.pyx"
+        __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_fn); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(2, 537, __pyx_L4_error)
 
-#line 538 "root_numpy/src/tree.pyx"
-        __pyx_v_file = TFile::Open(__pyx_t_6, ((const char *)"read"));
+#line 537 "root_numpy/src/tree.pyx"
+        __pyx_v_rfile = TFile::Open(__pyx_t_6, ((const char *)"read"));
 
-        /* "root_numpy/src/tree.pyx":539
+        /* "root_numpy/src/tree.pyx":538
  *             if warn_missing_tree:
- *                 file = Open(fn, 'read')
- *                 if file == NULL:             # <<<<<<<<<<<<<<
+ *                 rfile = Open(fn, 'read')
+ *                 if rfile == NULL:             # <<<<<<<<<<<<<<
  *                     raise IOError("cannot open file {0}".format(fn))
- *                 tree = <TTree*> file.Get(treename.c_str())
+ *                 tree = <TTree*> rfile.Get(treename.c_str())
  */
 
-#line 539 "root_numpy/src/tree.pyx"
-        __pyx_t_5 = ((__pyx_v_file == NULL) != 0);
+#line 538 "root_numpy/src/tree.pyx"
+        __pyx_t_5 = ((__pyx_v_rfile == NULL) != 0);
 
-#line 539 "root_numpy/src/tree.pyx"
+#line 538 "root_numpy/src/tree.pyx"
         if (__pyx_t_5) {
 
-          /* "root_numpy/src/tree.pyx":540
- *                 file = Open(fn, 'read')
- *                 if file == NULL:
+          /* "root_numpy/src/tree.pyx":539
+ *                 rfile = Open(fn, 'read')
+ *                 if rfile == NULL:
  *                     raise IOError("cannot open file {0}".format(fn))             # <<<<<<<<<<<<<<
- *                 tree = <TTree*> file.Get(treename.c_str())
+ *                 tree = <TTree*> rfile.Get(treename.c_str())
  *                 if tree == NULL:
  */
 
-#line 540 "root_numpy/src/tree.pyx"
-          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_cannot_open_file_0, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_7);
-
-#line 540 "root_numpy/src/tree.pyx"
-          __pyx_t_8 = NULL;
-
-#line 540 "root_numpy/src/tree.pyx"
-          if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_7))) {
-
-#line 540 "root_numpy/src/tree.pyx"
-            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-
-#line 540 "root_numpy/src/tree.pyx"
-            if (likely(__pyx_t_8)) {
-
-#line 540 "root_numpy/src/tree.pyx"
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-
-#line 540 "root_numpy/src/tree.pyx"
-              __Pyx_INCREF(__pyx_t_8);
-
-#line 540 "root_numpy/src/tree.pyx"
-              __Pyx_INCREF(function);
-
-#line 540 "root_numpy/src/tree.pyx"
-              __Pyx_DECREF_SET(__pyx_t_7, function);
-
-#line 540 "root_numpy/src/tree.pyx"
-            }
-
-#line 540 "root_numpy/src/tree.pyx"
-          }
-
-#line 540 "root_numpy/src/tree.pyx"
-          if (!__pyx_t_8) {
-
-#line 540 "root_numpy/src/tree.pyx"
-            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_fn); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_GOTREF(__pyx_t_4);
-
-#line 540 "root_numpy/src/tree.pyx"
-          } else {
-
-#line 540 "root_numpy/src/tree.pyx"
-            __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_GOTREF(__pyx_t_9);
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_INCREF(__pyx_v_fn);
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_GIVEREF(__pyx_v_fn);
-
-#line 540 "root_numpy/src/tree.pyx"
-            PyTuple_SET_ITEM(__pyx_t_9, 0+1, __pyx_v_fn);
-
-#line 540 "root_numpy/src/tree.pyx"
-            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_GOTREF(__pyx_t_4);
-
-#line 540 "root_numpy/src/tree.pyx"
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-
-#line 540 "root_numpy/src/tree.pyx"
-          }
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-#line 540 "root_numpy/src/tree.pyx"
-          __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_7);
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_t_4);
-
-#line 540 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
-
-#line 540 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = 0;
-
-#line 540 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 540, __pyx_L4_error)
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_4);
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_Raise(__pyx_t_4, 0, 0, 0);
-
-#line 540 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 540 "root_numpy/src/tree.pyx"
-          __PYX_ERR(2, 540, __pyx_L4_error)
-
-          /* "root_numpy/src/tree.pyx":539
- *             if warn_missing_tree:
- *                 file = Open(fn, 'read')
- *                 if file == NULL:             # <<<<<<<<<<<<<<
- *                     raise IOError("cannot open file {0}".format(fn))
- *                 tree = <TTree*> file.Get(treename.c_str())
- */
+#line 539 "root_numpy/src/tree.pyx"
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_cannot_open_file_0, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 539, __pyx_L4_error)
 
 #line 539 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_7);
+
+#line 539 "root_numpy/src/tree.pyx"
+          __pyx_t_8 = NULL;
+
+#line 539 "root_numpy/src/tree.pyx"
+          if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_7))) {
+
+#line 539 "root_numpy/src/tree.pyx"
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+
+#line 539 "root_numpy/src/tree.pyx"
+            if (likely(__pyx_t_8)) {
+
+#line 539 "root_numpy/src/tree.pyx"
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+
+#line 539 "root_numpy/src/tree.pyx"
+              __Pyx_INCREF(__pyx_t_8);
+
+#line 539 "root_numpy/src/tree.pyx"
+              __Pyx_INCREF(function);
+
+#line 539 "root_numpy/src/tree.pyx"
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+
+#line 539 "root_numpy/src/tree.pyx"
+            }
+
+#line 539 "root_numpy/src/tree.pyx"
+          }
+
+#line 539 "root_numpy/src/tree.pyx"
+          if (!__pyx_t_8) {
+
+#line 539 "root_numpy/src/tree.pyx"
+            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_fn); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 539, __pyx_L4_error)
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_GOTREF(__pyx_t_4);
+
+#line 539 "root_numpy/src/tree.pyx"
+          } else {
+
+#line 539 "root_numpy/src/tree.pyx"
+            __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 539, __pyx_L4_error)
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_GOTREF(__pyx_t_9);
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_INCREF(__pyx_v_fn);
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_GIVEREF(__pyx_v_fn);
+
+#line 539 "root_numpy/src/tree.pyx"
+            PyTuple_SET_ITEM(__pyx_t_9, 0+1, __pyx_v_fn);
+
+#line 539 "root_numpy/src/tree.pyx"
+            __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 539, __pyx_L4_error)
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_GOTREF(__pyx_t_4);
+
+#line 539 "root_numpy/src/tree.pyx"
+            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+#line 539 "root_numpy/src/tree.pyx"
+          }
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+#line 539 "root_numpy/src/tree.pyx"
+          __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 539, __pyx_L4_error)
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_7);
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_GIVEREF(__pyx_t_4);
+
+#line 539 "root_numpy/src/tree.pyx"
+          PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
+
+#line 539 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = 0;
+
+#line 539 "root_numpy/src/tree.pyx"
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 539, __pyx_L4_error)
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_4);
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+
+#line 539 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 539 "root_numpy/src/tree.pyx"
+          __PYX_ERR(2, 539, __pyx_L4_error)
+
+          /* "root_numpy/src/tree.pyx":538
+ *             if warn_missing_tree:
+ *                 rfile = Open(fn, 'read')
+ *                 if rfile == NULL:             # <<<<<<<<<<<<<<
+ *                     raise IOError("cannot open file {0}".format(fn))
+ *                 tree = <TTree*> rfile.Get(treename.c_str())
+ */
+
+#line 538 "root_numpy/src/tree.pyx"
         }
 
-        /* "root_numpy/src/tree.pyx":541
- *                 if file == NULL:
+        /* "root_numpy/src/tree.pyx":540
+ *                 if rfile == NULL:
  *                     raise IOError("cannot open file {0}".format(fn))
- *                 tree = <TTree*> file.Get(treename.c_str())             # <<<<<<<<<<<<<<
+ *                 tree = <TTree*> rfile.Get(treename.c_str())             # <<<<<<<<<<<<<<
  *                 if tree == NULL:
  *                     # skip this file
  */
 
-#line 541 "root_numpy/src/tree.pyx"
-        __pyx_v_tree = ((TTree *)__pyx_v_file->Get(__pyx_v_treename.c_str()));
+#line 540 "root_numpy/src/tree.pyx"
+        __pyx_v_tree = ((TTree *)__pyx_v_rfile->Get(__pyx_v_treename.c_str()));
 
-        /* "root_numpy/src/tree.pyx":542
+        /* "root_numpy/src/tree.pyx":541
  *                     raise IOError("cannot open file {0}".format(fn))
- *                 tree = <TTree*> file.Get(treename.c_str())
+ *                 tree = <TTree*> rfile.Get(treename.c_str())
  *                 if tree == NULL:             # <<<<<<<<<<<<<<
  *                     # skip this file
  *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
  */
 
-#line 542 "root_numpy/src/tree.pyx"
+#line 541 "root_numpy/src/tree.pyx"
         __pyx_t_5 = ((__pyx_v_tree == NULL) != 0);
 
-#line 542 "root_numpy/src/tree.pyx"
+#line 541 "root_numpy/src/tree.pyx"
         if (__pyx_t_5) {
 
-          /* "root_numpy/src/tree.pyx":544
+          /* "root_numpy/src/tree.pyx":543
  *                 if tree == NULL:
  *                     # skip this file
  *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),             # <<<<<<<<<<<<<<
  *                                   RuntimeWarning)
- *                     file.Close()
+ *                     rfile.Close()
+ */
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_warnings); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_7);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_warn); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_9);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_tree_0_not_found_in_1, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_8);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_10);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_11 = NULL;
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_12 = 0;
+
+#line 543 "root_numpy/src/tree.pyx"
+          if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_8))) {
+
+#line 543 "root_numpy/src/tree.pyx"
+            __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_8);
+
+#line 543 "root_numpy/src/tree.pyx"
+            if (likely(__pyx_t_11)) {
+
+#line 543 "root_numpy/src/tree.pyx"
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+
+#line 543 "root_numpy/src/tree.pyx"
+              __Pyx_INCREF(__pyx_t_11);
+
+#line 543 "root_numpy/src/tree.pyx"
+              __Pyx_INCREF(function);
+
+#line 543 "root_numpy/src/tree.pyx"
+              __Pyx_DECREF_SET(__pyx_t_8, function);
+
+#line 543 "root_numpy/src/tree.pyx"
+              __pyx_t_12 = 1;
+
+#line 543 "root_numpy/src/tree.pyx"
+            }
+
+#line 543 "root_numpy/src/tree.pyx"
+          }
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_13);
+
+#line 543 "root_numpy/src/tree.pyx"
+          if (__pyx_t_11) {
+
+#line 543 "root_numpy/src/tree.pyx"
+            __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
+
+#line 543 "root_numpy/src/tree.pyx"
+          }
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GIVEREF(__pyx_t_10);
+
+#line 543 "root_numpy/src/tree.pyx"
+          PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_t_10);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_INCREF(__pyx_v_fn);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GIVEREF(__pyx_v_fn);
+
+#line 543 "root_numpy/src/tree.pyx"
+          PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_v_fn);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_10 = 0;
+
+#line 543 "root_numpy/src/tree.pyx"
+          __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 543, __pyx_L4_error)
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_GOTREF(__pyx_t_7);
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+
+#line 543 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+          /* "root_numpy/src/tree.pyx":544
+ *                     # skip this file
+ *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
+ *                                   RuntimeWarning)             # <<<<<<<<<<<<<<
+ *                     rfile.Close()
+ *                     del rfile
  */
 
 #line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_warnings); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_7);
-
-#line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_warn); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_9);
-
-#line 544 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-#line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_tree_0_not_found_in_1, __pyx_n_s_format); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_8);
-
-#line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_10);
-
-#line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_11 = NULL;
+          __pyx_t_8 = NULL;
 
 #line 544 "root_numpy/src/tree.pyx"
           __pyx_t_12 = 0;
 
 #line 544 "root_numpy/src/tree.pyx"
-          if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_8))) {
+          if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_9))) {
 
 #line 544 "root_numpy/src/tree.pyx"
-            __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_8);
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_9);
 
 #line 544 "root_numpy/src/tree.pyx"
-            if (likely(__pyx_t_11)) {
+            if (likely(__pyx_t_8)) {
 
 #line 544 "root_numpy/src/tree.pyx"
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
 
 #line 544 "root_numpy/src/tree.pyx"
-              __Pyx_INCREF(__pyx_t_11);
+              __Pyx_INCREF(__pyx_t_8);
 
 #line 544 "root_numpy/src/tree.pyx"
               __Pyx_INCREF(function);
 
 #line 544 "root_numpy/src/tree.pyx"
-              __Pyx_DECREF_SET(__pyx_t_8, function);
+              __Pyx_DECREF_SET(__pyx_t_9, function);
 
 #line 544 "root_numpy/src/tree.pyx"
               __pyx_t_12 = 1;
@@ -28227,181 +28248,103 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
           }
 
 #line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 544, __pyx_L4_error)
+          __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 543, __pyx_L4_error)
 
 #line 544 "root_numpy/src/tree.pyx"
           __Pyx_GOTREF(__pyx_t_13);
 
 #line 544 "root_numpy/src/tree.pyx"
-          if (__pyx_t_11) {
+          if (__pyx_t_8) {
 
 #line 544 "root_numpy/src/tree.pyx"
-            __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
+            __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_8); __pyx_t_8 = NULL;
 
 #line 544 "root_numpy/src/tree.pyx"
           }
 
 #line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_t_10);
+          __Pyx_GIVEREF(__pyx_t_7);
 
 #line 544 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_t_10);
+          PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_t_7);
 
 #line 544 "root_numpy/src/tree.pyx"
-          __Pyx_INCREF(__pyx_v_fn);
+          __Pyx_INCREF(__pyx_builtin_RuntimeWarning);
 
 #line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_v_fn);
+          __Pyx_GIVEREF(__pyx_builtin_RuntimeWarning);
 
 #line 544 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_v_fn);
+          PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_builtin_RuntimeWarning);
 
 #line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_10 = 0;
+          __pyx_t_7 = 0;
 
 #line 544 "root_numpy/src/tree.pyx"
-          __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 544, __pyx_L4_error)
+          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_13, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 543, __pyx_L4_error)
 
 #line 544 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_7);
+          __Pyx_GOTREF(__pyx_t_4);
 
 #line 544 "root_numpy/src/tree.pyx"
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
 #line 544 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+#line 544 "root_numpy/src/tree.pyx"
+          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
           /* "root_numpy/src/tree.pyx":545
- *                     # skip this file
  *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
- *                                   RuntimeWarning)             # <<<<<<<<<<<<<<
- *                     file.Close()
+ *                                   RuntimeWarning)
+ *                     rfile.Close()             # <<<<<<<<<<<<<<
+ *                     del rfile
  *                     continue
  */
 
 #line 545 "root_numpy/src/tree.pyx"
-          __pyx_t_8 = NULL;
-
-#line 545 "root_numpy/src/tree.pyx"
-          __pyx_t_12 = 0;
-
-#line 545 "root_numpy/src/tree.pyx"
-          if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_9))) {
-
-#line 545 "root_numpy/src/tree.pyx"
-            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_9);
-
-#line 545 "root_numpy/src/tree.pyx"
-            if (likely(__pyx_t_8)) {
-
-#line 545 "root_numpy/src/tree.pyx"
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
-
-#line 545 "root_numpy/src/tree.pyx"
-              __Pyx_INCREF(__pyx_t_8);
-
-#line 545 "root_numpy/src/tree.pyx"
-              __Pyx_INCREF(function);
-
-#line 545 "root_numpy/src/tree.pyx"
-              __Pyx_DECREF_SET(__pyx_t_9, function);
-
-#line 545 "root_numpy/src/tree.pyx"
-              __pyx_t_12 = 1;
-
-#line 545 "root_numpy/src/tree.pyx"
-            }
-
-#line 545 "root_numpy/src/tree.pyx"
-          }
-
-#line 545 "root_numpy/src/tree.pyx"
-          __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_13);
-
-#line 545 "root_numpy/src/tree.pyx"
-          if (__pyx_t_8) {
-
-#line 545 "root_numpy/src/tree.pyx"
-            __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_8); __pyx_t_8 = NULL;
-
-#line 545 "root_numpy/src/tree.pyx"
-          }
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_t_7);
-
-#line 545 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_t_7);
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_INCREF(__pyx_builtin_RuntimeWarning);
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_GIVEREF(__pyx_builtin_RuntimeWarning);
-
-#line 545 "root_numpy/src/tree.pyx"
-          PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_builtin_RuntimeWarning);
-
-#line 545 "root_numpy/src/tree.pyx"
-          __pyx_t_7 = 0;
-
-#line 545 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_13, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 544, __pyx_L4_error)
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_GOTREF(__pyx_t_4);
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-
-#line 545 "root_numpy/src/tree.pyx"
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_v_rfile->Close();
 
           /* "root_numpy/src/tree.pyx":546
- *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
  *                                   RuntimeWarning)
- *                     file.Close()             # <<<<<<<<<<<<<<
+ *                     rfile.Close()
+ *                     del rfile             # <<<<<<<<<<<<<<
  *                     continue
  *                 del tree
  */
 
 #line 546 "root_numpy/src/tree.pyx"
-          __pyx_v_file->Close();
+          delete __pyx_v_rfile;
 
           /* "root_numpy/src/tree.pyx":547
- *                                   RuntimeWarning)
- *                     file.Close()
+ *                     rfile.Close()
+ *                     del rfile
  *                     continue             # <<<<<<<<<<<<<<
  *                 del tree
- *                 file.Close()
+ *                 rfile.Close()
  */
 
 #line 547 "root_numpy/src/tree.pyx"
           goto __pyx_L6_continue;
 
-          /* "root_numpy/src/tree.pyx":542
+          /* "root_numpy/src/tree.pyx":541
  *                     raise IOError("cannot open file {0}".format(fn))
- *                 tree = <TTree*> file.Get(treename.c_str())
+ *                 tree = <TTree*> rfile.Get(treename.c_str())
  *                 if tree == NULL:             # <<<<<<<<<<<<<<
  *                     # skip this file
  *                     warnings.warn("tree '{0}' not found in {1}".format(treename, fn),
  */
 
-#line 542 "root_numpy/src/tree.pyx"
+#line 541 "root_numpy/src/tree.pyx"
         }
 
         /* "root_numpy/src/tree.pyx":548
- *                     file.Close()
+ *                     del rfile
  *                     continue
  *                 del tree             # <<<<<<<<<<<<<<
- *                 file.Close()
- *             if chain.Add(fn, -1) == 0:
+ *                 rfile.Close()
+ *                 del rfile
  */
 
 #line 548 "root_numpy/src/tree.pyx"
@@ -28410,57 +28353,68 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
         /* "root_numpy/src/tree.pyx":549
  *                     continue
  *                 del tree
- *                 file.Close()             # <<<<<<<<<<<<<<
+ *                 rfile.Close()             # <<<<<<<<<<<<<<
+ *                 del rfile
+ *             if chain.Add(fn, -1) == 0:
+ */
+
+#line 549 "root_numpy/src/tree.pyx"
+        __pyx_v_rfile->Close();
+
+        /* "root_numpy/src/tree.pyx":550
+ *                 del tree
+ *                 rfile.Close()
+ *                 del rfile             # <<<<<<<<<<<<<<
  *             if chain.Add(fn, -1) == 0:
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  */
 
-#line 549 "root_numpy/src/tree.pyx"
-        __pyx_v_file->Close();
+#line 550 "root_numpy/src/tree.pyx"
+        delete __pyx_v_rfile;
 
-        /* "root_numpy/src/tree.pyx":537
- *         chain = new TChain(treename.c_str())
+        /* "root_numpy/src/tree.pyx":536
+ *     try:
  *         for fn in fnames:
  *             if warn_missing_tree:             # <<<<<<<<<<<<<<
- *                 file = Open(fn, 'read')
- *                 if file == NULL:
+ *                 rfile = Open(fn, 'read')
+ *                 if rfile == NULL:
  */
 
-#line 537 "root_numpy/src/tree.pyx"
+#line 536 "root_numpy/src/tree.pyx"
       }
 
-      /* "root_numpy/src/tree.pyx":550
- *                 del tree
- *                 file.Close()
+      /* "root_numpy/src/tree.pyx":551
+ *                 rfile.Close()
+ *                 del rfile
  *             if chain.Add(fn, -1) == 0:             # <<<<<<<<<<<<<<
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  *                     treename, fn))
  */
 
-#line 550 "root_numpy/src/tree.pyx"
-      __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_fn); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(2, 550, __pyx_L4_error)
+#line 551 "root_numpy/src/tree.pyx"
+      __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_fn); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(2, 551, __pyx_L4_error)
 
-#line 550 "root_numpy/src/tree.pyx"
+#line 551 "root_numpy/src/tree.pyx"
       __pyx_t_5 = ((__pyx_v_chain->Add(__pyx_t_6, -1LL) == 0) != 0);
 
-#line 550 "root_numpy/src/tree.pyx"
+#line 551 "root_numpy/src/tree.pyx"
       if (__pyx_t_5) {
 
-        /* "root_numpy/src/tree.pyx":551
- *                 file.Close()
+        /* "root_numpy/src/tree.pyx":552
+ *                 del rfile
  *             if chain.Add(fn, -1) == 0:
  *                 raise IOError("unable to access tree '{0}' in {1}".format(             # <<<<<<<<<<<<<<
  *                     treename, fn))
  *         if chain.GetNtrees() == 0:
  */
 
-#line 551 "root_numpy/src/tree.pyx"
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_unable_to_access_tree_0_in_1, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 551, __pyx_L4_error)
+#line 552 "root_numpy/src/tree.pyx"
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_unable_to_access_tree_0_in_1, __pyx_n_s_format); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 552, __pyx_L4_error)
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_9);
 
-        /* "root_numpy/src/tree.pyx":552
+        /* "root_numpy/src/tree.pyx":553
  *             if chain.Add(fn, -1) == 0:
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  *                     treename, fn))             # <<<<<<<<<<<<<<
@@ -28468,163 +28422,163 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             raise IOError("none of the input files contain "
  */
 
-#line 552 "root_numpy/src/tree.pyx"
-        __pyx_t_13 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 552, __pyx_L4_error)
+#line 553 "root_numpy/src/tree.pyx"
+        __pyx_t_13 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 553, __pyx_L4_error)
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_13);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __pyx_t_7 = NULL;
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __pyx_t_12 = 0;
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_9))) {
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
           __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_9);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
           if (likely(__pyx_t_7)) {
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
             PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
             __Pyx_INCREF(__pyx_t_7);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
             __Pyx_INCREF(function);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
             __Pyx_DECREF_SET(__pyx_t_9, function);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
             __pyx_t_12 = 1;
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
           }
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         }
 
-#line 552 "root_numpy/src/tree.pyx"
-        __pyx_t_8 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 551, __pyx_L4_error)
+#line 553 "root_numpy/src/tree.pyx"
+        __pyx_t_8 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 552, __pyx_L4_error)
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_8);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         if (__pyx_t_7) {
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
           __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         }
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_13);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_12, __pyx_t_13);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_INCREF(__pyx_v_fn);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_v_fn);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_12, __pyx_v_fn);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __pyx_t_13 = 0;
 
-#line 552 "root_numpy/src/tree.pyx"
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 551, __pyx_L4_error)
+#line 553 "root_numpy/src/tree.pyx"
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 552, __pyx_L4_error)
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_4);
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 552 "root_numpy/src/tree.pyx"
+#line 553 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-        /* "root_numpy/src/tree.pyx":551
- *                 file.Close()
+        /* "root_numpy/src/tree.pyx":552
+ *                 del rfile
  *             if chain.Add(fn, -1) == 0:
  *                 raise IOError("unable to access tree '{0}' in {1}".format(             # <<<<<<<<<<<<<<
  *                     treename, fn))
  *         if chain.GetNtrees() == 0:
  */
 
-#line 551 "root_numpy/src/tree.pyx"
-        __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 551, __pyx_L4_error)
+#line 552 "root_numpy/src/tree.pyx"
+        __pyx_t_9 = PyTuple_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 552, __pyx_L4_error)
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_9);
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_4);
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_4);
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __pyx_t_4 = 0;
 
-#line 551 "root_numpy/src/tree.pyx"
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 551, __pyx_L4_error)
+#line 552 "root_numpy/src/tree.pyx"
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_9, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 552, __pyx_L4_error)
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_4);
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
 
-#line 551 "root_numpy/src/tree.pyx"
+#line 552 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 551 "root_numpy/src/tree.pyx"
-        __PYX_ERR(2, 551, __pyx_L4_error)
+#line 552 "root_numpy/src/tree.pyx"
+        __PYX_ERR(2, 552, __pyx_L4_error)
 
-        /* "root_numpy/src/tree.pyx":550
- *                 del tree
- *                 file.Close()
+        /* "root_numpy/src/tree.pyx":551
+ *                 rfile.Close()
+ *                 del rfile
  *             if chain.Add(fn, -1) == 0:             # <<<<<<<<<<<<<<
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  *                     treename, fn))
  */
 
-#line 550 "root_numpy/src/tree.pyx"
+#line 551 "root_numpy/src/tree.pyx"
       }
 
-      /* "root_numpy/src/tree.pyx":536
+      /* "root_numpy/src/tree.pyx":535
+ *     cdef TChain* chain = new TChain(treename.c_str())
  *     try:
- *         chain = new TChain(treename.c_str())
  *         for fn in fnames:             # <<<<<<<<<<<<<<
  *             if warn_missing_tree:
- *                 file = Open(fn, 'read')
+ *                 rfile = Open(fn, 'read')
  */
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
       __pyx_L6_continue:;
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
     }
 
-#line 536 "root_numpy/src/tree.pyx"
+#line 535 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "root_numpy/src/tree.pyx":553
+    /* "root_numpy/src/tree.pyx":554
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  *                     treename, fn))
  *         if chain.GetNtrees() == 0:             # <<<<<<<<<<<<<<
@@ -28632,13 +28586,13 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *                           "the requested tree '{0}'".format(treename))
  */
 
-#line 553 "root_numpy/src/tree.pyx"
+#line 554 "root_numpy/src/tree.pyx"
     __pyx_t_5 = ((__pyx_v_chain->GetNtrees() == 0) != 0);
 
-#line 553 "root_numpy/src/tree.pyx"
+#line 554 "root_numpy/src/tree.pyx"
     if (__pyx_t_5) {
 
-      /* "root_numpy/src/tree.pyx":555
+      /* "root_numpy/src/tree.pyx":556
  *         if chain.GetNtrees() == 0:
  *             raise IOError("none of the input files contain "
  *                           "the requested tree '{0}'".format(treename))             # <<<<<<<<<<<<<<
@@ -28646,97 +28600,97 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             <TTree*> chain, True, branches,
  */
 
-#line 555 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_none_of_the_input_files_contain, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 555, __pyx_L4_error)
+#line 556 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_none_of_the_input_files_contain, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 556, __pyx_L4_error)
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 555 "root_numpy/src/tree.pyx"
-      __pyx_t_9 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 555, __pyx_L4_error)
+#line 556 "root_numpy/src/tree.pyx"
+      __pyx_t_9 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_treename); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 556, __pyx_L4_error)
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       __pyx_t_8 = NULL;
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_4))) {
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_4);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         if (likely(__pyx_t_8)) {
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
           __Pyx_INCREF(__pyx_t_8);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
           __Pyx_INCREF(function);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
           __Pyx_DECREF_SET(__pyx_t_4, function);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         }
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       }
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       if (!__pyx_t_8) {
 
-#line 555 "root_numpy/src/tree.pyx"
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 555, __pyx_L4_error)
+#line 556 "root_numpy/src/tree.pyx"
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 556, __pyx_L4_error)
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       } else {
 
-#line 555 "root_numpy/src/tree.pyx"
-        __pyx_t_13 = PyTuple_New(1+1); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 555, __pyx_L4_error)
+#line 556 "root_numpy/src/tree.pyx"
+        __pyx_t_13 = PyTuple_New(1+1); if (unlikely(!__pyx_t_13)) __PYX_ERR(2, 556, __pyx_L4_error)
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_13);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_8); __pyx_t_8 = NULL;
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_9);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         PyTuple_SET_ITEM(__pyx_t_13, 0+1, __pyx_t_9);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __pyx_t_9 = 0;
 
-#line 555 "root_numpy/src/tree.pyx"
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 555, __pyx_L4_error)
+#line 556 "root_numpy/src/tree.pyx"
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 556, __pyx_L4_error)
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       }
 
-#line 555 "root_numpy/src/tree.pyx"
+#line 556 "root_numpy/src/tree.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "root_numpy/src/tree.pyx":554
+      /* "root_numpy/src/tree.pyx":555
  *                     treename, fn))
  *         if chain.GetNtrees() == 0:
  *             raise IOError("none of the input files contain "             # <<<<<<<<<<<<<<
@@ -28744,40 +28698,40 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *         ret = tree2array(
  */
 
-#line 554 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 554, __pyx_L4_error)
+#line 555 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 555, __pyx_L4_error)
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_GIVEREF(__pyx_t_1);
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __pyx_t_1 = 0;
 
-#line 554 "root_numpy/src/tree.pyx"
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 554, __pyx_L4_error)
+#line 555 "root_numpy/src/tree.pyx"
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 555, __pyx_L4_error)
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
 
-#line 554 "root_numpy/src/tree.pyx"
+#line 555 "root_numpy/src/tree.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 554 "root_numpy/src/tree.pyx"
-      __PYX_ERR(2, 554, __pyx_L4_error)
+#line 555 "root_numpy/src/tree.pyx"
+      __PYX_ERR(2, 555, __pyx_L4_error)
 
-      /* "root_numpy/src/tree.pyx":553
+      /* "root_numpy/src/tree.pyx":554
  *                 raise IOError("unable to access tree '{0}' in {1}".format(
  *                     treename, fn))
  *         if chain.GetNtrees() == 0:             # <<<<<<<<<<<<<<
@@ -28785,10 +28739,10 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *                           "the requested tree '{0}'".format(treename))
  */
 
-#line 553 "root_numpy/src/tree.pyx"
+#line 554 "root_numpy/src/tree.pyx"
     }
 
-    /* "root_numpy/src/tree.pyx":558
+    /* "root_numpy/src/tree.pyx":559
  *         ret = tree2array(
  *             <TTree*> chain, True, branches,
  *             selection or '', object_selection,             # <<<<<<<<<<<<<<
@@ -28796,37 +28750,37 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             include_weight, weight_name, cache_size)
  */
 
-#line 558 "root_numpy/src/tree.pyx"
-    __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_v_selection); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(2, 558, __pyx_L4_error)
+#line 559 "root_numpy/src/tree.pyx"
+    __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_v_selection); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(2, 559, __pyx_L4_error)
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
     if (!__pyx_t_5) {
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
     } else {
 
-#line 558 "root_numpy/src/tree.pyx"
-      __pyx_t_15 = __pyx_convert_string_from_py_std__in_string(__pyx_v_selection); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 558, __pyx_L4_error)
+#line 559 "root_numpy/src/tree.pyx"
+      __pyx_t_15 = __pyx_convert_string_from_py_std__in_string(__pyx_v_selection); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 559, __pyx_L4_error)
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
       __pyx_t_14 = __pyx_t_15;
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
       goto __pyx_L13_bool_binop_done;
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
     }
 
-#line 558 "root_numpy/src/tree.pyx"
-    __pyx_t_15 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_s__15); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 558, __pyx_L4_error)
+#line 559 "root_numpy/src/tree.pyx"
+    __pyx_t_15 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_s__15); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 559, __pyx_L4_error)
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
     __pyx_t_14 = __pyx_t_15;
 
-#line 558 "root_numpy/src/tree.pyx"
+#line 559 "root_numpy/src/tree.pyx"
     __pyx_L13_bool_binop_done:;
 
-    /* "root_numpy/src/tree.pyx":556
+    /* "root_numpy/src/tree.pyx":557
  *             raise IOError("none of the input files contain "
  *                           "the requested tree '{0}'".format(treename))
  *         ret = tree2array(             # <<<<<<<<<<<<<<
@@ -28834,22 +28788,22 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             selection or '', object_selection,
  */
 
-#line 556 "root_numpy/src/tree.pyx"
-    __pyx_t_1 = __pyx_f_13_librootnumpy_tree2array(((TTree *)__pyx_v_chain), 1, __pyx_v_branches, __pyx_t_14, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 556, __pyx_L4_error)
+#line 557 "root_numpy/src/tree.pyx"
+    __pyx_t_1 = __pyx_f_13_librootnumpy_tree2array(((TTree *)__pyx_v_chain), 1, __pyx_v_branches, __pyx_t_14, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 557, __pyx_L4_error)
 
-#line 556 "root_numpy/src/tree.pyx"
+#line 557 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 556 "root_numpy/src/tree.pyx"
+#line 557 "root_numpy/src/tree.pyx"
     __pyx_v_ret = __pyx_t_1;
 
-#line 556 "root_numpy/src/tree.pyx"
+#line 557 "root_numpy/src/tree.pyx"
     __pyx_t_1 = 0;
 
-#line 556 "root_numpy/src/tree.pyx"
+#line 557 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":562
+  /* "root_numpy/src/tree.pyx":563
  *             include_weight, weight_name, cache_size)
  *     finally:
  *         del chain             # <<<<<<<<<<<<<<
@@ -28857,148 +28811,148 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  * 
  */
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
   /*finally:*/ {
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
     /*normal exit:*/{
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       delete __pyx_v_chain;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       goto __pyx_L5;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
     }
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
     /*exception exit:*/{
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_declare
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __pyx_L4_error:;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       if (PY_MAJOR_VERSION >= 3) __Pyx_ExceptionSwap(&__pyx_t_22, &__pyx_t_23, &__pyx_t_24);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       if ((PY_MAJOR_VERSION < 3) || unlikely(__Pyx_GetException(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21) < 0)) __Pyx_ErrFetch(&__pyx_t_19, &__pyx_t_20, &__pyx_t_21);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_19);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_20);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_21);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_22);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_23);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_24);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __pyx_t_16 = __pyx_lineno; __pyx_t_17 = __pyx_clineno; __pyx_t_18 = __pyx_filename;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       {
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
         delete __pyx_v_chain;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       }
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       if (PY_MAJOR_VERSION >= 3) {
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_22);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_23);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_24);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
         __Pyx_ExceptionReset(__pyx_t_22, __pyx_t_23, __pyx_t_24);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       }
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_19);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_20);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_21);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __Pyx_ErrRestore(__pyx_t_19, __pyx_t_20, __pyx_t_21);
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __pyx_t_19 = 0; __pyx_t_20 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0; __pyx_t_24 = 0;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       __pyx_lineno = __pyx_t_16; __pyx_clineno = __pyx_t_17; __pyx_filename = __pyx_t_18;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
       goto __pyx_L1_error;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
     }
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
     __pyx_L5:;
 
-#line 562 "root_numpy/src/tree.pyx"
+#line 563 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":563
+  /* "root_numpy/src/tree.pyx":564
  *     finally:
  *         del chain
  *     return ret             # <<<<<<<<<<<<<<
@@ -29006,16 +28960,16 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  * 
  */
 
-#line 563 "root_numpy/src/tree.pyx"
+#line 564 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 563 "root_numpy/src/tree.pyx"
+#line 564 "root_numpy/src/tree.pyx"
   __Pyx_INCREF(__pyx_v_ret);
 
-#line 563 "root_numpy/src/tree.pyx"
+#line 564 "root_numpy/src/tree.pyx"
   __pyx_r = __pyx_v_ret;
 
-#line 563 "root_numpy/src/tree.pyx"
+#line 564 "root_numpy/src/tree.pyx"
   goto __pyx_L0;
 
   /* "root_numpy/src/tree.pyx":527
@@ -29086,7 +29040,7 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
 #line 527 "root_numpy/src/tree.pyx"
 }
 
-/* "root_numpy/src/tree.pyx":566
+/* "root_numpy/src/tree.pyx":567
  * 
  * 
  * def root2array_fromtree(tree, branches, selection, object_selection,             # <<<<<<<<<<<<<<
@@ -29094,433 +29048,433 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *                         bool include_weight, string weight_name,
  */
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 /* Python wrapper */
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_15root2array_fromtree(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyMethodDef __pyx_mdef_13_librootnumpy_15root2array_fromtree = 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 {"root2array_fromtree", (PyCFunction)__pyx_pw_13_librootnumpy_15root2array_fromtree, METH_VARARGS|METH_KEYWORDS, 0};
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_15root2array_fromtree(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_tree = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_branches = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_selection = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_object_selection = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_start = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_stop = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_step = 0
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   bool __pyx_v_include_weight
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   std::string __pyx_v_weight_name
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
   long __pyx_v_cache_size
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = 0;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("root2array_fromtree (wrapper)", 0);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   {
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_tree,&__pyx_n_s_branches,&__pyx_n_s_selection,&__pyx_n_s_object_selection,&__pyx_n_s_start,&__pyx_n_s_stop,&__pyx_n_s_step,&__pyx_n_s_include_weight,&__pyx_n_s_weight_name,&__pyx_n_s_cache_size,0};
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     PyObject* values[10] = {0,0,0,0,0,0,0,0,0,0};
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     if (unlikely(__pyx_kwds)) {
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       Py_ssize_t kw_args;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       switch (pos_args) {
         case 10: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
         case  9: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
         case  8: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
         case  7: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
         case  6: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
         case  5: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
         case  4: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  0: break;
         default: 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       kw_args = PyDict_Size(__pyx_kwds);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       switch (pos_args) {
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  0:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_tree)) != 0)) kw_args--;
         else 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  1:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_branches)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 1); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  2:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_selection)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 2); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  3:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_object_selection)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 3); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  4:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_start)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 4); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  5:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_stop)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 5); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  6:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_step)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 6); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  7:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_include_weight)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 7); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  8:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[8] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_weight_name)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 8); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         case  9:
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         if (likely((values[9] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_cache_size)) != 0)) kw_args--;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, 9); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
         }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       if (unlikely(kw_args > 0)) {
 
-#line 566 "root_numpy/src/tree.pyx"
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "root2array_fromtree") < 0)) __PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "root2array_fromtree") < 0)) __PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     } else if (PyTuple_GET_SIZE(__pyx_args) != 10) {
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       goto __pyx_L5_argtuple_error;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     } else {
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
       values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_tree = values[0];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_branches = values[1];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_selection = values[2];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_object_selection = values[3];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_start = values[4];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_stop = values[5];
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
     __pyx_v_step = values[6];
 
-#line 566 "root_numpy/src/tree.pyx"
-    __pyx_v_include_weight = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_include_weight == (bool)-1) && PyErr_Occurred())) __PYX_ERR(2, 568, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+    __pyx_v_include_weight = __Pyx_PyObject_IsTrue(values[7]); if (unlikely((__pyx_v_include_weight == (bool)-1) && PyErr_Occurred())) __PYX_ERR(2, 569, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
-    __pyx_v_weight_name = __pyx_convert_string_from_py_std__in_string(values[8]); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 568, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+    __pyx_v_weight_name = __pyx_convert_string_from_py_std__in_string(values[8]); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 569, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
-    __pyx_v_cache_size = __Pyx_PyInt_As_long(values[9]); if (unlikely((__pyx_v_cache_size == (long)-1) && PyErr_Occurred())) __PYX_ERR(2, 569, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+    __pyx_v_cache_size = __Pyx_PyInt_As_long(values[9]); if (unlikely((__pyx_v_cache_size == (long)-1) && PyErr_Occurred())) __PYX_ERR(2, 570, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   goto __pyx_L4_argument_unpacking_done;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("root2array_fromtree", 1, 10, 10, PyTuple_GET_SIZE(__pyx_args)); 
-#line 566 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 566, __pyx_L3_error)
+#line 567 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 567, __pyx_L3_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_L3_error:;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.root2array_fromtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   return NULL;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_L4_argument_unpacking_done:;
   __pyx_r = 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 __pyx_pf_13_librootnumpy_14root2array_fromtree(__pyx_self, __pyx_v_tree, __pyx_v_branches, __pyx_v_selection, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 }
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_tree, PyObject *__pyx_v_branches, PyObject *__pyx_v_selection, PyObject *__pyx_v_object_selection, PyObject *__pyx_v_start, PyObject *__pyx_v_stop, PyObject *__pyx_v_step, bool __pyx_v_include_weight, std::string __pyx_v_weight_name, long __pyx_v_cache_size) {
   TTree *__pyx_v_rtree
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 ;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   void *__pyx_t_1;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   std::string __pyx_t_2;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   int __pyx_t_3;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   std::string __pyx_t_4;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("root2array_fromtree", 0);
 
-  /* "root_numpy/src/tree.pyx":570
+  /* "root_numpy/src/tree.pyx":571
  *                         bool include_weight, string weight_name,
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)             # <<<<<<<<<<<<<<
@@ -29528,13 +29482,13 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *         rtree, False, branches,
  */
 
-#line 570 "root_numpy/src/tree.pyx"
-  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_tree); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) __PYX_ERR(2, 570, __pyx_L1_error)
+#line 571 "root_numpy/src/tree.pyx"
+  __pyx_t_1 = PyCObject_AsVoidPtr(__pyx_v_tree); if (unlikely(__pyx_t_1 == NULL && PyErr_Occurred())) __PYX_ERR(2, 571, __pyx_L1_error)
 
-#line 570 "root_numpy/src/tree.pyx"
+#line 571 "root_numpy/src/tree.pyx"
   __pyx_v_rtree = ((TTree *)__pyx_t_1);
 
-  /* "root_numpy/src/tree.pyx":571
+  /* "root_numpy/src/tree.pyx":572
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     return tree2array(             # <<<<<<<<<<<<<<
@@ -29542,10 +29496,10 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *         selection or '', object_selection,
  */
 
-#line 571 "root_numpy/src/tree.pyx"
+#line 572 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-  /* "root_numpy/src/tree.pyx":573
+  /* "root_numpy/src/tree.pyx":574
  *     return tree2array(
  *         rtree, False, branches,
  *         selection or '', object_selection,             # <<<<<<<<<<<<<<
@@ -29553,37 +29507,37 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *         include_weight, weight_name, cache_size)
  */
 
-#line 573 "root_numpy/src/tree.pyx"
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_selection); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(2, 573, __pyx_L1_error)
+#line 574 "root_numpy/src/tree.pyx"
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_selection); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(2, 574, __pyx_L1_error)
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
   if (!__pyx_t_3) {
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
   } else {
 
-#line 573 "root_numpy/src/tree.pyx"
-    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_selection); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 573, __pyx_L1_error)
+#line 574 "root_numpy/src/tree.pyx"
+    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_selection); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 574, __pyx_L1_error)
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
     __pyx_t_2 = __pyx_t_4;
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
     goto __pyx_L3_bool_binop_done;
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
   }
 
-#line 573 "root_numpy/src/tree.pyx"
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_s__15); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 573, __pyx_L1_error)
+#line 574 "root_numpy/src/tree.pyx"
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_s__15); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 574, __pyx_L1_error)
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
   __pyx_t_2 = __pyx_t_4;
 
-#line 573 "root_numpy/src/tree.pyx"
+#line 574 "root_numpy/src/tree.pyx"
   __pyx_L3_bool_binop_done:;
 
-  /* "root_numpy/src/tree.pyx":571
+  /* "root_numpy/src/tree.pyx":572
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     return tree2array(             # <<<<<<<<<<<<<<
@@ -29591,22 +29545,22 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *         selection or '', object_selection,
  */
 
-#line 571 "root_numpy/src/tree.pyx"
-  __pyx_t_5 = __pyx_f_13_librootnumpy_tree2array(__pyx_v_rtree, 0, __pyx_v_branches, __pyx_t_2, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 571, __pyx_L1_error)
+#line 572 "root_numpy/src/tree.pyx"
+  __pyx_t_5 = __pyx_f_13_librootnumpy_tree2array(__pyx_v_rtree, 0, __pyx_v_branches, __pyx_t_2, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 572, __pyx_L1_error)
 
-#line 571 "root_numpy/src/tree.pyx"
+#line 572 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 571 "root_numpy/src/tree.pyx"
+#line 572 "root_numpy/src/tree.pyx"
   __pyx_r = __pyx_t_5;
 
-#line 571 "root_numpy/src/tree.pyx"
+#line 572 "root_numpy/src/tree.pyx"
   __pyx_t_5 = 0;
 
-#line 571 "root_numpy/src/tree.pyx"
+#line 572 "root_numpy/src/tree.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/tree.pyx":566
+  /* "root_numpy/src/tree.pyx":567
  * 
  * 
  * def root2array_fromtree(tree, branches, selection, object_selection,             # <<<<<<<<<<<<<<
@@ -29614,40 +29568,40 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *                         bool include_weight, string weight_name,
  */
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_L1_error:;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.root2array_fromtree", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_r = NULL;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __pyx_L0:;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
 }
 
-/* "root_numpy/src/tree.pyx":578
+/* "root_numpy/src/tree.pyx":579
  * 
  * 
  * cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:             # <<<<<<<<<<<<<<
@@ -29655,163 +29609,166 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *     cdef NP2ROOTConverter* cvt
  */
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *__pyx_v_arr, struct __pyx_opt_args_13_librootnumpy_array2tree *__pyx_optional_args) {
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   std::string __pyx_v_name = __pyx_k__38;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   TTree *__pyx_v_tree = ((TTree *)NULL);
   std::vector<__pyx_t_13_librootnumpy_NP2ROOTConverter *>  __pyx_v_converters
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_v_cvt
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   std::vector<int>  __pyx_v_roffsetarray
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   int __pyx_v_roffset
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   unsigned int __pyx_v_icol
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   unsigned int __pyx_v_num_cols
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_arr_len
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_idata
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   void *__pyx_v_source
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   void *__pyx_v_thisrow
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
+;
+  bool __pyx_v_own_tree
+#line 579 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_fieldnames = NULL
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_fields = NULL
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_fieldname = NULL
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_dtype = NULL
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 ;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   TTree *__pyx_r;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 578 "root_numpy/src/tree.pyx"
-  PyObject *__pyx_t_1 = NULL;
+#line 579 "root_numpy/src/tree.pyx"
+  int __pyx_t_1;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
-  int __pyx_t_4;
+#line 579 "root_numpy/src/tree.pyx"
+  PyObject *__pyx_t_4 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_6 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   Py_ssize_t __pyx_t_7;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   unsigned int __pyx_t_8;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_9 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_10 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *(*__pyx_t_11)(PyObject *);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   int __pyx_t_12;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_13 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_14 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_t_13_librootnumpy_SIZE_t __pyx_t_15;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_t_13_librootnumpy_SIZE_t __pyx_t_16;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   unsigned int __pyx_t_17;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   size_t __pyx_t_18;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   int __pyx_t_19;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   char const *__pyx_t_20;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_21 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_22 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_23 = NULL;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("array2tree", 0);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   if (__pyx_optional_args) {
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
     if (__pyx_optional_args->__pyx_n > 0) {
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
       __pyx_v_name = __pyx_optional_args->name;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
       if (__pyx_optional_args->__pyx_n > 1) {
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
         __pyx_v_tree = __pyx_optional_args->tree;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
       }
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
     }
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":585
+  /* "root_numpy/src/tree.pyx":586
  *     cdef unsigned int icol
  *     cdef unsigned int num_cols
  *     cdef SIZE_t arr_len = arr.shape[0]             # <<<<<<<<<<<<<<
@@ -29819,161 +29776,183 @@ static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *__pyx_v_arr, str
  *     cdef void* source = NULL
  */
 
-#line 585 "root_numpy/src/tree.pyx"
+#line 586 "root_numpy/src/tree.pyx"
   __pyx_v_arr_len = (__pyx_v_arr->dimensions[0]);
 
-  /* "root_numpy/src/tree.pyx":587
+  /* "root_numpy/src/tree.pyx":588
  *     cdef SIZE_t arr_len = arr.shape[0]
  *     cdef SIZE_t idata
  *     cdef void* source = NULL             # <<<<<<<<<<<<<<
  *     cdef void* thisrow = NULL
- * 
- */
-
-#line 587 "root_numpy/src/tree.pyx"
-  __pyx_v_source = NULL;
-
-  /* "root_numpy/src/tree.pyx":588
- *     cdef SIZE_t idata
- *     cdef void* source = NULL
- *     cdef void* thisrow = NULL             # <<<<<<<<<<<<<<
- * 
- *     try:
+ *     cdef bool own_tree = False
  */
 
 #line 588 "root_numpy/src/tree.pyx"
+  __pyx_v_source = NULL;
+
+  /* "root_numpy/src/tree.pyx":589
+ *     cdef SIZE_t idata
+ *     cdef void* source = NULL
+ *     cdef void* thisrow = NULL             # <<<<<<<<<<<<<<
+ *     cdef bool own_tree = False
+ * 
+ */
+
+#line 589 "root_numpy/src/tree.pyx"
   __pyx_v_thisrow = NULL;
 
   /* "root_numpy/src/tree.pyx":590
+ *     cdef void* source = NULL
  *     cdef void* thisrow = NULL
+ *     cdef bool own_tree = False             # <<<<<<<<<<<<<<
  * 
- *     try:             # <<<<<<<<<<<<<<
- *         if tree == NULL:
- *             tree = new TTree(name.c_str(), name.c_str())
+ *     if tree == NULL:
  */
 
 #line 590 "root_numpy/src/tree.pyx"
-  /*try:*/ {
+  __pyx_v_own_tree = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
-    {
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_PyThreadState_declare
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_PyThreadState_assign
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_ExceptionSave(&__pyx_t_1, &__pyx_t_2, &__pyx_t_3);
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_XGOTREF(__pyx_t_1);
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_XGOTREF(__pyx_t_2);
-
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_XGOTREF(__pyx_t_3);
-
-#line 590 "root_numpy/src/tree.pyx"
-      /*try:*/ {
-
-        /* "root_numpy/src/tree.pyx":591
+  /* "root_numpy/src/tree.pyx":592
+ *     cdef bool own_tree = False
  * 
- *     try:
- *         if tree == NULL:             # <<<<<<<<<<<<<<
- *             tree = new TTree(name.c_str(), name.c_str())
- * 
- */
-
-#line 591 "root_numpy/src/tree.pyx"
-        __pyx_t_4 = ((__pyx_v_tree == NULL) != 0);
-
-#line 591 "root_numpy/src/tree.pyx"
-        if (__pyx_t_4) {
-
-          /* "root_numpy/src/tree.pyx":592
- *     try:
- *         if tree == NULL:
- *             tree = new TTree(name.c_str(), name.c_str())             # <<<<<<<<<<<<<<
- * 
- *         fieldnames = arr.dtype.names
+ *     if tree == NULL:             # <<<<<<<<<<<<<<
+ *         own_tree = True
+ *         tree = new TTree(name.c_str(), name.c_str())
  */
 
 #line 592 "root_numpy/src/tree.pyx"
-          __pyx_v_tree = new TTree(__pyx_v_name.c_str(), __pyx_v_name.c_str());
+  __pyx_t_1 = ((__pyx_v_tree == NULL) != 0);
 
-          /* "root_numpy/src/tree.pyx":591
+#line 592 "root_numpy/src/tree.pyx"
+  if (__pyx_t_1) {
+
+    /* "root_numpy/src/tree.pyx":593
  * 
- *     try:
- *         if tree == NULL:             # <<<<<<<<<<<<<<
- *             tree = new TTree(name.c_str(), name.c_str())
+ *     if tree == NULL:
+ *         own_tree = True             # <<<<<<<<<<<<<<
+ *         tree = new TTree(name.c_str(), name.c_str())
  * 
  */
 
-#line 591 "root_numpy/src/tree.pyx"
-        }
+#line 593 "root_numpy/src/tree.pyx"
+    __pyx_v_own_tree = 1;
 
-        /* "root_numpy/src/tree.pyx":594
- *             tree = new TTree(name.c_str(), name.c_str())
+    /* "root_numpy/src/tree.pyx":594
+ *     if tree == NULL:
+ *         own_tree = True
+ *         tree = new TTree(name.c_str(), name.c_str())             # <<<<<<<<<<<<<<
  * 
+ *     try:
+ */
+
+#line 594 "root_numpy/src/tree.pyx"
+    __pyx_v_tree = new TTree(__pyx_v_name.c_str(), __pyx_v_name.c_str());
+
+    /* "root_numpy/src/tree.pyx":592
+ *     cdef bool own_tree = False
+ * 
+ *     if tree == NULL:             # <<<<<<<<<<<<<<
+ *         own_tree = True
+ *         tree = new TTree(name.c_str(), name.c_str())
+ */
+
+#line 592 "root_numpy/src/tree.pyx"
+  }
+
+  /* "root_numpy/src/tree.pyx":596
+ *         tree = new TTree(name.c_str(), name.c_str())
+ * 
+ *     try:             # <<<<<<<<<<<<<<
+ *         fieldnames = arr.dtype.names
+ *         fields = arr.dtype.fields
+ */
+
+#line 596 "root_numpy/src/tree.pyx"
+  /*try:*/ {
+
+#line 596 "root_numpy/src/tree.pyx"
+    {
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_PyThreadState_declare
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_PyThreadState_assign
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_ExceptionSave(&__pyx_t_2, &__pyx_t_3, &__pyx_t_4);
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_XGOTREF(__pyx_t_2);
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_XGOTREF(__pyx_t_3);
+
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_XGOTREF(__pyx_t_4);
+
+#line 596 "root_numpy/src/tree.pyx"
+      /*try:*/ {
+
+        /* "root_numpy/src/tree.pyx":597
+ * 
+ *     try:
  *         fieldnames = arr.dtype.names             # <<<<<<<<<<<<<<
  *         fields = arr.dtype.fields
  * 
  */
 
-#line 594 "root_numpy/src/tree.pyx"
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_arr), __pyx_n_s_dtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 594, __pyx_L6_error)
+#line 597 "root_numpy/src/tree.pyx"
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_arr), __pyx_n_s_dtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 597, __pyx_L7_error)
 
-#line 594 "root_numpy/src/tree.pyx"
+#line 597 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_5);
 
-#line 594 "root_numpy/src/tree.pyx"
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_names); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 594, __pyx_L6_error)
+#line 597 "root_numpy/src/tree.pyx"
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_names); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 597, __pyx_L7_error)
 
-#line 594 "root_numpy/src/tree.pyx"
+#line 597 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_6);
 
-#line 594 "root_numpy/src/tree.pyx"
+#line 597 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 594 "root_numpy/src/tree.pyx"
+#line 597 "root_numpy/src/tree.pyx"
         __pyx_v_fieldnames = __pyx_t_6;
 
-#line 594 "root_numpy/src/tree.pyx"
+#line 597 "root_numpy/src/tree.pyx"
         __pyx_t_6 = 0;
 
-        /* "root_numpy/src/tree.pyx":595
- * 
+        /* "root_numpy/src/tree.pyx":598
+ *     try:
  *         fieldnames = arr.dtype.names
  *         fields = arr.dtype.fields             # <<<<<<<<<<<<<<
  * 
  *         # Determine the structure
  */
 
-#line 595 "root_numpy/src/tree.pyx"
-        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_arr), __pyx_n_s_dtype); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 595, __pyx_L6_error)
+#line 598 "root_numpy/src/tree.pyx"
+        __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_arr), __pyx_n_s_dtype); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 598, __pyx_L7_error)
 
-#line 595 "root_numpy/src/tree.pyx"
+#line 598 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_6);
 
-#line 595 "root_numpy/src/tree.pyx"
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_fields); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 595, __pyx_L6_error)
+#line 598 "root_numpy/src/tree.pyx"
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_fields); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 598, __pyx_L7_error)
 
-#line 595 "root_numpy/src/tree.pyx"
+#line 598 "root_numpy/src/tree.pyx"
         __Pyx_GOTREF(__pyx_t_5);
 
-#line 595 "root_numpy/src/tree.pyx"
+#line 598 "root_numpy/src/tree.pyx"
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 595 "root_numpy/src/tree.pyx"
+#line 598 "root_numpy/src/tree.pyx"
         __pyx_v_fields = __pyx_t_5;
 
-#line 595 "root_numpy/src/tree.pyx"
+#line 598 "root_numpy/src/tree.pyx"
         __pyx_t_5 = 0;
 
-        /* "root_numpy/src/tree.pyx":598
+        /* "root_numpy/src/tree.pyx":601
  * 
  *         # Determine the structure
  *         for icol in range(len(fieldnames)):             # <<<<<<<<<<<<<<
@@ -29981,16 +29960,16 @@ static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *__pyx_v_arr, str
  *             # roffset is an offset of particular field in each record
  */
 
-#line 598 "root_numpy/src/tree.pyx"
-        __pyx_t_7 = PyObject_Length(__pyx_v_fieldnames); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(2, 598, __pyx_L6_error)
+#line 601 "root_numpy/src/tree.pyx"
+        __pyx_t_7 = PyObject_Length(__pyx_v_fieldnames); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(2, 601, __pyx_L7_error)
 
-#line 598 "root_numpy/src/tree.pyx"
+#line 601 "root_numpy/src/tree.pyx"
         for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
 
-#line 598 "root_numpy/src/tree.pyx"
+#line 601 "root_numpy/src/tree.pyx"
           __pyx_v_icol = __pyx_t_8;
 
-          /* "root_numpy/src/tree.pyx":599
+          /* "root_numpy/src/tree.pyx":602
  *         # Determine the structure
  *         for icol in range(len(fieldnames)):
  *             fieldname = fieldnames[icol]             # <<<<<<<<<<<<<<
@@ -29998,19 +29977,19 @@ static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *__pyx_v_arr, str
  *             dtype, roffset = fields[fieldname]
  */
 
-#line 599 "root_numpy/src/tree.pyx"
-          __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_fieldnames, __pyx_v_icol, unsigned int, 0, __Pyx_PyInt_From_unsigned_int, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 599, __pyx_L6_error)
+#line 602 "root_numpy/src/tree.pyx"
+          __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_fieldnames, __pyx_v_icol, unsigned int, 0, __Pyx_PyInt_From_unsigned_int, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 602, __pyx_L7_error)
 
-#line 599 "root_numpy/src/tree.pyx"
+#line 602 "root_numpy/src/tree.pyx"
           __Pyx_GOTREF(__pyx_t_5);
 
-#line 599 "root_numpy/src/tree.pyx"
+#line 602 "root_numpy/src/tree.pyx"
           __Pyx_XDECREF_SET(__pyx_v_fieldname, __pyx_t_5);
 
-#line 599 "root_numpy/src/tree.pyx"
+#line 602 "root_numpy/src/tree.pyx"
           __pyx_t_5 = 0;
 
-          /* "root_numpy/src/tree.pyx":601
+          /* "root_numpy/src/tree.pyx":604
  *             fieldname = fieldnames[icol]
  *             # roffset is an offset of particular field in each record
  *             dtype, roffset = fields[fieldname]             # <<<<<<<<<<<<<<
@@ -30018,178 +29997,178 @@ static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *__pyx_v_arr, str
  *             if cvt != NULL:
  */
 
-#line 601 "root_numpy/src/tree.pyx"
-          __pyx_t_5 = PyObject_GetItem(__pyx_v_fields, __pyx_v_fieldname); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+          __pyx_t_5 = PyObject_GetItem(__pyx_v_fields, __pyx_v_fieldname); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           __Pyx_GOTREF(__pyx_t_5);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           if ((likely(PyTuple_CheckExact(__pyx_t_5))) || (PyList_CheckExact(__pyx_t_5))) {
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             PyObject* sequence = __pyx_t_5;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             Py_ssize_t size = Py_SIZE(sequence);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #else
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             Py_ssize_t size = PySequence_Size(sequence);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #endif
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             if (unlikely(size != 2)) {
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 601 "root_numpy/src/tree.pyx"
-              __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+              __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             }
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #if CYTHON_COMPILING_IN_CPYTHON
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               __pyx_t_6 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               __pyx_t_9 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             } else {
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               __pyx_t_6 = PyList_GET_ITEM(sequence, 0); 
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
               __pyx_t_9 = PyList_GET_ITEM(sequence, 1); 
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             }
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_INCREF(__pyx_t_6);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_INCREF(__pyx_t_9);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #else
 
-#line 601 "root_numpy/src/tree.pyx"
-            __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+            __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_6);
 
-#line 601 "root_numpy/src/tree.pyx"
-            __pyx_t_9 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+            __pyx_t_9 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_9);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             #endif
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           } else {
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             Py_ssize_t index = -1;
 
-#line 601 "root_numpy/src/tree.pyx"
-            __pyx_t_10 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+            __pyx_t_10 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_10);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __pyx_t_11 = Py_TYPE(__pyx_t_10)->tp_iternext;
             index = 0; __pyx_t_6 = __pyx_t_11(__pyx_t_10); if (unlikely(!__pyx_t_6)) 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
 goto __pyx_L17_unpacking_failed;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_6);
             index = 1; __pyx_t_9 = __pyx_t_11(__pyx_t_10); if (unlikely(!__pyx_t_9)) 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
 goto __pyx_L17_unpacking_failed;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_9);
 
-#line 601 "root_numpy/src/tree.pyx"
-            if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 2) < 0) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+            if (__Pyx_IternextUnpackEndCheck(__pyx_t_11(__pyx_t_10), 2) < 0) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __pyx_t_11 = NULL;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             goto __pyx_L18_unpacking_done;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __pyx_L17_unpacking_failed:;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __pyx_t_11 = NULL;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 601 "root_numpy/src/tree.pyx"
-            __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+            __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
             __pyx_L18_unpacking_done:;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           }
 
-#line 601 "root_numpy/src/tree.pyx"
-          __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(2, 601, __pyx_L6_error)
+#line 604 "root_numpy/src/tree.pyx"
+          __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(2, 604, __pyx_L7_error)
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           __Pyx_XDECREF_SET(__pyx_v_dtype, __pyx_t_6);
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           __pyx_t_6 = 0;
 
-#line 601 "root_numpy/src/tree.pyx"
+#line 604 "root_numpy/src/tree.pyx"
           __pyx_v_roffset = __pyx_t_12;
 
-          /* "root_numpy/src/tree.pyx":602
+          /* "root_numpy/src/tree.pyx":605
  *             # roffset is an offset of particular field in each record
  *             dtype, roffset = fields[fieldname]
  *             cvt = find_np2root_converter(tree, fieldname, dtype)             # <<<<<<<<<<<<<<
@@ -30197,10 +30176,10 @@ goto __pyx_L17_unpacking_failed;
  *                 roffsetarray.push_back(roffset)
  */
 
-#line 602 "root_numpy/src/tree.pyx"
+#line 605 "root_numpy/src/tree.pyx"
           __pyx_v_cvt = __pyx_f_13_librootnumpy_find_np2root_converter(__pyx_v_tree, __pyx_v_fieldname, __pyx_v_dtype);
 
-          /* "root_numpy/src/tree.pyx":603
+          /* "root_numpy/src/tree.pyx":606
  *             dtype, roffset = fields[fieldname]
  *             cvt = find_np2root_converter(tree, fieldname, dtype)
  *             if cvt != NULL:             # <<<<<<<<<<<<<<
@@ -30208,13 +30187,13 @@ goto __pyx_L17_unpacking_failed;
  *                 converters.push_back(cvt)
  */
 
-#line 603 "root_numpy/src/tree.pyx"
-          __pyx_t_4 = ((__pyx_v_cvt != NULL) != 0);
+#line 606 "root_numpy/src/tree.pyx"
+          __pyx_t_1 = ((__pyx_v_cvt != NULL) != 0);
 
-#line 603 "root_numpy/src/tree.pyx"
-          if (__pyx_t_4) {
+#line 606 "root_numpy/src/tree.pyx"
+          if (__pyx_t_1) {
 
-            /* "root_numpy/src/tree.pyx":604
+            /* "root_numpy/src/tree.pyx":607
  *             cvt = find_np2root_converter(tree, fieldname, dtype)
  *             if cvt != NULL:
  *                 roffsetarray.push_back(roffset)             # <<<<<<<<<<<<<<
@@ -30222,25 +30201,25 @@ goto __pyx_L17_unpacking_failed;
  *             else:
  */
 
-#line 604 "root_numpy/src/tree.pyx"
+#line 607 "root_numpy/src/tree.pyx"
             try {
 
-#line 604 "root_numpy/src/tree.pyx"
+#line 607 "root_numpy/src/tree.pyx"
               __pyx_v_roffsetarray.push_back(__pyx_v_roffset);
 
-#line 604 "root_numpy/src/tree.pyx"
+#line 607 "root_numpy/src/tree.pyx"
             } catch(...) {
 
-#line 604 "root_numpy/src/tree.pyx"
+#line 607 "root_numpy/src/tree.pyx"
               __Pyx_CppExn2PyErr();
 
-#line 604 "root_numpy/src/tree.pyx"
-              __PYX_ERR(2, 604, __pyx_L6_error)
+#line 607 "root_numpy/src/tree.pyx"
+              __PYX_ERR(2, 607, __pyx_L7_error)
 
-#line 604 "root_numpy/src/tree.pyx"
+#line 607 "root_numpy/src/tree.pyx"
             }
 
-            /* "root_numpy/src/tree.pyx":605
+            /* "root_numpy/src/tree.pyx":608
  *             if cvt != NULL:
  *                 roffsetarray.push_back(roffset)
  *                 converters.push_back(cvt)             # <<<<<<<<<<<<<<
@@ -30248,25 +30227,25 @@ goto __pyx_L17_unpacking_failed;
  *                 warnings.warn("converter for {!r} is not "
  */
 
-#line 605 "root_numpy/src/tree.pyx"
+#line 608 "root_numpy/src/tree.pyx"
             try {
 
-#line 605 "root_numpy/src/tree.pyx"
+#line 608 "root_numpy/src/tree.pyx"
               __pyx_v_converters.push_back(__pyx_v_cvt);
 
-#line 605 "root_numpy/src/tree.pyx"
+#line 608 "root_numpy/src/tree.pyx"
             } catch(...) {
 
-#line 605 "root_numpy/src/tree.pyx"
+#line 608 "root_numpy/src/tree.pyx"
               __Pyx_CppExn2PyErr();
 
-#line 605 "root_numpy/src/tree.pyx"
-              __PYX_ERR(2, 605, __pyx_L6_error)
+#line 608 "root_numpy/src/tree.pyx"
+              __PYX_ERR(2, 608, __pyx_L7_error)
 
-#line 605 "root_numpy/src/tree.pyx"
+#line 608 "root_numpy/src/tree.pyx"
             }
 
-            /* "root_numpy/src/tree.pyx":603
+            /* "root_numpy/src/tree.pyx":606
  *             dtype, roffset = fields[fieldname]
  *             cvt = find_np2root_converter(tree, fieldname, dtype)
  *             if cvt != NULL:             # <<<<<<<<<<<<<<
@@ -30274,13 +30253,13 @@ goto __pyx_L17_unpacking_failed;
  *                 converters.push_back(cvt)
  */
 
-#line 603 "root_numpy/src/tree.pyx"
+#line 606 "root_numpy/src/tree.pyx"
             goto __pyx_L19;
 
-#line 603 "root_numpy/src/tree.pyx"
+#line 606 "root_numpy/src/tree.pyx"
           }
 
-          /* "root_numpy/src/tree.pyx":607
+          /* "root_numpy/src/tree.pyx":610
  *                 converters.push_back(cvt)
  *             else:
  *                 warnings.warn("converter for {!r} is not "             # <<<<<<<<<<<<<<
@@ -30288,25 +30267,25 @@ goto __pyx_L17_unpacking_failed;
  * 
  */
 
-#line 607 "root_numpy/src/tree.pyx"
+#line 610 "root_numpy/src/tree.pyx"
           /*else*/ {
 
-#line 607 "root_numpy/src/tree.pyx"
-            __pyx_t_9 = __Pyx_GetModuleGlobalName(__pyx_n_s_warnings); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 607, __pyx_L6_error)
+#line 610 "root_numpy/src/tree.pyx"
+            __pyx_t_9 = __Pyx_GetModuleGlobalName(__pyx_n_s_warnings); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 610, __pyx_L7_error)
 
-#line 607 "root_numpy/src/tree.pyx"
+#line 610 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_9);
 
-#line 607 "root_numpy/src/tree.pyx"
-            __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_warn); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 607, __pyx_L6_error)
+#line 610 "root_numpy/src/tree.pyx"
+            __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_warn); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 610, __pyx_L7_error)
 
-#line 607 "root_numpy/src/tree.pyx"
+#line 610 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_6);
 
-#line 607 "root_numpy/src/tree.pyx"
+#line 610 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-            /* "root_numpy/src/tree.pyx":608
+            /* "root_numpy/src/tree.pyx":611
  *             else:
  *                 warnings.warn("converter for {!r} is not "
  *                               "implemented (skipping)".format(dtype))             # <<<<<<<<<<<<<<
@@ -30314,178 +30293,178 @@ goto __pyx_L17_unpacking_failed;
  *         # Fill the data
  */
 
-#line 608 "root_numpy/src/tree.pyx"
-            __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_converter_for_r_is_not_implement, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 608, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+            __pyx_t_10 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_converter_for_r_is_not_implement, __pyx_n_s_format); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 611, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __Pyx_GOTREF(__pyx_t_10);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __pyx_t_13 = NULL;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_10))) {
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_10);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               if (likely(__pyx_t_13)) {
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_INCREF(__pyx_t_13);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_INCREF(function);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_DECREF_SET(__pyx_t_10, function);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             if (!__pyx_t_13) {
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_dtype); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 608, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_t_10, __pyx_v_dtype); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 611, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_9);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             } else {
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(2, 608, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(2, 611, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_14);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_13); __pyx_t_13 = NULL;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_INCREF(__pyx_v_dtype);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GIVEREF(__pyx_v_dtype);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               PyTuple_SET_ITEM(__pyx_t_14, 0+1, __pyx_v_dtype);
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_14, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 608, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_14, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 611, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_9);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __pyx_t_10 = NULL;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_6))) {
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_6);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               if (likely(__pyx_t_10)) {
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_INCREF(__pyx_t_10);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_INCREF(function);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
                 __Pyx_DECREF_SET(__pyx_t_6, function);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             if (!__pyx_t_10) {
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 607, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 610, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_5);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             } else {
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(2, 607, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(2, 610, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_14);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_10); __pyx_t_10 = NULL;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GIVEREF(__pyx_t_9);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               PyTuple_SET_ITEM(__pyx_t_14, 0+1, __pyx_t_9);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __pyx_t_9 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
-              __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 607, __pyx_L6_error)
+#line 611 "root_numpy/src/tree.pyx"
+              __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 610, __pyx_L7_error)
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_GOTREF(__pyx_t_5);
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
               __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
           }
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
           __pyx_L19:;
 
-#line 608 "root_numpy/src/tree.pyx"
+#line 611 "root_numpy/src/tree.pyx"
         }
 
-        /* "root_numpy/src/tree.pyx":611
+        /* "root_numpy/src/tree.pyx":614
  * 
  *         # Fill the data
  *         num_cols = converters.size()             # <<<<<<<<<<<<<<
@@ -30493,10 +30472,10 @@ goto __pyx_L17_unpacking_failed;
  *             thisrow = np.PyArray_GETPTR1(arr, idata)
  */
 
-#line 611 "root_numpy/src/tree.pyx"
+#line 614 "root_numpy/src/tree.pyx"
         __pyx_v_num_cols = __pyx_v_converters.size();
 
-        /* "root_numpy/src/tree.pyx":612
+        /* "root_numpy/src/tree.pyx":615
  *         # Fill the data
  *         num_cols = converters.size()
  *         for idata in range(arr_len):             # <<<<<<<<<<<<<<
@@ -30504,16 +30483,16 @@ goto __pyx_L17_unpacking_failed;
  *             for icol in range(num_cols):
  */
 
-#line 612 "root_numpy/src/tree.pyx"
+#line 615 "root_numpy/src/tree.pyx"
         __pyx_t_15 = __pyx_v_arr_len;
 
-#line 612 "root_numpy/src/tree.pyx"
+#line 615 "root_numpy/src/tree.pyx"
         for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
 
-#line 612 "root_numpy/src/tree.pyx"
+#line 615 "root_numpy/src/tree.pyx"
           __pyx_v_idata = __pyx_t_16;
 
-          /* "root_numpy/src/tree.pyx":613
+          /* "root_numpy/src/tree.pyx":616
  *         num_cols = converters.size()
  *         for idata in range(arr_len):
  *             thisrow = np.PyArray_GETPTR1(arr, idata)             # <<<<<<<<<<<<<<
@@ -30521,10 +30500,10 @@ goto __pyx_L17_unpacking_failed;
  *                 roffset = roffsetarray[icol]
  */
 
-#line 613 "root_numpy/src/tree.pyx"
+#line 616 "root_numpy/src/tree.pyx"
           __pyx_v_thisrow = PyArray_GETPTR1(__pyx_v_arr, __pyx_v_idata);
 
-          /* "root_numpy/src/tree.pyx":614
+          /* "root_numpy/src/tree.pyx":617
  *         for idata in range(arr_len):
  *             thisrow = np.PyArray_GETPTR1(arr, idata)
  *             for icol in range(num_cols):             # <<<<<<<<<<<<<<
@@ -30532,16 +30511,16 @@ goto __pyx_L17_unpacking_failed;
  *                 source = shift(thisrow, roffset)
  */
 
-#line 614 "root_numpy/src/tree.pyx"
+#line 617 "root_numpy/src/tree.pyx"
           __pyx_t_8 = __pyx_v_num_cols;
 
-#line 614 "root_numpy/src/tree.pyx"
+#line 617 "root_numpy/src/tree.pyx"
           for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_8; __pyx_t_17+=1) {
 
-#line 614 "root_numpy/src/tree.pyx"
+#line 617 "root_numpy/src/tree.pyx"
             __pyx_v_icol = __pyx_t_17;
 
-            /* "root_numpy/src/tree.pyx":615
+            /* "root_numpy/src/tree.pyx":618
  *             thisrow = np.PyArray_GETPTR1(arr, idata)
  *             for icol in range(num_cols):
  *                 roffset = roffsetarray[icol]             # <<<<<<<<<<<<<<
@@ -30549,10 +30528,10 @@ goto __pyx_L17_unpacking_failed;
  *                 converters[icol].fill_from(source)
  */
 
-#line 615 "root_numpy/src/tree.pyx"
+#line 618 "root_numpy/src/tree.pyx"
             __pyx_v_roffset = (__pyx_v_roffsetarray[__pyx_v_icol]);
 
-            /* "root_numpy/src/tree.pyx":616
+            /* "root_numpy/src/tree.pyx":619
  *             for icol in range(num_cols):
  *                 roffset = roffsetarray[icol]
  *                 source = shift(thisrow, roffset)             # <<<<<<<<<<<<<<
@@ -30560,10 +30539,10 @@ goto __pyx_L17_unpacking_failed;
  * 
  */
 
-#line 616 "root_numpy/src/tree.pyx"
+#line 619 "root_numpy/src/tree.pyx"
             __pyx_v_source = shift(__pyx_v_thisrow, __pyx_v_roffset);
 
-            /* "root_numpy/src/tree.pyx":617
+            /* "root_numpy/src/tree.pyx":620
  *                 roffset = roffsetarray[icol]
  *                 source = shift(thisrow, roffset)
  *                 converters[icol].fill_from(source)             # <<<<<<<<<<<<<<
@@ -30571,16 +30550,16 @@ goto __pyx_L17_unpacking_failed;
  *         # Need to update the number of entries in the tree to match
  */
 
-#line 617 "root_numpy/src/tree.pyx"
+#line 620 "root_numpy/src/tree.pyx"
             (__pyx_v_converters[__pyx_v_icol])->fill_from(__pyx_v_source);
 
-#line 617 "root_numpy/src/tree.pyx"
+#line 620 "root_numpy/src/tree.pyx"
           }
 
-#line 617 "root_numpy/src/tree.pyx"
+#line 620 "root_numpy/src/tree.pyx"
         }
 
-        /* "root_numpy/src/tree.pyx":621
+        /* "root_numpy/src/tree.pyx":624
  *         # Need to update the number of entries in the tree to match
  *         # the number in the branches since each branch is filled separately.
  *         tree.SetEntries(-1)             # <<<<<<<<<<<<<<
@@ -30588,355 +30567,391 @@ goto __pyx_L17_unpacking_failed;
  *     except:
  */
 
-#line 621 "root_numpy/src/tree.pyx"
+#line 624 "root_numpy/src/tree.pyx"
         __pyx_v_tree->SetEntries(-1LL);
 
-        /* "root_numpy/src/tree.pyx":590
- *     cdef void* thisrow = NULL
+        /* "root_numpy/src/tree.pyx":596
+ *         tree = new TTree(name.c_str(), name.c_str())
  * 
  *     try:             # <<<<<<<<<<<<<<
- *         if tree == NULL:
- *             tree = new TTree(name.c_str(), name.c_str())
+ *         fieldnames = arr.dtype.names
+ *         fields = arr.dtype.fields
  */
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       }
 
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
-      goto __pyx_L13_try_end;
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
-      __pyx_L6_error:;
+#line 596 "root_numpy/src/tree.pyx"
+      goto __pyx_L14_try_end;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
+      __pyx_L7_error:;
+
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "root_numpy/src/tree.pyx":623
+      /* "root_numpy/src/tree.pyx":626
  *         tree.SetEntries(-1)
  * 
  *     except:             # <<<<<<<<<<<<<<
+ *         if own_tree:
+ *             del tree
+ */
+
+#line 626 "root_numpy/src/tree.pyx"
+      /*except:*/ {
+
+#line 626 "root_numpy/src/tree.pyx"
+        __Pyx_AddTraceback("_librootnumpy.array2tree", __pyx_clineno, __pyx_lineno, __pyx_filename);
+
+#line 626 "root_numpy/src/tree.pyx"
+        if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_14) < 0) __PYX_ERR(2, 626, __pyx_L9_except_error)
+
+#line 626 "root_numpy/src/tree.pyx"
+        __Pyx_GOTREF(__pyx_t_5);
+
+#line 626 "root_numpy/src/tree.pyx"
+        __Pyx_GOTREF(__pyx_t_6);
+
+#line 626 "root_numpy/src/tree.pyx"
+        __Pyx_GOTREF(__pyx_t_14);
+
+        /* "root_numpy/src/tree.pyx":627
+ * 
+ *     except:
+ *         if own_tree:             # <<<<<<<<<<<<<<
+ *             del tree
+ *         raise
+ */
+
+#line 627 "root_numpy/src/tree.pyx"
+        __pyx_t_1 = (__pyx_v_own_tree != 0);
+
+#line 627 "root_numpy/src/tree.pyx"
+        if (__pyx_t_1) {
+
+          /* "root_numpy/src/tree.pyx":628
+ *     except:
+ *         if own_tree:
+ *             del tree             # <<<<<<<<<<<<<<
  *         raise
  * 
  */
 
-#line 623 "root_numpy/src/tree.pyx"
-      /*except:*/ {
+#line 628 "root_numpy/src/tree.pyx"
+          delete __pyx_v_tree;
 
-#line 623 "root_numpy/src/tree.pyx"
-        __Pyx_AddTraceback("_librootnumpy.array2tree", __pyx_clineno, __pyx_lineno, __pyx_filename);
-
-#line 623 "root_numpy/src/tree.pyx"
-        if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_6, &__pyx_t_14) < 0) __PYX_ERR(2, 623, __pyx_L8_except_error)
-
-#line 623 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_5);
-
-#line 623 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_6);
-
-#line 623 "root_numpy/src/tree.pyx"
-        __Pyx_GOTREF(__pyx_t_14);
-
-        /* "root_numpy/src/tree.pyx":624
+          /* "root_numpy/src/tree.pyx":627
  * 
  *     except:
+ *         if own_tree:             # <<<<<<<<<<<<<<
+ *             del tree
+ *         raise
+ */
+
+#line 627 "root_numpy/src/tree.pyx"
+        }
+
+        /* "root_numpy/src/tree.pyx":629
+ *         if own_tree:
+ *             del tree
  *         raise             # <<<<<<<<<<<<<<
  * 
  *     finally:
  */
 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_5);
 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
         __Pyx_GIVEREF(__pyx_t_6);
 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_14);
 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
         __Pyx_ErrRestoreWithState(__pyx_t_5, __pyx_t_6, __pyx_t_14);
         __pyx_t_5 = 0; __pyx_t_6 = 0; __pyx_t_14 = 0; 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
 
 
-#line 624 "root_numpy/src/tree.pyx"
-        __PYX_ERR(2, 624, __pyx_L8_except_error)
+#line 629 "root_numpy/src/tree.pyx"
+        __PYX_ERR(2, 629, __pyx_L9_except_error)
 
-#line 624 "root_numpy/src/tree.pyx"
+#line 629 "root_numpy/src/tree.pyx"
       }
 
-#line 624 "root_numpy/src/tree.pyx"
-      __pyx_L8_except_error:;
+#line 629 "root_numpy/src/tree.pyx"
+      __pyx_L9_except_error:;
 
-      /* "root_numpy/src/tree.pyx":590
- *     cdef void* thisrow = NULL
+      /* "root_numpy/src/tree.pyx":596
+ *         tree = new TTree(name.c_str(), name.c_str())
  * 
  *     try:             # <<<<<<<<<<<<<<
- *         if tree == NULL:
- *             tree = new TTree(name.c_str(), name.c_str())
+ *         fieldnames = arr.dtype.names
+ *         fields = arr.dtype.fields
  */
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_XGIVEREF(__pyx_t_1);
-
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_2);
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_3);
 
-#line 590 "root_numpy/src/tree.pyx"
-      __Pyx_ExceptionReset(__pyx_t_1, __pyx_t_2, __pyx_t_3);
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_XGIVEREF(__pyx_t_4);
 
-#line 590 "root_numpy/src/tree.pyx"
-      goto __pyx_L4_error;
+#line 596 "root_numpy/src/tree.pyx"
+      __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
 
-#line 590 "root_numpy/src/tree.pyx"
-      __pyx_L13_try_end:;
+#line 596 "root_numpy/src/tree.pyx"
+      goto __pyx_L5_error;
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
+      __pyx_L14_try_end:;
+
+#line 596 "root_numpy/src/tree.pyx"
     }
 
-#line 590 "root_numpy/src/tree.pyx"
+#line 596 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":627
+  /* "root_numpy/src/tree.pyx":632
  * 
  *     finally:
  *         for icol in range(converters.size()):             # <<<<<<<<<<<<<<
  *             del converters[icol]
- *         # TODO: clean up tree
+ * 
  */
 
-#line 627 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
   /*finally:*/ {
 
-#line 627 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
     /*normal exit:*/{
 
-#line 627 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
       __pyx_t_18 = __pyx_v_converters.size();
 
-#line 627 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
       for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_18; __pyx_t_8+=1) {
 
-#line 627 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
         __pyx_v_icol = __pyx_t_8;
 
-        /* "root_numpy/src/tree.pyx":628
+        /* "root_numpy/src/tree.pyx":633
  *     finally:
  *         for icol in range(converters.size()):
  *             del converters[icol]             # <<<<<<<<<<<<<<
- *         # TODO: clean up tree
  * 
+ *     return tree
  */
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         delete (__pyx_v_converters[__pyx_v_icol]);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       }
 
-#line 628 "root_numpy/src/tree.pyx"
-      goto __pyx_L5;
+#line 633 "root_numpy/src/tree.pyx"
+      goto __pyx_L6;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
     }
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
     /*exception exit:*/{
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_declare
 
-#line 628 "root_numpy/src/tree.pyx"
-      __pyx_L4_error:;
+#line 633 "root_numpy/src/tree.pyx"
+      __pyx_L5_error:;
 
-#line 628 "root_numpy/src/tree.pyx"
-      __pyx_t_3 = 0; __pyx_t_2 = 0; __pyx_t_1 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
+#line 633 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = 0; __pyx_t_3 = 0; __pyx_t_2 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       if (PY_MAJOR_VERSION >= 3) __Pyx_ExceptionSwap(&__pyx_t_21, &__pyx_t_22, &__pyx_t_23);
 
-#line 628 "root_numpy/src/tree.pyx"
-      if ((PY_MAJOR_VERSION < 3) || unlikely(__Pyx_GetException(&__pyx_t_3, &__pyx_t_2, &__pyx_t_1) < 0)) __Pyx_ErrFetch(&__pyx_t_3, &__pyx_t_2, &__pyx_t_1);
+#line 633 "root_numpy/src/tree.pyx"
+      if ((PY_MAJOR_VERSION < 3) || unlikely(__Pyx_GetException(&__pyx_t_4, &__pyx_t_3, &__pyx_t_2) < 0)) __Pyx_ErrFetch(&__pyx_t_4, &__pyx_t_3, &__pyx_t_2);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
+      __Pyx_XGOTREF(__pyx_t_4);
+
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_2);
 
-#line 628 "root_numpy/src/tree.pyx"
-      __Pyx_XGOTREF(__pyx_t_1);
-
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_21);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_22);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGOTREF(__pyx_t_23);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __pyx_t_12 = __pyx_lineno; __pyx_t_19 = __pyx_clineno; __pyx_t_20 = __pyx_filename;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       {
 
-        /* "root_numpy/src/tree.pyx":627
+        /* "root_numpy/src/tree.pyx":632
  * 
  *     finally:
  *         for icol in range(converters.size()):             # <<<<<<<<<<<<<<
  *             del converters[icol]
- *         # TODO: clean up tree
- */
-
-#line 627 "root_numpy/src/tree.pyx"
-        __pyx_t_18 = __pyx_v_converters.size();
-
-#line 627 "root_numpy/src/tree.pyx"
-        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_18; __pyx_t_8+=1) {
-
-#line 627 "root_numpy/src/tree.pyx"
-          __pyx_v_icol = __pyx_t_8;
-
-          /* "root_numpy/src/tree.pyx":628
- *     finally:
- *         for icol in range(converters.size()):
- *             del converters[icol]             # <<<<<<<<<<<<<<
- *         # TODO: clean up tree
  * 
  */
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 632 "root_numpy/src/tree.pyx"
+        __pyx_t_18 = __pyx_v_converters.size();
+
+#line 632 "root_numpy/src/tree.pyx"
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_18; __pyx_t_8+=1) {
+
+#line 632 "root_numpy/src/tree.pyx"
+          __pyx_v_icol = __pyx_t_8;
+
+          /* "root_numpy/src/tree.pyx":633
+ *     finally:
+ *         for icol in range(converters.size()):
+ *             del converters[icol]             # <<<<<<<<<<<<<<
+ * 
+ *     return tree
+ */
+
+#line 633 "root_numpy/src/tree.pyx"
           delete (__pyx_v_converters[__pyx_v_icol]);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         }
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       }
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_PyThreadState_assign
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       if (PY_MAJOR_VERSION >= 3) {
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_21);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_22);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         __Pyx_XGIVEREF(__pyx_t_23);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
         __Pyx_ExceptionReset(__pyx_t_21, __pyx_t_22, __pyx_t_23);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       }
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
+      __Pyx_XGIVEREF(__pyx_t_4);
+
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __Pyx_XGIVEREF(__pyx_t_2);
 
-#line 628 "root_numpy/src/tree.pyx"
-      __Pyx_XGIVEREF(__pyx_t_1);
+#line 633 "root_numpy/src/tree.pyx"
+      __Pyx_ErrRestore(__pyx_t_4, __pyx_t_3, __pyx_t_2);
 
-#line 628 "root_numpy/src/tree.pyx"
-      __Pyx_ErrRestore(__pyx_t_3, __pyx_t_2, __pyx_t_1);
+#line 633 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = 0; __pyx_t_3 = 0; __pyx_t_2 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
 
-#line 628 "root_numpy/src/tree.pyx"
-      __pyx_t_3 = 0; __pyx_t_2 = 0; __pyx_t_1 = 0; __pyx_t_21 = 0; __pyx_t_22 = 0; __pyx_t_23 = 0;
-
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       __pyx_lineno = __pyx_t_12; __pyx_clineno = __pyx_t_19; __pyx_filename = __pyx_t_20;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
       goto __pyx_L1_error;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
     }
 
-#line 628 "root_numpy/src/tree.pyx"
-    __pyx_L5:;
+#line 633 "root_numpy/src/tree.pyx"
+    __pyx_L6:;
 
-#line 628 "root_numpy/src/tree.pyx"
+#line 633 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":631
- *         # TODO: clean up tree
+  /* "root_numpy/src/tree.pyx":635
+ *             del converters[icol]
  * 
  *     return tree             # <<<<<<<<<<<<<<
  * 
  * 
  */
 
-#line 631 "root_numpy/src/tree.pyx"
+#line 635 "root_numpy/src/tree.pyx"
   __pyx_r = __pyx_v_tree;
 
-#line 631 "root_numpy/src/tree.pyx"
+#line 635 "root_numpy/src/tree.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/tree.pyx":578
+  /* "root_numpy/src/tree.pyx":579
  * 
  * 
  * cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:             # <<<<<<<<<<<<<<
@@ -30944,64 +30959,64 @@ goto __pyx_L17_unpacking_failed;
  *     cdef NP2ROOTConverter* cvt
  */
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_L1_error:;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_9);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_10);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_13);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_14);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.array2tree", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_r = 0;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_L0:;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_fieldnames);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_fields);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_fieldname);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_v_dtype);
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
 }
 
-/* "root_numpy/src/tree.pyx":634
+/* "root_numpy/src/tree.pyx":638
  * 
  * 
  * def array2tree_toCObj(arr, name='tree', tree=None):             # <<<<<<<<<<<<<<
@@ -31009,265 +31024,265 @@ goto __pyx_L17_unpacking_failed;
  *     cdef TTree* outtree = NULL
  */
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 /* Python wrapper */
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_17array2tree_toCObj(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyMethodDef __pyx_mdef_13_librootnumpy_17array2tree_toCObj = 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 {"array2tree_toCObj", (PyCFunction)__pyx_pw_13_librootnumpy_17array2tree_toCObj, METH_VARARGS|METH_KEYWORDS, 0};
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_17array2tree_toCObj(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_arr = 0
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_name = 0
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_tree = 0
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 ;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = 0;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("array2tree_toCObj (wrapper)", 0);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_arr,&__pyx_n_s_name,&__pyx_n_s_tree,0};
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     PyObject* values[3] = {0,0,0};
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     values[1] = ((PyObject *)__pyx_n_s_tree);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     values[2] = ((PyObject *)Py_None);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     if (unlikely(__pyx_kwds)) {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       Py_ssize_t kw_args;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       switch (pos_args) {
         case  3: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         case  0: break;
         default: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       kw_args = PyDict_Size(__pyx_kwds);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       switch (pos_args) {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         case  0:
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_arr)) != 0)) kw_args--;
         else 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         case  1:
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         if (kw_args > 0) {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_name);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
           if (value) { values[1] = value; kw_args--; }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         case  2:
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         if (kw_args > 0) {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_tree);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
           if (value) { values[2] = value; kw_args--; }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       if (unlikely(kw_args > 0)) {
 
-#line 634 "root_numpy/src/tree.pyx"
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "array2tree_toCObj") < 0)) __PYX_ERR(2, 634, __pyx_L3_error)
+#line 638 "root_numpy/src/tree.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "array2tree_toCObj") < 0)) __PYX_ERR(2, 638, __pyx_L3_error)
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     } else {
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       switch (PyTuple_GET_SIZE(__pyx_args)) {
         case  3: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
         break;
         default: 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
       }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     __pyx_v_arr = values[0];
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     __pyx_v_name = values[1];
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
     __pyx_v_tree = values[2];
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   goto __pyx_L4_argument_unpacking_done;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("array2tree_toCObj", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); 
-#line 634 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 634, __pyx_L3_error)
+#line 638 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 638, __pyx_L3_error)
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_L3_error:;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.array2tree_toCObj", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   return NULL;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_L4_argument_unpacking_done:;
   __pyx_r = 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 __pyx_pf_13_librootnumpy_16array2tree_toCObj(__pyx_self, __pyx_v_arr, __pyx_v_name, __pyx_v_tree);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 }
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_arr, PyObject *__pyx_v_name, PyObject *__pyx_v_tree) {
   TTree *__pyx_v_intree
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 ;
   TTree *__pyx_v_outtree
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 ;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   int __pyx_t_1;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   int __pyx_t_2;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   void *__pyx_t_3;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   std::string __pyx_t_4;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   TTree *__pyx_t_5;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   struct __pyx_opt_args_13_librootnumpy_array2tree __pyx_t_6;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_7 = NULL;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("array2tree_toCObj", 0);
 
-  /* "root_numpy/src/tree.pyx":635
+  /* "root_numpy/src/tree.pyx":639
  * 
  * def array2tree_toCObj(arr, name='tree', tree=None):
  *     cdef TTree* intree = NULL             # <<<<<<<<<<<<<<
@@ -31275,10 +31290,10 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     if tree is not None:
  */
 
-#line 635 "root_numpy/src/tree.pyx"
+#line 639 "root_numpy/src/tree.pyx"
   __pyx_v_intree = NULL;
 
-  /* "root_numpy/src/tree.pyx":636
+  /* "root_numpy/src/tree.pyx":640
  * def array2tree_toCObj(arr, name='tree', tree=None):
  *     cdef TTree* intree = NULL
  *     cdef TTree* outtree = NULL             # <<<<<<<<<<<<<<
@@ -31286,10 +31301,10 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *         intree = <TTree*> PyCObject_AsVoidPtr(tree)
  */
 
-#line 636 "root_numpy/src/tree.pyx"
+#line 640 "root_numpy/src/tree.pyx"
   __pyx_v_outtree = NULL;
 
-  /* "root_numpy/src/tree.pyx":637
+  /* "root_numpy/src/tree.pyx":641
  *     cdef TTree* intree = NULL
  *     cdef TTree* outtree = NULL
  *     if tree is not None:             # <<<<<<<<<<<<<<
@@ -31297,16 +31312,16 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     outtree = array2tree(arr, name=name, tree=intree)
  */
 
-#line 637 "root_numpy/src/tree.pyx"
+#line 641 "root_numpy/src/tree.pyx"
   __pyx_t_1 = (__pyx_v_tree != Py_None);
 
-#line 637 "root_numpy/src/tree.pyx"
+#line 641 "root_numpy/src/tree.pyx"
   __pyx_t_2 = (__pyx_t_1 != 0);
 
-#line 637 "root_numpy/src/tree.pyx"
+#line 641 "root_numpy/src/tree.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/tree.pyx":638
+    /* "root_numpy/src/tree.pyx":642
  *     cdef TTree* outtree = NULL
  *     if tree is not None:
  *         intree = <TTree*> PyCObject_AsVoidPtr(tree)             # <<<<<<<<<<<<<<
@@ -31314,13 +31329,13 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     return PyCObject_FromVoidPtr(outtree, NULL)
  */
 
-#line 638 "root_numpy/src/tree.pyx"
-    __pyx_t_3 = PyCObject_AsVoidPtr(__pyx_v_tree); if (unlikely(__pyx_t_3 == NULL && PyErr_Occurred())) __PYX_ERR(2, 638, __pyx_L1_error)
+#line 642 "root_numpy/src/tree.pyx"
+    __pyx_t_3 = PyCObject_AsVoidPtr(__pyx_v_tree); if (unlikely(__pyx_t_3 == NULL && PyErr_Occurred())) __PYX_ERR(2, 642, __pyx_L1_error)
 
-#line 638 "root_numpy/src/tree.pyx"
+#line 642 "root_numpy/src/tree.pyx"
     __pyx_v_intree = ((TTree *)__pyx_t_3);
 
-    /* "root_numpy/src/tree.pyx":637
+    /* "root_numpy/src/tree.pyx":641
  *     cdef TTree* intree = NULL
  *     cdef TTree* outtree = NULL
  *     if tree is not None:             # <<<<<<<<<<<<<<
@@ -31328,10 +31343,10 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     outtree = array2tree(arr, name=name, tree=intree)
  */
 
-#line 637 "root_numpy/src/tree.pyx"
+#line 641 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":639
+  /* "root_numpy/src/tree.pyx":643
  *     if tree is not None:
  *         intree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     outtree = array2tree(arr, name=name, tree=intree)             # <<<<<<<<<<<<<<
@@ -31339,28 +31354,28 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  * 
  */
 
-#line 639 "root_numpy/src/tree.pyx"
-  if (!(likely(((__pyx_v_arr) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_arr, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(2, 639, __pyx_L1_error)
+#line 643 "root_numpy/src/tree.pyx"
+  if (!(likely(((__pyx_v_arr) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_arr, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(2, 643, __pyx_L1_error)
 
-#line 639 "root_numpy/src/tree.pyx"
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 639, __pyx_L1_error)
+#line 643 "root_numpy/src/tree.pyx"
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 643, __pyx_L1_error)
 
-#line 639 "root_numpy/src/tree.pyx"
+#line 643 "root_numpy/src/tree.pyx"
   __pyx_t_6.__pyx_n = 2;
 
-#line 639 "root_numpy/src/tree.pyx"
+#line 643 "root_numpy/src/tree.pyx"
   __pyx_t_6.name = __pyx_t_4;
 
-#line 639 "root_numpy/src/tree.pyx"
+#line 643 "root_numpy/src/tree.pyx"
   __pyx_t_6.tree = __pyx_v_intree;
 
-#line 639 "root_numpy/src/tree.pyx"
-  __pyx_t_5 = __pyx_f_13_librootnumpy_array2tree(((PyArrayObject *)__pyx_v_arr), &__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 639, __pyx_L1_error)
+#line 643 "root_numpy/src/tree.pyx"
+  __pyx_t_5 = __pyx_f_13_librootnumpy_array2tree(((PyArrayObject *)__pyx_v_arr), &__pyx_t_6); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 643, __pyx_L1_error)
 
-#line 639 "root_numpy/src/tree.pyx"
+#line 643 "root_numpy/src/tree.pyx"
   __pyx_v_outtree = __pyx_t_5;
 
-  /* "root_numpy/src/tree.pyx":640
+  /* "root_numpy/src/tree.pyx":644
  *         intree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     outtree = array2tree(arr, name=name, tree=intree)
  *     return PyCObject_FromVoidPtr(outtree, NULL)             # <<<<<<<<<<<<<<
@@ -31368,25 +31383,25 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  * 
  */
 
-#line 640 "root_numpy/src/tree.pyx"
+#line 644 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 640 "root_numpy/src/tree.pyx"
-  __pyx_t_7 = PyCObject_FromVoidPtr(__pyx_v_outtree, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 640, __pyx_L1_error)
+#line 644 "root_numpy/src/tree.pyx"
+  __pyx_t_7 = PyCObject_FromVoidPtr(__pyx_v_outtree, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 644, __pyx_L1_error)
 
-#line 640 "root_numpy/src/tree.pyx"
+#line 644 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 640 "root_numpy/src/tree.pyx"
+#line 644 "root_numpy/src/tree.pyx"
   __pyx_r = __pyx_t_7;
 
-#line 640 "root_numpy/src/tree.pyx"
+#line 644 "root_numpy/src/tree.pyx"
   __pyx_t_7 = 0;
 
-#line 640 "root_numpy/src/tree.pyx"
+#line 644 "root_numpy/src/tree.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/tree.pyx":634
+  /* "root_numpy/src/tree.pyx":638
  * 
  * 
  * def array2tree_toCObj(arr, name='tree', tree=None):             # <<<<<<<<<<<<<<
@@ -31394,40 +31409,40 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     cdef TTree* outtree = NULL
  */
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_L1_error:;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_7);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.array2tree_toCObj", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_r = NULL;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __pyx_L0:;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
 }
 
-/* "root_numpy/src/tree.pyx":643
+/* "root_numpy/src/tree.pyx":647
  * 
  * 
  * def array2root(arr, filename, treename='tree', mode='update'):             # <<<<<<<<<<<<<<
@@ -31435,301 +31450,301 @@ static PyObject *__pyx_pf_13_librootnumpy_16array2tree_toCObj(CYTHON_UNUSED PyOb
  *     if rfile == NULL:
  */
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 /* Python wrapper */
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_19array2root(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static PyMethodDef __pyx_mdef_13_librootnumpy_19array2root = 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 {"array2root", (PyCFunction)__pyx_pw_13_librootnumpy_19array2root, METH_VARARGS|METH_KEYWORDS, 0};
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_19array2root(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_arr = 0
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_filename = 0
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_treename = 0
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
   PyObject *__pyx_v_mode = 0
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = 0;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("array2root (wrapper)", 0);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_arr,&__pyx_n_s_filename,&__pyx_n_s_treename,&__pyx_n_s_mode,0};
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     PyObject* values[4] = {0,0,0,0};
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     values[2] = ((PyObject *)__pyx_n_s_tree);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     values[3] = ((PyObject *)__pyx_n_s_update);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     if (unlikely(__pyx_kwds)) {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       Py_ssize_t kw_args;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       switch (pos_args) {
         case  4: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         case  1: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         case  0: break;
         default: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       kw_args = PyDict_Size(__pyx_kwds);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       switch (pos_args) {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         case  0:
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_arr)) != 0)) kw_args--;
         else 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         case  1:
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_filename)) != 0)) kw_args--;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         else {
           __Pyx_RaiseArgtupleInvalid("array2root", 0, 2, 4, 1); 
-#line 643 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 643, __pyx_L3_error)
+#line 647 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 647, __pyx_L3_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         case  2:
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         if (kw_args > 0) {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_treename);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
           if (value) { values[2] = value; kw_args--; }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         case  3:
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         if (kw_args > 0) {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
           PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_mode);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
           if (value) { values[3] = value; kw_args--; }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       if (unlikely(kw_args > 0)) {
 
-#line 643 "root_numpy/src/tree.pyx"
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "array2root") < 0)) __PYX_ERR(2, 643, __pyx_L3_error)
+#line 647 "root_numpy/src/tree.pyx"
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "array2root") < 0)) __PYX_ERR(2, 647, __pyx_L3_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     } else {
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       switch (PyTuple_GET_SIZE(__pyx_args)) {
         case  4: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
         case  3: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
         case  2: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
         break;
         default: 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 goto __pyx_L5_argtuple_error;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
       }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     __pyx_v_arr = values[0];
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     __pyx_v_filename = values[1];
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     __pyx_v_treename = values[2];
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
     __pyx_v_mode = values[3];
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   goto __pyx_L4_argument_unpacking_done;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("array2root", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); 
-#line 643 "root_numpy/src/tree.pyx"
-__PYX_ERR(2, 643, __pyx_L3_error)
+#line 647 "root_numpy/src/tree.pyx"
+__PYX_ERR(2, 647, __pyx_L3_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_L3_error:;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.array2root", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   return NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_L4_argument_unpacking_done:;
   __pyx_r = 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 __pyx_pf_13_librootnumpy_18array2root(__pyx_self, __pyx_v_arr, __pyx_v_filename, __pyx_v_treename, __pyx_v_mode);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 }
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_arr, PyObject *__pyx_v_filename, PyObject *__pyx_v_treename, PyObject *__pyx_v_mode) {
   TFile *__pyx_v_rfile
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
   TTree *__pyx_v_tree
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 ;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   const char *__pyx_t_1;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   const char *__pyx_t_2;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   int __pyx_t_3;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_6 = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   PyObject *__pyx_t_7 = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   std::string __pyx_t_8;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   TTree *__pyx_t_9;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   struct __pyx_opt_args_13_librootnumpy_array2tree __pyx_t_10;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannySetupContext("array2root", 0);
 
-  /* "root_numpy/src/tree.pyx":644
+  /* "root_numpy/src/tree.pyx":648
  * 
  * def array2root(arr, filename, treename='tree', mode='update'):
  *     cdef TFile* rfile = Open(filename, mode)             # <<<<<<<<<<<<<<
@@ -31737,16 +31752,16 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *         raise IOError("cannot open file {0}".format(filename))
  */
 
-#line 644 "root_numpy/src/tree.pyx"
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_filename); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(2, 644, __pyx_L1_error)
+#line 648 "root_numpy/src/tree.pyx"
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_filename); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(2, 648, __pyx_L1_error)
 
-#line 644 "root_numpy/src/tree.pyx"
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_mode); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 644, __pyx_L1_error)
+#line 648 "root_numpy/src/tree.pyx"
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_mode); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 648, __pyx_L1_error)
 
-#line 644 "root_numpy/src/tree.pyx"
+#line 648 "root_numpy/src/tree.pyx"
   __pyx_v_rfile = TFile::Open(__pyx_t_1, __pyx_t_2);
 
-  /* "root_numpy/src/tree.pyx":645
+  /* "root_numpy/src/tree.pyx":649
  * def array2root(arr, filename, treename='tree', mode='update'):
  *     cdef TFile* rfile = Open(filename, mode)
  *     if rfile == NULL:             # <<<<<<<<<<<<<<
@@ -31754,13 +31769,13 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     if not rfile.IsWritable():
  */
 
-#line 645 "root_numpy/src/tree.pyx"
+#line 649 "root_numpy/src/tree.pyx"
   __pyx_t_3 = ((__pyx_v_rfile == NULL) != 0);
 
-#line 645 "root_numpy/src/tree.pyx"
+#line 649 "root_numpy/src/tree.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/tree.pyx":646
+    /* "root_numpy/src/tree.pyx":650
  *     cdef TFile* rfile = Open(filename, mode)
  *     if rfile == NULL:
  *         raise IOError("cannot open file {0}".format(filename))             # <<<<<<<<<<<<<<
@@ -31768,121 +31783,121 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *         raise IOError("file {0} is not writable".format(filename))
  */
 
-#line 646 "root_numpy/src/tree.pyx"
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_cannot_open_file_0, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_cannot_open_file_0, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_5);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __pyx_t_6 = NULL;
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       if (likely(__pyx_t_6)) {
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
         __Pyx_INCREF(__pyx_t_6);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
         __Pyx_INCREF(function);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
         __Pyx_DECREF_SET(__pyx_t_5, function);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       }
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     }
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     if (!__pyx_t_6) {
 
-#line 646 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     } else {
 
-#line 646 "root_numpy/src/tree.pyx"
-      __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+      __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_7);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_INCREF(__pyx_v_filename);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_GIVEREF(__pyx_v_filename);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_v_filename);
 
-#line 646 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     }
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 646 "root_numpy/src/tree.pyx"
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_5);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_GIVEREF(__pyx_t_4);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __pyx_t_4 = 0;
 
-#line 646 "root_numpy/src/tree.pyx"
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 650, __pyx_L1_error)
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
 
-#line 646 "root_numpy/src/tree.pyx"
+#line 650 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 646 "root_numpy/src/tree.pyx"
-    __PYX_ERR(2, 646, __pyx_L1_error)
+#line 650 "root_numpy/src/tree.pyx"
+    __PYX_ERR(2, 650, __pyx_L1_error)
 
-    /* "root_numpy/src/tree.pyx":645
+    /* "root_numpy/src/tree.pyx":649
  * def array2root(arr, filename, treename='tree', mode='update'):
  *     cdef TFile* rfile = Open(filename, mode)
  *     if rfile == NULL:             # <<<<<<<<<<<<<<
@@ -31890,10 +31905,10 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     if not rfile.IsWritable():
  */
 
-#line 645 "root_numpy/src/tree.pyx"
+#line 649 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":647
+  /* "root_numpy/src/tree.pyx":651
  *     if rfile == NULL:
  *         raise IOError("cannot open file {0}".format(filename))
  *     if not rfile.IsWritable():             # <<<<<<<<<<<<<<
@@ -31901,13 +31916,13 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     # If a tree with that name exists, we want to update it
  */
 
-#line 647 "root_numpy/src/tree.pyx"
+#line 651 "root_numpy/src/tree.pyx"
   __pyx_t_3 = ((!(__pyx_v_rfile->IsWritable() != 0)) != 0);
 
-#line 647 "root_numpy/src/tree.pyx"
+#line 651 "root_numpy/src/tree.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/tree.pyx":648
+    /* "root_numpy/src/tree.pyx":652
  *         raise IOError("cannot open file {0}".format(filename))
  *     if not rfile.IsWritable():
  *         raise IOError("file {0} is not writable".format(filename))             # <<<<<<<<<<<<<<
@@ -31915,121 +31930,121 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     cdef TTree* tree = <TTree*> rfile.Get(treename)
  */
 
-#line 648 "root_numpy/src/tree.pyx"
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_file_0_is_not_writable, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_file_0_is_not_writable, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_5);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __pyx_t_7 = NULL;
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_5))) {
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       if (likely(__pyx_t_7)) {
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
         __Pyx_INCREF(__pyx_t_7);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
         __Pyx_INCREF(function);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
         __Pyx_DECREF_SET(__pyx_t_5, function);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       }
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     }
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     if (!__pyx_t_7) {
 
-#line 648 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_filename); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     } else {
 
-#line 648 "root_numpy/src/tree.pyx"
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7); __pyx_t_7 = NULL;
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_INCREF(__pyx_v_filename);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_GIVEREF(__pyx_v_filename);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_v_filename);
 
-#line 648 "root_numpy/src/tree.pyx"
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     }
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 648 "root_numpy/src/tree.pyx"
-    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+    __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_5);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_GIVEREF(__pyx_t_4);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __pyx_t_4 = 0;
 
-#line 648 "root_numpy/src/tree.pyx"
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(2, 652, __pyx_L1_error)
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
 
-#line 648 "root_numpy/src/tree.pyx"
+#line 652 "root_numpy/src/tree.pyx"
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 648 "root_numpy/src/tree.pyx"
-    __PYX_ERR(2, 648, __pyx_L1_error)
+#line 652 "root_numpy/src/tree.pyx"
+    __PYX_ERR(2, 652, __pyx_L1_error)
 
-    /* "root_numpy/src/tree.pyx":647
+    /* "root_numpy/src/tree.pyx":651
  *     if rfile == NULL:
  *         raise IOError("cannot open file {0}".format(filename))
  *     if not rfile.IsWritable():             # <<<<<<<<<<<<<<
@@ -32037,10 +32052,10 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     # If a tree with that name exists, we want to update it
  */
 
-#line 647 "root_numpy/src/tree.pyx"
+#line 651 "root_numpy/src/tree.pyx"
   }
 
-  /* "root_numpy/src/tree.pyx":650
+  /* "root_numpy/src/tree.pyx":654
  *         raise IOError("file {0} is not writable".format(filename))
  *     # If a tree with that name exists, we want to update it
  *     cdef TTree* tree = <TTree*> rfile.Get(treename)             # <<<<<<<<<<<<<<
@@ -32048,76 +32063,86 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     tree.Write(treename, kOverwrite)
  */
 
-#line 650 "root_numpy/src/tree.pyx"
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_treename); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 650, __pyx_L1_error)
+#line 654 "root_numpy/src/tree.pyx"
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_treename); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 654, __pyx_L1_error)
 
-#line 650 "root_numpy/src/tree.pyx"
+#line 654 "root_numpy/src/tree.pyx"
   __pyx_v_tree = ((TTree *)__pyx_v_rfile->Get(__pyx_t_2));
 
-  /* "root_numpy/src/tree.pyx":651
+  /* "root_numpy/src/tree.pyx":655
  *     # If a tree with that name exists, we want to update it
  *     cdef TTree* tree = <TTree*> rfile.Get(treename)
  *     tree = array2tree(arr, name=treename, tree=tree)             # <<<<<<<<<<<<<<
  *     tree.Write(treename, kOverwrite)
- *     rfile.Close()
- */
-
-#line 651 "root_numpy/src/tree.pyx"
-  if (!(likely(((__pyx_v_arr) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_arr, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(2, 651, __pyx_L1_error)
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_v_treename); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 651, __pyx_L1_error)
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_t_10.__pyx_n = 2;
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_t_10.name = __pyx_t_8;
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_t_10.tree = __pyx_v_tree;
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_t_9 = __pyx_f_13_librootnumpy_array2tree(((PyArrayObject *)__pyx_v_arr), &__pyx_t_10); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 651, __pyx_L1_error)
-
-#line 651 "root_numpy/src/tree.pyx"
-  __pyx_v_tree = __pyx_t_9;
-
-  /* "root_numpy/src/tree.pyx":652
- *     cdef TTree* tree = <TTree*> rfile.Get(treename)
- *     tree = array2tree(arr, name=treename, tree=tree)
- *     tree.Write(treename, kOverwrite)             # <<<<<<<<<<<<<<
- *     rfile.Close()
- *     # TODO: clean up tree
- */
-
-#line 652 "root_numpy/src/tree.pyx"
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_treename); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 652, __pyx_L1_error)
-
-#line 652 "root_numpy/src/tree.pyx"
-  __pyx_v_tree->Write(__pyx_t_2, TObject::kOverwrite);
-
-  /* "root_numpy/src/tree.pyx":653
- *     tree = array2tree(arr, name=treename, tree=tree)
- *     tree.Write(treename, kOverwrite)
- *     rfile.Close()             # <<<<<<<<<<<<<<
- *     # TODO: clean up tree
- *     del rfile
- */
-
-#line 653 "root_numpy/src/tree.pyx"
-  __pyx_v_rfile->Close();
-
-  /* "root_numpy/src/tree.pyx":655
- *     rfile.Close()
- *     # TODO: clean up tree
- *     del rfile             # <<<<<<<<<<<<<<
+ *     del tree
  */
 
 #line 655 "root_numpy/src/tree.pyx"
+  if (!(likely(((__pyx_v_arr) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_arr, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(2, 655, __pyx_L1_error)
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_t_8 = __pyx_convert_string_from_py_std__in_string(__pyx_v_treename); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 655, __pyx_L1_error)
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_t_10.__pyx_n = 2;
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_t_10.name = __pyx_t_8;
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_t_10.tree = __pyx_v_tree;
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_t_9 = __pyx_f_13_librootnumpy_array2tree(((PyArrayObject *)__pyx_v_arr), &__pyx_t_10); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 655, __pyx_L1_error)
+
+#line 655 "root_numpy/src/tree.pyx"
+  __pyx_v_tree = __pyx_t_9;
+
+  /* "root_numpy/src/tree.pyx":656
+ *     cdef TTree* tree = <TTree*> rfile.Get(treename)
+ *     tree = array2tree(arr, name=treename, tree=tree)
+ *     tree.Write(treename, kOverwrite)             # <<<<<<<<<<<<<<
+ *     del tree
+ *     rfile.Close()
+ */
+
+#line 656 "root_numpy/src/tree.pyx"
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_treename); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(2, 656, __pyx_L1_error)
+
+#line 656 "root_numpy/src/tree.pyx"
+  __pyx_v_tree->Write(__pyx_t_2, TObject::kOverwrite);
+
+  /* "root_numpy/src/tree.pyx":657
+ *     tree = array2tree(arr, name=treename, tree=tree)
+ *     tree.Write(treename, kOverwrite)
+ *     del tree             # <<<<<<<<<<<<<<
+ *     rfile.Close()
+ *     del rfile
+ */
+
+#line 657 "root_numpy/src/tree.pyx"
+  delete __pyx_v_tree;
+
+  /* "root_numpy/src/tree.pyx":658
+ *     tree.Write(treename, kOverwrite)
+ *     del tree
+ *     rfile.Close()             # <<<<<<<<<<<<<<
+ *     del rfile
+ */
+
+#line 658 "root_numpy/src/tree.pyx"
+  __pyx_v_rfile->Close();
+
+  /* "root_numpy/src/tree.pyx":659
+ *     del tree
+ *     rfile.Close()
+ *     del rfile             # <<<<<<<<<<<<<<
+ */
+
+#line 659 "root_numpy/src/tree.pyx"
   delete __pyx_v_rfile;
 
-  /* "root_numpy/src/tree.pyx":643
+  /* "root_numpy/src/tree.pyx":647
  * 
  * 
  * def array2root(arr, filename, treename='tree', mode='update'):             # <<<<<<<<<<<<<<
@@ -32125,52 +32150,52 @@ static PyObject *__pyx_pf_13_librootnumpy_18array2root(CYTHON_UNUSED PyObject *_
  *     if rfile == NULL:
  */
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   /* function exit code */
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   goto __pyx_L0;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_L1_error:;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_XDECREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_AddTraceback("_librootnumpy.array2root", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_r = NULL;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __pyx_L0:;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   return __pyx_r;
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
 }
 
 /* "root_numpy/src/array.pyx":4
@@ -75692,7 +75717,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_failed_to_allocate_memory_for_0, __pyx_k_failed_to_allocate_memory_for_0, sizeof(__pyx_k_failed_to_allocate_memory_for_0), 0, 0, 1, 0},
   {&__pyx_kp_s_field_0_of_type_1_is_not_compati, __pyx_k_field_0_of_type_1_is_not_compati, sizeof(__pyx_k_field_0_of_type_1_is_not_compati), 0, 0, 1, 0},
   {&__pyx_n_s_fields, __pyx_k_fields, sizeof(__pyx_k_fields), 0, 0, 1, 1},
-  {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_kp_s_file_0_is_not_writable, __pyx_k_file_0_is_not_writable, sizeof(__pyx_k_file_0_is_not_writable), 0, 0, 1, 0},
   {&__pyx_n_s_filename, __pyx_k_filename, sizeof(__pyx_k_filename), 0, 0, 1, 1},
   {&__pyx_n_s_fill_g1, __pyx_k_fill_g1, sizeof(__pyx_k_fill_g1), 0, 0, 1, 1},
@@ -75931,7 +75955,7 @@ static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 67, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(1, 80, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 540, __pyx_L1_error)
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 652, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 649, __pyx_L1_error)
   __pyx_builtin_IOError = __Pyx_GetBuiltinName(__pyx_n_s_IOError); if (!__pyx_builtin_IOError) __PYX_ERR(2, 7, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(2, 41, __pyx_L1_error)
   __pyx_builtin_IndexError = __Pyx_GetBuiltinName(__pyx_n_s_IndexError); if (!__pyx_builtin_IndexError) __PYX_ERR(2, 147, __pyx_L1_error)
@@ -76105,7 +76129,7 @@ static int __Pyx_InitCachedConstants(void) {
 #line 590 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "root_numpy/src/converters.pyx":642
+  /* "root_numpy/src/converters.pyx":639
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')             # <<<<<<<<<<<<<<
@@ -76113,13 +76137,13 @@ static int __Pyx_InitCachedConstants(void) {
  *         leaflist.append(b'/')
  */
 
-#line 642 "root_numpy/src/converters.pyx"
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 639 "root_numpy/src/converters.pyx"
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 639, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__14);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "root_numpy/src/tree.pyx":125
@@ -76999,7 +77023,7 @@ static int __Pyx_InitCachedConstants(void) {
  */
 
 #line 527 "root_numpy/src/tree.pyx"
-  __pyx_tuple__76 = PyTuple_Pack(17, __pyx_n_s_fnames, __pyx_n_s_treename, __pyx_n_s_branches, __pyx_n_s_selection, __pyx_n_s_object_selection, __pyx_n_s_start, __pyx_n_s_stop, __pyx_n_s_step, __pyx_n_s_include_weight, __pyx_n_s_weight_name, __pyx_n_s_cache_size, __pyx_n_s_warn_missing_tree, __pyx_n_s_chain, __pyx_n_s_file, __pyx_n_s_tree, __pyx_n_s_fn, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(2, 527, __pyx_L1_error)
+  __pyx_tuple__76 = PyTuple_Pack(17, __pyx_n_s_fnames, __pyx_n_s_treename, __pyx_n_s_branches, __pyx_n_s_selection, __pyx_n_s_object_selection, __pyx_n_s_start, __pyx_n_s_stop, __pyx_n_s_step, __pyx_n_s_include_weight, __pyx_n_s_weight_name, __pyx_n_s_cache_size, __pyx_n_s_warn_missing_tree, __pyx_n_s_rfile, __pyx_n_s_tree, __pyx_n_s_chain, __pyx_n_s_fn, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(2, 527, __pyx_L1_error)
 
 #line 527 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_tuple__76);
@@ -77010,7 +77034,7 @@ static int __Pyx_InitCachedConstants(void) {
 #line 527 "root_numpy/src/tree.pyx"
   __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(12, 0, 17, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_root2array_fromfile, 527, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(2, 527, __pyx_L1_error)
 
-  /* "root_numpy/src/tree.pyx":566
+  /* "root_numpy/src/tree.pyx":567
  * 
  * 
  * def root2array_fromtree(tree, branches, selection, object_selection,             # <<<<<<<<<<<<<<
@@ -77018,19 +77042,19 @@ static int __Pyx_InitCachedConstants(void) {
  *                         bool include_weight, string weight_name,
  */
 
-#line 566 "root_numpy/src/tree.pyx"
-  __pyx_tuple__78 = PyTuple_Pack(11, __pyx_n_s_tree, __pyx_n_s_branches, __pyx_n_s_selection, __pyx_n_s_object_selection, __pyx_n_s_start, __pyx_n_s_stop, __pyx_n_s_step, __pyx_n_s_include_weight, __pyx_n_s_weight_name, __pyx_n_s_cache_size, __pyx_n_s_rtree); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(2, 566, __pyx_L1_error)
+#line 567 "root_numpy/src/tree.pyx"
+  __pyx_tuple__78 = PyTuple_Pack(11, __pyx_n_s_tree, __pyx_n_s_branches, __pyx_n_s_selection, __pyx_n_s_object_selection, __pyx_n_s_start, __pyx_n_s_stop, __pyx_n_s_step, __pyx_n_s_include_weight, __pyx_n_s_weight_name, __pyx_n_s_cache_size, __pyx_n_s_rtree); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(2, 567, __pyx_L1_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_tuple__78);
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_GIVEREF(__pyx_tuple__78);
 
-#line 566 "root_numpy/src/tree.pyx"
-  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(10, 0, 11, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__78, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_root2array_fromtree, 566, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(2, 566, __pyx_L1_error)
+#line 567 "root_numpy/src/tree.pyx"
+  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(10, 0, 11, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__78, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_root2array_fromtree, 567, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(2, 567, __pyx_L1_error)
 
-  /* "root_numpy/src/tree.pyx":634
+  /* "root_numpy/src/tree.pyx":638
  * 
  * 
  * def array2tree_toCObj(arr, name='tree', tree=None):             # <<<<<<<<<<<<<<
@@ -77038,19 +77062,19 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef TTree* outtree = NULL
  */
 
-#line 634 "root_numpy/src/tree.pyx"
-  __pyx_tuple__80 = PyTuple_Pack(5, __pyx_n_s_arr, __pyx_n_s_name, __pyx_n_s_tree, __pyx_n_s_intree, __pyx_n_s_outtree); if (unlikely(!__pyx_tuple__80)) __PYX_ERR(2, 634, __pyx_L1_error)
+#line 638 "root_numpy/src/tree.pyx"
+  __pyx_tuple__80 = PyTuple_Pack(5, __pyx_n_s_arr, __pyx_n_s_name, __pyx_n_s_tree, __pyx_n_s_intree, __pyx_n_s_outtree); if (unlikely(!__pyx_tuple__80)) __PYX_ERR(2, 638, __pyx_L1_error)
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_tuple__80);
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_GIVEREF(__pyx_tuple__80);
 
-#line 634 "root_numpy/src/tree.pyx"
-  __pyx_codeobj__81 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__80, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_array2tree_toCObj, 634, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__81)) __PYX_ERR(2, 634, __pyx_L1_error)
+#line 638 "root_numpy/src/tree.pyx"
+  __pyx_codeobj__81 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__80, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_array2tree_toCObj, 638, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__81)) __PYX_ERR(2, 638, __pyx_L1_error)
 
-  /* "root_numpy/src/tree.pyx":643
+  /* "root_numpy/src/tree.pyx":647
  * 
  * 
  * def array2root(arr, filename, treename='tree', mode='update'):             # <<<<<<<<<<<<<<
@@ -77058,17 +77082,17 @@ static int __Pyx_InitCachedConstants(void) {
  *     if rfile == NULL:
  */
 
-#line 643 "root_numpy/src/tree.pyx"
-  __pyx_tuple__82 = PyTuple_Pack(6, __pyx_n_s_arr, __pyx_n_s_filename, __pyx_n_s_treename, __pyx_n_s_mode, __pyx_n_s_rfile, __pyx_n_s_tree); if (unlikely(!__pyx_tuple__82)) __PYX_ERR(2, 643, __pyx_L1_error)
+#line 647 "root_numpy/src/tree.pyx"
+  __pyx_tuple__82 = PyTuple_Pack(6, __pyx_n_s_arr, __pyx_n_s_filename, __pyx_n_s_treename, __pyx_n_s_mode, __pyx_n_s_rfile, __pyx_n_s_tree); if (unlikely(!__pyx_tuple__82)) __PYX_ERR(2, 647, __pyx_L1_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_tuple__82);
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_GIVEREF(__pyx_tuple__82);
 
-#line 643 "root_numpy/src/tree.pyx"
-  __pyx_codeobj__83 = (PyObject*)__Pyx_PyCode_New(4, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__82, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_array2root, 643, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__83)) __PYX_ERR(2, 643, __pyx_L1_error)
+#line 647 "root_numpy/src/tree.pyx"
+  __pyx_codeobj__83 = (PyObject*)__Pyx_PyCode_New(4, 0, 6, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__82, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy_2, __pyx_n_s_array2root, 647, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__83)) __PYX_ERR(2, 647, __pyx_L1_error)
 
   /* "root_numpy/src/array.pyx":10
  * 
@@ -83359,7 +83383,7 @@ goto __pyx_L16_unpacking_failed;
 #line 527 "root_numpy/src/tree.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/tree.pyx":566
+  /* "root_numpy/src/tree.pyx":567
  * 
  * 
  * def root2array_fromtree(tree, branches, selection, object_selection,             # <<<<<<<<<<<<<<
@@ -83367,19 +83391,19 @@ goto __pyx_L16_unpacking_failed;
  *                         bool include_weight, string weight_name,
  */
 
-#line 566 "root_numpy/src/tree.pyx"
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_15root2array_fromtree, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 566, __pyx_L1_error)
+#line 567 "root_numpy/src/tree.pyx"
+  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_15root2array_fromtree, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 567, __pyx_L1_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 566 "root_numpy/src/tree.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_root2array_fromtree, __pyx_t_7) < 0) __PYX_ERR(2, 566, __pyx_L1_error)
+#line 567 "root_numpy/src/tree.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_root2array_fromtree, __pyx_t_7) < 0) __PYX_ERR(2, 567, __pyx_L1_error)
 
-#line 566 "root_numpy/src/tree.pyx"
+#line 567 "root_numpy/src/tree.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/tree.pyx":578
+  /* "root_numpy/src/tree.pyx":579
  * 
  * 
  * cdef TTree* array2tree(np.ndarray arr, string name='tree', TTree* tree=NULL) except *:             # <<<<<<<<<<<<<<
@@ -83387,13 +83411,13 @@ goto __pyx_L16_unpacking_failed;
  *     cdef NP2ROOTConverter* cvt
  */
 
-#line 578 "root_numpy/src/tree.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_tree); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 578, __pyx_L1_error)
+#line 579 "root_numpy/src/tree.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_tree); if (unlikely(PyErr_Occurred())) __PYX_ERR(2, 579, __pyx_L1_error)
 
-#line 578 "root_numpy/src/tree.pyx"
+#line 579 "root_numpy/src/tree.pyx"
   __pyx_k__38 = __pyx_t_17;
 
-  /* "root_numpy/src/tree.pyx":634
+  /* "root_numpy/src/tree.pyx":638
  * 
  * 
  * def array2tree_toCObj(arr, name='tree', tree=None):             # <<<<<<<<<<<<<<
@@ -83401,19 +83425,19 @@ goto __pyx_L16_unpacking_failed;
  *     cdef TTree* outtree = NULL
  */
 
-#line 634 "root_numpy/src/tree.pyx"
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_17array2tree_toCObj, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 634, __pyx_L1_error)
+#line 638 "root_numpy/src/tree.pyx"
+  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_17array2tree_toCObj, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 638, __pyx_L1_error)
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 634 "root_numpy/src/tree.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_array2tree_toCObj, __pyx_t_7) < 0) __PYX_ERR(2, 634, __pyx_L1_error)
+#line 638 "root_numpy/src/tree.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_array2tree_toCObj, __pyx_t_7) < 0) __PYX_ERR(2, 638, __pyx_L1_error)
 
-#line 634 "root_numpy/src/tree.pyx"
+#line 638 "root_numpy/src/tree.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/tree.pyx":643
+  /* "root_numpy/src/tree.pyx":647
  * 
  * 
  * def array2root(arr, filename, treename='tree', mode='update'):             # <<<<<<<<<<<<<<
@@ -83421,16 +83445,16 @@ goto __pyx_L16_unpacking_failed;
  *     if rfile == NULL:
  */
 
-#line 643 "root_numpy/src/tree.pyx"
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_19array2root, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 643, __pyx_L1_error)
+#line 647 "root_numpy/src/tree.pyx"
+  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_19array2root, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 647, __pyx_L1_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/tree.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_array2root, __pyx_t_7) < 0) __PYX_ERR(2, 643, __pyx_L1_error)
+#line 647 "root_numpy/src/tree.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_array2root, __pyx_t_7) < 0) __PYX_ERR(2, 647, __pyx_L1_error)
 
-#line 643 "root_numpy/src/tree.pyx"
+#line 647 "root_numpy/src/tree.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "root_numpy/src/array.pyx":10
