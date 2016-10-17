@@ -210,21 +210,36 @@ def hist2array(hist, include_overflow=False, copy=True):
             array = array_func(ROOT.AsCObject(hist))
             array.shape = shape
             bin_array = [[] for idim in range(array.ndim)]
-            for idim in range(array.ndim):
-              nbins = hist.GetAxis(dim).GetNbins()
-              bin_array[idim] = np.zeros(nbins, dtype=float)
-              for ibin in range(nbins):
-                bin_array[idim][ibin] =  hist.GetAxis(idim).GetBinLowEdge(ibin)
+            if array.ndim > 0:
+                bin_array[0] = np.zeros(shape[0], dtype=float)
+                for ibin in range(shape[0]):
+                    bin_array[0][ibin] =  hist.GetXaxis().GetBinLowEdge(ibin)
+            if array.ndim > 1:
+                bin_array[1] = np.zeros(shape[1], dtype=float)
+                for ibin in range(shape[1]):
+                    bin_array[1][ibin] =  hist.GetYaxis().GetBinLowEdge(ibin)
+            if array.ndim > 2:
+                bin_array[2] = np.zeros(shape[2], dtype=float)
+                for ibin in range(shape[2]):
+                    bin_array[2][ibin] =  hist.GetZaxis().GetBinLowEdge(ibin)
+
         else:
             dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
             array = np.ndarray(shape=shape, dtype=dtype,
                                buffer=hist.GetArray())
             bin_array = [[] for idim in range(array.ndim)]
-            for idim in range(array.ndim):
-              nbins = hist.GetAxis(dim).GetNbins()
-              bin_array[idim] = np.zeros(nbins, dtype=float)
-              for ibin in range(nbins):
-                bin_array[idim][ibin] =  hist.GetAxis(idim).GetBinLowEdge(ibin)
+            if array.ndim > 0:
+                bin_array[0] = np.zeros(shape[0], dtype=float)
+                for ibin in range(shape[0]):
+                    bin_array[0][ibin] =  hist.GetXaxis().GetBinLowEdge(ibin)
+            if array.ndim > 1:
+                bin_array[1] = np.zeros(shape[1], dtype=float)
+                for ibin in range(shape[1]):
+                    bin_array[1][ibin] =  hist.GetYaxis().GetBinLowEdge(ibin)
+            if array.ndim > 2:
+                bin_array[2] = np.zeros(shape[2], dtype=float)
+                for ibin in range(shape[2]):
+                    bin_array[2][ibin] =  hist.GetZaxis().GetBinLowEdge(ibin)
 
     else:  # THn THnSparse
         dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
@@ -239,13 +254,13 @@ def hist2array(hist, include_overflow=False, copy=True):
         # Remove overflow and underflow bins
         array = array[tuple([slice(1, -1) for idim in range(array.ndim)])]
         for idim in range(array.ndim):
-            bin_array[idim] = bin_array[tuple(slice(1, -1))]
+            bin_array[idim] = bin_array[idim][slice(1, -1)]
 
     if simple_hist:
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
         if copy:
-            return np.copy(array)
+            return bin_array, np.copy(array)
     return bin_array, array
 
 
