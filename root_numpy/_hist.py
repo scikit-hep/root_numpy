@@ -266,9 +266,9 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
             if return_edges:
                 return np.copy(array), bin_array
             return np.copy(array)
-        if return_edges:
-            return array, bin_array
-        return array
+    if return_edges:
+        return array, bin_array
+    return array
 
 
 def array2hist(array, hist):
