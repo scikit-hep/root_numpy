@@ -129,7 +129,7 @@ def fill_profile(profile, array, weights=None, return_indices=False):
         "ROOT.TProfile, ROOT.TProfile2D, or ROOT.TProfile3D")
 
 
-def hist2array(hist, include_overflow=False, copy=True):
+def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
     """Convert a ROOT histogram into a NumPy array
 
     Parameters
@@ -143,13 +143,16 @@ def hist2array(hist, include_overflow=False, copy=True):
         If True (the default) then copy the underlying array, otherwise the
         NumPy array will view (and not own) the same memory as the ROOT
         histogram's array.
+    return_edges : bool, optional (default=False)
+        If True then return a list of arrays containing the histogram bin low edges ([x,y,z])
 
     Returns
     -------
-    bin_array[dim]: list of numpy arrays
-        A list of NumPy arrays containing the histogram bin low edges ([x,y,z])
     array : numpy array
         A NumPy array containing the histogram bin values
+    bin_array[dim]: list of numpy arrays
+        If ``return_edges`` is True, then return a list of NumPy arrays containing the histogram bin low edges ([x,y,z])
+
 
     Raises
     ------
@@ -260,8 +263,12 @@ def hist2array(hist, include_overflow=False, copy=True):
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
         if copy:
-            return bin_array, np.copy(array)
-    return bin_array, array
+            if return_edges:
+                return np.copy(array), bin_array
+            return np.copy(array)
+        if return_edges:
+            return array, bin_array
+        return array
 
 
 def array2hist(array, hist):
