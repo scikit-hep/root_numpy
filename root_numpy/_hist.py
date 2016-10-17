@@ -146,6 +146,8 @@ def hist2array(hist, include_overflow=False, copy=True):
 
     Returns
     -------
+    bin_array[dim]: list of numpy arrays
+        A list of NumPy arrays containing the histogram bin low edges ([x,y,z])
     array : numpy array
         A NumPy array containing the histogram bin values
 
@@ -207,29 +209,44 @@ def hist2array(hist, include_overflow=False, copy=True):
                                  'array_h{0}c'.format(len(shape)))
             array = array_func(ROOT.AsCObject(hist))
             array.shape = shape
+            bin_array = [[] for idim in range(array.ndim)]
+            for idim in range(array.ndim):
+              nbins = hist.GetAxis(dim).GetNbins()
+              bin_array[idim] = np.zeros(nbins, dtype=float)
+              for ibin in range(nbins):
+                bin_array[idim][ibin] =  hist.GetAxis(idim).GetBinLowEdge(ibin)
         else:
             dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
             array = np.ndarray(shape=shape, dtype=dtype,
                                buffer=hist.GetArray())
+            bin_array = [[] for idim in range(array.ndim)]
+            for idim in range(array.ndim):
+              nbins = hist.GetAxis(dim).GetNbins()
+              bin_array[idim] = np.zeros(nbins, dtype=float)
+              for ibin in range(nbins):
+                bin_array[idim][ibin] =  hist.GetAxis(idim).GetBinLowEdge(ibin)
+
     else:  # THn THnSparse
         dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
         if isinstance(hist, ROOT.THnSparse):
-            array = _librootnumpy.thnsparse2array(ROOT.AsCObject(hist),
+            bin_array, array = _librootnumpy.thnsparse2array(ROOT.AsCObject(hist),
                                                   shape, dtype)
         else:
-            array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
+            bin_array, array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
                                             shape, dtype)
 
     if not include_overflow:
         # Remove overflow and underflow bins
         array = array[tuple([slice(1, -1) for idim in range(array.ndim)])]
+        for idim in range(array.ndim):
+            bin_array[idim] = bin_array[tuple(slice(1, -1))]
 
     if simple_hist:
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
         if copy:
             return np.copy(array)
-    return array
+    return bin_array, array
 
 
 def array2hist(array, hist):

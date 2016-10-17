@@ -175,9 +175,15 @@ def thn2array(hist, shape, dtype):
     cdef long long nbins = _hist.GetNbins()
     cdef np.ndarray array = np.zeros(shape, dtype=dtype)
     cdef np.ndarray array_ravel_view = np.ravel(array)
+    cdef bin_array = [[] for idim in range(array.ndim)]
     for ibin in range(nbins):
         array_ravel_view[ibin] = _hist.GetBinContent(ibin)
-    return array
+    for idim in range(array.ndim):
+      nbins = _hist.GetAxis(dim).GetNbins()
+      bin_array[idim] = np.zeros(nbins, dtype=float)
+      for ibin in range(nbins):
+        bin_array[idim][ibin] =  _hist.GetAxis(idim).GetBinLowEdge(ibin)
+    return bin_array,array
 
 
 @cython.boundscheck(False)
@@ -189,8 +195,14 @@ def thnsparse2array(hist, shape, dtype):
     cdef long long nbins = _hist.GetNbins()
     cdef np.ndarray array = np.zeros(shape, dtype=dtype)
     cdef np.ndarray coord = np.empty(array.ndim, dtype=np.int32)
+    cdef bin_array = [[] for idim in range(array.ndim)]
     itemset = array.itemset
     for ibin in range(nbins):
         content = _hist.GetBinContent(ibin, <int*> coord.data)
         itemset(tuple(coord), content)
-    return array
+    for idim in range(array.ndim):
+      nbins = _hist.GetAxis(dim).GetNbins()
+      bin_array[idim] = np.zeros(nbins, dtype=float)
+      for ibin in range(nbins):
+        bin_array[idim][ibin] =  _hist.GetAxis(idim).GetBinLowEdge(ibin)
+    return bin_array,array
