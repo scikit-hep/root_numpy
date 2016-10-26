@@ -1118,6 +1118,11 @@ def test_hist2array():
             yield check_hist2array, hist, True, False
             yield check_hist2array, hist, True, True
             yield check_hist2array_THn, hist
+    # check edges
+    hist = make_histogram('D', shape=(5,) * 3)
+    _, edges = rnp.hist2array(hist, return_edges=True)
+    assert_equal(len(edges), 3)
+    assert_true(np.all(edges[0] == edges[0]))
 
 
 def test_hist2array_THn():
@@ -1126,6 +1131,10 @@ def test_hist2array_THn():
         for hist_type in 'DFISC':
             hist = make_histogram(hist_type, shape=(5,) * ndim)
             yield check_hist2array_THn, hist
+    hist = ROOT.THn.CreateHn("", "", make_histogram('D', shape=(5,) * 3))
+    _, edges = rnp.hist2array(hist, return_edges=True)
+    assert_equal(len(edges), 3)
+    assert_true(np.all(edges[0] == edges[0]))
 
 
 def test_hist2array_THnSparse():
@@ -1134,6 +1143,10 @@ def test_hist2array_THnSparse():
         for hist_type in 'DFISC':
             hist = make_histogram(hist_type, shape=(5,) * ndim)
             yield check_hist2array_THnSparse, hist
+    hist = ROOT.THnSparse.CreateSparse("", "", make_histogram('D', shape=(5,) * 3))
+    _, edges = rnp.hist2array(hist, return_edges=True)
+    assert_equal(len(edges), 3)
+    assert_true(np.all(edges[0] == edges[0]))
 
 
 def check_array2hist(hist):

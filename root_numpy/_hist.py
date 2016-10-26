@@ -129,7 +129,7 @@ def fill_profile(profile, array, weights=None, return_indices=False):
         "ROOT.TProfile, ROOT.TProfile2D, or ROOT.TProfile3D")
 
 
-def hist2array(hist, include_overflow=False, copy=True):
+def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
     """Convert a ROOT histogram into a NumPy array
 
     Parameters
@@ -143,11 +143,17 @@ def hist2array(hist, include_overflow=False, copy=True):
         If True (the default) then copy the underlying array, otherwise the
         NumPy array will view (and not own) the same memory as the ROOT
         histogram's array.
+    return_edges : bool, optional (default=True)
+        If True, also return the eges of each bin along each axis.
 
     Returns
     -------
     array : numpy array
         A NumPy array containing the histogram bin values
+    edges : list of numpy arrays
+        A list of numpy arrays where each array contains the bin edges
+        of one dimension of `hist`. Over and under flow bins are are
+        not included.
 
     Raises
     ------
@@ -220,6 +226,28 @@ def hist2array(hist, include_overflow=False, copy=True):
             array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
                                             shape, dtype)
 
+    if return_edges:
+        if simple_hist:
+            ndims = hist.GetDimension()
+            axis_getters = ['GetXaxis', 'GetYaxis', 'GetZaxis'][:ndims]
+        else:
+            ndims = hist.GetNdimensions()
+            axis_getters = ['GetAxis'] * ndims
+
+        edges = []
+        for idim, axis_getter in zip(range(ndims), axis_getters):
+            if simple_hist:
+                params = ()
+            else:
+                params = (idim, )
+            ax = getattr(hist, axis_getter)(*(() if simple_hist else (idim, )))
+            # `edges` is Nbins + 1 in order to have the last bin's upper edge as well
+            edges.append(np.arange(ax.GetNbins() + 1, dtype=np.double))
+            # load the lower edges into `edges`
+            ax.GetLowEdge(edges[-1])
+            # Get the upper edge of the last bin
+            edges[-1][-1] = ax.GetBinUpEdge(ax.GetNbins())
+
     if not include_overflow:
         # Remove overflow and underflow bins
         array = array[tuple([slice(1, -1) for idim in range(array.ndim)])]
@@ -228,8 +256,14 @@ def hist2array(hist, include_overflow=False, copy=True):
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
         if copy:
-            return np.copy(array)
-    return array
+            if return_edges:
+                np.copy(array), edges
+            else:
+                np.copy(array)
+    if return_edges:
+        return array, edges
+    else:
+        return array
 
 
 def array2hist(array, hist):
