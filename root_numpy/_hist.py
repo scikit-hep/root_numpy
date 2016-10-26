@@ -236,10 +236,7 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
 
         edges = []
         for idim, axis_getter in zip(range(ndims), axis_getters):
-            if simple_hist:
-                params = ()
-            else:
-                params = (idim, )
+            # GetXaxis expects 0 parameters while we need the axis in GetAxis
             ax = getattr(hist, axis_getter)(*(() if simple_hist else (idim, )))
             # `edges` is Nbins + 1 in order to have the last bin's upper edge as well
             edges.append(np.arange(ax.GetNbins() + 1, dtype=np.double))
