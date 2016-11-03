@@ -141,7 +141,7 @@ def root2array(filenames,
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
-    branches : list of strings or single string, optional (default=None)
+    branches : list of strings or string, optional (default=None)
         List of branch names and expressions to include as columns of the
         array or a single branch name or expression to convert into a
         one-dimensional array. If None then include all branches that can be
@@ -285,7 +285,7 @@ def tree2array(tree,
     ----------
     tree : ROOT TTree instance
         The ROOT TTree to convert into an array.
-    branches : list of strings or single string, optional (default=None)
+    branches : list of strings or string, optional (default=None)
         List of branch names and expressions to include as columns of the
         array or a single branch name or expression to convert into a
         one-dimensional array. If None then include all branches that can be

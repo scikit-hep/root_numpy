@@ -24,21 +24,21 @@ def rec2array(rec, fields=None):
     ----------
     rec : NumPy record/structured array
         A NumPy structured array that will be cast into a homogenous data type.
-    fields : list of strings, optional (default=None)
+    fields : list of strings or string, optional (default=None)
         The fields to include as columns in the output array. If None, then all
         columns will be included. All fields must have the same shape.
+        See below regarding the case where ``fields`` is a string.
 
     Returns
     -------
     array : NumPy ndarray
-        A new NumPy ndarray with homogeneous data types for all columns.
-
-    Notes
-    -----
-    If the fields are scalars the shape of the output ``array`` will be
-    ``(len(rec), num_fields)``. If the fields are arrays of length
-    ``num_things`` the shape of the output ``array`` will be ``(len(rec),
-    num_things, num_fields)``.
+        A new NumPy ndarray with homogeneous data types for all columns. If the
+        fields are scalars the shape will be ``(len(rec), num_fields)``. If the
+        fields are arrays of length ``num_things`` the shape will be
+        ``(len(rec), num_things, num_fields)``. If ``fields`` is a string (a
+        single field), then the shape will be simplified to remove the last
+        dimension ``num_fields``. This simplification will not occur if
+        ``fields`` is a list containing a single field.
 
     Examples
     --------
@@ -81,12 +81,24 @@ def rec2array(rec, fields=None):
     (2, 3, 2)
 
     """
+    simplify = False
     if fields is None:
         fields = rec.dtype.names
-    if len(fields) == 1:
-        return rec[fields[0]]
+    elif isinstance(fields, string_types):
+        fields = [fields]
+        simplify = True
     # Creates a copy and casts all data to the same type
-    return np.squeeze(np.dstack([rec[field] for field in fields]))
+    arr = np.dstack([rec[field] for field in fields])
+    # Check for array-type fields. If none, then remove outer dimension.
+    # Only need to check first field since np.dstack will anyway raise an
+    # exception if the shapes don't match
+    # np.dstack will also fail if fields is an empty list
+    if not rec.dtype[fields[0]].shape:
+        arr = arr[0]
+    if simplify:
+        # remove last dimension (will be of size 1)
+        arr = arr.reshape(arr.shape[:-1])
+    return arr
 
 
 def stack(recs, fields=None):
@@ -126,7 +138,7 @@ def stretch(arr, fields=None, return_indices=False):
     ----------
     arr : NumPy structured or record array
         The array to be stretched.
-    fields : list of strings or single string, optional (default=None)
+    fields : list of strings or string, optional (default=None)
         A list of column names or a single column name to stretch.
         If ``fields`` is a string, then the output array is a one-dimensional
         unstructured array containing only the stretched elements of that

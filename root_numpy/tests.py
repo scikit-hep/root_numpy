@@ -924,6 +924,7 @@ def test_matrix():
 
 
 def test_rec2array():
+    # scalar fields
     a = np.array([
         (12345, 2., 2.1, True),
         (3, 4., 4.2, False),],
@@ -932,20 +933,31 @@ def test_rec2array():
             ('y', np.float32),
             ('z', np.float64),
             ('w', np.bool)])
+
     arr = rnp.rec2array(a)
     assert_array_equal(arr,
         np.array([
             [12345, 2, 2.1, 1],
             [3, 4, 4.2, 0]]))
+
     arr = rnp.rec2array(a, fields=['x', 'y'])
     assert_array_equal(arr,
         np.array([
             [12345, 2],
             [3, 4]]))
-    # single field
+
+    # single scalar field
     arr = rnp.rec2array(a, fields=['x'])
-    assert_equal(arr.ndim, 1)
-    assert_equal(arr.shape, (a.shape[0],))
+    assert_array_equal(arr, np.array([[12345], [3]], dtype=np.int32))
+    # single scalar field simplified
+    arr = rnp.rec2array(a, fields='x')
+    assert_array_equal(arr, np.array([12345, 3], dtype=np.int32))
+
+    # case where array has single record
+    assert_equal(rnp.rec2array(a[:1]).shape, (1, 4))
+    assert_equal(rnp.rec2array(a[:1], fields=['x']).shape, (1, 1))
+    assert_equal(rnp.rec2array(a[:1], fields='x').shape, (1,))
+
     # array fields
     a = np.array([
         ([1, 2, 3], [4.5, 6, 9.5],),
@@ -953,14 +965,39 @@ def test_rec2array():
         dtype=[
             ('x', np.int32, (3,)),
             ('y', np.float32, (3,))])
+
     arr = rnp.rec2array(a)
     assert_array_almost_equal(arr,
         np.array([[[1, 4.5],
-                   [2, 6,],
+                   [2, 6],
                    [3, 9.5]],
                   [[4, 3.3],
                    [5, 7.5],
                    [6, 8.4]]]))
+
+    # lengths mismatch
+    a = np.array([
+        ([1, 2], [4.5, 6, 9.5],),
+        ([4, 5], [3.3, 7.5, 8.4],),],
+        dtype=[
+            ('x', np.int32, (2,)),
+            ('y', np.float32, (3,))])
+    assert_raises(ValueError, rnp.rec2array, a)
+
+    # single array field
+    arr = rnp.rec2array(a, fields=['y'])
+    assert_array_almost_equal(arr,
+        np.array([[[4.5], [6], [9.5]],
+                  [[3.3], [7.5], [8.4]]]))
+    # single array field simplified
+    arr = rnp.rec2array(a, fields='y')
+    assert_array_almost_equal(arr,
+        np.array([[4.5, 6, 9.5],
+                  [3.3, 7.5, 8.4]]))
+
+    # case where array has single record
+    assert_equal(rnp.rec2array(a[:1], fields=['y']).shape, (1, 3, 1))
+    assert_equal(rnp.rec2array(a[:1], fields='y').shape, (1, 3))
 
 
 def test_stack():
