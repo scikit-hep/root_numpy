@@ -254,9 +254,9 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
         array = np.transpose(array)
         if copy:
             if return_edges:
-                np.copy(array), edges
+                array, edges = np.copy(array), edges
             else:
-                np.copy(array)
+                array = np.copy(array)
     if return_edges:
         return array, edges
     else:

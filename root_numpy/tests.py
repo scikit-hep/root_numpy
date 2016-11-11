@@ -1120,7 +1120,10 @@ def test_hist2array():
             yield check_hist2array_THn, hist
     # check edges
     hist = make_histogram('D', shape=(5,) * 3)
-    _, edges = rnp.hist2array(hist, return_edges=True)
+    a, edges = rnp.hist2array(hist, return_edges=True)
+    hist.Delete()
+    # check that the content was copied
+    assert_equal(np.sum(a), 5000)
     assert_equal(len(edges), 3)
     assert_true(np.all(edges[0] == edges[0]))
 
@@ -1144,7 +1147,10 @@ def test_hist2array_THnSparse():
             hist = make_histogram(hist_type, shape=(5,) * ndim)
             yield check_hist2array_THnSparse, hist
     hist = ROOT.THnSparse.CreateSparse("", "", make_histogram('D', shape=(5,) * 3))
-    _, edges = rnp.hist2array(hist, return_edges=True)
+    a, edges = rnp.hist2array(hist, return_edges=True)
+    hist.Delete()
+    # check that the content was copied
+    assert_equal(np.sum(a), 5000)
     assert_equal(len(edges), 3)
     assert_true(np.all(edges[0] == edges[0]))
 
