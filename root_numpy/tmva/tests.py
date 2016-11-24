@@ -78,10 +78,10 @@ class TMVA_Estimator(object):
         # test exceptions
         assert_raises(TypeError, func, object(), X, y)
         assert_raises(ValueError, func,
-                      self.factory, X, y[:y.shape[0] / 2])
+                      self.factory, X, y[:y.shape[0] // 2])
         if weights is not None:
             assert_raises(ValueError, func, self.factory, X, y,
-                          weights=weights[:weights.shape[0]/2])
+                          weights=weights[:weights.shape[0] // 2])
             assert_raises(ValueError, func, self.factory, X, y,
                           weights=weights[:, np.newaxis])
 
