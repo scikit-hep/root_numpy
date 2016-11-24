@@ -8,7 +8,10 @@ from collections import namedtuple
 class ROOTVersion(namedtuple('_ROOTVersionBase',
                              ['major', 'minor', 'micro'])):
 
-    def __new__(cls, version):
+    def __new__(cls, *version):
+        if len(version) == 1:
+            version = version[0]
+
         if isinstance(version, numbers.Integral):
             if version < 1E4:
                 raise ValueError(
