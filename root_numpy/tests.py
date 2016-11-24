@@ -1103,15 +1103,18 @@ def make_histogram(hist_type, shape, fill=True):
     hist_cls = getattr(ROOT, 'TH{0}{1}'.format(ndim, hist_type))
     if ndim == 1:
         hist = hist_cls(hist_cls.__name__, '',
-                        shape[0], 0, 1)
+                        shape[0], 0, shape[0])
         func = ROOT.TF1('func', 'x')
     elif ndim == 2:
         hist = hist_cls(hist_cls.__name__, '',
-                        shape[1], 0, 1, shape[0], 0, 1)
+                        shape[1], 0, shape[1],
+                        shape[0], 0, shape[0])
         func = ROOT.TF2('func', 'x*y')
     elif ndim == 3:
         hist = hist_cls(hist_cls.__name__, '',
-                        shape[2], 0, 1, shape[1], 0, 1, shape[0], 0, 1)
+                        shape[2], 0, shape[2],
+                        shape[1], 0, shape[1],
+                        shape[0], 0, shape[0])
         func = ROOT.TF3('func', 'x*y*z')
     else:
         raise ValueError("ndim must be 1, 2, or 3")  # pragma: no cover
@@ -1130,8 +1133,9 @@ def check_hist2array(hist, include_overflow, copy):
         else:
             assert_equal(array.shape[iaxis],
                          getattr(hist, 'GetNbins{0}'.format(axis))())
-    # non-zero elements
-    assert_true(np.any(array))
+    hist_sum = hist.Integral()
+    assert_true(hist_sum > 0)
+    assert_equal(hist_sum, np.sum(array))
 
 
 def check_hist2array_THn(hist):
@@ -1139,7 +1143,7 @@ def check_hist2array_THn(hist):
     array = rnp.hist2array(hist)
     array_thn = rnp.hist2array(hist_thn)
     # non-zero elements
-    assert_true(np.any(array))
+    assert_true(np.any(array_thn))
     # arrays should be identical
     assert_array_equal(array, array_thn)
 
@@ -1149,7 +1153,7 @@ def check_hist2array_THnSparse(hist):
     array = rnp.hist2array(hist)
     array_thnsparse = rnp.hist2array(hist_thnsparse)
     # non-zero elements
-    assert_true(np.any(array))
+    assert_true(np.any(array_thnsparse))
     # arrays should be identical
     assert_array_equal(array, array_thnsparse)
 
@@ -1164,6 +1168,20 @@ def test_hist2array():
             yield check_hist2array, hist, True, False
             yield check_hist2array, hist, True, True
             yield check_hist2array_THn, hist
+            # check that the memory was copied
+            arr = rnp.hist2array(hist, copy=True)
+            hist_sum = hist.Integral()
+            assert_true(hist_sum > 0)
+            hist.Reset()
+            assert_equal(np.sum(arr), hist_sum)
+            # check that the memory is shared
+            hist = make_histogram(hist_type, shape=(5,) * ndim)
+            arr = rnp.hist2array(hist, copy=False)
+            hist_sum = hist.Integral()
+            assert_true(hist_sum > 0)
+            assert_true(np.sum(arr) == hist_sum)
+            hist.Reset()
+            assert_true(np.sum(arr) == 0)
 
 
 def test_hist2array_THn():
@@ -1180,6 +1198,24 @@ def test_hist2array_THnSparse():
         for hist_type in 'DFISC':
             hist = make_histogram(hist_type, shape=(5,) * ndim)
             yield check_hist2array_THnSparse, hist
+
+
+def check_hist2array_edges(hist, ndim, bins):
+    _, edges = rnp.hist2array(hist, return_edges=True)
+    assert_equal(len(edges), ndim)
+    for axis_edges in edges:
+        assert_array_equal(axis_edges, np.arange(bins + 1, dtype=np.double))
+
+
+def test_hist2array_edges():
+    for ndim in (1, 2, 3):
+        for bins in (1, 2, 5):
+            hist = make_histogram('D', shape=(bins,) * ndim)
+            yield check_hist2array_edges, hist, ndim, bins
+            hist = ROOT.THn.CreateHn("", "", make_histogram('D', shape=(bins,) * ndim))
+            yield check_hist2array_edges, hist, ndim, bins
+            hist = ROOT.THnSparse.CreateSparse("", "", make_histogram('D', shape=(bins,) * ndim))
+            yield check_hist2array_edges, hist, ndim, bins
 
 
 def check_array2hist(hist):
