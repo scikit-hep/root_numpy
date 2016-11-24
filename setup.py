@@ -136,7 +136,7 @@ if install:
     print(__doc__)
 
     config = {
-        'ROOT_version': root_version,
+        'ROOT_version': str(root_version),
         'numpy_version': numpy.__version__,
         }
 

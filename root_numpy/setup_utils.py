@@ -1,5 +1,53 @@
 import os
+import re
 import subprocess
+import numbers
+from collections import namedtuple
+
+
+class ROOTVersion(namedtuple('_ROOTVersionBase',
+                             ['major', 'minor', 'micro'])):
+
+    def __new__(cls, version):
+        if isinstance(version, numbers.Integral):
+            if version < 1E4:
+                raise ValueError(
+                    "{0:d} is not a valid ROOT version integer".format(version))
+            return super(ROOTVersion, cls).__new__(
+                cls,
+                int(version / 1E4),
+                int((version / 1E2) % 100),
+                int(version % 100))
+
+        if isinstance(version, tuple):
+            return super(ROOTVersion, cls).__new__(cls, *version)
+
+        # parse the string version X.YY/ZZ
+        match = re.match(
+            r"(?P<major>[\d]+)\.(?P<minor>[\d]+)/(?P<micro>[\d]+)", version)
+        if not match:
+            raise ValueError(
+                "'{0}' is not a valid ROOT version string".format(version))
+        return super(ROOTVersion, cls).__new__(
+            cls,
+            int(match.group('major')),
+            int(match.group('minor')),
+            int(match.group('micro')))
+
+
+    def __eq__(self, version):
+        if not isinstance(version, tuple):
+            version = ROOTVersion(version)
+        return super(ROOTVersion, self).__eq__(version)
+
+    def __ne__(self, version):
+        return not self.__eq__(version)
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return '{0:d}.{1:02d}/{2:02d}'.format(*self)
 
 
 def root_flags(root_config='root-config'):
@@ -33,12 +81,12 @@ def root_version_installed(root_config='root-config'):
         stdout=subprocess.PIPE).communicate()[0].strip()
     if sys.version > '3':
         root_vers = root_vers.decode('utf-8')
-    return root_vers
+    return ROOTVersion(root_vers)
 
 
 def root_version_active():
     import ROOT
-    return ROOT.gROOT.GetVersion()
+    return ROOTVersion(ROOT.gROOT.GetVersionInt())
 
 
 def get_config():
