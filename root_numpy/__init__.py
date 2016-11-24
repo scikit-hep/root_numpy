@@ -12,7 +12,7 @@ warnings.filterwarnings('always', category=DeprecationWarning,
                         module='^{0}\.'.format(re.escape(__name__)))
 
 # Only show ImportWarning if not running in nosetests
-if not IN_NOSETESTS:
+if not IN_NOSETESTS:  # pragma: no cover
     warnings.filterwarnings('always', category=ImportWarning,
                             module='^{0}\.'.format(re.escape(__name__)))
 
