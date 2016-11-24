@@ -1,3 +1,11 @@
+from nose.plugins.skip import SkipTest
+
+SKIP = False
+try:
+    from root_numpy.tmva import _libtmvanumpy
+except ImportError:  # pragma: no cover
+    SKIP = True
+
 import os
 import tempfile
 import shutil
@@ -9,7 +17,7 @@ from numpy.testing import assert_array_equal
 from numpy.random import RandomState
 
 import ROOT
-from ROOT import TFile, TCut, TMVA
+from ROOT import TFile, TCut
 
 import root_numpy as rnp
 
@@ -18,6 +26,12 @@ from nose.tools import assert_raises, assert_true, assert_equal
 
 ROOT.gErrorIgnoreLevel = ROOT.kFatal
 RNG = RandomState(42)
+
+
+def maybe_skip():
+    if SKIP: # pragma: no cover
+        raise SkipTest(
+            "root_numpy is compiled with the tmva interface disabled")
 
 
 class TMVA_Estimator(object):
@@ -31,8 +45,8 @@ class TMVA_Estimator(object):
         self.tmpdir = tempfile.mkdtemp()
         self.output = TFile(os.path.join(self.tmpdir, 'tmva_output.root'),
                             'recreate')
-        self.factory = TMVA.Factory(name, self.output,
-                                    'AnalysisType={0}:Silent'.format(task))
+        self.factory = ROOT.TMVA.Factory(
+            name, self.output, 'AnalysisType={0}:Silent'.format(task))
         for n in range(n_vars):
             self.factory.AddVariable('X_{0}'.format(n), 'F')
         if task == 'Regression':
@@ -48,7 +62,7 @@ class TMVA_Estimator(object):
             signal_label=None, **kwargs):
         # (re)configure settings since deleting a previous Factory resets all
         # this. This is poor design, TMVA.
-        config = TMVA.gConfig()
+        config = ROOT.TMVA.gConfig()
         config.GetIONames().fWeightFileDir = self.tmpdir
         config.SetSilent(True)
         config.SetDrawProgressBar(False)
@@ -64,10 +78,10 @@ class TMVA_Estimator(object):
         # test exceptions
         assert_raises(TypeError, func, object(), X, y)
         assert_raises(ValueError, func,
-                      self.factory, X, y[:y.shape[0] / 2])
+                      self.factory, X, y[:y.shape[0] // 2])
         if weights is not None:
             assert_raises(ValueError, func, self.factory, X, y,
-                          weights=weights[:weights.shape[0]/2])
+                          weights=weights[:weights.shape[0] // 2])
             assert_raises(ValueError, func, self.factory, X, y,
                           weights=weights[:, np.newaxis])
 
@@ -97,7 +111,7 @@ class TMVA_Estimator(object):
         self.factory.TrainAllMethods()
 
     def predict(self, X, aux=0.):
-        reader = TMVA.Reader()
+        reader = ROOT.TMVA.Reader()
         for n in range(self.n_vars):
             reader.AddVariable('X_{0}'.format(n), array('f', [0.]))
         reader.BookMVA(self.method,
@@ -146,6 +160,7 @@ def make_classification(n_features, n_events_per_class, n_classes):
 
 
 def test_tmva_methodcuts():
+    maybe_skip()
     X, y, w = make_classification(2, 300, 2)
     est = TMVA_Estimator('Cuts', 2, method='Cuts')
     est.fit(X, y,
@@ -158,6 +173,7 @@ def test_tmva_methodcuts():
 
 
 def test_tmva_twoclass():
+    maybe_skip()
     n_vars = 2
     n_events = 1000
     X, y, w = make_classification(n_vars, n_events, 2)
@@ -201,6 +217,7 @@ def test_tmva_twoclass():
 
 
 def test_tmva_multiclass():
+    maybe_skip()
     n_vars = 2
     n_events = 500
     X, y, w = make_classification(n_vars, n_events, 3)
@@ -220,6 +237,7 @@ def test_tmva_multiclass():
 
 
 def test_tmva_regression():
+    maybe_skip()
     X = np.linspace(0, 6, 100)[:, np.newaxis]
     y = np.sin(X).ravel() + \
         np.sin(6 * X).ravel() + \
