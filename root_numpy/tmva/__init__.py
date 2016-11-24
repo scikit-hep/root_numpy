@@ -1,7 +1,7 @@
 try:
     from . import _libtmvanumpy
 
-except ImportError:
+except ImportError:  # pragma: no cover
     import warnings
     warnings.warn(
         "root_numpy.tmva requires that you install root_numpy with "
