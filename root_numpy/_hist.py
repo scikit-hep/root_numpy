@@ -129,7 +129,7 @@ def fill_profile(profile, array, weights=None, return_indices=False):
         "ROOT.TProfile, ROOT.TProfile2D, or ROOT.TProfile3D")
 
 
-def hist2array(hist, include_overflow=False, copy=True):
+def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
     """Convert a ROOT histogram into a NumPy array
 
     Parameters
@@ -143,11 +143,16 @@ def hist2array(hist, include_overflow=False, copy=True):
         If True (the default) then copy the underlying array, otherwise the
         NumPy array will view (and not own) the same memory as the ROOT
         histogram's array.
+    return_edges : bool, optional (default=False)
+        If True then return a list of arrays containing the histogram bin low edges ([x,y,z])
 
     Returns
     -------
     array : numpy array
         A NumPy array containing the histogram bin values
+    bin_array[dim]: list of numpy arrays
+        If ``return_edges`` is True, then return a list of NumPy arrays containing the histogram bin low edges ([x,y,z])
+
 
     Raises
     ------
@@ -207,28 +212,62 @@ def hist2array(hist, include_overflow=False, copy=True):
                                  'array_h{0}c'.format(len(shape)))
             array = array_func(ROOT.AsCObject(hist))
             array.shape = shape
+            bin_array = [[] for idim in range(array.ndim)]
+            if array.ndim > 0:
+                bin_array[0] = np.zeros(shape[0], dtype=float)
+                for ibin in range(shape[0]):
+                    bin_array[0][ibin] =  hist.GetXaxis().GetBinLowEdge(ibin)
+            if array.ndim > 1:
+                bin_array[1] = np.zeros(shape[1], dtype=float)
+                for ibin in range(shape[1]):
+                    bin_array[1][ibin] =  hist.GetYaxis().GetBinLowEdge(ibin)
+            if array.ndim > 2:
+                bin_array[2] = np.zeros(shape[2], dtype=float)
+                for ibin in range(shape[2]):
+                    bin_array[2][ibin] =  hist.GetZaxis().GetBinLowEdge(ibin)
+
         else:
             dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
             array = np.ndarray(shape=shape, dtype=dtype,
                                buffer=hist.GetArray())
+            bin_array = [[] for idim in range(array.ndim)]
+            if array.ndim > 0:
+                bin_array[0] = np.zeros(shape[0], dtype=float)
+                for ibin in range(shape[0]):
+                    bin_array[0][ibin] =  hist.GetXaxis().GetBinLowEdge(ibin)
+            if array.ndim > 1:
+                bin_array[1] = np.zeros(shape[1], dtype=float)
+                for ibin in range(shape[1]):
+                    bin_array[1][ibin] =  hist.GetYaxis().GetBinLowEdge(ibin)
+            if array.ndim > 2:
+                bin_array[2] = np.zeros(shape[2], dtype=float)
+                for ibin in range(shape[2]):
+                    bin_array[2][ibin] =  hist.GetZaxis().GetBinLowEdge(ibin)
+
     else:  # THn THnSparse
         dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
         if isinstance(hist, ROOT.THnSparse):
-            array = _librootnumpy.thnsparse2array(ROOT.AsCObject(hist),
+            bin_array, array = _librootnumpy.thnsparse2array(ROOT.AsCObject(hist),
                                                   shape, dtype)
         else:
-            array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
+            bin_array, array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
                                             shape, dtype)
 
     if not include_overflow:
         # Remove overflow and underflow bins
         array = array[tuple([slice(1, -1) for idim in range(array.ndim)])]
+        for idim in range(array.ndim):
+            bin_array[idim] = bin_array[idim][slice(1, -1)]
 
     if simple_hist:
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
         if copy:
+            if return_edges:
+                return np.copy(array), bin_array
             return np.copy(array)
+    if return_edges:
+        return array, bin_array
     return array
 
 
