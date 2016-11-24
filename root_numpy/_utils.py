@@ -184,8 +184,8 @@ def stretch(arr, fields=None, return_indices=False):
                 # Variable-length array field
                 lengths = VLEN(arr[field])
             else:
+                # Fixed-length array field
                 lengths = np.repeat(dt.shape[0], arr.shape[0])
-            # Fixed-length array field
             if len_array is None:
                 len_array = lengths
             elif not np.array_equal(lengths, len_array):

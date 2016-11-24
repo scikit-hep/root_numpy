@@ -1,9 +1,20 @@
+import sys
+
+IN_NOSETESTS = False
+if sys.argv and sys.argv[0].endswith('nosetests'):  # pragma: no cover
+    IN_NOSETESTS = True
+
 import warnings
 import re
 
 # Make sure that DeprecationWarning within this package always gets printed
 warnings.filterwarnings('always', category=DeprecationWarning,
                         module='^{0}\.'.format(re.escape(__name__)))
+
+# Only show ImportWarning if not running in nosetests
+if not IN_NOSETESTS:
+    warnings.filterwarnings('always', category=ImportWarning,
+                            module='^{0}\.'.format(re.escape(__name__)))
 
 from .setup_utils import root_version_active, get_config
 

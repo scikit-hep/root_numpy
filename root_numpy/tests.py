@@ -975,15 +975,6 @@ def test_rec2array():
                    [5, 7.5],
                    [6, 8.4]]]))
 
-    # lengths mismatch
-    a = np.array([
-        ([1, 2], [4.5, 6, 9.5],),
-        ([4, 5], [3.3, 7.5, 8.4],),],
-        dtype=[
-            ('x', np.int32, (2,)),
-            ('y', np.float32, (3,))])
-    assert_raises(ValueError, rnp.rec2array, a)
-
     # single array field
     arr = rnp.rec2array(a, fields=['y'])
     assert_array_almost_equal(arr,
@@ -998,6 +989,24 @@ def test_rec2array():
     # case where array has single record
     assert_equal(rnp.rec2array(a[:1], fields=['y']).shape, (1, 3, 1))
     assert_equal(rnp.rec2array(a[:1], fields='y').shape, (1, 3))
+
+    # lengths mismatch
+    a = np.array([
+        ([1, 2], [4.5, 6, 9.5],),
+        ([4, 5], [3.3, 7.5, 8.4],),],
+        dtype=[
+            ('x', np.int32, (2,)),
+            ('y', np.float32, (3,))])
+    assert_raises(ValueError, rnp.rec2array, a)
+
+    # mix of scalar and array fields should fail
+    a = np.array([
+        (1, [4.5, 6, 9.5],),
+        (4, [3.3, 7.5, 8.4],),],
+        dtype=[
+            ('x', np.int32),
+            ('y', np.float32, (3,))])
+    assert_raises(ValueError, rnp.rec2array, a)
 
 
 def test_stack():
