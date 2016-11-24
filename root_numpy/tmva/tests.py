@@ -3,7 +3,7 @@ from nose.plugins.skip import SkipTest
 SKIP = False
 try:
     from root_numpy.tmva import _libtmvanumpy
-except ImportError:
+except ImportError:  # pragma: no cover
     SKIP = True
 
 import os
@@ -29,7 +29,7 @@ RNG = RandomState(42)
 
 
 def maybe_skip():
-    if SKIP:
+    if SKIP: # pragma: no cover
         raise SkipTest(
             "root_numpy is compiled with the tmva interface disabled")
 
