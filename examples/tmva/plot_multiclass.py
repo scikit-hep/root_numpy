@@ -38,17 +38,19 @@ output = TFile('tmva_output.root', 'recreate')
 factory = TMVA.Factory('classifier', output,
                        'AnalysisType=Multiclass:'
                        '!V:Silent:!DrawProgressBar')
+
+data = TMVA.DataLoader('.')
 for n in range(2):
-    factory.AddVariable('f{0}'.format(n), 'F')
+    data.AddVariable('f{0}'.format(n), 'F')
 
 # Call root_numpy's utility functions to add events from the arrays
-add_classification_events(factory, X_train, y_train, weights=w_train)
-add_classification_events(factory, X_test, y_test, weights=w_test, test=True)
+add_classification_events(data, X_train, y_train, weights=w_train)
+add_classification_events(data, X_test, y_test, weights=w_test, test=True)
 # The following line is necessary if events have been added individually:
-factory.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
+data.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 
 # Train an MLP
-factory.BookMethod('MLP', 'MLP',
+factory.BookMethod(data, 'MLP', 'MLP',
                    'NeuronType=tanh:NCycles=200:HiddenLayers=N+2,2:'
                    'TestRate=5:EstimatorType=MSE')
 factory.TrainAllMethods()
