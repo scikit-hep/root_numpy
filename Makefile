@@ -74,13 +74,13 @@ install-user: clean
 	@$(PYTHON) setup.py install --user
 
 sdist: clean
-	@$(PYTHON) setup.py sdist --release
+	@$(PYTHON) setup.py sdist
 
 register:
-	@$(PYTHON) setup.py register --release
+	@$(PYTHON) setup.py register
 
 upload: clean
-	@$(PYTHON) setup.py sdist upload --release
+	@$(PYTHON) setup.py sdist upload
 
 valgrind: inplace
 	valgrind --log-file=valgrind.log --tool=memcheck --leak-check=full \
