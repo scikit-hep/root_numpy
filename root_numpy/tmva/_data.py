@@ -56,12 +56,12 @@ def add_classification_events(obj, events, labels, signal_label=None,
         weights[0], weights[first_signal] = weights[first_signal], weights[0]
 
     """
-    if NEW_TMVA_API:
+    if NEW_TMVA_API:  # pragma: no cover
         if not isinstance(obj, TMVA.DataLoader):
             raise TypeError(
                 "obj must be a TMVA.DataLoader "
                 "instance for ROOT >= 6.07/04")
-    else:
+    else:  # pragma: no cover
         if not isinstance(obj, TMVA.Factory):
             raise TypeError(
                 "obj must be a TMVA.Factory instance")
@@ -129,12 +129,12 @@ def add_regression_events(obj, events, targets, weights=None, test=False):
     test events even if you don't intend to call ``TestAllMethods()``.
 
     """
-    if NEW_TMVA_API:
+    if NEW_TMVA_API:  # pragma: no cover
         if not isinstance(obj, TMVA.DataLoader):
             raise TypeError(
                 "obj must be a TMVA.DataLoader "
                 "instance for ROOT >= 6.07/04")
-    else:
+    else:  # pragma: no cover
         if not isinstance(obj, TMVA.Factory):
             raise TypeError(
                 "obj must be a TMVA.Factory instance")
