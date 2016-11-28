@@ -2,6 +2,7 @@ import numpy as np
 import ROOT
 from ROOT import TMVA
 from . import _libtmvanumpy
+from .. import ROOT_VERSION
 
 
 __all__ = [
@@ -9,16 +10,19 @@ __all__ = [
     'add_regression_events',
 ]
 
+NEW_TMVA_API = ROOT_VERSION >= '6.07/04'
 
-def add_classification_events(factory, events, labels, signal_label=None,
+
+def add_classification_events(obj, events, labels, signal_label=None,
                               weights=None, test=False):
-    """Add classification events to a TMVA::Factory from NumPy arrays.
+    """Add classification events to a TMVA::Factory or TMVA::DataLoader from NumPy arrays.
 
     Parameters
     ----------
-    factory : TMVA::Factory
-        A TMVA::Factory instance with variables already booked in exactly the
-        same order as the columns in ``events``.
+    obj : TMVA::Factory or TMVA::DataLoader
+        A TMVA::Factory or TMVA::DataLoader (TMVA's interface as of ROOT
+        6.07/04) instance with variables already booked in exactly the same
+        order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
         A two-dimensional NumPy array containing the rows of events and columns
         of variables. The order of the columns must match the order in which
@@ -37,8 +41,8 @@ def add_classification_events(factory, events, labels, signal_label=None,
 
     Notes
     -----
-    * A TMVA::Factory requires you to add both training and test events even if
-      you don't intend to call ``TestAllMethods()``.
+    * A TMVA::Factory or TMVA::DataLoader requires you to add both training and
+      test events even if you don't intend to call ``TestAllMethods()``.
 
     * When using MethodCuts, the first event added must be a signal event,
       otherwise TMVA will fail with ``<FATAL> Interval : maximum lower than
@@ -52,8 +56,15 @@ def add_classification_events(factory, events, labels, signal_label=None,
         weights[0], weights[first_signal] = weights[first_signal], weights[0]
 
     """
-    if not isinstance(factory, TMVA.Factory):
-        raise TypeError("factory must be a TMVA.Factory instance")
+    if NEW_TMVA_API:  # pragma: no cover
+        if not isinstance(obj, TMVA.DataLoader):
+            raise TypeError(
+                "obj must be a TMVA.DataLoader "
+                "instance for ROOT >= 6.07/04")
+    else:  # pragma: no cover
+        if not isinstance(obj, TMVA.Factory):
+            raise TypeError(
+                "obj must be a TMVA.Factory instance")
     events = np.ascontiguousarray(events, dtype=np.float64)
     if events.ndim == 1:
         # convert to 2D
@@ -74,29 +85,30 @@ def add_classification_events(factory, events, labels, signal_label=None,
     n_classes = class_labels.shape[0]
     if n_classes > 2:
         # multiclass classification
-        _libtmvanumpy.factory_add_events_multiclass(
-            ROOT.AsCObject(factory), events, class_idx,
+        _libtmvanumpy.add_events_multiclass(
+            ROOT.AsCObject(obj), events, class_idx,
             weights, test)
     elif n_classes == 2:
         # binary classification
         if signal_label is None:
             signal_label = class_labels[1]
         signal_label = np.where(class_labels == signal_label)[0][0]
-        _libtmvanumpy.factory_add_events_twoclass(
-            ROOT.AsCObject(factory), events, class_idx,
+        _libtmvanumpy.add_events_twoclass(
+            ROOT.AsCObject(obj), events, class_idx,
             signal_label, weights, test)
     else:
         raise ValueError("labels must contain at least two classes")
 
 
-def add_regression_events(factory, events, targets, weights=None, test=False):
+def add_regression_events(obj, events, targets, weights=None, test=False):
     """Add regression events to a TMVA::Factory from NumPy arrays.
 
     Parameters
     ----------
-    factory : TMVA::Factory
-        A TMVA::Factory instance with variables already booked in exactly the
-        same order as the columns in ``events``.
+    obj : TMVA::Factory or TMVA::DataLoader
+        A TMVA::Factory or TMVA::DataLoader (TMVA's interface as of ROOT
+        6.07/04) instance with variables already
+        booked in exactly the same order as the columns in ``events``.
     events : numpy array of shape [n_events, n_variables]
         A two-dimensional NumPy array containing the rows of events and columns
         of variables. The order of the columns must match the order in which
@@ -113,12 +125,19 @@ def add_regression_events(factory, events, targets, weights=None, test=False):
 
     Notes
     -----
-    A TMVA::Factory requires you to add both training and test events even if
-    you don't intend to call ``TestAllMethods()``.
+    A TMVA::Factory or TMVA::DataLoader requires you to add both training and
+    test events even if you don't intend to call ``TestAllMethods()``.
 
     """
-    if not isinstance(factory, TMVA.Factory):
-        raise TypeError("factory must be a TMVA.Factory instance")
+    if NEW_TMVA_API:  # pragma: no cover
+        if not isinstance(obj, TMVA.DataLoader):
+            raise TypeError(
+                "obj must be a TMVA.DataLoader "
+                "instance for ROOT >= 6.07/04")
+    else:  # pragma: no cover
+        if not isinstance(obj, TMVA.Factory):
+            raise TypeError(
+                "obj must be a TMVA.Factory instance")
     events = np.ascontiguousarray(events, dtype=np.float64)
     if events.ndim == 1:
         # convert to 2D
@@ -141,5 +160,5 @@ def add_regression_events(factory, events, targets, weights=None, test=False):
             raise ValueError("numbers of events and weights do not match")
         if weights.ndim != 1:
             raise ValueError("weights must be one-dimensional")
-    _libtmvanumpy.factory_add_events_regression(
-        ROOT.AsCObject(factory), events, targets, weights, test)
+    _libtmvanumpy.add_events_regression(
+        ROOT.AsCObject(obj), events, targets, weights, test)

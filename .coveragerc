@@ -1,5 +1,5 @@
 # .coveragerc to control coverage.py
-# based on http://nedbatchelder.com/code/coverage/config.html
+# based on http://coverage.readthedocs.io/en/latest/config.html
 [run]
 branch = True
 source = root_numpy
@@ -9,6 +9,7 @@ omit =
     */root_numpy/extern/*
     */root_numpy/setup_utils.py
     */setup.py
+    */tests.py
 [report]
 exclude_lines =
     # Enable the standard pragma

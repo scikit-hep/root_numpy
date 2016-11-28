@@ -10,8 +10,7 @@ except ImportError:  # pragma: no cover
 
 else:
 
-    from ._factory import add_classification_events
-    from ._factory import add_regression_events
+    from ._data import add_classification_events, add_regression_events
     from ._evaluate import evaluate_reader, evaluate_method
 
 

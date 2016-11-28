@@ -45,16 +45,6 @@ root_numpy
 root_numpy.tmva
 ---------------
 
-.. warning:: The interface of TMVA has changed in ROOT 6.07. So building
-   root_numpy there will fail until we can handle their new DataLoader
-   interface. In the meantime disable the TMVA interface with the following
-   if you must use ROOT 6.07 with TMVA enabled::
-
-      NOTMVA=1 pip install --upgrade --user root_numpy
-
-   Note that if TMVA is not enabled in the ROOT build, root_numpy will anyway
-   not attempt to build the TMVA interface.
-
 .. currentmodule:: root_numpy.tmva
 
 .. autosummary::
