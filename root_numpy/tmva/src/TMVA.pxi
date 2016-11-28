@@ -47,10 +47,10 @@ cdef extern from "TMVA/MethodCuts.h" namespace "TMVA":
     cdef cppclass MethodCuts:
         void SetTestSignalEfficiency(double eff)
 
-cdef extern from "TMVA/Factory.h" namespace "TMVA":
-    cdef cppclass Factory:
-        void AddEvent(string& classname, ETreeType treetype, vector[double]& event, double weight)
-
 cdef extern from "TMVA/Reader.h" namespace "TMVA":
     cdef cppclass Reader:
         IMethod* FindMVA(string name)
+
+cdef extern from "defs.h":
+    cdef cppclass TMVA_Object:
+        void AddEvent(string& classname, ETreeType treetype, vector[double]& event, double weight)

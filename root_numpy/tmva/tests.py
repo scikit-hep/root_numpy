@@ -3,8 +3,10 @@ from nose.plugins.skip import SkipTest
 SKIP = False
 try:
     from root_numpy.tmva import _libtmvanumpy
+    from root_numpy.tmva._data import NEW_TMVA_API
 except ImportError:  # pragma: no cover
     SKIP = True
+    raise
 
 import os
 import tempfile
@@ -47,11 +49,13 @@ class TMVA_Estimator(object):
                             'recreate')
         self.factory = ROOT.TMVA.Factory(
             name, self.output, 'AnalysisType={0}:Silent'.format(task))
-        for n in range(n_vars):
-            self.factory.AddVariable('X_{0}'.format(n), 'F')
-        if task == 'Regression':
-            for n in range(n_targets):
-                self.factory.AddTarget('y_{0}'.format(n), 'F')
+
+        if not NEW_TMVA_API:
+            for n in range(n_vars):
+                self.factory.AddVariable('X_{0}'.format(n), 'F')
+            if task == 'Regression':
+                for n in range(n_targets):
+                    self.factory.AddTarget('y_{0}'.format(n), 'F')
 
     def __del__(self):
         self.output.Close()
@@ -68,6 +72,18 @@ class TMVA_Estimator(object):
         config.SetDrawProgressBar(False)
         self.factory.DeleteAllMethods()
 
+        if NEW_TMVA_API:
+            # DataLoader name must be an empty string otherwise TMVA tries to
+            # prepend the name to the path where the weights files are located
+            obj = ROOT.TMVA.DataLoader('')
+            for n in range(self.n_vars):
+                obj.AddVariable('X_{0}'.format(n), 'F')
+            if self.task == 'Regression':
+                for n in range(self.n_targets):
+                    obj.AddTarget('y_{0}'.format(n), 'F')
+        else:
+            obj = self.factory
+
         extra_kwargs = dict()
         if self.task == 'Regression':
             func = rnp.tmva.add_regression_events
@@ -77,27 +93,26 @@ class TMVA_Estimator(object):
 
         # test exceptions
         assert_raises(TypeError, func, object(), X, y)
-        assert_raises(ValueError, func,
-                      self.factory, X, y[:y.shape[0] // 2])
+        assert_raises(ValueError, func, obj, X, y[:y.shape[0] // 2])
         if weights is not None:
-            assert_raises(ValueError, func, self.factory, X, y,
+            assert_raises(ValueError, func, obj, X, y,
                           weights=weights[:weights.shape[0] // 2])
-            assert_raises(ValueError, func, self.factory, X, y,
+            assert_raises(ValueError, func, obj, X, y,
                           weights=weights[:, np.newaxis])
 
-        assert_raises(ValueError, func, self.factory, [[[1, 2]]], [1])
-        assert_raises(ValueError, func, self.factory, [[1, 2]], [[[1]]])
+        assert_raises(ValueError, func, obj, [[[1, 2]]], [1])
+        assert_raises(ValueError, func, obj, [[1, 2]], [[[1]]])
 
-        func(self.factory, X, y, weights=weights, **extra_kwargs)
+        func(obj, X, y, weights=weights, **extra_kwargs)
+
         if X_test is None:
             X_test = X
             y_test = y
             weights_test = weights
-        func(self.factory, X_test, y_test,
+        func(obj, X_test, y_test,
              weights=weights_test, test=True, **extra_kwargs)
 
-        self.factory.PrepareTrainingAndTestTree(
-            TCut('1'), 'NormMode=EqualNumEvents')
+        obj.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
         options = []
         for param, value in kwargs.items():
             if value is True:
@@ -107,7 +122,10 @@ class TMVA_Estimator(object):
             else:
                 options.append('{0}={1}'.format(param, value))
         options = ':'.join(options)
-        self.factory.BookMethod(self.method, self.method, options)
+        if NEW_TMVA_API:
+            self.factory.BookMethod(obj, self.method, self.method, options)
+        else:
+            self.factory.BookMethod(self.method, self.method, options)
         self.factory.TrainAllMethods()
 
     def predict(self, X, aux=0.):

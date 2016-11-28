@@ -46,6 +46,26 @@ class ROOTVersion(namedtuple('_ROOTVersionBase',
     def __ne__(self, version):
         return not self.__eq__(version)
 
+    def __gt__(self, version):
+        if not isinstance(version, tuple):
+            version = ROOTVersion(version)
+        return super(ROOTVersion, self).__gt__(version)
+
+    def __ge__(self, version):
+        if not isinstance(version, tuple):
+            version = ROOTVersion(version)
+        return super(ROOTVersion, self).__ge__(version)
+
+    def __lt__(self, version):
+        if not isinstance(version, tuple):
+            version = ROOTVersion(version)
+        return super(ROOTVersion, self).__lt__(version)
+
+    def __le__(self, version):
+        if not isinstance(version, tuple):
+            version = ROOTVersion(version)
+        return super(ROOTVersion, self).__le__(version)
+
     def __repr__(self):
         return str(self)
 

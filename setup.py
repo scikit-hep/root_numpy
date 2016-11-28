@@ -90,19 +90,22 @@ packages = [
     'root_numpy.extern',
     ]
 
-if has_tmva and not os.getenv('NOTMVA', None):
+if has_tmva:
     librootnumpy_tmva = Extension(
         'root_numpy.tmva._libtmvanumpy',
         sources=[
             'root_numpy/tmva/src/_libtmvanumpy.cpp',
         ],
-        depends=['root_numpy/src/2to3.h'],
+        depends=glob('root_numpy/tmva/src/*.h') + [
+            'root_numpy/src/2to3.h',
+        ],
         language='c++',
         include_dirs=[
             numpy.get_include(),
             'root_numpy/src',
             'root_numpy/tmva/src',
         ],
+        define_macros=[('NEW_TMVA_API', None)] if root_version >= '6.07/04' else [],
         extra_compile_args=root_cflags + [
             '-Wno-unused-function',
             '-Wno-write-strings',
