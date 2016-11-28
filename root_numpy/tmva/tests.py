@@ -50,7 +50,7 @@ class TMVA_Estimator(object):
         self.factory = ROOT.TMVA.Factory(
             name, self.output, 'AnalysisType={0}:Silent'.format(task))
 
-        if not NEW_TMVA_API:
+        if not NEW_TMVA_API:  # pragma: no cover
             for n in range(n_vars):
                 self.factory.AddVariable('X_{0}'.format(n), 'F')
             if task == 'Regression':
@@ -72,7 +72,7 @@ class TMVA_Estimator(object):
         config.SetDrawProgressBar(False)
         self.factory.DeleteAllMethods()
 
-        if NEW_TMVA_API:
+        if NEW_TMVA_API:  # pragma: no cover
             # DataLoader name must be an empty string otherwise TMVA tries to
             # prepend the name to the path where the weights files are located
             obj = ROOT.TMVA.DataLoader('')
@@ -81,7 +81,7 @@ class TMVA_Estimator(object):
             if self.task == 'Regression':
                 for n in range(self.n_targets):
                     obj.AddTarget('y_{0}'.format(n), 'F')
-        else:
+        else:  # pragma: no cover
             obj = self.factory
 
         extra_kwargs = dict()
@@ -122,9 +122,9 @@ class TMVA_Estimator(object):
             else:
                 options.append('{0}={1}'.format(param, value))
         options = ':'.join(options)
-        if NEW_TMVA_API:
+        if NEW_TMVA_API:  # pragma: no cover
             self.factory.BookMethod(obj, self.method, self.method, options)
-        else:
+        else:  # pragma: no cover
             self.factory.BookMethod(self.method, self.method, options)
         self.factory.TrainAllMethods()
 
@@ -146,7 +146,7 @@ class TMVA_Estimator(object):
             assert_raises(ValueError, rnp.tmva.evaluate_reader,
                           reader, self.method, [1, 2, 3])
         output = rnp.tmva.evaluate_reader(reader, self.method, X, aux)
-        if ROOT.gROOT.GetVersionInt() >= 60300:
+        if ROOT.gROOT.GetVersionInt() >= 60300:  # pragma: no cover
             method = reader.FindMVA(self.method)
             assert_raises(TypeError, rnp.tmva.evaluate_method,
                           object(), X)
