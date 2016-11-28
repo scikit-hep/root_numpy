@@ -8,24 +8,25 @@ import sys
 if sys.version_info < (2, 6):
     sys.exit("root_numpy only supports python 2.6 and above")
 
-# check that NumPy is installed
-try:
-    import numpy
-except ImportError:
-    raise RuntimeError(
-        "numpy cannot be imported. numpy must be installed "
-        "prior to installing root_numpy")
+if sys.version_info[0] < 3:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 try:
     # try to use setuptools if installed
     from pkg_resources import parse_version, get_distribution
-    from setuptools import setup, Extension
+
     if get_distribution('setuptools').parsed_version < parse_version('0.7'):
         # before merge with distribute
         raise ImportError
+
+    from setuptools import setup, Extension
+    from setuptools.command.build_ext import build_ext as _build_ext
 except ImportError:
     # fall back on distutils
     from distutils.core import setup, Extension
+    from distutils.command.build_ext import build_ext as _build_ext
 
 import os
 from glob import glob
@@ -66,6 +67,27 @@ else:
             "root-config is not in PATH and ROOTSYS is not set. "
             "Is ROOT installed correctly?")
 
+class build_ext(_build_ext):
+    def finalize_options(self):
+        _build_ext.finalize_options(self)
+        # prevent numpy from thinking it is still in its setup process:
+        try:
+            del builtins.__NUMPY_SETUP__
+        except AttributeError:
+            pass
+        import numpy
+        self.include_dirs.append(numpy.get_include())
+
+        config = {
+            'ROOT_version': str(root_version),
+            'numpy_version': numpy.__version__,
+        }
+
+        # write config.json
+        import json
+        with open('root_numpy/config.json', 'w') as config_file:
+            json.dump(config, config_file, indent=4)
+
 librootnumpy = Extension(
     'root_numpy._librootnumpy',
     sources=[
@@ -74,7 +96,6 @@ librootnumpy = Extension(
     depends=glob('root_numpy/src/*.h'),
     language='c++',
     include_dirs=[
-        numpy.get_include(),
         'root_numpy/src',
     ],
     extra_compile_args=root_cflags + [
@@ -101,7 +122,6 @@ if has_tmva:
         ],
         language='c++',
         include_dirs=[
-            numpy.get_include(),
             'root_numpy/src',
             'root_numpy/tmva/src',
         ],
@@ -138,15 +158,16 @@ exec(open('root_numpy/info.py').read())
 if install:
     print(__doc__)
 
-    config = {
-        'ROOT_version': str(root_version),
-        'numpy_version': numpy.__version__,
-        }
-
-    # write config.json
-    import json
-    with open('root_numpy/config.json', 'w') as config_file:
-        json.dump(config, config_file, indent=4)
+# Figure out whether to add ``*_requires = ['numpy']``.
+# We don't want to do that unconditionally, because we risk updating
+# an installed numpy which fails too often.  Just if it's not installed, we
+# may give it a try.
+try:
+    import numpy
+except ImportError:
+    build_requires = ['numpy']
+else:
+    build_requires = []
 
 setup(
     name='root_numpy',
@@ -164,6 +185,9 @@ setup(
         'root_numpy': ['testdata/*.root', 'config.json'],
     },
     ext_modules=ext_modules,
+    cmdclass={'build_ext': build_ext},
+    setup_requires=build_requires,
+    install_requires=build_requires,
     extras_require={
         'with-numpy': ('numpy',),
     },
