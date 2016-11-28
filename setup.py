@@ -164,6 +164,9 @@ setup(
         'root_numpy': ['testdata/*.root', 'config.json'],
     },
     ext_modules=ext_modules,
+    extras_require={
+        'with-numpy': ('numpy',),
+    },
     zip_safe=False,
     classifiers=[
         'Intended Audience :: Science/Research',
