@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import sys
 
-# check Python version
+# Check Python version
 if sys.version_info < (2, 6):
     sys.exit("root_numpy only supports python 2.6 and above")
 
@@ -14,22 +14,28 @@ else:
     import builtins
 
 try:
-    # try to use setuptools if installed
+    # Try to use setuptools if installed
+    from setuptools import setup, Extension
     from pkg_resources import parse_version, get_distribution
 
     if get_distribution('setuptools').parsed_version < parse_version('0.7'):
-        # before merge with distribute
+        # setuptools is too old (before merge with distribute)
         raise ImportError
 
-    from setuptools import setup, Extension
     from setuptools.command.build_ext import build_ext as _build_ext
+    from setuptools.command.install import install as _install
+    use_setuptools = True
+
 except ImportError:
-    # fall back on distutils
+    # Use distutils instead
     from distutils.core import setup, Extension
     from distutils.command.build_ext import build_ext as _build_ext
+    from distutils.command.install import install as _install
+    use_setuptools = False
 
 import os
 from glob import glob
+from contextlib import contextmanager
 
 # Prevent setup from trying to create hard links
 # which are not allowed on AFS between directories.
@@ -67,10 +73,30 @@ else:
             "root-config is not in PATH and ROOTSYS is not set. "
             "Is ROOT installed correctly?")
 
+@contextmanager
+def version(release=False):
+    if not release:
+        yield
+    else:
+        # Remove dev from version in root_numpy/info.py
+        import shutil
+        print("writing release version in 'root_numpy/info.py'")
+        shutil.move('root_numpy/info.py', 'info.tmp')
+        dev_info = ''.join(open('info.tmp', 'r').readlines())
+        open('root_numpy/info.py', 'w').write(
+            dev_info.replace('.dev0', ''))
+        try:
+            yield
+        finally:
+            # Revert root_numpy/info.py
+            print("restoring dev version in 'root_numpy/info.py'")
+            shutil.move('info.tmp', 'root_numpy/info.py')
+
+
 class build_ext(_build_ext):
     def finalize_options(self):
         _build_ext.finalize_options(self)
-        # prevent numpy from thinking it is still in its setup process:
+        # Prevent numpy from thinking it is still in its setup process
         try:
             del builtins.__NUMPY_SETUP__
         except AttributeError:
@@ -78,15 +104,28 @@ class build_ext(_build_ext):
         import numpy
         self.include_dirs.append(numpy.get_include())
 
+
+class install(_install):
+    def run(self):
+        print(__doc__)
+        import numpy
+
         config = {
             'ROOT_version': str(root_version),
             'numpy_version': numpy.__version__,
         }
 
-        # write config.json
+        # Write version info in config.json
+        print("writing 'root_numpy/config.json'")
         import json
         with open('root_numpy/config.json', 'w') as config_file:
             json.dump(config, config_file, indent=4)
+
+        _install.run(self)
+
+        print("removing 'root_numpy/config.json'")
+        os.remove('root_numpy/config.json')
+
 
 librootnumpy = Extension(
     'root_numpy._librootnumpy',
@@ -134,90 +173,74 @@ if has_tmva:
     ext_modules.append(librootnumpy_tmva)
     packages.append('root_numpy.tmva')
 
-# check for custom args
-filtered_args = []
-release = False
-install = 'install' in sys.argv
-for arg in sys.argv:
-    if arg == '--release':
-        # --release sets the version number before installing
-        release = True
+
+def setup_package():
+    # Only add numpy to *_requires lists if not already installed to prevent
+    # pip from trying to upgrade an existing numpy and failing.
+    try:
+        import numpy
+    except ImportError:
+        build_requires = ['numpy']
     else:
-        filtered_args.append(arg)
-sys.argv = filtered_args
+        build_requires = []
 
-if release:
-    # remove dev from version in root_numpy/info.py
-    import shutil
-    shutil.move('root_numpy/info.py', 'info.tmp')
-    dev_info = ''.join(open('info.tmp', 'r').readlines())
-    open('root_numpy/info.py', 'w').write(
-        dev_info.replace('.dev0', ''))
+    if use_setuptools:
+        setuptools_options = dict(
+            setup_requires=build_requires,
+            install_requires=build_requires,
+            extras_require={
+                'with-numpy': ('numpy',),
+            },
+            zip_safe=False,
+        )
+    else:
+        setuptools_options = dict()
 
-exec(open('root_numpy/info.py').read())
-if install:
-    print(__doc__)
+    setup(
+        name='root_numpy',
+        version=__version__,
+        description='The interface between ROOT and NumPy',
+        long_description=''.join(open('README.rst').readlines()[7:-4]),
+        author='the rootpy developers',
+        author_email='rootpy-dev@googlegroups.com',
+        license='MIT',
+        url='http://rootpy.github.io/root_numpy',
+        download_url='http://pypi.python.org/packages/source/r/'
+                    'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
+        packages=packages,
+        package_data={
+            'root_numpy': ['testdata/*.root', 'config.json'],
+        },
+        ext_modules=ext_modules,
+        cmdclass={
+            'build_ext': build_ext,
+            'install': install,
+        },
+        classifiers=[
+            'Intended Audience :: Science/Research',
+            'Intended Audience :: Developers',
+            'Topic :: Software Development',
+            'Topic :: Scientific/Engineering',
+            'Topic :: Utilities',
+            'Operating System :: POSIX',
+            'Operating System :: Unix',
+            'Operating System :: MacOS',
+            'License :: OSI Approved :: MIT License',
+            'Programming Language :: Python',
+            'Programming Language :: Python :: 2',
+            'Programming Language :: Python :: 2.6',
+            'Programming Language :: Python :: 2.7',
+            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.3',
+            'Programming Language :: Python :: 3.4',
+            'Programming Language :: C++',
+            'Programming Language :: Cython',
+            'Development Status :: 5 - Production/Stable',
+        ],
+        **setuptools_options
+    )
 
-# Figure out whether to add ``*_requires = ['numpy']``.
-# We don't want to do that unconditionally, because we risk updating
-# an installed numpy which fails too often.  Just if it's not installed, we
-# may give it a try.
-try:
-    import numpy
-except ImportError:
-    build_requires = ['numpy']
-else:
-    build_requires = []
 
-setup(
-    name='root_numpy',
-    version=__version__,
-    description='The interface between ROOT and NumPy',
-    long_description=''.join(open('README.rst').readlines()[7:-4]),
-    author='the rootpy developers',
-    author_email='rootpy-dev@googlegroups.com',
-    license='MIT',
-    url='http://rootpy.github.io/root_numpy',
-    download_url='http://pypi.python.org/packages/source/r/'
-                 'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
-    packages=packages,
-    package_data={
-        'root_numpy': ['testdata/*.root', 'config.json'],
-    },
-    ext_modules=ext_modules,
-    cmdclass={'build_ext': build_ext},
-    setup_requires=build_requires,
-    install_requires=build_requires,
-    extras_require={
-        'with-numpy': ('numpy',),
-    },
-    zip_safe=False,
-    classifiers=[
-        'Intended Audience :: Science/Research',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development',
-        'Topic :: Scientific/Engineering',
-        'Topic :: Utilities',
-        'Operating System :: POSIX',
-        'Operating System :: Unix',
-        'Operating System :: MacOS',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: C++',
-        'Programming Language :: Cython',
-        'Development Status :: 5 - Production/Stable',
-    ]
-)
-
-if release:
-    # revert root_numpy/info.py
-    shutil.move('info.tmp', 'root_numpy/info.py')
-
-if install:
-    os.remove('root_numpy/config.json')
+with version(release=set(['sdist', 'register']).intersection(sys.argv[1:])):
+    exec(open('root_numpy/info.py').read())
+    setup_package()
