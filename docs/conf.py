@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'root_numpy'
-copyright = u'%s, rootpy developers and contributors' % now.year
+copyright = u'%s, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>' % now.year
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
