@@ -50,7 +50,8 @@ y_1 = evaluate_reader(reader, 'BDT1', X)
 y_2 = evaluate_reader(reader, 'BDT2', X)
 
 # Plot the results
-plt.figure()
+fig = plt.figure()
+fig.patch.set_alpha(0)
 plt.scatter(X, y, c="k", label="training samples")
 plt.plot(X, y_1, c="g", label="1 tree", linewidth=2)
 plt.plot(X, y_2, c="r", label="300 trees", linewidth=2)
