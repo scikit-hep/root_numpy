@@ -341,10 +341,16 @@ def generate_file_rst(fname, target_dir, src_dir, plot_gallery):
                     plt.savefig(image_path % fig_num)
                     figure_list.append(image_fname % fig_num)
                 for canvas in ROOT.gROOT.GetListOfCanvases():
-                    canvas.SaveAs(root_image_path % root_fig_num)
-                    canvas.Close()
-                    figure_list.append(root_image_fname % root_fig_num)
-                    root_fig_num += 1
+                    maybe_root_filename = os.path.join(os.path.dirname(src_file), canvas.name)
+                    if os.path.isfile(maybe_root_filename):
+                        os.rename(maybe_root_filename, os.path.join(image_dir, canvas.name))
+                        figure_list.append(canvas.name)
+                        canvas.Close()
+                    else:
+                        canvas.SaveAs(root_image_path % root_fig_num)
+                        canvas.Close()
+                        figure_list.append(root_image_fname % root_fig_num)
+                        root_fig_num += 1
             except:
                 print 80 * '_'
                 print '%s is not compiling:' % fname

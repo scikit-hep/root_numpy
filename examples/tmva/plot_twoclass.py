@@ -8,6 +8,7 @@ import numpy as np
 from numpy.random import RandomState
 import matplotlib.pyplot as plt
 from root_numpy.tmva import add_classification_events, evaluate_reader
+from root_numpy import ROOT_VERSION
 from ROOT import TMVA, TFile, TCut
 
 plt.style.use('ggplot')
@@ -36,7 +37,10 @@ output = TFile('tmva_output.root', 'recreate')
 factory = TMVA.Factory('classifier', output,
                        'AnalysisType=Classification:'
                        '!V:Silent:!DrawProgressBar')
-data = TMVA.DataLoader('.')
+if ROOT_VERSION >= '6.07/04':
+    data = TMVA.DataLoader('.')
+else:
+    data = factory
 for n in range(n_vars):
     data.AddVariable('f{0}'.format(n), 'F')
 
@@ -47,10 +51,14 @@ add_classification_events(data, X_test, y_test, weights=w_test, test=True)
 data.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 
 # Train a classifier
-factory.BookMethod(data, 'Fisher', 'Fisher',
-                   'Fisher:VarTransform=None:CreateMVAPdfs:'
-                   'PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:'
-                   'NsmoothMVAPdf=10')
+if ROOT_VERSION >= '6.07/04':
+    BookMethod = factory.BookMethod
+else:
+    BookMethod = TMVA.Factory.BookMethod
+BookMethod(data, 'Fisher', 'Fisher',
+           'Fisher:VarTransform=None:CreateMVAPdfs:'
+           'PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:'
+           'NsmoothMVAPdf=10')
 factory.TrainAllMethods()
 
 # Classify the test dataset with the classifier

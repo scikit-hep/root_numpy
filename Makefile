@@ -21,6 +21,9 @@ endif
 
 all: clean cython inplace test
 
+clean-examples:
+	@find examples -name "*.root" -exec rm {} \;
+
 clean-pyc:
 	@find . -name "*.pyc" -exec rm {} \;
 
@@ -33,7 +36,7 @@ clean-build:
 clean-html:
 	@find root_numpy/src -name "*.html" -exec rm {} \;
 
-clean: clean-build clean-pyc clean-so
+clean: clean-examples clean-build clean-pyc clean-so
 
 .SECONDEXPANSION:
 %.cpp: %.pyx $$(filter-out $$@,$$(wildcard $$(@D)/*))
