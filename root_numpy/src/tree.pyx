@@ -226,6 +226,10 @@ cdef object tree2array(TTree* tree, branches,
     cdef int branch_title_size
     cdef char type_code
 
+    cdef object branch_dict = None
+    cdef object branch_spec = None
+    cdef object branch_defaults = dict()
+
     if num_requested_branches > 0:
         columns.reserve(num_requested_branches)
         converters.reserve(num_requested_branches)
@@ -247,9 +251,31 @@ cdef object tree2array(TTree* tree, branches,
             # rolling over to the next tree.
             chain.AddFormula(selection_formula)
 
-        branch_dict = None
         if num_requested_branches > 0:
-            branch_dict = dict([(b, idx) for idx, b in enumerate(branches)])
+            branch_dict = dict()
+            for idx, branch_spec in enumerate(branches):
+                if isinstance(branch_spec, tuple):
+                    # branch_spec should be (branch_name, default_value) or
+                    # (branch_name, cropped_length, fill_value)
+                    if len(branch_spec) == 2:
+                        # Transform (branch_name, default_value) to
+                        # (branch_name, 1, default_value) to impute the array
+                        branch_dict[branch_spec[0]] = (idx, 1)
+                    elif len(branch_spec) == 3:
+                        if branch_spec[1] < 1:
+                            raise ValueError(
+                                "truncated length must be greater than zero: {0}".format(branch_spec))
+                        branch_dict[branch_spec[0]] = (idx, branch_spec[1])
+                    else:
+                        raise ValueError(
+                            ("invalid branch specification tuple: {0}. "
+                             "A branch specification tuple must contain two elements "
+                             "(branch_name, default_value) or three elements "
+                             "(branch_name, cropped_length, fill_value) for branches "
+                             "with multiplicity -1 or multiplicity >= 1, respectively").format(branch_spec))
+                    branch_defaults[branch_spec[0]] = branch_spec[-1]
+                else:
+                    branch_dict[branch_spec] = (idx, 0)
             if len(branch_dict) != num_requested_branches:
                 raise ValueError("duplicate branches requested")
 
@@ -279,6 +305,7 @@ cdef object tree2array(TTree* tree, branches,
         seen_branches = set()
 
         # Build vector of Converters for branches
+        branch_spec = None
         for ibranch in range(num_branches):
             tbranch = <TBranch*> branch_array.At(ibranch)
             branch_name = tbranch.GetName()
@@ -286,10 +313,12 @@ cdef object tree2array(TTree* tree, branches,
                 if len(branch_dict) == 0:
                     # No more branches to consider
                     break
-                branch_idx = branch_dict.pop(branch_name, -1)
-                if branch_idx == -1:
+                try:
+                    branch_spec = branch_dict.pop(branch_name)
+                except KeyError:
                     # This branch was not selected by the user
                     continue
+                branch_idx = branch_spec[0]
             elif branch_name in seen_branches:
                 warnings.warn("ignoring duplicate branch named '{0}'".format(branch_name),
                               RuntimeWarning)
@@ -344,6 +373,9 @@ cdef object tree2array(TTree* tree, branches,
                     col = new BranchColumn(column_name, tleaf)
                     col.selector = selector
 
+                    if branch_spec is not None:
+                        col.max_length = branch_spec[1]
+
                     if num_requested_branches > 0:
                         column_buckets[branch_idx].push_back(col)
                         converter_buckets[branch_idx].push_back(conv)
@@ -374,7 +406,8 @@ cdef object tree2array(TTree* tree, branches,
         if num_requested_branches > 0:
             # Attempt to interpret remaining "branches" as expressions
             for expression in branch_dict.keys():
-                branch_idx = branch_dict[expression]
+                branch_spec = branch_dict[expression]
+                branch_idx = branch_spec[0]
                 c_string = expression
                 formula = new TTreeFormula(c_string, c_string, tree)
                 if formula == NULL or formula.GetNdim() == 0:
@@ -454,7 +487,7 @@ cdef object tree2array(TTree* tree, branches,
         # make an appropriate array structure
         dtype_fields = []
         for icol in range(columns.size()):
-            dtype_fields.append((columns[icol].name, converters[icol].get_nptype()))
+            dtype_fields.append((columns[icol].name, converters[icol].get_nptype(columns[icol])))
         if include_weight:
             dtype_fields.append((weight_name, np.dtype('d')))
         dtype = np.dtype(dtype_fields)
@@ -470,6 +503,10 @@ cdef object tree2array(TTree* tree, branches,
             # Raise a more informative exception
             raise MemoryError("failed to allocate memory for {0} array of {1} records with {2} fields".format(
                 humanize_bytes(dtype.itemsize * num_entries), num_entries, len(dtype_fields)))
+
+        # Fill default values if we will truncate or impute
+        for branch_name, branch_default in branch_defaults.items():
+            arr[branch_name].fill(branch_default)
 
         # Exclude weight column in num_columns
         num_columns = columns.size()
