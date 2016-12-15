@@ -75,7 +75,7 @@ cdef extern from "Selector.h":
 
 cdef extern from "TreeChain.h":
     cdef cppclass TreeChain:
-        TreeChain(TTree*, bool, long_long)
+        TreeChain(TTree*, long_long)
         int Prepare()
         int Next()
         void AddColumn(string, string, BranchColumn*)

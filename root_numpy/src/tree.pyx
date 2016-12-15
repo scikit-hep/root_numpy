@@ -156,7 +156,7 @@ ctypedef cpp_map[string, Selector*] selector_map_type
 ctypedef pair[string, Selector*] selector_map_item_type
 
 
-cdef object tree2array(TTree* tree, bool ischain, branches,
+cdef object tree2array(TTree* tree, branches,
                        string selection, object_selection,
                        start, stop, step,
                        bool include_weight, string weight_name,
@@ -175,7 +175,7 @@ cdef object tree2array(TTree* tree, bool ischain, branches,
     cdef long long num_entries_selected = 0
     cdef long long ientry
 
-    cdef TreeChain* chain = new TreeChain(tree, ischain, cache_size)
+    cdef TreeChain* chain = new TreeChain(tree, cache_size)
     handle_load(chain.Prepare(), True)
 
     cdef TObjArray* branch_array = tree.GetListOfBranches()
@@ -555,7 +555,7 @@ def root2array_fromfile(fnames, string treename, branches,
             raise IOError("none of the input files contain "
                           "the requested tree '{0}'".format(treename))
         ret = tree2array(
-            <TTree*> chain, True, branches,
+            <TTree*> chain, branches,
             selection or '', object_selection,
             start, stop, step,
             include_weight, weight_name, cache_size)
@@ -570,7 +570,7 @@ def root2array_fromtree(tree, branches, selection, object_selection,
                         long cache_size):
     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
     return tree2array(
-        rtree, False, branches,
+        rtree, branches,
         selection or '', object_selection,
         start, stop, step,
         include_weight, weight_name, cache_size)

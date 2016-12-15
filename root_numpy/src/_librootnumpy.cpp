@@ -2715,7 +2715,7 @@ static PyObject *__pyx_f_13_librootnumpy_get_branch_structure(TBranch *); /*prot
 static PyObject *__pyx_f_13_librootnumpy_get_tree_structure(TTree *, struct __pyx_opt_args_13_librootnumpy_get_tree_structure *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_13_librootnumpy_humanize_bytes(long, struct __pyx_opt_args_13_librootnumpy_humanize_bytes *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_13_librootnumpy_handle_load(int, struct __pyx_opt_args_13_librootnumpy_handle_load *__pyx_optional_args); /*proto*/
-static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *, bool, PyObject *, std::string, PyObject *, PyObject *, PyObject *, PyObject *, bool, std::string, long); /*proto*/
+static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *, PyObject *, std::string, PyObject *, PyObject *, PyObject *, PyObject *, bool, std::string, long); /*proto*/
 static TTree *__pyx_f_13_librootnumpy_array2tree(PyArrayObject *, struct __pyx_opt_args_13_librootnumpy_array2tree *__pyx_optional_args); /*proto*/
 static CYTHON_INLINE PyArrayObject *__pyx_f_13_librootnumpy_tonumpyarray(void *, int, int); /*proto*/
 static PyObject *__pyx_f_13_librootnumpy__blockwise_inner_join(PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch); /*proto*/
@@ -20942,7 +20942,7 @@ static PyObject *__pyx_f_13_librootnumpy_handle_load(int __pyx_v_load, struct __
 /* "root_numpy/src/tree.pyx":159
  * 
  * 
- * cdef object tree2array(TTree* tree, bool ischain, branches,             # <<<<<<<<<<<<<<
+ * cdef object tree2array(TTree* tree, branches,             # <<<<<<<<<<<<<<
  *                        string selection, object_selection,
  *                        start, stop, step,
  */
@@ -20951,7 +20951,7 @@ static PyObject *__pyx_f_13_librootnumpy_handle_load(int __pyx_v_load, struct __
 
 
 #line 159 "root_numpy/src/tree.pyx"
-static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *__pyx_v_tree, bool __pyx_v_ischain, PyObject *__pyx_v_branches, std::string __pyx_v_selection, PyObject *__pyx_v_object_selection, PyObject *__pyx_v_start, PyObject *__pyx_v_stop, PyObject *__pyx_v_step, bool __pyx_v_include_weight, std::string __pyx_v_weight_name, long __pyx_v_cache_size) {
+static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *__pyx_v_tree, PyObject *__pyx_v_branches, std::string __pyx_v_selection, PyObject *__pyx_v_object_selection, PyObject *__pyx_v_start, PyObject *__pyx_v_stop, PyObject *__pyx_v_step, bool __pyx_v_include_weight, std::string __pyx_v_weight_name, long __pyx_v_cache_size) {
   int __pyx_v_num_requested_branches
 #line 159 "root_numpy/src/tree.pyx"
 ;
@@ -21439,17 +21439,17 @@ static PyObject *__pyx_f_13_librootnumpy_tree2array(TTree *__pyx_v_tree, bool __
   /* "root_numpy/src/tree.pyx":178
  *     cdef long long ientry
  * 
- *     cdef TreeChain* chain = new TreeChain(tree, ischain, cache_size)             # <<<<<<<<<<<<<<
+ *     cdef TreeChain* chain = new TreeChain(tree, cache_size)             # <<<<<<<<<<<<<<
  *     handle_load(chain.Prepare(), True)
  * 
  */
 
 #line 178 "root_numpy/src/tree.pyx"
-  __pyx_v_chain = new TreeChain(__pyx_v_tree, __pyx_v_ischain, __pyx_v_cache_size);
+  __pyx_v_chain = new TreeChain(__pyx_v_tree, __pyx_v_cache_size);
 
   /* "root_numpy/src/tree.pyx":179
  * 
- *     cdef TreeChain* chain = new TreeChain(tree, ischain, cache_size)
+ *     cdef TreeChain* chain = new TreeChain(tree, cache_size)
  *     handle_load(chain.Prepare(), True)             # <<<<<<<<<<<<<<
  * 
  *     cdef TObjArray* branch_array = tree.GetListOfBranches()
@@ -29475,7 +29475,7 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_indices); if (unlikely(!__pyx_t_2)) __PYX_E
   /* "root_numpy/src/tree.pyx":159
  * 
  * 
- * cdef object tree2array(TTree* tree, bool ischain, branches,             # <<<<<<<<<<<<<<
+ * cdef object tree2array(TTree* tree, branches,             # <<<<<<<<<<<<<<
  *                        string selection, object_selection,
  *                        start, stop, step,
  */
@@ -31249,7 +31249,7 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             raise IOError("none of the input files contain "
  *                           "the requested tree '{0}'".format(treename))             # <<<<<<<<<<<<<<
  *         ret = tree2array(
- *             <TTree*> chain, True, branches,
+ *             <TTree*> chain, branches,
  */
 
 #line 556 "root_numpy/src/tree.pyx"
@@ -31456,7 +31456,7 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
 
     /* "root_numpy/src/tree.pyx":559
  *         ret = tree2array(
- *             <TTree*> chain, True, branches,
+ *             <TTree*> chain, branches,
  *             selection or '', object_selection,             # <<<<<<<<<<<<<<
  *             start, stop, step,
  *             include_weight, weight_name, cache_size)
@@ -31496,12 +31496,12 @@ __pyx_t_1 = PyObject_GetIter(__pyx_v_fnames); if (unlikely(!__pyx_t_1)) __PYX_ER
  *             raise IOError("none of the input files contain "
  *                           "the requested tree '{0}'".format(treename))
  *         ret = tree2array(             # <<<<<<<<<<<<<<
- *             <TTree*> chain, True, branches,
+ *             <TTree*> chain, branches,
  *             selection or '', object_selection,
  */
 
 #line 557 "root_numpy/src/tree.pyx"
-    __pyx_t_1 = __pyx_f_13_librootnumpy_tree2array(((TTree *)__pyx_v_chain), 1, __pyx_v_branches, __pyx_t_14, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 557, __pyx_L4_error)
+    __pyx_t_1 = __pyx_f_13_librootnumpy_tree2array(((TTree *)__pyx_v_chain), __pyx_v_branches, __pyx_t_14, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 557, __pyx_L4_error)
 
 #line 557 "root_numpy/src/tree.pyx"
     __Pyx_GOTREF(__pyx_t_1);
@@ -32191,7 +32191,7 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)             # <<<<<<<<<<<<<<
  *     return tree2array(
- *         rtree, False, branches,
+ *         rtree, branches,
  */
 
 #line 571 "root_numpy/src/tree.pyx"
@@ -32204,7 +32204,7 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     return tree2array(             # <<<<<<<<<<<<<<
- *         rtree, False, branches,
+ *         rtree, branches,
  *         selection or '', object_selection,
  */
 
@@ -32213,7 +32213,7 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
 
   /* "root_numpy/src/tree.pyx":574
  *     return tree2array(
- *         rtree, False, branches,
+ *         rtree, branches,
  *         selection or '', object_selection,             # <<<<<<<<<<<<<<
  *         start, stop, step,
  *         include_weight, weight_name, cache_size)
@@ -32253,12 +32253,12 @@ static PyObject *__pyx_pf_13_librootnumpy_14root2array_fromtree(CYTHON_UNUSED Py
  *                         long cache_size):
  *     cdef TTree* rtree = <TTree*> PyCObject_AsVoidPtr(tree)
  *     return tree2array(             # <<<<<<<<<<<<<<
- *         rtree, False, branches,
+ *         rtree, branches,
  *         selection or '', object_selection,
  */
 
 #line 572 "root_numpy/src/tree.pyx"
-  __pyx_t_5 = __pyx_f_13_librootnumpy_tree2array(__pyx_v_rtree, 0, __pyx_v_branches, __pyx_t_2, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 572, __pyx_L1_error)
+  __pyx_t_5 = __pyx_f_13_librootnumpy_tree2array(__pyx_v_rtree, __pyx_v_branches, __pyx_t_2, __pyx_v_object_selection, __pyx_v_start, __pyx_v_stop, __pyx_v_step, __pyx_v_include_weight, __pyx_v_weight_name, __pyx_v_cache_size); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 572, __pyx_L1_error)
 
 #line 572 "root_numpy/src/tree.pyx"
   __Pyx_GOTREF(__pyx_t_5);
