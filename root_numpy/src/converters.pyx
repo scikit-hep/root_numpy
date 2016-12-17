@@ -51,7 +51,8 @@ cdef inline int write_array(string name,
                             void* here, void* src, int typecode,
                             unsigned long numele, int elesize,
                             int ndim=1, SIZE_t* dims=NULL,
-                            Selector* selector=NULL) except -1:
+                            Selector* selector=NULL,
+                            unsigned int max_length=0) except -1:
     """
     create numpy array of type typecode with numele elements and size of
     each element elesize and write it to the array
@@ -70,26 +71,40 @@ cdef inline int write_array(string name,
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, _dims[0]))
         _dims[0] = selector.num_selected
-    cdef np.ndarray tmp = np.PyArray_EMPTY(ndim, _dims, typecode, 0)
-    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
-    # incref since we are writing directly in the array
-    Py_INCREF(tmp)
-    # copy to tmp.data
-    cdef unsigned long nbytes = numele * elesize
+    cdef void* dest
+    cdef np.ndarray tmp
+    cdef PyObject* tmpobj = NULL
+    cdef unsigned long nbytes
+    if max_length:
+        dest = here
+        nbytes = min(max_length, numele) * elesize
+    else:
+        tmp = np.PyArray_EMPTY(ndim, _dims, typecode, 0)
+        tmpobj = <PyObject*> tmp # borrow ref
+        # incref since we are writing directly in the array
+        Py_INCREF(tmp)
+        dest = tmp.data
+        nbytes = numele * elesize
+    # copy to dest
     if selector != NULL:
         # copy with selection
         for i in range(selector.selected.size()):
             if selector.selected[i]:
-                memcpy(static_cast['char*'](tmp.data) + j * elesize,
+                memcpy(static_cast['char*'](dest) + j * elesize,
                        static_cast['char*'](src) + i * elesize,
                        elesize)
                 j += 1
+                if max_length:
+                    if j == max_length:
+                        break
     else:
         # quick copy
-        memcpy(tmp.data, src, nbytes)
-    # now write PyObject* to the array
-    memcpy(here, &tmpobj, sizeof(PyObject*))
-    return sizeof(tmpobj)
+        memcpy(dest, src, nbytes)
+    if not max_length:
+        # now write PyObject* to the array
+        memcpy(here, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+    return nbytes
 
 
 # special treatment for vector<bool>
@@ -175,10 +190,10 @@ cdef cppclass Converter:
     int write(Column* col, void* here) except -1:
         pass
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         pass
 
-    int get_nptypecode():
+    int get_dtypecode():
         pass
 
 
@@ -197,19 +212,19 @@ cdef cppclass BasicConverter(Converter):
         memcpy(here, src, this.size)
         return this.size
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         return np.dtype(this.nptype)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.nptypecode
 
 
 cdef cppclass ObjectConverterBase(Converter):
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         return np.object
 
-    int get_nptypecode():
+    int get_dtypecode():
         return np.NPY_OBJECT
 
 
@@ -224,7 +239,7 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         this.conv = conv
         this.dims = dims
         this.ndim = ndim
-        this.typecode = conv.get_nptypecode()
+        this.typecode = conv.get_dtypecode()
         this.elesize = conv.size
 
     __dealloc__():
@@ -235,9 +250,9 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         this.dims[0] = col.GetCountLen()
         return write_array(col.name, here, col.GetValuePointer(),
                            this.typecode, col.GetLen(), this.elesize,
-                           this.ndim, this.dims, col.selector)
+                           this.ndim, this.dims, col.selector, col.max_length)
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         if col.max_length == 1:
             # Single value
             return np.dtype(this.conv.nptype)
@@ -265,10 +280,10 @@ cdef cppclass FixedArrayConverter(Converter):
         memcpy(here, col.GetValuePointer(), nbytes)
         return nbytes
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         return (np.dtype(this.conv.nptype), <object> this.shape)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.conv.nptypecode
 
 
@@ -288,10 +303,10 @@ cdef cppclass CharArrayConverter(Converter):
             memset((<char*> here) + length, '\0', nbytes - length)
         return nbytes
 
-    object get_nptype(Column* col):
+    object get_dtype(Column* col):
         return 'S{0:d}'.format(this.size)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.conv.nptypecode
 
 
@@ -299,22 +314,33 @@ cdef cppclass VectorConverter[T](ObjectConverterBase):
     int elesize
     int nptypecode
     Vector2Array[T] v2a
+    string nptype
 
     __init__():
         cdef TypeName[T] ast = TypeName[T]()
         info = TYPES[ast.name]
+        this.nptype = info[1].name
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
 
     int write(Column* col, void* here) except -1:
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef unsigned long numele = tmp.size()
-        # check cython auto-generated code
-        # if it really does &((*tmp)[0])
+        # This should be &((*tmp)[0])
         cdef T* fa = this.v2a.convert(tmp)
         return write_array(col.name, here, fa, this.nptypecode,
                            numele, this.elesize, 1, NULL,
-                           col.selector)
+                           col.selector, col.max_length)
+
+    object get_dtype(Column* col):
+        if col.max_length == 1:
+            # Single value
+            return np.dtype(this.nptype)
+        elif col.max_length:
+            # Truncated
+            return (np.dtype(this.nptype), col.max_length)
+        # Pointer to array
+        return np.object
 
 
 cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
@@ -365,6 +391,16 @@ cdef cppclass VectorBoolConverter(ObjectConverterBase):
     int write(Column* col, void* here) except -1:
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
         return write_array_vectorbool(col.name, here, tmp, col.selector)
+
+    object get_dtype(Column* col):
+        if col.max_length == 1:
+            # Single value
+            return np.dtype(np.bool)
+        elif col.max_length:
+            # Truncated
+            return (np.dtype(np.bool), col.max_length)
+        # Pointer to array
+        return np.object
 
 
 cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):

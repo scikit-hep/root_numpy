@@ -258,22 +258,21 @@ cdef object tree2array(TTree* tree, branches,
                     # branch_spec should be (branch_name, default_value) or
                     # (branch_name, cropped_length, fill_value)
                     if len(branch_spec) == 2:
-                        # Transform (branch_name, default_value) to
-                        # (branch_name, 1, default_value) to impute the array
+                        # max_length is implicitly equal to one
                         branch_dict[branch_spec[0]] = (idx, 1)
                     elif len(branch_spec) == 3:
-                        if branch_spec[1] < 1:
+                        if branch_spec[2] < 1:
                             raise ValueError(
                                 "truncated length must be greater than zero: {0}".format(branch_spec))
-                        branch_dict[branch_spec[0]] = (idx, branch_spec[1])
+                        branch_dict[branch_spec[0]] = (idx, branch_spec[2])
                     else:
                         raise ValueError(
-                            ("invalid branch specification tuple: {0}. "
-                             "A branch specification tuple must contain two elements "
+                            ("invalid branch tuple: {0}. "
+                             "A branch tuple must contain two elements "
                              "(branch_name, default_value) or three elements "
-                             "(branch_name, cropped_length, fill_value) for branches "
-                             "with multiplicity -1 or multiplicity >= 1, respectively").format(branch_spec))
-                    branch_defaults[branch_spec[0]] = branch_spec[-1]
+                             "(branch_name, fill_value, max_length) "
+                             "to yield a single value or truncate, respectively").format(branch_spec))
+                    branch_defaults[branch_spec[0]] = branch_spec[1]
                 else:
                     branch_dict[branch_spec] = (idx, 0)
             if len(branch_dict) != num_requested_branches:
@@ -359,7 +358,7 @@ cdef object tree2array(TTree* tree, branches,
                         column_name.append(<string> '_')
                         column_name.append(leaf_name)
 
-                    if conv.get_nptypecode() != np.NPY_OBJECT:
+                    if conv.get_dtypecode() != np.NPY_OBJECT:
                         if selector != NULL:
                             raise TypeError(
                                 "attempting to apply selection on column '{0}' "
@@ -487,7 +486,7 @@ cdef object tree2array(TTree* tree, branches,
         # make an appropriate array structure
         dtype_fields = []
         for icol in range(columns.size()):
-            dtype_fields.append((columns[icol].name, converters[icol].get_nptype(columns[icol])))
+            dtype_fields.append((columns[icol].name, converters[icol].get_dtype(columns[icol])))
         if include_weight:
             dtype_fields.append((weight_name, np.dtype('d')))
         dtype = np.dtype(dtype_fields)
