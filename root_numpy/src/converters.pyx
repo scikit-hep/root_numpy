@@ -211,6 +211,9 @@ cdef cppclass Converter:
     int get_dtypecode():
         pass
 
+    bool can_truncate():
+        return False
+
 
 cdef cppclass BasicConverter(Converter):
     int size
@@ -276,6 +279,9 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
             return (np.dtype(this.conv.nptype), col.max_length)
         # Pointer to array
         return np.object
+
+    bool can_truncate():
+        return True
 
 
 cdef cppclass FixedArrayConverter(Converter):
@@ -357,6 +363,9 @@ cdef cppclass VectorConverter[T](ObjectConverterBase):
         # Pointer to array
         return np.object
 
+    bool can_truncate():
+        return True
+
 
 cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
     int elesize
@@ -417,6 +426,9 @@ cdef cppclass VectorBoolConverter(ObjectConverterBase):
             return (np.dtype(np.bool), col.max_length)
         # Pointer to array
         return np.object
+
+    bool can_truncate():
+        return True
 
 
 cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):

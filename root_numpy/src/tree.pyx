@@ -362,7 +362,7 @@ cdef object tree2array(TTree* tree, branches,
                         if selector != NULL:
                             raise TypeError(
                                 "attempting to apply selection on column '{0}' "
-                                "that is not of type object".format(column_name))
+                                "that is not of type 'object'".format(column_name))
                         # We may not read any bytes for empty arrays
                         # otherwise reading zero bytes can be a sign of a
                         # corrupt ROOT file.
@@ -373,6 +373,11 @@ cdef object tree2array(TTree* tree, branches,
                     col.selector = selector
 
                     if branch_spec is not None:
+                        if branch_spec[1] > 0 and not conv.can_truncate():
+                            raise TypeError(
+                                "unable to truncate column '{0}' "
+                                "of type '{1}'".format(
+                                    column_name, resolve_type(tleaf.GetTypeName())))
                         col.max_length = branch_spec[1]
 
                     if num_requested_branches > 0:
