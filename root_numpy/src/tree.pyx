@@ -464,6 +464,13 @@ cdef object tree2array(TTree* tree, branches,
                         "could not find a formula converter for '{0}'. "
                         "Please report this bug.".format(expression))
 
+                if branch_spec[1] > 0 and not conv.can_truncate():
+                    raise TypeError(
+                        "unable to truncate column '{0}' "
+                        "with formula of multiplicity={1:d}".format(
+                            expression, formula.GetMultiplicity()))
+                col.max_length = branch_spec[1]
+
                 column_buckets[branch_idx].push_back(col)
                 converter_buckets[branch_idx].push_back(conv)
 
