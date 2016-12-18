@@ -104,13 +104,14 @@ cdef inline int write_array(string name,
         # now write PyObject* to the array
         memcpy(here, &tmpobj, sizeof(PyObject*))
         return sizeof(tmpobj)
-    return nbytes
+    return max_length * elesize
 
 
 # special treatment for vector<bool>
 cdef inline int write_array_vectorbool(string name,
                                        void* here, vector[bool]* src,
-                                       Selector* selector=NULL) except -1:
+                                       Selector* selector=NULL,
+                                       unsigned int max_length=0) except -1:
     cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
@@ -123,23 +124,37 @@ cdef inline int write_array_vectorbool(string name,
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, dims[0]))
         dims[0] = selector.num_selected
-    cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
-    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
-    # incref since we are writing directly in the array
-    Py_INCREF(tmp)
+    cdef np.ndarray tmp
+    cdef PyObject* tmpobj = NULL
+    if max_length:
+        dest = here
+    else:
+        tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+        tmpobj = <PyObject*> tmp # borrow ref
+        # incref since we are writing directly in the array
+        Py_INCREF(tmp)
+        dest = tmp.data
     if selector != NULL:
         # copy with selection
         for i in range(selector.selected.size()):
             if selector.selected[i]:
-                tmp[j] = deref(src)[i]
+                (<bool*> dest)[j] = deref(src)[i]
                 j += 1
+                if max_length:
+                    if j == max_length:
+                        break
     else:
         # can't use memcpy here...
         for i in range(numele):
-            tmp[i] = deref(src)[i]
-    # now write PyObject* to the array
-    memcpy(here, &tmpobj, sizeof(PyObject*))
-    return sizeof(tmpobj)
+            (<bool*> dest)[i] = deref(src)[i]
+            if max_length:
+                if i == max_length - 1:
+                    break
+    if not max_length:
+        # now write PyObject* to the array
+        memcpy(here, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+    return max_length * sizeof(bool)
 
 
 cdef inline int write_array_vectorstring(string name,
@@ -390,7 +405,8 @@ cdef cppclass VectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
     int write(Column* col, void* here) except -1:
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
-        return write_array_vectorbool(col.name, here, tmp, col.selector)
+        return write_array_vectorbool(col.name, here, tmp,
+                                      col.selector, col.max_length)
 
     object get_dtype(Column* col):
         if col.max_length == 1:

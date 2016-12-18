@@ -1256,7 +1256,7 @@ struct __pyx_opt_args_13_librootnumpy_write_array {
  * # special treatment for vector<bool>
  * cdef inline int write_array_vectorbool(string name,             # <<<<<<<<<<<<<<
  *                                        void* here, vector[bool]* src,
- *                                        Selector* selector=NULL) except -1:
+ *                                        Selector* selector=NULL,
  */
 
 #line 111 "root_numpy/src/converters.pyx"
@@ -1269,9 +1269,12 @@ struct __pyx_opt_args_13_librootnumpy_write_array_vectorbool {
   Selector *selector;
 
 #line 111 "root_numpy/src/converters.pyx"
+  unsigned int max_length;
+
+#line 111 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":145
+/* "root_numpy/src/converters.pyx":160
  * 
  * 
  * cdef inline int write_array_vectorstring(string name,             # <<<<<<<<<<<<<<
@@ -1279,37 +1282,37 @@ struct __pyx_opt_args_13_librootnumpy_write_array_vectorbool {
  *                                          Selector* selector=NULL) except -1:
  */
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 struct __pyx_opt_args_13_librootnumpy_write_array_vectorstring {
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   int __pyx_n;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   Selector *selector;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_Converter
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 int get_dtypecode(void);
   virtual ~__pyx_t_13_librootnumpy_Converter() { }
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_BasicConverter : public __pyx_t_13_librootnumpy_Converter
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":200
+  /* "root_numpy/src/converters.pyx":215
  * 
  * 
  * cdef cppclass BasicConverter(Converter):             # <<<<<<<<<<<<<<
@@ -1317,46 +1320,46 @@ struct __pyx_t_13_librootnumpy_BasicConverter : public __pyx_t_13_librootnumpy_C
  *     int nptypecode
  */
 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
   int size;
 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
   int nptypecode;
 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
   std::string nptype;
 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_BasicConverter(int, std::string, int);
   virtual 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 int get_dtypecode(void);
   virtual ~__pyx_t_13_librootnumpy_BasicConverter() { }
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_ObjectConverterBase : public __pyx_t_13_librootnumpy_Converter
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual 
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 int get_dtypecode(void);
   virtual ~__pyx_t_13_librootnumpy_ObjectConverterBase() { }
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_VaryArrayConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 200 "root_numpy/src/converters.pyx"
+#line 215 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":231
+  /* "root_numpy/src/converters.pyx":246
  * 
  * 
  * cdef cppclass VaryArrayConverter(ObjectConverterBase):             # <<<<<<<<<<<<<<
@@ -1364,40 +1367,40 @@ struct __pyx_t_13_librootnumpy_VaryArrayConverter : public __pyx_t_13_librootnum
  *     SIZE_t* dims
  */
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_BasicConverter *conv;
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t *dims;
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
   int ndim;
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
   int typecode;
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
   int elesize;
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_VaryArrayConverter(__pyx_t_13_librootnumpy_BasicConverter *, int, __pyx_t_13_librootnumpy_SIZE_t *);
   virtual 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
  ~__pyx_t_13_librootnumpy_VaryArrayConverter(void);
   virtual 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
 
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_FixedArrayConverter : public __pyx_t_13_librootnumpy_Converter
-#line 231 "root_numpy/src/converters.pyx"
+#line 246 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":266
+  /* "root_numpy/src/converters.pyx":281
  * 
  * 
  * cdef cppclass FixedArrayConverter(Converter):             # <<<<<<<<<<<<<<
@@ -1405,34 +1408,34 @@ struct __pyx_t_13_librootnumpy_FixedArrayConverter : public __pyx_t_13_librootnu
  *     PyObject* shape
  */
 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_BasicConverter *conv;
 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
   PyObject *shape;
 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_FixedArrayConverter(__pyx_t_13_librootnumpy_BasicConverter *, PyObject *);
   virtual 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
  ~__pyx_t_13_librootnumpy_FixedArrayConverter(void);
   virtual 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
 int get_dtypecode(void);
 
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_CharArrayConverter : public __pyx_t_13_librootnumpy_Converter
-#line 266 "root_numpy/src/converters.pyx"
+#line 281 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":290
+  /* "root_numpy/src/converters.pyx":305
  * 
  * 
  * cdef cppclass CharArrayConverter(Converter):             # <<<<<<<<<<<<<<
@@ -1440,28 +1443,28 @@ struct __pyx_t_13_librootnumpy_CharArrayConverter : public __pyx_t_13_librootnum
  *     int size
  */
 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_BasicConverter *conv;
 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
   int size;
 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_CharArrayConverter(int);
   virtual 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual 
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
 int get_dtypecode(void);
   virtual ~__pyx_t_13_librootnumpy_CharArrayConverter() { }
-#line 290 "root_numpy/src/converters.pyx"
+#line 305 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":313
+/* "root_numpy/src/converters.pyx":328
  * 
  * 
  * cdef cppclass VectorConverter[T](ObjectConverterBase):             # <<<<<<<<<<<<<<
@@ -1469,37 +1472,37 @@ int get_dtypecode(void);
  *     int nptypecode
  */
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
 template <class T>
 struct __pyx_t_13_librootnumpy_VectorConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
  {
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
   int elesize;
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
   int nptypecode;
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
   Vector2Array<T>  v2a;
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
   std::string nptype;
 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_VectorConverter(void);
   virtual 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual ~__pyx_t_13_librootnumpy_VectorConverter() { }
-#line 313 "root_numpy/src/converters.pyx"
+#line 328 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":346
+/* "root_numpy/src/converters.pyx":361
  * 
  * 
  * cdef cppclass VectorVectorConverter[T](ObjectConverterBase):             # <<<<<<<<<<<<<<
@@ -1507,79 +1510,79 @@ PyObject *get_dtype(Column *);
  *     int nptypecode
  */
 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 template <class T>
 struct __pyx_t_13_librootnumpy_VectorVectorConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
   int elesize;
 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
   int nptypecode;
 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
   Vector2Array<T>  v2a;
 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_VectorVectorConverter(void);
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual ~__pyx_t_13_librootnumpy_VectorVectorConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_VectorBoolConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 PyObject *get_dtype(Column *);
   virtual ~__pyx_t_13_librootnumpy_VectorBoolConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_VectorVectorBoolConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual ~__pyx_t_13_librootnumpy_VectorVectorBoolConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_StringConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual ~__pyx_t_13_librootnumpy_StringConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_VectorStringConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual ~__pyx_t_13_librootnumpy_VectorStringConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_VectorVectorStringConverter : public __pyx_t_13_librootnumpy_ObjectConverterBase
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 int write(Column *, void *);
   virtual ~__pyx_t_13_librootnumpy_VectorVectorStringConverter() { }
-#line 346 "root_numpy/src/converters.pyx"
+#line 361 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":485
+/* "root_numpy/src/converters.pyx":501
  * 
  * 
  * ctypedef cpp_map[string, Converter*] CONVERTERS_TYPE             # <<<<<<<<<<<<<<
@@ -1587,10 +1590,10 @@ int write(Column *, void *);
  * cdef CONVERTERS_TYPE CONVERTERS
  */
 
-#line 485 "root_numpy/src/converters.pyx"
+#line 501 "root_numpy/src/converters.pyx"
 typedef std::map<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_t_13_librootnumpy_CONVERTERS_TYPE;
 
-/* "root_numpy/src/converters.pyx":486
+/* "root_numpy/src/converters.pyx":502
  * 
  * ctypedef cpp_map[string, Converter*] CONVERTERS_TYPE
  * ctypedef pair[string, Converter*] CONVERTERS_ITEM_TYPE             # <<<<<<<<<<<<<<
@@ -1598,10 +1601,10 @@ typedef std::map<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_t_13_li
  * 
  */
 
-#line 486 "root_numpy/src/converters.pyx"
+#line 502 "root_numpy/src/converters.pyx"
 typedef std::pair<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE;
 
-/* "root_numpy/src/converters.pyx":610
+/* "root_numpy/src/converters.pyx":626
  * 
  * 
  * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
@@ -1609,31 +1612,31 @@ typedef std::pair<std::string,__pyx_t_13_librootnumpy_Converter *>  __pyx_t_13_l
  *     cdef Converter* conv
  */
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 struct __pyx_opt_args_13_librootnumpy_get_converter {
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   int __pyx_n;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   char type_code;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_NP2ROOTConverter
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
  {
   virtual 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 void fill_from(void *);
   virtual ~__pyx_t_13_librootnumpy_NP2ROOTConverter() { }
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 };
 struct __pyx_t_13_librootnumpy_FixedNP2ROOTConverter : public __pyx_t_13_librootnumpy_NP2ROOTConverter
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
  {
 
-  /* "root_numpy/src/converters.pyx":661
+  /* "root_numpy/src/converters.pyx":677
  * 
  * 
  * cdef cppclass FixedNP2ROOTConverter(NP2ROOTConverter):             # <<<<<<<<<<<<<<
@@ -1641,28 +1644,28 @@ struct __pyx_t_13_librootnumpy_FixedNP2ROOTConverter : public __pyx_t_13_libroot
  *     void* value
  */
 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
   int nbytes;
 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
   void *value;
 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
   TBranch *branch;
 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
    __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(TTree *, std::string, std::string, int, int, struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ *__pyx_optional_args);
   virtual 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
  ~__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(void);
   virtual 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
 void fill_from(void *);
 
-#line 661 "root_numpy/src/converters.pyx"
+#line 677 "root_numpy/src/converters.pyx"
 };
 
-/* "root_numpy/src/converters.pyx":666
+/* "root_numpy/src/converters.pyx":682
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -1670,19 +1673,19 @@ void fill_from(void *);
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
 struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ {
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   int __pyx_n;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   int ndim;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t *dims;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
 };
 
 /* "root_numpy/src/tree.pyx":4
@@ -1951,16 +1954,6 @@ static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject 
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
-/* SetItemInt.proto */
-#define __Pyx_SetItemInt(o, i, v, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_SetItemInt_Fast(o, (Py_ssize_t)i, v, is_list, wraparound, boundscheck) :\
-    (is_list ? (PyErr_SetString(PyExc_IndexError, "list assignment index out of range"), -1) :\
-               __Pyx_SetItemInt_Generic(o, to_py_func(i), v)))
-static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v);
-static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v,
-                                               int is_list, int wraparound, int boundscheck);
-
 /* WriteUnraisableException.proto */
 static void __Pyx_WriteUnraisable(const char *name, int clineno,
                                   int lineno, const char *filename,
@@ -2205,6 +2198,16 @@ static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
 #define __Pyx_BufPtrStrided2d(type, buf, i0, s0, i1, s1) (type)((char*)buf + i0 * s0 + i1 * s1)
 /* BufferFallbackError.proto */
 static void __Pyx_RaiseBufferFallbackError(void);
+
+/* SetItemInt.proto */
+#define __Pyx_SetItemInt(o, i, v, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_SetItemInt_Fast(o, (Py_ssize_t)i, v, is_list, wraparound, boundscheck) :\
+    (is_list ? (PyErr_SetString(PyExc_IndexError, "list assignment index out of range"), -1) :\
+               __Pyx_SetItemInt_Generic(o, to_py_func(i), v)))
+static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v);
+static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v,
+                                               int is_list, int wraparound, int boundscheck);
 
 /* BufferIndexError.proto */
 static void __Pyx_RaiseBufferIndexError(int axis);
@@ -5016,7 +5019,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array(std::string __pyx_v
  *         # now write PyObject* to the array
  *         memcpy(here, &tmpobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
  *         return sizeof(tmpobj)
- *     return nbytes
+ *     return max_length * elesize
  */
 
 #line 105 "root_numpy/src/converters.pyx"
@@ -5026,7 +5029,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array(std::string __pyx_v
  *         # now write PyObject* to the array
  *         memcpy(here, &tmpobj, sizeof(PyObject*))
  *         return sizeof(tmpobj)             # <<<<<<<<<<<<<<
- *     return nbytes
+ *     return max_length * elesize
  * 
  */
 
@@ -5050,13 +5053,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array(std::string __pyx_v
   /* "root_numpy/src/converters.pyx":107
  *         memcpy(here, &tmpobj, sizeof(PyObject*))
  *         return sizeof(tmpobj)
- *     return nbytes             # <<<<<<<<<<<<<<
+ *     return max_length * elesize             # <<<<<<<<<<<<<<
  * 
  * 
  */
 
 #line 107 "root_numpy/src/converters.pyx"
-  __pyx_r = __pyx_v_nbytes;
+  __pyx_r = (__pyx_v_max_length * __pyx_v_elesize);
 
 #line 107 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
@@ -5128,7 +5131,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array(std::string __pyx_v
  * # special treatment for vector<bool>
  * cdef inline int write_array_vectorbool(string name,             # <<<<<<<<<<<<<<
  *                                        void* here, vector[bool]* src,
- *                                        Selector* selector=NULL) except -1:
+ *                                        Selector* selector=NULL,
  */
 
 #line 111 "root_numpy/src/converters.pyx"
@@ -5140,13 +5143,16 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
   /* "root_numpy/src/converters.pyx":113
  * cdef inline int write_array_vectorbool(string name,
  *                                        void* here, vector[bool]* src,
- *                                        Selector* selector=NULL) except -1:             # <<<<<<<<<<<<<<
+ *                                        Selector* selector=NULL,             # <<<<<<<<<<<<<<
+ *                                        unsigned int max_length=0) except -1:
  *     cdef unsigned long i = 0, j = 0
- *     cdef unsigned long numele = src.size()
  */
 
 #line 113 "root_numpy/src/converters.pyx"
   Selector *__pyx_v_selector = ((Selector *)NULL);
+
+#line 113 "root_numpy/src/converters.pyx"
+  unsigned int __pyx_v_max_length = ((unsigned int)0);
   unsigned long __pyx_v_i
 #line 113 "root_numpy/src/converters.pyx"
 ;
@@ -5163,6 +5169,9 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
 #line 113 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_tmpobj
+#line 113 "root_numpy/src/converters.pyx"
+;
+  void *__pyx_v_dest
 #line 113 "root_numpy/src/converters.pyx"
 ;
 
@@ -5206,13 +5215,16 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
   __pyx_t_13_librootnumpy_unsigned_int __pyx_t_11;
 
 #line 113 "root_numpy/src/converters.pyx"
-  size_t __pyx_t_12;
+  char *__pyx_t_12;
 
 #line 113 "root_numpy/src/converters.pyx"
-  unsigned long __pyx_t_13;
+  size_t __pyx_t_13;
 
 #line 113 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_14;
+
+#line 113 "root_numpy/src/converters.pyx"
+  unsigned long __pyx_t_15;
 
 #line 113 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write_array_vectorbool", 0);
@@ -5227,37 +5239,46 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
       __pyx_v_selector = __pyx_optional_args->selector;
 
 #line 113 "root_numpy/src/converters.pyx"
+      if (__pyx_optional_args->__pyx_n > 1) {
+
+#line 113 "root_numpy/src/converters.pyx"
+        __pyx_v_max_length = __pyx_optional_args->max_length;
+
+#line 113 "root_numpy/src/converters.pyx"
+      }
+
+#line 113 "root_numpy/src/converters.pyx"
     }
 
 #line 113 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":114
- *                                        void* here, vector[bool]* src,
- *                                        Selector* selector=NULL) except -1:
+  /* "root_numpy/src/converters.pyx":115
+ *                                        Selector* selector=NULL,
+ *                                        unsigned int max_length=0) except -1:
  *     cdef unsigned long i = 0, j = 0             # <<<<<<<<<<<<<<
  *     cdef unsigned long numele = src.size()
  *     cdef SIZE_t dims[1]
  */
 
-#line 114 "root_numpy/src/converters.pyx"
+#line 115 "root_numpy/src/converters.pyx"
   __pyx_v_i = 0;
 
-#line 114 "root_numpy/src/converters.pyx"
+#line 115 "root_numpy/src/converters.pyx"
   __pyx_v_j = 0;
 
-  /* "root_numpy/src/converters.pyx":115
- *                                        Selector* selector=NULL) except -1:
+  /* "root_numpy/src/converters.pyx":116
+ *                                        unsigned int max_length=0) except -1:
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()             # <<<<<<<<<<<<<<
  *     cdef SIZE_t dims[1]
  *     dims[0] = numele;
  */
 
-#line 115 "root_numpy/src/converters.pyx"
+#line 116 "root_numpy/src/converters.pyx"
   __pyx_v_numele = __pyx_v_src->size();
 
-  /* "root_numpy/src/converters.pyx":117
+  /* "root_numpy/src/converters.pyx":118
  *     cdef unsigned long numele = src.size()
  *     cdef SIZE_t dims[1]
  *     dims[0] = numele;             # <<<<<<<<<<<<<<
@@ -5265,10 +5286,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *         # check that lengths match
  */
 
-#line 117 "root_numpy/src/converters.pyx"
+#line 118 "root_numpy/src/converters.pyx"
   (__pyx_v_dims[0]) = __pyx_v_numele;
 
-  /* "root_numpy/src/converters.pyx":118
+  /* "root_numpy/src/converters.pyx":119
  *     cdef SIZE_t dims[1]
  *     dims[0] = numele;
  *     if selector != NULL:             # <<<<<<<<<<<<<<
@@ -5276,13 +5297,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *         if selector.selected.size() != <unsigned_long> dims[0]:
  */
 
-#line 118 "root_numpy/src/converters.pyx"
+#line 119 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_selector != NULL) != 0);
 
-#line 118 "root_numpy/src/converters.pyx"
+#line 119 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":120
+    /* "root_numpy/src/converters.pyx":121
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
@@ -5290,13 +5311,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
-#line 120 "root_numpy/src/converters.pyx"
+#line 121 "root_numpy/src/converters.pyx"
     __pyx_t_1 = ((__pyx_v_selector->selected.size() != ((__pyx_t_13_librootnumpy_unsigned_long)(__pyx_v_dims[0]))) != 0);
 
-#line 120 "root_numpy/src/converters.pyx"
+#line 121 "root_numpy/src/converters.pyx"
     if (__pyx_t_1) {
 
-      /* "root_numpy/src/converters.pyx":122
+      /* "root_numpy/src/converters.pyx":123
  *         if selector.selected.size() != <unsigned_long> dims[0]:
  *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
@@ -5304,13 +5325,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *                                    name, dims[0]))
  */
 
-#line 122 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 122, __pyx_L1_error)
+#line 123 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 123, __pyx_L1_error)
 
-#line 122 "root_numpy/src/converters.pyx"
+#line 123 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-      /* "root_numpy/src/converters.pyx":123
+      /* "root_numpy/src/converters.pyx":124
  *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
@@ -5318,216 +5339,216 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *         dims[0] = selector.num_selected
  */
 
-#line 123 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyStr_FromString(__pyx_v_selector->selection->GetTitle()); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 123, __pyx_L1_error)
+#line 124 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyStr_FromString(__pyx_v_selector->selection->GetTitle()); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 124, __pyx_L1_error)
 
-#line 123 "root_numpy/src/converters.pyx"
+#line 124 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 123 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = __Pyx_PyInt_FromSize_t(__pyx_v_selector->selected.size()); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 123, __pyx_L1_error)
+#line 124 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = __Pyx_PyInt_FromSize_t(__pyx_v_selector->selected.size()); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 124, __pyx_L1_error)
 
-#line 123 "root_numpy/src/converters.pyx"
+#line 124 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-      /* "root_numpy/src/converters.pyx":124
+      /* "root_numpy/src/converters.pyx":125
  *                                "and object array '{2}' ({3}) are not equal".format(
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  *                                    name, dims[0]))             # <<<<<<<<<<<<<<
  *         dims[0] = selector.num_selected
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+ *     cdef np.ndarray tmp
  */
 
-#line 124 "root_numpy/src/converters.pyx"
-      __pyx_t_6 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 124, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+      __pyx_t_6 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 125, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 124 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 124, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 125, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_7);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       __pyx_t_8 = NULL;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       __pyx_t_9 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_3);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_8)) {
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_8);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_3, function);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           __pyx_t_9 = 1;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         }
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       }
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCALL
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       if (PyFunction_Check(__pyx_t_3)) {
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
 
-#line 124 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 122, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 123, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       } else
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       #endif
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCCALL
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
 
-#line 124 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 122, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 123, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       } else
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       #endif
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       {
 
-#line 124 "root_numpy/src/converters.pyx"
-        __pyx_t_10 = PyTuple_New(4+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 122, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+        __pyx_t_10 = PyTuple_New(4+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 123, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_10);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         if (__pyx_t_8) {
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         }
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_4);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_4);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_5);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_5);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_6);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_6);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_7);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_t_7);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __pyx_t_4 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __pyx_t_5 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __pyx_t_6 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __pyx_t_7 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 122, __pyx_L1_error)
+#line 125 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 123, __pyx_L1_error)
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       }
 
-#line 124 "root_numpy/src/converters.pyx"
+#line 125 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "root_numpy/src/converters.pyx":121
+      /* "root_numpy/src/converters.pyx":122
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:
  *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
@@ -5535,40 +5556,40 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  */
 
-#line 121 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 121, __pyx_L1_error)
+#line 122 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 122, __pyx_L1_error)
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_2);
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __pyx_t_2 = 0;
 
-#line 121 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 121, __pyx_L1_error)
+#line 122 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 122, __pyx_L1_error)
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_2, 0, 0, 0);
 
-#line 121 "root_numpy/src/converters.pyx"
+#line 122 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 121 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 121, __pyx_L1_error)
+#line 122 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 122, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":120
+      /* "root_numpy/src/converters.pyx":121
  *     if selector != NULL:
  *         # check that lengths match
  *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
@@ -5576,24 +5597,24 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
-#line 120 "root_numpy/src/converters.pyx"
+#line 121 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":125
+    /* "root_numpy/src/converters.pyx":126
  *                                    selector.selection.GetTitle(), selector.selected.size(),
  *                                    name, dims[0]))
  *         dims[0] = selector.num_selected             # <<<<<<<<<<<<<<
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
+ *     cdef np.ndarray tmp
+ *     cdef PyObject* tmpobj = NULL
  */
 
-#line 125 "root_numpy/src/converters.pyx"
+#line 126 "root_numpy/src/converters.pyx"
     __pyx_t_11 = __pyx_v_selector->num_selected;
 
-#line 125 "root_numpy/src/converters.pyx"
+#line 126 "root_numpy/src/converters.pyx"
     (__pyx_v_dims[0]) = __pyx_t_11;
 
-    /* "root_numpy/src/converters.pyx":118
+    /* "root_numpy/src/converters.pyx":119
  *     cdef SIZE_t dims[1]
  *     dims[0] = numele;
  *     if selector != NULL:             # <<<<<<<<<<<<<<
@@ -5601,230 +5622,452 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *         if selector.selected.size() != <unsigned_long> dims[0]:
  */
 
-#line 118 "root_numpy/src/converters.pyx"
+#line 119 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":126
- *                                    name, dims[0]))
+  /* "root_numpy/src/converters.pyx":128
  *         dims[0] = selector.num_selected
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)             # <<<<<<<<<<<<<<
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
- *     # incref since we are writing directly in the array
+ *     cdef np.ndarray tmp
+ *     cdef PyObject* tmpobj = NULL             # <<<<<<<<<<<<<<
+ *     if max_length:
+ *         dest = here
  */
 
-#line 126 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyArray_EMPTY(1, __pyx_v_dims, NPY_BOOL, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 126, __pyx_L1_error)
-
-#line 126 "root_numpy/src/converters.pyx"
-  __Pyx_GOTREF(__pyx_t_2);
-
-#line 126 "root_numpy/src/converters.pyx"
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 126, __pyx_L1_error)
-
-#line 126 "root_numpy/src/converters.pyx"
-  __pyx_v_tmp = ((PyArrayObject *)__pyx_t_2);
-
-#line 126 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = 0;
-
-  /* "root_numpy/src/converters.pyx":127
- *         dims[0] = selector.num_selected
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref             # <<<<<<<<<<<<<<
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)
- */
-
-#line 127 "root_numpy/src/converters.pyx"
-  __pyx_v_tmpobj = ((PyObject *)__pyx_v_tmp);
+#line 128 "root_numpy/src/converters.pyx"
+  __pyx_v_tmpobj = NULL;
 
   /* "root_numpy/src/converters.pyx":129
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray tmp
+ *     cdef PyObject* tmpobj = NULL
+ *     if max_length:             # <<<<<<<<<<<<<<
+ *         dest = here
+ *     else:
+ */
+
+#line 129 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = (__pyx_v_max_length != 0);
+
+#line 129 "root_numpy/src/converters.pyx"
+  if (__pyx_t_1) {
+
+    /* "root_numpy/src/converters.pyx":130
+ *     cdef PyObject* tmpobj = NULL
+ *     if max_length:
+ *         dest = here             # <<<<<<<<<<<<<<
+ *     else:
+ *         tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+ */
+
+#line 130 "root_numpy/src/converters.pyx"
+    __pyx_v_dest = __pyx_v_here;
+
+    /* "root_numpy/src/converters.pyx":129
+ *     cdef np.ndarray tmp
+ *     cdef PyObject* tmpobj = NULL
+ *     if max_length:             # <<<<<<<<<<<<<<
+ *         dest = here
+ *     else:
+ */
+
+#line 129 "root_numpy/src/converters.pyx"
+    goto __pyx_L5;
+
+#line 129 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":132
+ *         dest = here
+ *     else:
+ *         tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)             # <<<<<<<<<<<<<<
+ *         tmpobj = <PyObject*> tmp # borrow ref
+ *         # incref since we are writing directly in the array
+ */
+
+#line 132 "root_numpy/src/converters.pyx"
+  /*else*/ {
+
+#line 132 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = PyArray_EMPTY(1, __pyx_v_dims, NPY_BOOL, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 132, __pyx_L1_error)
+
+#line 132 "root_numpy/src/converters.pyx"
+    __Pyx_GOTREF(__pyx_t_2);
+
+#line 132 "root_numpy/src/converters.pyx"
+    if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 132, __pyx_L1_error)
+
+#line 132 "root_numpy/src/converters.pyx"
+    __pyx_v_tmp = ((PyArrayObject *)__pyx_t_2);
+
+#line 132 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = 0;
+
+    /* "root_numpy/src/converters.pyx":133
+ *     else:
+ *         tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+ *         tmpobj = <PyObject*> tmp # borrow ref             # <<<<<<<<<<<<<<
+ *         # incref since we are writing directly in the array
+ *         Py_INCREF(tmp)
+ */
+
+#line 133 "root_numpy/src/converters.pyx"
+    __pyx_v_tmpobj = ((PyObject *)__pyx_v_tmp);
+
+    /* "root_numpy/src/converters.pyx":135
+ *         tmpobj = <PyObject*> tmp # borrow ref
+ *         # incref since we are writing directly in the array
+ *         Py_INCREF(tmp)             # <<<<<<<<<<<<<<
+ *         dest = tmp.data
+ *     if selector != NULL:
+ */
+
+#line 135 "root_numpy/src/converters.pyx"
+    Py_INCREF(((PyObject *)__pyx_v_tmp));
+
+    /* "root_numpy/src/converters.pyx":136
+ *         # incref since we are writing directly in the array
+ *         Py_INCREF(tmp)
+ *         dest = tmp.data             # <<<<<<<<<<<<<<
  *     if selector != NULL:
  *         # copy with selection
  */
 
-#line 129 "root_numpy/src/converters.pyx"
-  Py_INCREF(((PyObject *)__pyx_v_tmp));
+#line 136 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_v_tmp->data;
 
-  /* "root_numpy/src/converters.pyx":130
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)
+#line 136 "root_numpy/src/converters.pyx"
+    __pyx_v_dest = __pyx_t_12;
+
+#line 136 "root_numpy/src/converters.pyx"
+  }
+
+#line 136 "root_numpy/src/converters.pyx"
+  __pyx_L5:;
+
+  /* "root_numpy/src/converters.pyx":137
+ *         Py_INCREF(tmp)
+ *         dest = tmp.data
  *     if selector != NULL:             # <<<<<<<<<<<<<<
  *         # copy with selection
  *         for i in range(selector.selected.size()):
  */
 
-#line 130 "root_numpy/src/converters.pyx"
+#line 137 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_selector != NULL) != 0);
 
-#line 130 "root_numpy/src/converters.pyx"
+#line 137 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":132
+    /* "root_numpy/src/converters.pyx":139
  *     if selector != NULL:
  *         # copy with selection
  *         for i in range(selector.selected.size()):             # <<<<<<<<<<<<<<
  *             if selector.selected[i]:
- *                 tmp[j] = deref(src)[i]
+ *                 (<bool*> dest)[j] = deref(src)[i]
  */
 
-#line 132 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_v_selector->selected.size();
+#line 139 "root_numpy/src/converters.pyx"
+    __pyx_t_13 = __pyx_v_selector->selected.size();
 
-#line 132 "root_numpy/src/converters.pyx"
-    for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
+#line 139 "root_numpy/src/converters.pyx"
+    for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
 
-#line 132 "root_numpy/src/converters.pyx"
-      __pyx_v_i = __pyx_t_13;
+#line 139 "root_numpy/src/converters.pyx"
+      __pyx_v_i = __pyx_t_14;
 
-      /* "root_numpy/src/converters.pyx":133
+      /* "root_numpy/src/converters.pyx":140
  *         # copy with selection
  *         for i in range(selector.selected.size()):
  *             if selector.selected[i]:             # <<<<<<<<<<<<<<
- *                 tmp[j] = deref(src)[i]
+ *                 (<bool*> dest)[j] = deref(src)[i]
  *                 j += 1
  */
 
-#line 133 "root_numpy/src/converters.pyx"
+#line 140 "root_numpy/src/converters.pyx"
       __pyx_t_1 = ((__pyx_v_selector->selected[__pyx_v_i]) != 0);
 
-#line 133 "root_numpy/src/converters.pyx"
+#line 140 "root_numpy/src/converters.pyx"
       if (__pyx_t_1) {
 
-        /* "root_numpy/src/converters.pyx":134
+        /* "root_numpy/src/converters.pyx":141
  *         for i in range(selector.selected.size()):
  *             if selector.selected[i]:
- *                 tmp[j] = deref(src)[i]             # <<<<<<<<<<<<<<
+ *                 (<bool*> dest)[j] = deref(src)[i]             # <<<<<<<<<<<<<<
  *                 j += 1
+ *                 if max_length:
+ */
+
+#line 141 "root_numpy/src/converters.pyx"
+        (((bool *)__pyx_v_dest)[__pyx_v_j]) = ((*__pyx_v_src)[__pyx_v_i]);
+
+        /* "root_numpy/src/converters.pyx":142
+ *             if selector.selected[i]:
+ *                 (<bool*> dest)[j] = deref(src)[i]
+ *                 j += 1             # <<<<<<<<<<<<<<
+ *                 if max_length:
+ *                     if j == max_length:
+ */
+
+#line 142 "root_numpy/src/converters.pyx"
+        __pyx_v_j = (__pyx_v_j + 1);
+
+        /* "root_numpy/src/converters.pyx":143
+ *                 (<bool*> dest)[j] = deref(src)[i]
+ *                 j += 1
+ *                 if max_length:             # <<<<<<<<<<<<<<
+ *                     if j == max_length:
+ *                         break
+ */
+
+#line 143 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = (__pyx_v_max_length != 0);
+
+#line 143 "root_numpy/src/converters.pyx"
+        if (__pyx_t_1) {
+
+          /* "root_numpy/src/converters.pyx":144
+ *                 j += 1
+ *                 if max_length:
+ *                     if j == max_length:             # <<<<<<<<<<<<<<
+ *                         break
  *     else:
  */
 
-#line 134 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyBool_FromLong(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 134, __pyx_L1_error)
+#line 144 "root_numpy/src/converters.pyx"
+          __pyx_t_1 = ((__pyx_v_j == __pyx_v_max_length) != 0);
 
-#line 134 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
+#line 144 "root_numpy/src/converters.pyx"
+          if (__pyx_t_1) {
 
-#line 134 "root_numpy/src/converters.pyx"
-        if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_tmp), __pyx_v_j, __pyx_t_2, unsigned long, 0, __Pyx_PyInt_From_unsigned_long, 0, 0, 1) < 0)) __PYX_ERR(1, 134, __pyx_L1_error)
-
-#line 134 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-        /* "root_numpy/src/converters.pyx":135
- *             if selector.selected[i]:
- *                 tmp[j] = deref(src)[i]
- *                 j += 1             # <<<<<<<<<<<<<<
+            /* "root_numpy/src/converters.pyx":145
+ *                 if max_length:
+ *                     if j == max_length:
+ *                         break             # <<<<<<<<<<<<<<
  *     else:
  *         # can't use memcpy here...
  */
 
-#line 135 "root_numpy/src/converters.pyx"
-        __pyx_v_j = (__pyx_v_j + 1);
+#line 145 "root_numpy/src/converters.pyx"
+            goto __pyx_L8_break;
 
-        /* "root_numpy/src/converters.pyx":133
+            /* "root_numpy/src/converters.pyx":144
+ *                 j += 1
+ *                 if max_length:
+ *                     if j == max_length:             # <<<<<<<<<<<<<<
+ *                         break
+ *     else:
+ */
+
+#line 144 "root_numpy/src/converters.pyx"
+          }
+
+          /* "root_numpy/src/converters.pyx":143
+ *                 (<bool*> dest)[j] = deref(src)[i]
+ *                 j += 1
+ *                 if max_length:             # <<<<<<<<<<<<<<
+ *                     if j == max_length:
+ *                         break
+ */
+
+#line 143 "root_numpy/src/converters.pyx"
+        }
+
+        /* "root_numpy/src/converters.pyx":140
  *         # copy with selection
  *         for i in range(selector.selected.size()):
  *             if selector.selected[i]:             # <<<<<<<<<<<<<<
- *                 tmp[j] = deref(src)[i]
+ *                 (<bool*> dest)[j] = deref(src)[i]
  *                 j += 1
  */
 
-#line 133 "root_numpy/src/converters.pyx"
+#line 140 "root_numpy/src/converters.pyx"
       }
 
-#line 133 "root_numpy/src/converters.pyx"
+#line 140 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":130
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)
+#line 140 "root_numpy/src/converters.pyx"
+    __pyx_L8_break:;
+
+    /* "root_numpy/src/converters.pyx":137
+ *         Py_INCREF(tmp)
+ *         dest = tmp.data
  *     if selector != NULL:             # <<<<<<<<<<<<<<
  *         # copy with selection
  *         for i in range(selector.selected.size()):
  */
 
-#line 130 "root_numpy/src/converters.pyx"
-    goto __pyx_L5;
+#line 137 "root_numpy/src/converters.pyx"
+    goto __pyx_L6;
 
-#line 130 "root_numpy/src/converters.pyx"
+#line 137 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":138
+  /* "root_numpy/src/converters.pyx":148
  *     else:
  *         # can't use memcpy here...
  *         for i in range(numele):             # <<<<<<<<<<<<<<
- *             tmp[i] = deref(src)[i]
- *     # now write PyObject* to the array
+ *             (<bool*> dest)[i] = deref(src)[i]
+ *             if max_length:
  */
 
-#line 138 "root_numpy/src/converters.pyx"
+#line 148 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 138 "root_numpy/src/converters.pyx"
-    __pyx_t_13 = __pyx_v_numele;
+#line 148 "root_numpy/src/converters.pyx"
+    __pyx_t_14 = __pyx_v_numele;
 
-#line 138 "root_numpy/src/converters.pyx"
-    for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
+#line 148 "root_numpy/src/converters.pyx"
+    for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
 
-#line 138 "root_numpy/src/converters.pyx"
-      __pyx_v_i = __pyx_t_14;
+#line 148 "root_numpy/src/converters.pyx"
+      __pyx_v_i = __pyx_t_15;
 
-      /* "root_numpy/src/converters.pyx":139
+      /* "root_numpy/src/converters.pyx":149
  *         # can't use memcpy here...
  *         for i in range(numele):
- *             tmp[i] = deref(src)[i]             # <<<<<<<<<<<<<<
- *     # now write PyObject* to the array
- *     memcpy(here, &tmpobj, sizeof(PyObject*))
+ *             (<bool*> dest)[i] = deref(src)[i]             # <<<<<<<<<<<<<<
+ *             if max_length:
+ *                 if i == max_length - 1:
  */
 
-#line 139 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyBool_FromLong(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 139, __pyx_L1_error)
+#line 149 "root_numpy/src/converters.pyx"
+      (((bool *)__pyx_v_dest)[__pyx_v_i]) = ((*__pyx_v_src)[__pyx_v_i]);
 
-#line 139 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_2);
+      /* "root_numpy/src/converters.pyx":150
+ *         for i in range(numele):
+ *             (<bool*> dest)[i] = deref(src)[i]
+ *             if max_length:             # <<<<<<<<<<<<<<
+ *                 if i == max_length - 1:
+ *                     break
+ */
 
-#line 139 "root_numpy/src/converters.pyx"
-      if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_tmp), __pyx_v_i, __pyx_t_2, unsigned long, 0, __Pyx_PyInt_From_unsigned_long, 0, 0, 1) < 0)) __PYX_ERR(1, 139, __pyx_L1_error)
+#line 150 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = (__pyx_v_max_length != 0);
 
-#line 139 "root_numpy/src/converters.pyx"
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+#line 150 "root_numpy/src/converters.pyx"
+      if (__pyx_t_1) {
 
-#line 139 "root_numpy/src/converters.pyx"
+        /* "root_numpy/src/converters.pyx":151
+ *             (<bool*> dest)[i] = deref(src)[i]
+ *             if max_length:
+ *                 if i == max_length - 1:             # <<<<<<<<<<<<<<
+ *                     break
+ *     if not max_length:
+ */
+
+#line 151 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = ((__pyx_v_i == (__pyx_v_max_length - 1)) != 0);
+
+#line 151 "root_numpy/src/converters.pyx"
+        if (__pyx_t_1) {
+
+          /* "root_numpy/src/converters.pyx":152
+ *             if max_length:
+ *                 if i == max_length - 1:
+ *                     break             # <<<<<<<<<<<<<<
+ *     if not max_length:
+ *         # now write PyObject* to the array
+ */
+
+#line 152 "root_numpy/src/converters.pyx"
+          goto __pyx_L13_break;
+
+          /* "root_numpy/src/converters.pyx":151
+ *             (<bool*> dest)[i] = deref(src)[i]
+ *             if max_length:
+ *                 if i == max_length - 1:             # <<<<<<<<<<<<<<
+ *                     break
+ *     if not max_length:
+ */
+
+#line 151 "root_numpy/src/converters.pyx"
+        }
+
+        /* "root_numpy/src/converters.pyx":150
+ *         for i in range(numele):
+ *             (<bool*> dest)[i] = deref(src)[i]
+ *             if max_length:             # <<<<<<<<<<<<<<
+ *                 if i == max_length - 1:
+ *                     break
+ */
+
+#line 150 "root_numpy/src/converters.pyx"
+      }
+
+#line 150 "root_numpy/src/converters.pyx"
     }
 
-#line 139 "root_numpy/src/converters.pyx"
+#line 150 "root_numpy/src/converters.pyx"
+    __pyx_L13_break:;
+
+#line 150 "root_numpy/src/converters.pyx"
   }
 
-#line 139 "root_numpy/src/converters.pyx"
-  __pyx_L5:;
+#line 150 "root_numpy/src/converters.pyx"
+  __pyx_L6:;
 
-  /* "root_numpy/src/converters.pyx":141
- *             tmp[i] = deref(src)[i]
- *     # now write PyObject* to the array
- *     memcpy(here, &tmpobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
- *     return sizeof(tmpobj)
+  /* "root_numpy/src/converters.pyx":153
+ *                 if i == max_length - 1:
+ *                     break
+ *     if not max_length:             # <<<<<<<<<<<<<<
+ *         # now write PyObject* to the array
+ *         memcpy(here, &tmpobj, sizeof(PyObject*))
+ */
+
+#line 153 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = ((!(__pyx_v_max_length != 0)) != 0);
+
+#line 153 "root_numpy/src/converters.pyx"
+  if (__pyx_t_1) {
+
+    /* "root_numpy/src/converters.pyx":155
+ *     if not max_length:
+ *         # now write PyObject* to the array
+ *         memcpy(here, &tmpobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
+ *         return sizeof(tmpobj)
+ *     return max_length * sizeof(bool)
+ */
+
+#line 155 "root_numpy/src/converters.pyx"
+    memcpy(__pyx_v_here, (&__pyx_v_tmpobj), (sizeof(PyObject *)));
+
+    /* "root_numpy/src/converters.pyx":156
+ *         # now write PyObject* to the array
+ *         memcpy(here, &tmpobj, sizeof(PyObject*))
+ *         return sizeof(tmpobj)             # <<<<<<<<<<<<<<
+ *     return max_length * sizeof(bool)
  * 
  */
 
-#line 141 "root_numpy/src/converters.pyx"
-  memcpy(__pyx_v_here, (&__pyx_v_tmpobj), (sizeof(PyObject *)));
+#line 156 "root_numpy/src/converters.pyx"
+    __pyx_r = (sizeof(__pyx_v_tmpobj));
 
-  /* "root_numpy/src/converters.pyx":142
- *     # now write PyObject* to the array
- *     memcpy(here, &tmpobj, sizeof(PyObject*))
- *     return sizeof(tmpobj)             # <<<<<<<<<<<<<<
+#line 156 "root_numpy/src/converters.pyx"
+    goto __pyx_L0;
+
+    /* "root_numpy/src/converters.pyx":153
+ *                 if i == max_length - 1:
+ *                     break
+ *     if not max_length:             # <<<<<<<<<<<<<<
+ *         # now write PyObject* to the array
+ *         memcpy(here, &tmpobj, sizeof(PyObject*))
+ */
+
+#line 153 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":157
+ *         memcpy(here, &tmpobj, sizeof(PyObject*))
+ *         return sizeof(tmpobj)
+ *     return max_length * sizeof(bool)             # <<<<<<<<<<<<<<
  * 
  * 
  */
 
-#line 142 "root_numpy/src/converters.pyx"
-  __pyx_r = (sizeof(__pyx_v_tmpobj));
+#line 157 "root_numpy/src/converters.pyx"
+  __pyx_r = (__pyx_v_max_length * (sizeof(bool)));
 
-#line 142 "root_numpy/src/converters.pyx"
+#line 157 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
   /* "root_numpy/src/converters.pyx":111
@@ -5832,7 +6075,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  * # special treatment for vector<bool>
  * cdef inline int write_array_vectorbool(string name,             # <<<<<<<<<<<<<<
  *                                        void* here, vector[bool]* src,
- *                                        Selector* selector=NULL) except -1:
+ *                                        Selector* selector=NULL,
  */
 
 #line 111 "root_numpy/src/converters.pyx"
@@ -5889,7 +6132,7 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
 #line 111 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":145
+/* "root_numpy/src/converters.pyx":160
  * 
  * 
  * cdef inline int write_array_vectorstring(string name,             # <<<<<<<<<<<<<<
@@ -5897,13 +6140,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorbool(std::str
  *                                          Selector* selector=NULL) except -1:
  */
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::string __pyx_v_name, void *__pyx_v_here, std::vector<std::string>  *__pyx_v_src, struct __pyx_opt_args_13_librootnumpy_write_array_vectorstring *__pyx_optional_args) {
 
-  /* "root_numpy/src/converters.pyx":147
+  /* "root_numpy/src/converters.pyx":162
  * cdef inline int write_array_vectorstring(string name,
  *                                          void* here, vector[string]* src,
  *                                          Selector* selector=NULL) except -1:             # <<<<<<<<<<<<<<
@@ -5911,106 +6154,106 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *     cdef unsigned long numele = src.size()
  */
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   Selector *__pyx_v_selector = ((Selector *)NULL);
   unsigned long __pyx_v_i
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_j
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_numele
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_dims[1]
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objsize
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   PyArrayObject *__pyx_v_tmp = 0
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_tmpobj
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_tmpstrobj
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   char *__pyx_v_dataptr
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_py_bytes = NULL
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
 ;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_6 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_7 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_8 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   int __pyx_t_9;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_10 = NULL;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_unsigned_int __pyx_t_11;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   size_t __pyx_t_12;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_13;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_14;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write_array_vectorstring", 0);
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   if (__pyx_optional_args) {
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
     if (__pyx_optional_args->__pyx_n > 0) {
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
       __pyx_v_selector = __pyx_optional_args->selector;
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
     }
 
-#line 147 "root_numpy/src/converters.pyx"
+#line 162 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":148
+  /* "root_numpy/src/converters.pyx":163
  *                                          void* here, vector[string]* src,
  *                                          Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0             # <<<<<<<<<<<<<<
@@ -6018,13 +6261,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *     cdef SIZE_t dims[1]
  */
 
-#line 148 "root_numpy/src/converters.pyx"
+#line 163 "root_numpy/src/converters.pyx"
   __pyx_v_i = 0;
 
-#line 148 "root_numpy/src/converters.pyx"
+#line 163 "root_numpy/src/converters.pyx"
   __pyx_v_j = 0;
 
-  /* "root_numpy/src/converters.pyx":149
+  /* "root_numpy/src/converters.pyx":164
  *                                          Selector* selector=NULL) except -1:
  *     cdef unsigned long i = 0, j = 0
  *     cdef unsigned long numele = src.size()             # <<<<<<<<<<<<<<
@@ -6032,10 +6275,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *     dims[0] = numele;
  */
 
-#line 149 "root_numpy/src/converters.pyx"
+#line 164 "root_numpy/src/converters.pyx"
   __pyx_v_numele = __pyx_v_src->size();
 
-  /* "root_numpy/src/converters.pyx":151
+  /* "root_numpy/src/converters.pyx":166
  *     cdef unsigned long numele = src.size()
  *     cdef SIZE_t dims[1]
  *     dims[0] = numele;             # <<<<<<<<<<<<<<
@@ -6043,430 +6286,15 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *         # check that lengths match
  */
 
-#line 151 "root_numpy/src/converters.pyx"
+#line 166 "root_numpy/src/converters.pyx"
   (__pyx_v_dims[0]) = __pyx_v_numele;
 
-  /* "root_numpy/src/converters.pyx":152
- *     cdef SIZE_t dims[1]
- *     dims[0] = numele;
- *     if selector != NULL:             # <<<<<<<<<<<<<<
- *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
- */
-
-#line 152 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = ((__pyx_v_selector != NULL) != 0);
-
-#line 152 "root_numpy/src/converters.pyx"
-  if (__pyx_t_1) {
-
-    /* "root_numpy/src/converters.pyx":154
- *     if selector != NULL:
- *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
- *                                "and object array '{2}' ({3}) are not equal".format(
- */
-
-#line 154 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = ((__pyx_v_selector->selected.size() != ((__pyx_t_13_librootnumpy_unsigned_long)(__pyx_v_dims[0]))) != 0);
-
-#line 154 "root_numpy/src/converters.pyx"
-    if (__pyx_t_1) {
-
-      /* "root_numpy/src/converters.pyx":156
- *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
- *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
- *                                    selector.selection.GetTitle(), selector.selected.size(),
- *                                    name, dims[0]))
- */
-
-#line 156 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 156, __pyx_L1_error)
-
-#line 156 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_3);
-
-      /* "root_numpy/src/converters.pyx":157
- *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
- *                                "and object array '{2}' ({3}) are not equal".format(
- *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
- *                                    name, dims[0]))
- *         dims[0] = selector.num_selected
- */
-
-#line 157 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyStr_FromString(__pyx_v_selector->selection->GetTitle()); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 157, __pyx_L1_error)
-
-#line 157 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_4);
-
-#line 157 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = __Pyx_PyInt_FromSize_t(__pyx_v_selector->selected.size()); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 157, __pyx_L1_error)
-
-#line 157 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_5);
-
-      /* "root_numpy/src/converters.pyx":158
- *                                "and object array '{2}' ({3}) are not equal".format(
- *                                    selector.selection.GetTitle(), selector.selected.size(),
- *                                    name, dims[0]))             # <<<<<<<<<<<<<<
- *         dims[0] = selector.num_selected
- *     cdef int objsize = np.dtype('O').itemsize
- */
-
-#line 158 "root_numpy/src/converters.pyx"
-      __pyx_t_6 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 158, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_6);
-
-#line 158 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 158, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_7);
-
-#line 158 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = NULL;
-
-#line 158 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_3);
-
-#line 158 "root_numpy/src/converters.pyx"
-        if (likely(__pyx_t_8)) {
-
-#line 158 "root_numpy/src/converters.pyx"
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-
-#line 158 "root_numpy/src/converters.pyx"
-          __Pyx_INCREF(__pyx_t_8);
-
-#line 158 "root_numpy/src/converters.pyx"
-          __Pyx_INCREF(function);
-
-#line 158 "root_numpy/src/converters.pyx"
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-
-#line 158 "root_numpy/src/converters.pyx"
-          __pyx_t_9 = 1;
-
-#line 158 "root_numpy/src/converters.pyx"
-        }
-
-#line 158 "root_numpy/src/converters.pyx"
-      }
-
-#line 158 "root_numpy/src/converters.pyx"
-      #if CYTHON_FAST_PYCALL
-
-#line 158 "root_numpy/src/converters.pyx"
-      if (PyFunction_Check(__pyx_t_3)) {
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 156, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-      } else
-
-#line 158 "root_numpy/src/converters.pyx"
-      #endif
-
-#line 158 "root_numpy/src/converters.pyx"
-      #if CYTHON_FAST_PYCCALL
-
-#line 158 "root_numpy/src/converters.pyx"
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 156, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-      } else
-
-#line 158 "root_numpy/src/converters.pyx"
-      #endif
-
-#line 158 "root_numpy/src/converters.pyx"
-      {
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_10 = PyTuple_New(4+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 156, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_10);
-
-#line 158 "root_numpy/src/converters.pyx"
-        if (__pyx_t_8) {
-
-#line 158 "root_numpy/src/converters.pyx"
-          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
-
-#line 158 "root_numpy/src/converters.pyx"
-        }
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GIVEREF(__pyx_t_4);
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_4);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GIVEREF(__pyx_t_5);
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_5);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GIVEREF(__pyx_t_6);
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_6);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GIVEREF(__pyx_t_7);
-
-#line 158 "root_numpy/src/converters.pyx"
-        PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_t_7);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_4 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_5 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_7 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 156, __pyx_L1_error)
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
-
-#line 158 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-
-#line 158 "root_numpy/src/converters.pyx"
-      }
-
-#line 158 "root_numpy/src/converters.pyx"
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-      /* "root_numpy/src/converters.pyx":155
- *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
- *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
- *                                "and object array '{2}' ({3}) are not equal".format(
- *                                    selector.selection.GetTitle(), selector.selected.size(),
- */
-
-#line 155 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 155, __pyx_L1_error)
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_3);
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_GIVEREF(__pyx_t_2);
-
-#line 155 "root_numpy/src/converters.pyx"
-      PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
-
-#line 155 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = 0;
-
-#line 155 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 155, __pyx_L1_error)
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_GOTREF(__pyx_t_2);
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_Raise(__pyx_t_2, 0, 0, 0);
-
-#line 155 "root_numpy/src/converters.pyx"
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-#line 155 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 155, __pyx_L1_error)
-
-      /* "root_numpy/src/converters.pyx":154
- *     if selector != NULL:
- *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
- *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
- *                                "and object array '{2}' ({3}) are not equal".format(
- */
-
-#line 154 "root_numpy/src/converters.pyx"
-    }
-
-    /* "root_numpy/src/converters.pyx":159
- *                                    selector.selection.GetTitle(), selector.selected.size(),
- *                                    name, dims[0]))
- *         dims[0] = selector.num_selected             # <<<<<<<<<<<<<<
- *     cdef int objsize = np.dtype('O').itemsize
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
- */
-
-#line 159 "root_numpy/src/converters.pyx"
-    __pyx_t_11 = __pyx_v_selector->num_selected;
-
-#line 159 "root_numpy/src/converters.pyx"
-    (__pyx_v_dims[0]) = __pyx_t_11;
-
-    /* "root_numpy/src/converters.pyx":152
- *     cdef SIZE_t dims[1]
- *     dims[0] = numele;
- *     if selector != NULL:             # <<<<<<<<<<<<<<
- *         # check that lengths match
- *         if selector.selected.size() != <unsigned_long> dims[0]:
- */
-
-#line 152 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":160
- *                                    name, dims[0]))
- *         dims[0] = selector.num_selected
- *     cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
- */
-
-#line 160 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 160, __pyx_L1_error)
-
-#line 160 "root_numpy/src/converters.pyx"
-  __Pyx_GOTREF(__pyx_t_2);
-
-#line 160 "root_numpy/src/converters.pyx"
-  __pyx_t_9 = ((PyArray_Descr *)__pyx_t_2)->elsize;
-
-#line 160 "root_numpy/src/converters.pyx"
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-
-#line 160 "root_numpy/src/converters.pyx"
-  __pyx_v_objsize = __pyx_t_9;
-
-  /* "root_numpy/src/converters.pyx":161
- *         dims[0] = selector.num_selected
- *     cdef int objsize = np.dtype('O').itemsize
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)             # <<<<<<<<<<<<<<
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
- *     # incref since we are writing directly in the array
- */
-
-#line 161 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyArray_EMPTY(1, __pyx_v_dims, NPY_OBJECT, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 161, __pyx_L1_error)
-
-#line 161 "root_numpy/src/converters.pyx"
-  __Pyx_GOTREF(__pyx_t_2);
-
-#line 161 "root_numpy/src/converters.pyx"
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 161, __pyx_L1_error)
-
-#line 161 "root_numpy/src/converters.pyx"
-  __pyx_v_tmp = ((PyArrayObject *)__pyx_t_2);
-
-#line 161 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = 0;
-
-  /* "root_numpy/src/converters.pyx":162
- *     cdef int objsize = np.dtype('O').itemsize
- *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref             # <<<<<<<<<<<<<<
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)
- */
-
-#line 162 "root_numpy/src/converters.pyx"
-  __pyx_v_tmpobj = ((PyObject *)__pyx_v_tmp);
-
-  /* "root_numpy/src/converters.pyx":164
- *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
- *     # incref since we are writing directly in the array
- *     Py_INCREF(tmp)             # <<<<<<<<<<<<<<
- *     cdef PyObject* tmpstrobj
- *     cdef char* dataptr = <char*> tmp.data
- */
-
-#line 164 "root_numpy/src/converters.pyx"
-  Py_INCREF(((PyObject *)__pyx_v_tmp));
-
-  /* "root_numpy/src/converters.pyx":166
- *     Py_INCREF(tmp)
- *     cdef PyObject* tmpstrobj
- *     cdef char* dataptr = <char*> tmp.data             # <<<<<<<<<<<<<<
- *     if selector != NULL:
- *         # copy with selection
- */
-
-#line 166 "root_numpy/src/converters.pyx"
-  __pyx_v_dataptr = ((char *)__pyx_v_tmp->data);
-
   /* "root_numpy/src/converters.pyx":167
- *     cdef PyObject* tmpstrobj
- *     cdef char* dataptr = <char*> tmp.data
+ *     cdef SIZE_t dims[1]
+ *     dims[0] = numele;
  *     if selector != NULL:             # <<<<<<<<<<<<<<
- *         # copy with selection
- *         for i in range(selector.selected.size()):
+ *         # check that lengths match
+ *         if selector.selected.size() != <unsigned_long> dims[0]:
  */
 
 #line 167 "root_numpy/src/converters.pyx"
@@ -6477,138 +6305,406 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
 
     /* "root_numpy/src/converters.pyx":169
  *     if selector != NULL:
- *         # copy with selection
- *         for i in range(selector.selected.size()):             # <<<<<<<<<<<<<<
- *             if selector.selected[i]:
- *                 py_bytes = str(deref(src)[i])
+ *         # check that lengths match
+ *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
+ *                                "and object array '{2}' ({3}) are not equal".format(
  */
 
 #line 169 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_v_selector->selected.size();
+    __pyx_t_1 = ((__pyx_v_selector->selected.size() != ((__pyx_t_13_librootnumpy_unsigned_long)(__pyx_v_dims[0]))) != 0);
 
 #line 169 "root_numpy/src/converters.pyx"
-    for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
+    if (__pyx_t_1) {
 
-#line 169 "root_numpy/src/converters.pyx"
-      __pyx_v_i = __pyx_t_13;
-
-      /* "root_numpy/src/converters.pyx":170
- *         # copy with selection
- *         for i in range(selector.selected.size()):
- *             if selector.selected[i]:             # <<<<<<<<<<<<<<
- *                 py_bytes = str(deref(src)[i])
- *                 Py_INCREF(py_bytes)
- */
-
-#line 170 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = ((__pyx_v_selector->selected[__pyx_v_i]) != 0);
-
-#line 170 "root_numpy/src/converters.pyx"
-      if (__pyx_t_1) {
-
-        /* "root_numpy/src/converters.pyx":171
- *         for i in range(selector.selected.size()):
- *             if selector.selected[i]:
- *                 py_bytes = str(deref(src)[i])             # <<<<<<<<<<<<<<
- *                 Py_INCREF(py_bytes)
- *                 tmpstrobj = <PyObject*> py_bytes
+      /* "root_numpy/src/converters.pyx":171
+ *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
+ *                                "and object array '{2}' ({3}) are not equal".format(             # <<<<<<<<<<<<<<
+ *                                    selector.selection.GetTitle(), selector.selected.size(),
+ *                                    name, dims[0]))
  */
 
 #line 171 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 171, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_lengths_of_object_selection_0_1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 171, __pyx_L1_error)
 
 #line 171 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_GOTREF(__pyx_t_3);
 
-#line 171 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 171, __pyx_L1_error)
-
-#line 171 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_3);
-
-#line 171 "root_numpy/src/converters.pyx"
-        __Pyx_GIVEREF(__pyx_t_2);
-
-#line 171 "root_numpy/src/converters.pyx"
-        PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
-
-#line 171 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = 0;
-
-#line 171 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 171, __pyx_L1_error)
-
-#line 171 "root_numpy/src/converters.pyx"
-        __Pyx_GOTREF(__pyx_t_2);
-
-#line 171 "root_numpy/src/converters.pyx"
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-#line 171 "root_numpy/src/converters.pyx"
-        __Pyx_XDECREF_SET(__pyx_v_py_bytes, __pyx_t_2);
-
-#line 171 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = 0;
-
-        /* "root_numpy/src/converters.pyx":172
- *             if selector.selected[i]:
- *                 py_bytes = str(deref(src)[i])
- *                 Py_INCREF(py_bytes)             # <<<<<<<<<<<<<<
- *                 tmpstrobj = <PyObject*> py_bytes
- *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
+      /* "root_numpy/src/converters.pyx":172
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
+ *                                "and object array '{2}' ({3}) are not equal".format(
+ *                                    selector.selection.GetTitle(), selector.selected.size(),             # <<<<<<<<<<<<<<
+ *                                    name, dims[0]))
+ *         dims[0] = selector.num_selected
  */
 
 #line 172 "root_numpy/src/converters.pyx"
-        Py_INCREF(__pyx_v_py_bytes);
+      __pyx_t_4 = __Pyx_PyStr_FromString(__pyx_v_selector->selection->GetTitle()); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 172, __pyx_L1_error)
 
-        /* "root_numpy/src/converters.pyx":173
- *                 py_bytes = str(deref(src)[i])
- *                 Py_INCREF(py_bytes)
- *                 tmpstrobj = <PyObject*> py_bytes             # <<<<<<<<<<<<<<
- *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
- *                 j += 1
+#line 172 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_4);
+
+#line 172 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = __Pyx_PyInt_FromSize_t(__pyx_v_selector->selected.size()); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 172, __pyx_L1_error)
+
+#line 172 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_5);
+
+      /* "root_numpy/src/converters.pyx":173
+ *                                "and object array '{2}' ({3}) are not equal".format(
+ *                                    selector.selection.GetTitle(), selector.selected.size(),
+ *                                    name, dims[0]))             # <<<<<<<<<<<<<<
+ *         dims[0] = selector.num_selected
+ *     cdef int objsize = np.dtype('O').itemsize
  */
 
 #line 173 "root_numpy/src/converters.pyx"
-        __pyx_v_tmpstrobj = ((PyObject *)__pyx_v_py_bytes);
+      __pyx_t_6 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 173, __pyx_L1_error)
 
-        /* "root_numpy/src/converters.pyx":174
- *                 Py_INCREF(py_bytes)
- *                 tmpstrobj = <PyObject*> py_bytes
- *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
- *                 j += 1
- *     else:
+#line 173 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_6);
+
+#line 173 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[0])); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 173, __pyx_L1_error)
+
+#line 173 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_7);
+
+#line 173 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = NULL;
+
+#line 173 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_3);
+
+#line 173 "root_numpy/src/converters.pyx"
+        if (likely(__pyx_t_8)) {
+
+#line 173 "root_numpy/src/converters.pyx"
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+
+#line 173 "root_numpy/src/converters.pyx"
+          __Pyx_INCREF(__pyx_t_8);
+
+#line 173 "root_numpy/src/converters.pyx"
+          __Pyx_INCREF(function);
+
+#line 173 "root_numpy/src/converters.pyx"
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+
+#line 173 "root_numpy/src/converters.pyx"
+          __pyx_t_9 = 1;
+
+#line 173 "root_numpy/src/converters.pyx"
+        }
+
+#line 173 "root_numpy/src/converters.pyx"
+      }
+
+#line 173 "root_numpy/src/converters.pyx"
+      #if CYTHON_FAST_PYCALL
+
+#line 173 "root_numpy/src/converters.pyx"
+      if (PyFunction_Check(__pyx_t_3)) {
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 171, __pyx_L1_error)
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_2);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+      } else
+
+#line 173 "root_numpy/src/converters.pyx"
+      #endif
+
+#line 173 "root_numpy/src/converters.pyx"
+      #if CYTHON_FAST_PYCCALL
+
+#line 173 "root_numpy/src/converters.pyx"
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyObject *__pyx_temp[5] = {__pyx_t_8, __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7};
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 4+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 171, __pyx_L1_error)
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_2);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+      } else
+
+#line 173 "root_numpy/src/converters.pyx"
+      #endif
+
+#line 173 "root_numpy/src/converters.pyx"
+      {
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_10 = PyTuple_New(4+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 171, __pyx_L1_error)
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_10);
+
+#line 173 "root_numpy/src/converters.pyx"
+        if (__pyx_t_8) {
+
+#line 173 "root_numpy/src/converters.pyx"
+          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
+
+#line 173 "root_numpy/src/converters.pyx"
+        }
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GIVEREF(__pyx_t_4);
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_4);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GIVEREF(__pyx_t_5);
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_5);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GIVEREF(__pyx_t_6);
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_6);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GIVEREF(__pyx_t_7);
+
+#line 173 "root_numpy/src/converters.pyx"
+        PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_t_7);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_4 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_5 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_7 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 171, __pyx_L1_error)
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_2);
+
+#line 173 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+
+#line 173 "root_numpy/src/converters.pyx"
+      }
+
+#line 173 "root_numpy/src/converters.pyx"
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "root_numpy/src/converters.pyx":170
+ *         # check that lengths match
+ *         if selector.selected.size() != <unsigned_long> dims[0]:
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "             # <<<<<<<<<<<<<<
+ *                                "and object array '{2}' ({3}) are not equal".format(
+ *                                    selector.selection.GetTitle(), selector.selected.size(),
+ */
+
+#line 170 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 170, __pyx_L1_error)
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_3);
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_GIVEREF(__pyx_t_2);
+
+#line 170 "root_numpy/src/converters.pyx"
+      PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
+
+#line 170 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = 0;
+
+#line 170 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 170, __pyx_L1_error)
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_GOTREF(__pyx_t_2);
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+
+#line 170 "root_numpy/src/converters.pyx"
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 170 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 170, __pyx_L1_error)
+
+      /* "root_numpy/src/converters.pyx":169
+ *     if selector != NULL:
+ *         # check that lengths match
+ *         if selector.selected.size() != <unsigned_long> dims[0]:             # <<<<<<<<<<<<<<
+ *             raise RuntimeError("lengths of object selection '{0}' ({1}) "
+ *                                "and object array '{2}' ({3}) are not equal".format(
+ */
+
+#line 169 "root_numpy/src/converters.pyx"
+    }
+
+    /* "root_numpy/src/converters.pyx":174
+ *                                    selector.selection.GetTitle(), selector.selected.size(),
+ *                                    name, dims[0]))
+ *         dims[0] = selector.num_selected             # <<<<<<<<<<<<<<
+ *     cdef int objsize = np.dtype('O').itemsize
+ *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
  */
 
 #line 174 "root_numpy/src/converters.pyx"
-        memcpy((&(__pyx_v_dataptr[(__pyx_v_j * __pyx_v_objsize)])), (&__pyx_v_tmpstrobj), (sizeof(PyObject *)));
+    __pyx_t_11 = __pyx_v_selector->num_selected;
 
-        /* "root_numpy/src/converters.pyx":175
- *                 tmpstrobj = <PyObject*> py_bytes
- *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
- *                 j += 1             # <<<<<<<<<<<<<<
- *     else:
- *         # can't use memcpy here...
+#line 174 "root_numpy/src/converters.pyx"
+    (__pyx_v_dims[0]) = __pyx_t_11;
+
+    /* "root_numpy/src/converters.pyx":167
+ *     cdef SIZE_t dims[1]
+ *     dims[0] = numele;
+ *     if selector != NULL:             # <<<<<<<<<<<<<<
+ *         # check that lengths match
+ *         if selector.selected.size() != <unsigned_long> dims[0]:
+ */
+
+#line 167 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":175
+ *                                    name, dims[0]))
+ *         dims[0] = selector.num_selected
+ *     cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
+ *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
  */
 
 #line 175 "root_numpy/src/converters.pyx"
-        __pyx_v_j = (__pyx_v_j + 1);
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 175, __pyx_L1_error)
 
-        /* "root_numpy/src/converters.pyx":170
- *         # copy with selection
- *         for i in range(selector.selected.size()):
- *             if selector.selected[i]:             # <<<<<<<<<<<<<<
- *                 py_bytes = str(deref(src)[i])
- *                 Py_INCREF(py_bytes)
+#line 175 "root_numpy/src/converters.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
+
+#line 175 "root_numpy/src/converters.pyx"
+  __pyx_t_9 = ((PyArray_Descr *)__pyx_t_2)->elsize;
+
+#line 175 "root_numpy/src/converters.pyx"
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+#line 175 "root_numpy/src/converters.pyx"
+  __pyx_v_objsize = __pyx_t_9;
+
+  /* "root_numpy/src/converters.pyx":176
+ *         dims[0] = selector.num_selected
+ *     cdef int objsize = np.dtype('O').itemsize
+ *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)             # <<<<<<<<<<<<<<
+ *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
+ *     # incref since we are writing directly in the array
  */
 
-#line 170 "root_numpy/src/converters.pyx"
-      }
+#line 176 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyArray_EMPTY(1, __pyx_v_dims, NPY_OBJECT, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 176, __pyx_L1_error)
 
-#line 170 "root_numpy/src/converters.pyx"
-    }
+#line 176 "root_numpy/src/converters.pyx"
+  __Pyx_GOTREF(__pyx_t_2);
 
-    /* "root_numpy/src/converters.pyx":167
+#line 176 "root_numpy/src/converters.pyx"
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 176, __pyx_L1_error)
+
+#line 176 "root_numpy/src/converters.pyx"
+  __pyx_v_tmp = ((PyArrayObject *)__pyx_t_2);
+
+#line 176 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = 0;
+
+  /* "root_numpy/src/converters.pyx":177
+ *     cdef int objsize = np.dtype('O').itemsize
+ *     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
+ *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref             # <<<<<<<<<<<<<<
+ *     # incref since we are writing directly in the array
+ *     Py_INCREF(tmp)
+ */
+
+#line 177 "root_numpy/src/converters.pyx"
+  __pyx_v_tmpobj = ((PyObject *)__pyx_v_tmp);
+
+  /* "root_numpy/src/converters.pyx":179
+ *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
+ *     # incref since we are writing directly in the array
+ *     Py_INCREF(tmp)             # <<<<<<<<<<<<<<
+ *     cdef PyObject* tmpstrobj
+ *     cdef char* dataptr = <char*> tmp.data
+ */
+
+#line 179 "root_numpy/src/converters.pyx"
+  Py_INCREF(((PyObject *)__pyx_v_tmp));
+
+  /* "root_numpy/src/converters.pyx":181
+ *     Py_INCREF(tmp)
+ *     cdef PyObject* tmpstrobj
+ *     cdef char* dataptr = <char*> tmp.data             # <<<<<<<<<<<<<<
+ *     if selector != NULL:
+ *         # copy with selection
+ */
+
+#line 181 "root_numpy/src/converters.pyx"
+  __pyx_v_dataptr = ((char *)__pyx_v_tmp->data);
+
+  /* "root_numpy/src/converters.pyx":182
  *     cdef PyObject* tmpstrobj
  *     cdef char* dataptr = <char*> tmp.data
  *     if selector != NULL:             # <<<<<<<<<<<<<<
@@ -6616,13 +6712,160 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *         for i in range(selector.selected.size()):
  */
 
-#line 167 "root_numpy/src/converters.pyx"
+#line 182 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = ((__pyx_v_selector != NULL) != 0);
+
+#line 182 "root_numpy/src/converters.pyx"
+  if (__pyx_t_1) {
+
+    /* "root_numpy/src/converters.pyx":184
+ *     if selector != NULL:
+ *         # copy with selection
+ *         for i in range(selector.selected.size()):             # <<<<<<<<<<<<<<
+ *             if selector.selected[i]:
+ *                 py_bytes = str(deref(src)[i])
+ */
+
+#line 184 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_v_selector->selected.size();
+
+#line 184 "root_numpy/src/converters.pyx"
+    for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
+
+#line 184 "root_numpy/src/converters.pyx"
+      __pyx_v_i = __pyx_t_13;
+
+      /* "root_numpy/src/converters.pyx":185
+ *         # copy with selection
+ *         for i in range(selector.selected.size()):
+ *             if selector.selected[i]:             # <<<<<<<<<<<<<<
+ *                 py_bytes = str(deref(src)[i])
+ *                 Py_INCREF(py_bytes)
+ */
+
+#line 185 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = ((__pyx_v_selector->selected[__pyx_v_i]) != 0);
+
+#line 185 "root_numpy/src/converters.pyx"
+      if (__pyx_t_1) {
+
+        /* "root_numpy/src/converters.pyx":186
+ *         for i in range(selector.selected.size()):
+ *             if selector.selected[i]:
+ *                 py_bytes = str(deref(src)[i])             # <<<<<<<<<<<<<<
+ *                 Py_INCREF(py_bytes)
+ *                 tmpstrobj = <PyObject*> py_bytes
+ */
+
+#line 186 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 186, __pyx_L1_error)
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_2);
+
+#line 186 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 186, __pyx_L1_error)
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_3);
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_GIVEREF(__pyx_t_2);
+
+#line 186 "root_numpy/src/converters.pyx"
+        PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
+
+#line 186 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = 0;
+
+#line 186 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 186, __pyx_L1_error)
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_GOTREF(__pyx_t_2);
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+#line 186 "root_numpy/src/converters.pyx"
+        __Pyx_XDECREF_SET(__pyx_v_py_bytes, __pyx_t_2);
+
+#line 186 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = 0;
+
+        /* "root_numpy/src/converters.pyx":187
+ *             if selector.selected[i]:
+ *                 py_bytes = str(deref(src)[i])
+ *                 Py_INCREF(py_bytes)             # <<<<<<<<<<<<<<
+ *                 tmpstrobj = <PyObject*> py_bytes
+ *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
+ */
+
+#line 187 "root_numpy/src/converters.pyx"
+        Py_INCREF(__pyx_v_py_bytes);
+
+        /* "root_numpy/src/converters.pyx":188
+ *                 py_bytes = str(deref(src)[i])
+ *                 Py_INCREF(py_bytes)
+ *                 tmpstrobj = <PyObject*> py_bytes             # <<<<<<<<<<<<<<
+ *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
+ *                 j += 1
+ */
+
+#line 188 "root_numpy/src/converters.pyx"
+        __pyx_v_tmpstrobj = ((PyObject *)__pyx_v_py_bytes);
+
+        /* "root_numpy/src/converters.pyx":189
+ *                 Py_INCREF(py_bytes)
+ *                 tmpstrobj = <PyObject*> py_bytes
+ *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
+ *                 j += 1
+ *     else:
+ */
+
+#line 189 "root_numpy/src/converters.pyx"
+        memcpy((&(__pyx_v_dataptr[(__pyx_v_j * __pyx_v_objsize)])), (&__pyx_v_tmpstrobj), (sizeof(PyObject *)));
+
+        /* "root_numpy/src/converters.pyx":190
+ *                 tmpstrobj = <PyObject*> py_bytes
+ *                 memcpy(&dataptr[j*objsize], &tmpstrobj, sizeof(PyObject*))
+ *                 j += 1             # <<<<<<<<<<<<<<
+ *     else:
+ *         # can't use memcpy here...
+ */
+
+#line 190 "root_numpy/src/converters.pyx"
+        __pyx_v_j = (__pyx_v_j + 1);
+
+        /* "root_numpy/src/converters.pyx":185
+ *         # copy with selection
+ *         for i in range(selector.selected.size()):
+ *             if selector.selected[i]:             # <<<<<<<<<<<<<<
+ *                 py_bytes = str(deref(src)[i])
+ *                 Py_INCREF(py_bytes)
+ */
+
+#line 185 "root_numpy/src/converters.pyx"
+      }
+
+#line 185 "root_numpy/src/converters.pyx"
+    }
+
+    /* "root_numpy/src/converters.pyx":182
+ *     cdef PyObject* tmpstrobj
+ *     cdef char* dataptr = <char*> tmp.data
+ *     if selector != NULL:             # <<<<<<<<<<<<<<
+ *         # copy with selection
+ *         for i in range(selector.selected.size()):
+ */
+
+#line 182 "root_numpy/src/converters.pyx"
     goto __pyx_L5;
 
-#line 167 "root_numpy/src/converters.pyx"
+#line 182 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":178
+  /* "root_numpy/src/converters.pyx":193
  *     else:
  *         # can't use memcpy here...
  *         for i in range(numele):             # <<<<<<<<<<<<<<
@@ -6630,19 +6873,19 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *             Py_INCREF(py_bytes)
  */
 
-#line 178 "root_numpy/src/converters.pyx"
+#line 193 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 178 "root_numpy/src/converters.pyx"
+#line 193 "root_numpy/src/converters.pyx"
     __pyx_t_13 = __pyx_v_numele;
 
-#line 178 "root_numpy/src/converters.pyx"
+#line 193 "root_numpy/src/converters.pyx"
     for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
 
-#line 178 "root_numpy/src/converters.pyx"
+#line 193 "root_numpy/src/converters.pyx"
       __pyx_v_i = __pyx_t_14;
 
-      /* "root_numpy/src/converters.pyx":179
+      /* "root_numpy/src/converters.pyx":194
  *         # can't use memcpy here...
  *         for i in range(numele):
  *             py_bytes = str(deref(src)[i])             # <<<<<<<<<<<<<<
@@ -6650,43 +6893,43 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *             tmpstrobj = <PyObject*> py_bytes
  */
 
-#line 179 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 179, __pyx_L1_error)
+#line 194 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(((*__pyx_v_src)[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 194, __pyx_L1_error)
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 179 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 179, __pyx_L1_error)
+#line 194 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 194, __pyx_L1_error)
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_2);
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __pyx_t_2 = 0;
 
-#line 179 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 179, __pyx_L1_error)
+#line 194 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 194, __pyx_L1_error)
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF_SET(__pyx_v_py_bytes, __pyx_t_2);
 
-#line 179 "root_numpy/src/converters.pyx"
+#line 194 "root_numpy/src/converters.pyx"
       __pyx_t_2 = 0;
 
-      /* "root_numpy/src/converters.pyx":180
+      /* "root_numpy/src/converters.pyx":195
  *         for i in range(numele):
  *             py_bytes = str(deref(src)[i])
  *             Py_INCREF(py_bytes)             # <<<<<<<<<<<<<<
@@ -6694,10 +6937,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *             memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
  */
 
-#line 180 "root_numpy/src/converters.pyx"
+#line 195 "root_numpy/src/converters.pyx"
       Py_INCREF(__pyx_v_py_bytes);
 
-      /* "root_numpy/src/converters.pyx":181
+      /* "root_numpy/src/converters.pyx":196
  *             py_bytes = str(deref(src)[i])
  *             Py_INCREF(py_bytes)
  *             tmpstrobj = <PyObject*> py_bytes             # <<<<<<<<<<<<<<
@@ -6705,10 +6948,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *     # now write PyObject* to the array
  */
 
-#line 181 "root_numpy/src/converters.pyx"
+#line 196 "root_numpy/src/converters.pyx"
       __pyx_v_tmpstrobj = ((PyObject *)__pyx_v_py_bytes);
 
-      /* "root_numpy/src/converters.pyx":182
+      /* "root_numpy/src/converters.pyx":197
  *             Py_INCREF(py_bytes)
  *             tmpstrobj = <PyObject*> py_bytes
  *             memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -6716,19 +6959,19 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *     memcpy(here, &tmpobj, sizeof(PyObject*))
  */
 
-#line 182 "root_numpy/src/converters.pyx"
+#line 197 "root_numpy/src/converters.pyx"
       memcpy((&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&__pyx_v_tmpstrobj), (sizeof(PyObject *)));
 
-#line 182 "root_numpy/src/converters.pyx"
+#line 197 "root_numpy/src/converters.pyx"
     }
 
-#line 182 "root_numpy/src/converters.pyx"
+#line 197 "root_numpy/src/converters.pyx"
   }
 
-#line 182 "root_numpy/src/converters.pyx"
+#line 197 "root_numpy/src/converters.pyx"
   __pyx_L5:;
 
-  /* "root_numpy/src/converters.pyx":184
+  /* "root_numpy/src/converters.pyx":199
  *             memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
  *     # now write PyObject* to the array
  *     memcpy(here, &tmpobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -6736,10 +6979,10 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  * 
  */
 
-#line 184 "root_numpy/src/converters.pyx"
+#line 199 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, (&__pyx_v_tmpobj), (sizeof(PyObject *)));
 
-  /* "root_numpy/src/converters.pyx":185
+  /* "root_numpy/src/converters.pyx":200
  *     # now write PyObject* to the array
  *     memcpy(here, &tmpobj, sizeof(PyObject*))
  *     return sizeof(tmpobj)             # <<<<<<<<<<<<<<
@@ -6747,13 +6990,13 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  * 
  */
 
-#line 185 "root_numpy/src/converters.pyx"
+#line 200 "root_numpy/src/converters.pyx"
   __pyx_r = (sizeof(__pyx_v_tmpobj));
 
-#line 185 "root_numpy/src/converters.pyx"
+#line 200 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":145
+  /* "root_numpy/src/converters.pyx":160
  * 
  * 
  * cdef inline int write_array_vectorstring(string name,             # <<<<<<<<<<<<<<
@@ -6761,64 +7004,64 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  *                                          Selector* selector=NULL) except -1:
  */
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_7);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_8);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_10);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("_librootnumpy.write_array_vectorstring", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_tmp);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_py_bytes);
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 145 "root_numpy/src/converters.pyx"
+#line 160 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":190
+/* "root_numpy/src/converters.pyx":205
  * cdef cppclass Converter:
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -6826,40 +7069,40 @@ static CYTHON_INLINE int __pyx_f_13_librootnumpy_write_array_vectorstring(std::s
  * 
  */
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
 
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_Converter::write(CYTHON_UNUSED Column *__pyx_v_col, CYTHON_UNUSED void *__pyx_v_here) {
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
 
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 190 "root_numpy/src/converters.pyx"
+#line 205 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":193
+/* "root_numpy/src/converters.pyx":208
  *         pass
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -6867,43 +7110,43 @@ int __pyx_t_13_librootnumpy_Converter::write(CYTHON_UNUSED Column *__pyx_v_col, 
  * 
  */
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
 
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_Converter::get_dtype(CYTHON_UNUSED Column *__pyx_v_col) {
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
 
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 193 "root_numpy/src/converters.pyx"
+#line 208 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":196
+/* "root_numpy/src/converters.pyx":211
  *         pass
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -6911,40 +7154,40 @@ PyObject *__pyx_t_13_librootnumpy_Converter::get_dtype(CYTHON_UNUSED Column *__p
  * 
  */
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
 
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtypecode", 0);
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
 
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 196 "root_numpy/src/converters.pyx"
+#line 211 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":205
+/* "root_numpy/src/converters.pyx":220
  *     string nptype
  * 
  *     __init__(int size, string nptype, int nptypecode):             # <<<<<<<<<<<<<<
@@ -6952,19 +7195,19 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  *         this.nptypecode = nptypecode
  */
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
 
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_BasicConverter::__pyx_t_13_librootnumpy_BasicConverter(int __pyx_v_size, std::string __pyx_v_nptype, int __pyx_v_nptypecode) {
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":206
+  /* "root_numpy/src/converters.pyx":221
  * 
  *     __init__(int size, string nptype, int nptypecode):
  *         this.size = size             # <<<<<<<<<<<<<<
@@ -6972,10 +7215,10 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  *         this.nptype = nptype
  */
 
-#line 206 "root_numpy/src/converters.pyx"
+#line 221 "root_numpy/src/converters.pyx"
   this->size = __pyx_v_size;
 
-  /* "root_numpy/src/converters.pyx":207
+  /* "root_numpy/src/converters.pyx":222
  *     __init__(int size, string nptype, int nptypecode):
  *         this.size = size
  *         this.nptypecode = nptypecode             # <<<<<<<<<<<<<<
@@ -6983,10 +7226,10 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  * 
  */
 
-#line 207 "root_numpy/src/converters.pyx"
+#line 222 "root_numpy/src/converters.pyx"
   this->nptypecode = __pyx_v_nptypecode;
 
-  /* "root_numpy/src/converters.pyx":208
+  /* "root_numpy/src/converters.pyx":223
  *         this.size = size
  *         this.nptypecode = nptypecode
  *         this.nptype = nptype             # <<<<<<<<<<<<<<
@@ -6994,10 +7237,10 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 208 "root_numpy/src/converters.pyx"
+#line 223 "root_numpy/src/converters.pyx"
   this->nptype = __pyx_v_nptype;
 
-  /* "root_numpy/src/converters.pyx":205
+  /* "root_numpy/src/converters.pyx":220
  *     string nptype
  * 
  *     __init__(int size, string nptype, int nptypecode):             # <<<<<<<<<<<<<<
@@ -7005,19 +7248,19 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  *         this.nptypecode = nptypecode
  */
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
 
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 205 "root_numpy/src/converters.pyx"
+#line 220 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":210
+/* "root_numpy/src/converters.pyx":225
  *         this.nptype = nptype
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -7025,25 +7268,25 @@ int __pyx_t_13_librootnumpy_Converter::get_dtypecode(void) {
  *         memcpy(here, src, this.size)
  */
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
 
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   void *__pyx_v_src
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
 ;
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":211
+  /* "root_numpy/src/converters.pyx":226
  * 
  *     int write(Column* col, void* here) except -1:
  *         cdef void* src = col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -7051,10 +7294,10 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
  *         return this.size
  */
 
-#line 211 "root_numpy/src/converters.pyx"
+#line 226 "root_numpy/src/converters.pyx"
   __pyx_v_src = __pyx_v_col->GetValuePointer();
 
-  /* "root_numpy/src/converters.pyx":212
+  /* "root_numpy/src/converters.pyx":227
  *     int write(Column* col, void* here) except -1:
  *         cdef void* src = col.GetValuePointer()
  *         memcpy(here, src, this.size)             # <<<<<<<<<<<<<<
@@ -7062,10 +7305,10 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
  * 
  */
 
-#line 212 "root_numpy/src/converters.pyx"
+#line 227 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, __pyx_v_src, this->size);
 
-  /* "root_numpy/src/converters.pyx":213
+  /* "root_numpy/src/converters.pyx":228
  *         cdef void* src = col.GetValuePointer()
  *         memcpy(here, src, this.size)
  *         return this.size             # <<<<<<<<<<<<<<
@@ -7073,13 +7316,13 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
  *     object get_dtype(Column* col):
  */
 
-#line 213 "root_numpy/src/converters.pyx"
+#line 228 "root_numpy/src/converters.pyx"
   __pyx_r = this->size;
 
-#line 213 "root_numpy/src/converters.pyx"
+#line 228 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":210
+  /* "root_numpy/src/converters.pyx":225
  *         this.nptype = nptype
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -7087,25 +7330,25 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
  *         memcpy(here, src, this.size)
  */
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
 
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 210 "root_numpy/src/converters.pyx"
+#line 225 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":215
+/* "root_numpy/src/converters.pyx":230
  *         return this.size
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7113,28 +7356,28 @@ int __pyx_t_13_librootnumpy_BasicConverter::write(Column *__pyx_v_col, void *__p
  * 
  */
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
 
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_BasicConverter::get_dtype(CYTHON_UNUSED Column *__pyx_v_col) {
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":216
+  /* "root_numpy/src/converters.pyx":231
  * 
  *     object get_dtype(Column* col):
  *         return np.dtype(this.nptype)             # <<<<<<<<<<<<<<
@@ -7142,49 +7385,49 @@ PyObject *__pyx_t_13_librootnumpy_BasicConverter::get_dtype(CYTHON_UNUSED Column
  *     int get_dtypecode():
  */
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 216 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 216, __pyx_L1_error)
+#line 231 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 231, __pyx_L1_error)
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 216 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 216, __pyx_L1_error)
+#line 231 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 231, __pyx_L1_error)
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 216 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 216, __pyx_L1_error)
+#line 231 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 231, __pyx_L1_error)
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 216 "root_numpy/src/converters.pyx"
+#line 231 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":215
+  /* "root_numpy/src/converters.pyx":230
  *         return this.size
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7192,43 +7435,43 @@ PyObject *__pyx_t_13_librootnumpy_BasicConverter::get_dtype(CYTHON_UNUSED Column
  * 
  */
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
 
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("BasicConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 215 "root_numpy/src/converters.pyx"
+#line 230 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":218
+/* "root_numpy/src/converters.pyx":233
  *         return np.dtype(this.nptype)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -7236,22 +7479,22 @@ PyObject *__pyx_t_13_librootnumpy_BasicConverter::get_dtype(CYTHON_UNUSED Column
  * 
  */
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
 
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_BasicConverter::get_dtypecode(void) {
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtypecode", 0);
 
-  /* "root_numpy/src/converters.pyx":219
+  /* "root_numpy/src/converters.pyx":234
  * 
  *     int get_dtypecode():
  *         return this.nptypecode             # <<<<<<<<<<<<<<
@@ -7259,13 +7502,13 @@ int __pyx_t_13_librootnumpy_BasicConverter::get_dtypecode(void) {
  * 
  */
 
-#line 219 "root_numpy/src/converters.pyx"
+#line 234 "root_numpy/src/converters.pyx"
   __pyx_r = this->nptypecode;
 
-#line 219 "root_numpy/src/converters.pyx"
+#line 234 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":218
+  /* "root_numpy/src/converters.pyx":233
  *         return np.dtype(this.nptype)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -7273,25 +7516,25 @@ int __pyx_t_13_librootnumpy_BasicConverter::get_dtypecode(void) {
  * 
  */
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
 
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 218 "root_numpy/src/converters.pyx"
+#line 233 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":224
+/* "root_numpy/src/converters.pyx":239
  * cdef cppclass ObjectConverterBase(Converter):
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7299,28 +7542,28 @@ int __pyx_t_13_librootnumpy_BasicConverter::get_dtypecode(void) {
  * 
  */
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
 
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_ObjectConverterBase::get_dtype(CYTHON_UNUSED Column *__pyx_v_col) {
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":225
+  /* "root_numpy/src/converters.pyx":240
  * 
  *     object get_dtype(Column* col):
  *         return np.object             # <<<<<<<<<<<<<<
@@ -7328,34 +7571,34 @@ PyObject *__pyx_t_13_librootnumpy_ObjectConverterBase::get_dtype(CYTHON_UNUSED C
  *     int get_dtypecode():
  */
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 225 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 225, __pyx_L1_error)
+#line 240 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 240, __pyx_L1_error)
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 225 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_object); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 225, __pyx_L1_error)
+#line 240 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_object); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 240, __pyx_L1_error)
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_2;
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   __pyx_t_2 = 0;
 
-#line 225 "root_numpy/src/converters.pyx"
+#line 240 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":224
+  /* "root_numpy/src/converters.pyx":239
  * cdef cppclass ObjectConverterBase(Converter):
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7363,43 +7606,43 @@ PyObject *__pyx_t_13_librootnumpy_ObjectConverterBase::get_dtype(CYTHON_UNUSED C
  * 
  */
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
 
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("ObjectConverterBase.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 224 "root_numpy/src/converters.pyx"
+#line 239 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":227
+/* "root_numpy/src/converters.pyx":242
  *         return np.object
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -7407,22 +7650,22 @@ PyObject *__pyx_t_13_librootnumpy_ObjectConverterBase::get_dtype(CYTHON_UNUSED C
  * 
  */
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
 
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtypecode", 0);
 
-  /* "root_numpy/src/converters.pyx":228
+  /* "root_numpy/src/converters.pyx":243
  * 
  *     int get_dtypecode():
  *         return np.NPY_OBJECT             # <<<<<<<<<<<<<<
@@ -7430,13 +7673,13 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  * 
  */
 
-#line 228 "root_numpy/src/converters.pyx"
+#line 243 "root_numpy/src/converters.pyx"
   __pyx_r = NPY_OBJECT;
 
-#line 228 "root_numpy/src/converters.pyx"
+#line 243 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":227
+  /* "root_numpy/src/converters.pyx":242
  *         return np.object
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -7444,25 +7687,25 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  * 
  */
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
 
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 227 "root_numpy/src/converters.pyx"
+#line 242 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":238
+/* "root_numpy/src/converters.pyx":253
  *     int elesize
  * 
  *     __init__(BasicConverter* conv, int ndim, SIZE_t* dims):             # <<<<<<<<<<<<<<
@@ -7470,22 +7713,22 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.dims = dims
  */
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
 
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_VaryArrayConverter::__pyx_t_13_librootnumpy_VaryArrayConverter(__pyx_t_13_librootnumpy_BasicConverter *__pyx_v_conv, int __pyx_v_ndim, __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims) {
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":239
+  /* "root_numpy/src/converters.pyx":254
  * 
  *     __init__(BasicConverter* conv, int ndim, SIZE_t* dims):
  *         this.conv = conv             # <<<<<<<<<<<<<<
@@ -7493,10 +7736,10 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.ndim = ndim
  */
 
-#line 239 "root_numpy/src/converters.pyx"
+#line 254 "root_numpy/src/converters.pyx"
   this->conv = __pyx_v_conv;
 
-  /* "root_numpy/src/converters.pyx":240
+  /* "root_numpy/src/converters.pyx":255
  *     __init__(BasicConverter* conv, int ndim, SIZE_t* dims):
  *         this.conv = conv
  *         this.dims = dims             # <<<<<<<<<<<<<<
@@ -7504,10 +7747,10 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.typecode = conv.get_dtypecode()
  */
 
-#line 240 "root_numpy/src/converters.pyx"
+#line 255 "root_numpy/src/converters.pyx"
   this->dims = __pyx_v_dims;
 
-  /* "root_numpy/src/converters.pyx":241
+  /* "root_numpy/src/converters.pyx":256
  *         this.conv = conv
  *         this.dims = dims
  *         this.ndim = ndim             # <<<<<<<<<<<<<<
@@ -7515,10 +7758,10 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.elesize = conv.size
  */
 
-#line 241 "root_numpy/src/converters.pyx"
+#line 256 "root_numpy/src/converters.pyx"
   this->ndim = __pyx_v_ndim;
 
-  /* "root_numpy/src/converters.pyx":242
+  /* "root_numpy/src/converters.pyx":257
  *         this.dims = dims
  *         this.ndim = ndim
  *         this.typecode = conv.get_dtypecode()             # <<<<<<<<<<<<<<
@@ -7526,10 +7769,10 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  * 
  */
 
-#line 242 "root_numpy/src/converters.pyx"
+#line 257 "root_numpy/src/converters.pyx"
   this->typecode = __pyx_v_conv->get_dtypecode();
 
-  /* "root_numpy/src/converters.pyx":243
+  /* "root_numpy/src/converters.pyx":258
  *         this.ndim = ndim
  *         this.typecode = conv.get_dtypecode()
  *         this.elesize = conv.size             # <<<<<<<<<<<<<<
@@ -7537,13 +7780,13 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *     __dealloc__():
  */
 
-#line 243 "root_numpy/src/converters.pyx"
+#line 258 "root_numpy/src/converters.pyx"
   __pyx_t_1 = __pyx_v_conv->size;
 
-#line 243 "root_numpy/src/converters.pyx"
+#line 258 "root_numpy/src/converters.pyx"
   this->elesize = __pyx_t_1;
 
-  /* "root_numpy/src/converters.pyx":238
+  /* "root_numpy/src/converters.pyx":253
  *     int elesize
  * 
  *     __init__(BasicConverter* conv, int ndim, SIZE_t* dims):             # <<<<<<<<<<<<<<
@@ -7551,19 +7794,19 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.dims = dims
  */
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
 
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 238 "root_numpy/src/converters.pyx"
+#line 253 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":245
+/* "root_numpy/src/converters.pyx":260
  *         this.elesize = conv.size
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -7571,19 +7814,19 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  * 
  */
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
 
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_VaryArrayConverter::~__pyx_t_13_librootnumpy_VaryArrayConverter(void) {
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<del>", 0);
 
-  /* "root_numpy/src/converters.pyx":246
+  /* "root_numpy/src/converters.pyx":261
  * 
  *     __dealloc__():
  *         free(this.dims)             # <<<<<<<<<<<<<<
@@ -7591,10 +7834,10 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 246 "root_numpy/src/converters.pyx"
+#line 261 "root_numpy/src/converters.pyx"
   free(this->dims);
 
-  /* "root_numpy/src/converters.pyx":245
+  /* "root_numpy/src/converters.pyx":260
  *         this.elesize = conv.size
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -7602,19 +7845,19 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  * 
  */
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
 
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 245 "root_numpy/src/converters.pyx"
+#line 260 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":248
+/* "root_numpy/src/converters.pyx":263
  *         free(this.dims)
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -7622,28 +7865,28 @@ int __pyx_t_13_librootnumpy_ObjectConverterBase::get_dtypecode(void) {
  *         this.dims[0] = col.GetCountLen()
  */
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
 
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_13_librootnumpy_write_array __pyx_t_2;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":250
+  /* "root_numpy/src/converters.pyx":265
  *     int write(Column* col, void* here) except -1:
  *         # only the first dimension can vary in length
  *         this.dims[0] = col.GetCountLen()             # <<<<<<<<<<<<<<
@@ -7651,10 +7894,10 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
  *                            this.typecode, col.GetLen(), this.elesize,
  */
 
-#line 250 "root_numpy/src/converters.pyx"
+#line 265 "root_numpy/src/converters.pyx"
   (this->dims[0]) = __pyx_v_col->GetCountLen();
 
-  /* "root_numpy/src/converters.pyx":251
+  /* "root_numpy/src/converters.pyx":266
  *         # only the first dimension can vary in length
  *         this.dims[0] = col.GetCountLen()
  *         return write_array(col.name, here, col.GetValuePointer(),             # <<<<<<<<<<<<<<
@@ -7662,31 +7905,31 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
  *                            this.ndim, this.dims, col.selector, col.max_length)
  */
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_t_2.__pyx_n = 4;
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_t_2.ndim = this->ndim;
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_t_2.dims = this->dims;
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_t_2.selector = __pyx_v_col->selector;
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_t_2.max_length = __pyx_v_col->max_length;
 
-#line 251 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, __pyx_v_here, __pyx_v_col->GetValuePointer(), this->typecode, __pyx_v_col->GetLen(), this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 251, __pyx_L1_error)
+#line 266 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, __pyx_v_here, __pyx_v_col->GetValuePointer(), this->typecode, __pyx_v_col->GetLen(), this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 266, __pyx_L1_error)
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 251 "root_numpy/src/converters.pyx"
+#line 266 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":248
+  /* "root_numpy/src/converters.pyx":263
  *         free(this.dims)
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -7694,34 +7937,34 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
  *         this.dims[0] = col.GetCountLen()
  */
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
 
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VaryArrayConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 248 "root_numpy/src/converters.pyx"
+#line 263 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":255
+/* "root_numpy/src/converters.pyx":270
  *                            this.ndim, this.dims, col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7729,34 +7972,34 @@ int __pyx_t_13_librootnumpy_VaryArrayConverter::write(Column *__pyx_v_col, void 
  *             # Single value
  */
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
 
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_col) {
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":256
+  /* "root_numpy/src/converters.pyx":271
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -7764,13 +8007,13 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             return np.dtype(this.conv.nptype)
  */
 
-#line 256 "root_numpy/src/converters.pyx"
+#line 271 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_col->max_length == 1) != 0);
 
-#line 256 "root_numpy/src/converters.pyx"
+#line 271 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":258
+    /* "root_numpy/src/converters.pyx":273
  *         if col.max_length == 1:
  *             # Single value
  *             return np.dtype(this.conv.nptype)             # <<<<<<<<<<<<<<
@@ -7778,49 +8021,49 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             # Truncated
  */
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 258 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 258, __pyx_L1_error)
+#line 273 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 273, __pyx_L1_error)
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 258 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 258, __pyx_L1_error)
+#line 273 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 273, __pyx_L1_error)
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 258 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 258, __pyx_L1_error)
+#line 273 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 273, __pyx_L1_error)
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_2;
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 258 "root_numpy/src/converters.pyx"
+#line 273 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":256
+    /* "root_numpy/src/converters.pyx":271
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -7828,10 +8071,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             return np.dtype(this.conv.nptype)
  */
 
-#line 256 "root_numpy/src/converters.pyx"
+#line 271 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":259
+  /* "root_numpy/src/converters.pyx":274
  *             # Single value
  *             return np.dtype(this.conv.nptype)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -7839,13 +8082,13 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             return (np.dtype(this.conv.nptype), col.max_length)
  */
 
-#line 259 "root_numpy/src/converters.pyx"
+#line 274 "root_numpy/src/converters.pyx"
   __pyx_t_1 = (__pyx_v_col->max_length != 0);
 
-#line 259 "root_numpy/src/converters.pyx"
+#line 274 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":261
+    /* "root_numpy/src/converters.pyx":276
  *         elif col.max_length:
  *             # Truncated
  *             return (np.dtype(this.conv.nptype), col.max_length)             # <<<<<<<<<<<<<<
@@ -7853,79 +8096,79 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         return np.object
  */
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 261 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 261, __pyx_L1_error)
+#line 276 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 276, __pyx_L1_error)
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 261, __pyx_L1_error)
+#line 276 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 261 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 261, __pyx_L1_error)
+#line 276 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 276, __pyx_L1_error)
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 261 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 261, __pyx_L1_error)
+#line 276 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 261 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 261, __pyx_L1_error)
+#line 276 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 276, __pyx_L1_error)
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_3);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_4;
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     __pyx_t_4 = 0;
 
-#line 261 "root_numpy/src/converters.pyx"
+#line 276 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":259
+    /* "root_numpy/src/converters.pyx":274
  *             # Single value
  *             return np.dtype(this.conv.nptype)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -7933,10 +8176,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             return (np.dtype(this.conv.nptype), col.max_length)
  */
 
-#line 259 "root_numpy/src/converters.pyx"
+#line 274 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":263
+  /* "root_numpy/src/converters.pyx":278
  *             return (np.dtype(this.conv.nptype), col.max_length)
  *         # Pointer to array
  *         return np.object             # <<<<<<<<<<<<<<
@@ -7944,34 +8187,34 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  * 
  */
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 263 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 263, __pyx_L1_error)
+#line 278 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 278, __pyx_L1_error)
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 263 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 263, __pyx_L1_error)
+#line 278 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 278, __pyx_L1_error)
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_3;
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   __pyx_t_3 = 0;
 
-#line 263 "root_numpy/src/converters.pyx"
+#line 278 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":255
+  /* "root_numpy/src/converters.pyx":270
  *                            this.ndim, this.dims, col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -7979,46 +8222,46 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *             # Single value
  */
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
 
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VaryArrayConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 255 "root_numpy/src/converters.pyx"
+#line 270 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":270
+/* "root_numpy/src/converters.pyx":285
  *     PyObject* shape
  * 
  *     __init__(BasicConverter* conv, PyObject* shape):             # <<<<<<<<<<<<<<
@@ -8026,19 +8269,19 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         this.conv = conv
  */
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
 
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_FixedArrayConverter::__pyx_t_13_librootnumpy_FixedArrayConverter(__pyx_t_13_librootnumpy_BasicConverter *__pyx_v_conv, PyObject *__pyx_v_shape) {
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":271
+  /* "root_numpy/src/converters.pyx":286
  * 
  *     __init__(BasicConverter* conv, PyObject* shape):
  *         Py_INCREF(<object> shape)             # <<<<<<<<<<<<<<
@@ -8046,10 +8289,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         this.shape = shape
  */
 
-#line 271 "root_numpy/src/converters.pyx"
+#line 286 "root_numpy/src/converters.pyx"
   Py_INCREF(((PyObject *)__pyx_v_shape));
 
-  /* "root_numpy/src/converters.pyx":272
+  /* "root_numpy/src/converters.pyx":287
  *     __init__(BasicConverter* conv, PyObject* shape):
  *         Py_INCREF(<object> shape)
  *         this.conv = conv             # <<<<<<<<<<<<<<
@@ -8057,10 +8300,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  * 
  */
 
-#line 272 "root_numpy/src/converters.pyx"
+#line 287 "root_numpy/src/converters.pyx"
   this->conv = __pyx_v_conv;
 
-  /* "root_numpy/src/converters.pyx":273
+  /* "root_numpy/src/converters.pyx":288
  *         Py_INCREF(<object> shape)
  *         this.conv = conv
  *         this.shape = shape             # <<<<<<<<<<<<<<
@@ -8068,10 +8311,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *     __dealloc__():
  */
 
-#line 273 "root_numpy/src/converters.pyx"
+#line 288 "root_numpy/src/converters.pyx"
   this->shape = __pyx_v_shape;
 
-  /* "root_numpy/src/converters.pyx":270
+  /* "root_numpy/src/converters.pyx":285
  *     PyObject* shape
  * 
  *     __init__(BasicConverter* conv, PyObject* shape):             # <<<<<<<<<<<<<<
@@ -8079,19 +8322,19 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         this.conv = conv
  */
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
 
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 270 "root_numpy/src/converters.pyx"
+#line 285 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":275
+/* "root_numpy/src/converters.pyx":290
  *         this.shape = shape
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -8099,19 +8342,19 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  * 
  */
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
 
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_FixedArrayConverter::~__pyx_t_13_librootnumpy_FixedArrayConverter(void) {
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<del>", 0);
 
-  /* "root_numpy/src/converters.pyx":276
+  /* "root_numpy/src/converters.pyx":291
  * 
  *     __dealloc__():
  *         Py_XDECREF(this.shape)             # <<<<<<<<<<<<<<
@@ -8119,10 +8362,10 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 276 "root_numpy/src/converters.pyx"
+#line 291 "root_numpy/src/converters.pyx"
   Py_XDECREF(this->shape);
 
-  /* "root_numpy/src/converters.pyx":275
+  /* "root_numpy/src/converters.pyx":290
  *         this.shape = shape
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -8130,19 +8373,19 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  * 
  */
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
 
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 275 "root_numpy/src/converters.pyx"
+#line 290 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":278
+/* "root_numpy/src/converters.pyx":293
  *         Py_XDECREF(this.shape)
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -8150,25 +8393,25 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         memcpy(here, col.GetValuePointer(), nbytes)
  */
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
 
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   int __pyx_v_nbytes
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
 ;
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":279
+  /* "root_numpy/src/converters.pyx":294
  * 
  *     int write(Column* col, void* here) except -1:
  *         cdef int nbytes = col.GetSize()             # <<<<<<<<<<<<<<
@@ -8176,10 +8419,10 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
  *         return nbytes
  */
 
-#line 279 "root_numpy/src/converters.pyx"
+#line 294 "root_numpy/src/converters.pyx"
   __pyx_v_nbytes = __pyx_v_col->GetSize();
 
-  /* "root_numpy/src/converters.pyx":280
+  /* "root_numpy/src/converters.pyx":295
  *     int write(Column* col, void* here) except -1:
  *         cdef int nbytes = col.GetSize()
  *         memcpy(here, col.GetValuePointer(), nbytes)             # <<<<<<<<<<<<<<
@@ -8187,10 +8430,10 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
  * 
  */
 
-#line 280 "root_numpy/src/converters.pyx"
+#line 295 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, __pyx_v_col->GetValuePointer(), __pyx_v_nbytes);
 
-  /* "root_numpy/src/converters.pyx":281
+  /* "root_numpy/src/converters.pyx":296
  *         cdef int nbytes = col.GetSize()
  *         memcpy(here, col.GetValuePointer(), nbytes)
  *         return nbytes             # <<<<<<<<<<<<<<
@@ -8198,13 +8441,13 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
  *     object get_dtype(Column* col):
  */
 
-#line 281 "root_numpy/src/converters.pyx"
+#line 296 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_v_nbytes;
 
-#line 281 "root_numpy/src/converters.pyx"
+#line 296 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":278
+  /* "root_numpy/src/converters.pyx":293
  *         Py_XDECREF(this.shape)
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -8212,25 +8455,25 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
  *         memcpy(here, col.GetValuePointer(), nbytes)
  */
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
 
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 278 "root_numpy/src/converters.pyx"
+#line 293 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":283
+/* "root_numpy/src/converters.pyx":298
  *         return nbytes
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -8238,28 +8481,28 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::write(Column *__pyx_v_col, void
  * 
  */
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
 
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_FixedArrayConverter::get_dtype(CYTHON_UNUSED Column *__pyx_v_col) {
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":284
+  /* "root_numpy/src/converters.pyx":299
  * 
  *     object get_dtype(Column* col):
  *         return (np.dtype(this.conv.nptype), <object> this.shape)             # <<<<<<<<<<<<<<
@@ -8267,73 +8510,73 @@ PyObject *__pyx_t_13_librootnumpy_FixedArrayConverter::get_dtype(CYTHON_UNUSED C
  *     int get_dtypecode():
  */
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 284 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 284, __pyx_L1_error)
+#line 299 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(this->conv->nptype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 299, __pyx_L1_error)
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 284, __pyx_L1_error)
+#line 299 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 299, __pyx_L1_error)
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 284 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 284, __pyx_L1_error)
+#line 299 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 299, __pyx_L1_error)
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 284 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 284, __pyx_L1_error)
+#line 299 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 299, __pyx_L1_error)
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_INCREF(((PyObject *)this->shape));
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(((PyObject *)this->shape));
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   PyTuple_SET_ITEM(__pyx_t_2, 1, ((PyObject *)this->shape));
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_2;
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   __pyx_t_2 = 0;
 
-#line 284 "root_numpy/src/converters.pyx"
+#line 299 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":283
+  /* "root_numpy/src/converters.pyx":298
  *         return nbytes
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -8341,43 +8584,43 @@ PyObject *__pyx_t_13_librootnumpy_FixedArrayConverter::get_dtype(CYTHON_UNUSED C
  * 
  */
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
 
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("FixedArrayConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 283 "root_numpy/src/converters.pyx"
+#line 298 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":286
+/* "root_numpy/src/converters.pyx":301
  *         return (np.dtype(this.conv.nptype), <object> this.shape)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -8385,22 +8628,22 @@ PyObject *__pyx_t_13_librootnumpy_FixedArrayConverter::get_dtype(CYTHON_UNUSED C
  * 
  */
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
 
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtypecode", 0);
 
-  /* "root_numpy/src/converters.pyx":287
+  /* "root_numpy/src/converters.pyx":302
  * 
  *     int get_dtypecode():
  *         return this.conv.nptypecode             # <<<<<<<<<<<<<<
@@ -8408,13 +8651,13 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  * 
  */
 
-#line 287 "root_numpy/src/converters.pyx"
+#line 302 "root_numpy/src/converters.pyx"
   __pyx_r = this->conv->nptypecode;
 
-#line 287 "root_numpy/src/converters.pyx"
+#line 302 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":286
+  /* "root_numpy/src/converters.pyx":301
  *         return (np.dtype(this.conv.nptype), <object> this.shape)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -8422,25 +8665,25 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  * 
  */
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
 
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 286 "root_numpy/src/converters.pyx"
+#line 301 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":294
+/* "root_numpy/src/converters.pyx":309
  *     int size
  * 
  *     __init__(int size):             # <<<<<<<<<<<<<<
@@ -8448,22 +8691,22 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  *         this.size = size
  */
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
 
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_CharArrayConverter::__pyx_t_13_librootnumpy_CharArrayConverter(int __pyx_v_size) {
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   std::string __pyx_t_1;
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":295
+  /* "root_numpy/src/converters.pyx":310
  * 
  *     __init__(int size):
  *         this.conv = <BasicConverter*> CONVERTERS['char']             # <<<<<<<<<<<<<<
@@ -8471,13 +8714,13 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  * 
  */
 
-#line 295 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 295, __pyx_L1_error)
+#line 310 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 310, __pyx_L1_error)
 
-#line 295 "root_numpy/src/converters.pyx"
+#line 310 "root_numpy/src/converters.pyx"
   this->conv = ((__pyx_t_13_librootnumpy_BasicConverter *)(__pyx_v_13_librootnumpy_CONVERTERS[__pyx_t_1]));
 
-  /* "root_numpy/src/converters.pyx":296
+  /* "root_numpy/src/converters.pyx":311
  *     __init__(int size):
  *         this.conv = <BasicConverter*> CONVERTERS['char']
  *         this.size = size             # <<<<<<<<<<<<<<
@@ -8485,10 +8728,10 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 296 "root_numpy/src/converters.pyx"
+#line 311 "root_numpy/src/converters.pyx"
   this->size = __pyx_v_size;
 
-  /* "root_numpy/src/converters.pyx":294
+  /* "root_numpy/src/converters.pyx":309
  *     int size
  * 
  *     __init__(int size):             # <<<<<<<<<<<<<<
@@ -8496,31 +8739,31 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  *         this.size = size
  */
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
 
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("CharArrayConverter.<init>", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 294 "root_numpy/src/converters.pyx"
+#line 309 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":298
+/* "root_numpy/src/converters.pyx":313
  *         this.size = size
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -8528,31 +8771,31 @@ int __pyx_t_13_librootnumpy_FixedArrayConverter::get_dtypecode(void) {
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  */
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   int __pyx_v_nbytes
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_length
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 ;
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":299
+  /* "root_numpy/src/converters.pyx":314
  * 
  *     int write(Column* col, void* here) except -1:
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination             # <<<<<<<<<<<<<<
@@ -8560,10 +8803,10 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *         memcpy(here, col.GetValuePointer(), nbytes)
  */
 
-#line 299 "root_numpy/src/converters.pyx"
+#line 314 "root_numpy/src/converters.pyx"
   __pyx_v_nbytes = (__pyx_v_col->GetSize() - (sizeof(char)));
 
-  /* "root_numpy/src/converters.pyx":300
+  /* "root_numpy/src/converters.pyx":315
  *     int write(Column* col, void* here) except -1:
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
  *         cdef int length = strlen(<char*> col.GetValuePointer())             # <<<<<<<<<<<<<<
@@ -8571,10 +8814,10 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *         if length < nbytes:
  */
 
-#line 300 "root_numpy/src/converters.pyx"
+#line 315 "root_numpy/src/converters.pyx"
   __pyx_v_length = strlen(((char *)__pyx_v_col->GetValuePointer()));
 
-  /* "root_numpy/src/converters.pyx":301
+  /* "root_numpy/src/converters.pyx":316
  *         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  *         memcpy(here, col.GetValuePointer(), nbytes)             # <<<<<<<<<<<<<<
@@ -8582,10 +8825,10 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *             memset((<char*> here) + length, '\0', nbytes - length)
  */
 
-#line 301 "root_numpy/src/converters.pyx"
+#line 316 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, __pyx_v_col->GetValuePointer(), __pyx_v_nbytes);
 
-  /* "root_numpy/src/converters.pyx":302
+  /* "root_numpy/src/converters.pyx":317
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  *         memcpy(here, col.GetValuePointer(), nbytes)
  *         if length < nbytes:             # <<<<<<<<<<<<<<
@@ -8593,13 +8836,13 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *         return nbytes
  */
 
-#line 302 "root_numpy/src/converters.pyx"
+#line 317 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_length < __pyx_v_nbytes) != 0);
 
-#line 302 "root_numpy/src/converters.pyx"
+#line 317 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":303
+    /* "root_numpy/src/converters.pyx":318
  *         memcpy(here, col.GetValuePointer(), nbytes)
  *         if length < nbytes:
  *             memset((<char*> here) + length, '\0', nbytes - length)             # <<<<<<<<<<<<<<
@@ -8607,10 +8850,10 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  * 
  */
 
-#line 303 "root_numpy/src/converters.pyx"
+#line 318 "root_numpy/src/converters.pyx"
     memset((((char *)__pyx_v_here) + __pyx_v_length), '\x00', (__pyx_v_nbytes - __pyx_v_length));
 
-    /* "root_numpy/src/converters.pyx":302
+    /* "root_numpy/src/converters.pyx":317
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  *         memcpy(here, col.GetValuePointer(), nbytes)
  *         if length < nbytes:             # <<<<<<<<<<<<<<
@@ -8618,10 +8861,10 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *         return nbytes
  */
 
-#line 302 "root_numpy/src/converters.pyx"
+#line 317 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":304
+  /* "root_numpy/src/converters.pyx":319
  *         if length < nbytes:
  *             memset((<char*> here) + length, '\0', nbytes - length)
  *         return nbytes             # <<<<<<<<<<<<<<
@@ -8629,13 +8872,13 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *     object get_dtype(Column* col):
  */
 
-#line 304 "root_numpy/src/converters.pyx"
+#line 319 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_v_nbytes;
 
-#line 304 "root_numpy/src/converters.pyx"
+#line 319 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":298
+  /* "root_numpy/src/converters.pyx":313
  *         this.size = size
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -8643,25 +8886,25 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  *         cdef int length = strlen(<char*> col.GetValuePointer())
  */
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 298 "root_numpy/src/converters.pyx"
+#line 313 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":306
+/* "root_numpy/src/converters.pyx":321
  *         return nbytes
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -8669,37 +8912,37 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::write(Column *__pyx_v_col, void 
  * 
  */
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
 
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_CharArrayConverter::get_dtype(CYTHON_UNUSED Column *__pyx_v_col) {
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":307
+  /* "root_numpy/src/converters.pyx":322
  * 
  *     object get_dtype(Column* col):
  *         return 'S{0:d}'.format(this.size)             # <<<<<<<<<<<<<<
@@ -8707,169 +8950,169 @@ PyObject *__pyx_t_13_librootnumpy_CharArrayConverter::get_dtype(CYTHON_UNUSED Co
  *     int get_dtypecode():
  */
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 307 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_S_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_S_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 307 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyInt_From_int(this->size); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyInt_From_int(this->size); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __pyx_t_4 = NULL;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     if (likely(__pyx_t_4)) {
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_4);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(function);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_DECREF_SET(__pyx_t_2, function);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     }
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   }
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   if (!__pyx_t_4) {
 
-#line 307 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   } else {
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     #if CYTHON_FAST_PYCALL
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     if (PyFunction_Check(__pyx_t_2)) {
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_3};
 
-#line 307 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     } else
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     #endif
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     #if CYTHON_FAST_PYCCALL
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_3};
 
-#line 307 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     } else
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     #endif
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     {
 
-#line 307 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_3);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 307, __pyx_L1_error)
+#line 322 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 322, __pyx_L1_error)
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
     }
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   }
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 307 "root_numpy/src/converters.pyx"
+#line 322 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":306
+  /* "root_numpy/src/converters.pyx":321
  *         return nbytes
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -8877,52 +9120,52 @@ PyObject *__pyx_t_13_librootnumpy_CharArrayConverter::get_dtype(CYTHON_UNUSED Co
  * 
  */
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
 
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("CharArrayConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 306 "root_numpy/src/converters.pyx"
+#line 321 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":309
+/* "root_numpy/src/converters.pyx":324
  *         return 'S{0:d}'.format(this.size)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -8930,22 +9173,22 @@ PyObject *__pyx_t_13_librootnumpy_CharArrayConverter::get_dtype(CYTHON_UNUSED Co
  * 
  */
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
 
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_CharArrayConverter::get_dtypecode(void) {
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtypecode", 0);
 
-  /* "root_numpy/src/converters.pyx":310
+  /* "root_numpy/src/converters.pyx":325
  * 
  *     int get_dtypecode():
  *         return this.conv.nptypecode             # <<<<<<<<<<<<<<
@@ -8953,13 +9196,13 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::get_dtypecode(void) {
  * 
  */
 
-#line 310 "root_numpy/src/converters.pyx"
+#line 325 "root_numpy/src/converters.pyx"
   __pyx_r = this->conv->nptypecode;
 
-#line 310 "root_numpy/src/converters.pyx"
+#line 325 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":309
+  /* "root_numpy/src/converters.pyx":324
  *         return 'S{0:d}'.format(this.size)
  * 
  *     int get_dtypecode():             # <<<<<<<<<<<<<<
@@ -8967,25 +9210,25 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::get_dtypecode(void) {
  * 
  */
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
 
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 309 "root_numpy/src/converters.pyx"
+#line 324 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":319
+/* "root_numpy/src/converters.pyx":334
  *     string nptype
  * 
  *     __init__():             # <<<<<<<<<<<<<<
@@ -8993,43 +9236,43 @@ int __pyx_t_13_librootnumpy_CharArrayConverter::get_dtypecode(void) {
  *         info = TYPES[ast.name]
  */
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 template <typename T>
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_VectorConverter<T> ::__pyx_t_13_librootnumpy_VectorConverter(void) {
   TypeName<T>  __pyx_v_ast
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_info = NULL
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 ;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   std::string __pyx_t_4;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   int __pyx_t_5;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":320
+  /* "root_numpy/src/converters.pyx":335
  * 
  *     __init__():
  *         cdef TypeName[T] ast = TypeName[T]()             # <<<<<<<<<<<<<<
@@ -9037,10 +9280,10 @@ template <typename T>
  *         this.nptype = info[1].name
  */
 
-#line 320 "root_numpy/src/converters.pyx"
+#line 335 "root_numpy/src/converters.pyx"
   __pyx_v_ast = TypeName<T> ();
 
-  /* "root_numpy/src/converters.pyx":321
+  /* "root_numpy/src/converters.pyx":336
  *     __init__():
  *         cdef TypeName[T] ast = TypeName[T]()
  *         info = TYPES[ast.name]             # <<<<<<<<<<<<<<
@@ -9048,37 +9291,37 @@ template <typename T>
  *         this.elesize = info[1].itemsize
  */
 
-#line 321 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 321, __pyx_L1_error)
+#line 336 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 336, __pyx_L1_error)
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 321 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyStr_FromString(__pyx_v_ast.name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 321, __pyx_L1_error)
+#line 336 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyStr_FromString(__pyx_v_ast.name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 336, __pyx_L1_error)
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 321 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = PyObject_GetItem(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 321, __pyx_L1_error)
+#line 336 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = PyObject_GetItem(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 336, __pyx_L1_error)
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __pyx_v_info = __pyx_t_3;
 
-#line 321 "root_numpy/src/converters.pyx"
+#line 336 "root_numpy/src/converters.pyx"
   __pyx_t_3 = 0;
 
-  /* "root_numpy/src/converters.pyx":322
+  /* "root_numpy/src/converters.pyx":337
  *         cdef TypeName[T] ast = TypeName[T]()
  *         info = TYPES[ast.name]
  *         this.nptype = info[1].name             # <<<<<<<<<<<<<<
@@ -9086,31 +9329,31 @@ template <typename T>
  *         this.nptypecode = info[2]
  */
 
-#line 322 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 322, __pyx_L1_error)
+#line 337 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 337, __pyx_L1_error)
 
-#line 322 "root_numpy/src/converters.pyx"
+#line 337 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 322 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 322, __pyx_L1_error)
+#line 337 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 337, __pyx_L1_error)
 
-#line 322 "root_numpy/src/converters.pyx"
+#line 337 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 322 "root_numpy/src/converters.pyx"
+#line 337 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 322 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 322, __pyx_L1_error)
+#line 337 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 337, __pyx_L1_error)
 
-#line 322 "root_numpy/src/converters.pyx"
+#line 337 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 322 "root_numpy/src/converters.pyx"
+#line 337 "root_numpy/src/converters.pyx"
   this->nptype = __pyx_t_4;
 
-  /* "root_numpy/src/converters.pyx":323
+  /* "root_numpy/src/converters.pyx":338
  *         info = TYPES[ast.name]
  *         this.nptype = info[1].name
  *         this.elesize = info[1].itemsize             # <<<<<<<<<<<<<<
@@ -9118,31 +9361,31 @@ template <typename T>
  * 
  */
 
-#line 323 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 323, __pyx_L1_error)
+#line 338 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 338, __pyx_L1_error)
 
-#line 323 "root_numpy/src/converters.pyx"
+#line 338 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 323 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 323, __pyx_L1_error)
+#line 338 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 338, __pyx_L1_error)
 
-#line 323 "root_numpy/src/converters.pyx"
+#line 338 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 323 "root_numpy/src/converters.pyx"
+#line 338 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 323 "root_numpy/src/converters.pyx"
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 323, __pyx_L1_error)
+#line 338 "root_numpy/src/converters.pyx"
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 338, __pyx_L1_error)
 
-#line 323 "root_numpy/src/converters.pyx"
+#line 338 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 323 "root_numpy/src/converters.pyx"
+#line 338 "root_numpy/src/converters.pyx"
   this->elesize = __pyx_t_5;
 
-  /* "root_numpy/src/converters.pyx":324
+  /* "root_numpy/src/converters.pyx":339
  *         this.nptype = info[1].name
  *         this.elesize = info[1].itemsize
  *         this.nptypecode = info[2]             # <<<<<<<<<<<<<<
@@ -9150,22 +9393,22 @@ template <typename T>
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 324 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 324, __pyx_L1_error)
+#line 339 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 339, __pyx_L1_error)
 
-#line 324 "root_numpy/src/converters.pyx"
+#line 339 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 324 "root_numpy/src/converters.pyx"
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 324, __pyx_L1_error)
+#line 339 "root_numpy/src/converters.pyx"
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 339, __pyx_L1_error)
 
-#line 324 "root_numpy/src/converters.pyx"
+#line 339 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 324 "root_numpy/src/converters.pyx"
+#line 339 "root_numpy/src/converters.pyx"
   this->nptypecode = __pyx_t_5;
 
-  /* "root_numpy/src/converters.pyx":319
+  /* "root_numpy/src/converters.pyx":334
  *     string nptype
  * 
  *     __init__():             # <<<<<<<<<<<<<<
@@ -9173,43 +9416,43 @@ template <typename T>
  *         info = TYPES[ast.name]
  */
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("VectorConverter.<init>", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_info);
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 319 "root_numpy/src/converters.pyx"
+#line 334 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":326
+/* "root_numpy/src/converters.pyx":341
  *         this.nptypecode = info[2]
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -9217,40 +9460,40 @@ template <typename T>
  *         cdef unsigned long numele = tmp.size()
  */
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 template <typename T>
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<T>  *__pyx_v_tmp
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_numele
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 ;
   T *__pyx_v_fa
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 ;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_13_librootnumpy_write_array __pyx_t_2;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":327
+  /* "root_numpy/src/converters.pyx":342
  * 
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -9258,10 +9501,10 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *         # This should be &((*tmp)[0])
  */
 
-#line 327 "root_numpy/src/converters.pyx"
+#line 342 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<T>  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":328
+  /* "root_numpy/src/converters.pyx":343
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
  *         cdef unsigned long numele = tmp.size()             # <<<<<<<<<<<<<<
@@ -9269,10 +9512,10 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *         cdef T* fa = this.v2a.convert(tmp)
  */
 
-#line 328 "root_numpy/src/converters.pyx"
+#line 343 "root_numpy/src/converters.pyx"
   __pyx_v_numele = __pyx_v_tmp->size();
 
-  /* "root_numpy/src/converters.pyx":330
+  /* "root_numpy/src/converters.pyx":345
  *         cdef unsigned long numele = tmp.size()
  *         # This should be &((*tmp)[0])
  *         cdef T* fa = this.v2a.convert(tmp)             # <<<<<<<<<<<<<<
@@ -9280,10 +9523,10 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *                            numele, this.elesize, 1, NULL,
  */
 
-#line 330 "root_numpy/src/converters.pyx"
+#line 345 "root_numpy/src/converters.pyx"
   __pyx_v_fa = this->v2a.convert(__pyx_v_tmp);
 
-  /* "root_numpy/src/converters.pyx":331
+  /* "root_numpy/src/converters.pyx":346
  *         # This should be &((*tmp)[0])
  *         cdef T* fa = this.v2a.convert(tmp)
  *         return write_array(col.name, here, fa, this.nptypecode,             # <<<<<<<<<<<<<<
@@ -9291,31 +9534,31 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *                            col.selector, col.max_length)
  */
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_t_2.__pyx_n = 4;
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_t_2.ndim = 1;
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_t_2.dims = NULL;
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_t_2.selector = __pyx_v_col->selector;
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_t_2.max_length = __pyx_v_col->max_length;
 
-#line 331 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, __pyx_v_here, __pyx_v_fa, this->nptypecode, __pyx_v_numele, this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 331, __pyx_L1_error)
+#line 346 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, __pyx_v_here, __pyx_v_fa, this->nptypecode, __pyx_v_numele, this->elesize, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 346, __pyx_L1_error)
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 331 "root_numpy/src/converters.pyx"
+#line 346 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":326
+  /* "root_numpy/src/converters.pyx":341
  *         this.nptypecode = info[2]
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -9323,34 +9566,34 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *         cdef unsigned long numele = tmp.size()
  */
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 326 "root_numpy/src/converters.pyx"
+#line 341 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":335
+/* "root_numpy/src/converters.pyx":350
  *                            col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -9358,37 +9601,37 @@ int __pyx_t_13_librootnumpy_VectorConverter<T> ::write(Column *__pyx_v_col, void
  *             # Single value
  */
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
 
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
 template <typename T>
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v_col) {
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":336
+  /* "root_numpy/src/converters.pyx":351
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -9396,13 +9639,13 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             return np.dtype(this.nptype)
  */
 
-#line 336 "root_numpy/src/converters.pyx"
+#line 351 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_col->max_length == 1) != 0);
 
-#line 336 "root_numpy/src/converters.pyx"
+#line 351 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":338
+    /* "root_numpy/src/converters.pyx":353
  *         if col.max_length == 1:
  *             # Single value
  *             return np.dtype(this.nptype)             # <<<<<<<<<<<<<<
@@ -9410,49 +9653,49 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             # Truncated
  */
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 338 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 338, __pyx_L1_error)
+#line 353 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 353, __pyx_L1_error)
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 338 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 338, __pyx_L1_error)
+#line 353 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 353, __pyx_L1_error)
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 338 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 338, __pyx_L1_error)
+#line 353 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 353, __pyx_L1_error)
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_2;
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 338 "root_numpy/src/converters.pyx"
+#line 353 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":336
+    /* "root_numpy/src/converters.pyx":351
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -9460,10 +9703,10 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             return np.dtype(this.nptype)
  */
 
-#line 336 "root_numpy/src/converters.pyx"
+#line 351 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":339
+  /* "root_numpy/src/converters.pyx":354
  *             # Single value
  *             return np.dtype(this.nptype)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -9471,13 +9714,13 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             return (np.dtype(this.nptype), col.max_length)
  */
 
-#line 339 "root_numpy/src/converters.pyx"
+#line 354 "root_numpy/src/converters.pyx"
   __pyx_t_1 = (__pyx_v_col->max_length != 0);
 
-#line 339 "root_numpy/src/converters.pyx"
+#line 354 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":341
+    /* "root_numpy/src/converters.pyx":356
  *         elif col.max_length:
  *             # Truncated
  *             return (np.dtype(this.nptype), col.max_length)             # <<<<<<<<<<<<<<
@@ -9485,79 +9728,79 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *         return np.object
  */
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 341 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 341, __pyx_L1_error)
+#line 356 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(this->nptype); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 356, __pyx_L1_error)
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 341, __pyx_L1_error)
+#line 356 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 356, __pyx_L1_error)
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 341 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 341, __pyx_L1_error)
+#line 356 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 356, __pyx_L1_error)
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 341 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 341, __pyx_L1_error)
+#line 356 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 356, __pyx_L1_error)
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 341 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 341, __pyx_L1_error)
+#line 356 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 356, __pyx_L1_error)
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_3);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_4;
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     __pyx_t_4 = 0;
 
-#line 341 "root_numpy/src/converters.pyx"
+#line 356 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":339
+    /* "root_numpy/src/converters.pyx":354
  *             # Single value
  *             return np.dtype(this.nptype)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -9565,10 +9808,10 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             return (np.dtype(this.nptype), col.max_length)
  */
 
-#line 339 "root_numpy/src/converters.pyx"
+#line 354 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":343
+  /* "root_numpy/src/converters.pyx":358
  *             return (np.dtype(this.nptype), col.max_length)
  *         # Pointer to array
  *         return np.object             # <<<<<<<<<<<<<<
@@ -9576,34 +9819,34 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  * 
  */
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 343 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 343, __pyx_L1_error)
+#line 358 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 358, __pyx_L1_error)
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 343 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 343, __pyx_L1_error)
+#line 358 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 358, __pyx_L1_error)
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_3;
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   __pyx_t_3 = 0;
 
-#line 343 "root_numpy/src/converters.pyx"
+#line 358 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":335
+  /* "root_numpy/src/converters.pyx":350
  *                            col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
@@ -9611,46 +9854,46 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *             # Single value
  */
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
 
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 335 "root_numpy/src/converters.pyx"
+#line 350 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":351
+/* "root_numpy/src/converters.pyx":366
  *     Vector2Array[T] v2a
  * 
  *     __init__():             # <<<<<<<<<<<<<<
@@ -9658,40 +9901,40 @@ PyObject *__pyx_t_13_librootnumpy_VectorConverter<T> ::get_dtype(Column *__pyx_v
  *         info = TYPES[ast.name]
  */
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 template <typename T>
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::__pyx_t_13_librootnumpy_VectorVectorConverter(void) {
   TypeName<T>  __pyx_v_ast
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_info = NULL
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 ;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   int __pyx_t_4;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-  /* "root_numpy/src/converters.pyx":352
+  /* "root_numpy/src/converters.pyx":367
  * 
  *     __init__():
  *         cdef TypeName[T] ast = TypeName[T]()             # <<<<<<<<<<<<<<
@@ -9699,10 +9942,10 @@ template <typename T>
  *         this.elesize = info[1].itemsize
  */
 
-#line 352 "root_numpy/src/converters.pyx"
+#line 367 "root_numpy/src/converters.pyx"
   __pyx_v_ast = TypeName<T> ();
 
-  /* "root_numpy/src/converters.pyx":353
+  /* "root_numpy/src/converters.pyx":368
  *     __init__():
  *         cdef TypeName[T] ast = TypeName[T]()
  *         info = TYPES[ast.name]             # <<<<<<<<<<<<<<
@@ -9710,37 +9953,37 @@ template <typename T>
  *         this.nptypecode = info[2]
  */
 
-#line 353 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 353, __pyx_L1_error)
+#line 368 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 368, __pyx_L1_error)
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 353 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyStr_FromString(__pyx_v_ast.name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 353, __pyx_L1_error)
+#line 368 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyStr_FromString(__pyx_v_ast.name); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 368, __pyx_L1_error)
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 353 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = PyObject_GetItem(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 353, __pyx_L1_error)
+#line 368 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = PyObject_GetItem(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 368, __pyx_L1_error)
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __pyx_v_info = __pyx_t_3;
 
-#line 353 "root_numpy/src/converters.pyx"
+#line 368 "root_numpy/src/converters.pyx"
   __pyx_t_3 = 0;
 
-  /* "root_numpy/src/converters.pyx":354
+  /* "root_numpy/src/converters.pyx":369
  *         cdef TypeName[T] ast = TypeName[T]()
  *         info = TYPES[ast.name]
  *         this.elesize = info[1].itemsize             # <<<<<<<<<<<<<<
@@ -9748,31 +9991,31 @@ template <typename T>
  * 
  */
 
-#line 354 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 354, __pyx_L1_error)
+#line 369 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_info, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 369, __pyx_L1_error)
 
-#line 354 "root_numpy/src/converters.pyx"
+#line 369 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 354 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 354, __pyx_L1_error)
+#line 369 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 369, __pyx_L1_error)
 
-#line 354 "root_numpy/src/converters.pyx"
+#line 369 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 354 "root_numpy/src/converters.pyx"
+#line 369 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 354 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 354, __pyx_L1_error)
+#line 369 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 369, __pyx_L1_error)
 
-#line 354 "root_numpy/src/converters.pyx"
+#line 369 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 354 "root_numpy/src/converters.pyx"
+#line 369 "root_numpy/src/converters.pyx"
   this->elesize = __pyx_t_4;
 
-  /* "root_numpy/src/converters.pyx":355
+  /* "root_numpy/src/converters.pyx":370
  *         info = TYPES[ast.name]
  *         this.elesize = info[1].itemsize
  *         this.nptypecode = info[2]             # <<<<<<<<<<<<<<
@@ -9780,22 +10023,22 @@ template <typename T>
  *     int write(Column* col, void* here) except -1:
  */
 
-#line 355 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_info, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 355, __pyx_L1_error)
+#line 370 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_info, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 370, __pyx_L1_error)
 
-#line 355 "root_numpy/src/converters.pyx"
+#line 370 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 355 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 355, __pyx_L1_error)
+#line 370 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 370, __pyx_L1_error)
 
-#line 355 "root_numpy/src/converters.pyx"
+#line 370 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 355 "root_numpy/src/converters.pyx"
+#line 370 "root_numpy/src/converters.pyx"
   this->nptypecode = __pyx_t_4;
 
-  /* "root_numpy/src/converters.pyx":351
+  /* "root_numpy/src/converters.pyx":366
  *     Vector2Array[T] v2a
  * 
  *     __init__():             # <<<<<<<<<<<<<<
@@ -9803,43 +10046,43 @@ template <typename T>
  *         info = TYPES[ast.name]
  */
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("VectorVectorConverter.<init>", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_info);
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 351 "root_numpy/src/converters.pyx"
+#line 366 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":357
+/* "root_numpy/src/converters.pyx":372
  *         this.nptypecode = info[2]
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -9847,67 +10090,67 @@ template <typename T>
  *         # this will hold number of subvectors
  */
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 template <typename T>
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<std::vector<T> >  *__pyx_v_tmp
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_numele
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   T *__pyx_v_fa
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objsize
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objtypecode
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_dims[1]
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   PyArrayObject *__pyx_v_outer = 0
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_outerobj
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   char *__pyx_v_dataptr
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_i
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 ;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_3;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_4;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":358
+  /* "root_numpy/src/converters.pyx":373
  * 
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -9915,10 +10158,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         cdef unsigned long numele
  */
 
-#line 358 "root_numpy/src/converters.pyx"
+#line 373 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<std::vector<T> >  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":363
+  /* "root_numpy/src/converters.pyx":378
  *         cdef T* fa
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -9926,22 +10169,22 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         numele = tmp[0].size()
  */
 
-#line 363 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 363, __pyx_L1_error)
+#line 378 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 378, __pyx_L1_error)
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((PyArray_Descr *)__pyx_t_1)->elsize;
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __pyx_v_objsize = __pyx_t_2;
 
-  /* "root_numpy/src/converters.pyx":364
+  /* "root_numpy/src/converters.pyx":379
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT             # <<<<<<<<<<<<<<
@@ -9949,10 +10192,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         # create an outer array container that dataptr points to,
  */
 
-#line 364 "root_numpy/src/converters.pyx"
+#line 379 "root_numpy/src/converters.pyx"
   __pyx_v_objtypecode = NPY_OBJECT;
 
-  /* "root_numpy/src/converters.pyx":365
+  /* "root_numpy/src/converters.pyx":380
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT
  *         numele = tmp[0].size()             # <<<<<<<<<<<<<<
@@ -9960,10 +10203,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         # containing pointers from write_array().
  */
 
-#line 365 "root_numpy/src/converters.pyx"
+#line 380 "root_numpy/src/converters.pyx"
   __pyx_v_numele = (__pyx_v_tmp[0]).size();
 
-  /* "root_numpy/src/converters.pyx":370
+  /* "root_numpy/src/converters.pyx":385
  *         # define an (numele)-dimensional outer array to hold our subvectors fa
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele             # <<<<<<<<<<<<<<
@@ -9971,10 +10214,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  */
 
-#line 370 "root_numpy/src/converters.pyx"
+#line 385 "root_numpy/src/converters.pyx"
   (__pyx_v_dims[0]) = __pyx_v_numele;
 
-  /* "root_numpy/src/converters.pyx":371
+  /* "root_numpy/src/converters.pyx":386
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)             # <<<<<<<<<<<<<<
@@ -9982,22 +10225,22 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         # increase one since we are writing directly in the array
  */
 
-#line 371 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 371, __pyx_L1_error)
+#line 386 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 386, __pyx_L1_error)
 
-#line 371 "root_numpy/src/converters.pyx"
+#line 386 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 371 "root_numpy/src/converters.pyx"
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 371, __pyx_L1_error)
+#line 386 "root_numpy/src/converters.pyx"
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 386, __pyx_L1_error)
 
-#line 371 "root_numpy/src/converters.pyx"
+#line 386 "root_numpy/src/converters.pyx"
   __pyx_v_outer = ((PyArrayObject *)__pyx_t_1);
 
-#line 371 "root_numpy/src/converters.pyx"
+#line 386 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":372
+  /* "root_numpy/src/converters.pyx":387
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref             # <<<<<<<<<<<<<<
@@ -10005,10 +10248,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         Py_INCREF(outer)
  */
 
-#line 372 "root_numpy/src/converters.pyx"
+#line 387 "root_numpy/src/converters.pyx"
   __pyx_v_outerobj = ((PyObject *)__pyx_v_outer);
 
-  /* "root_numpy/src/converters.pyx":374
+  /* "root_numpy/src/converters.pyx":389
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  *         # increase one since we are writing directly in the array
  *         Py_INCREF(outer)             # <<<<<<<<<<<<<<
@@ -10016,10 +10259,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         memcpy(here, &outerobj, sizeof(PyObject*))
  */
 
-#line 374 "root_numpy/src/converters.pyx"
+#line 389 "root_numpy/src/converters.pyx"
   Py_INCREF(((PyObject *)__pyx_v_outer));
 
-  /* "root_numpy/src/converters.pyx":376
+  /* "root_numpy/src/converters.pyx":391
  *         Py_INCREF(outer)
  *         # now write PyObject* to the array
  *         memcpy(here, &outerobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -10027,10 +10270,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         # of the subvectors
  */
 
-#line 376 "root_numpy/src/converters.pyx"
+#line 391 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, (&__pyx_v_outerobj), (sizeof(PyObject *)));
 
-  /* "root_numpy/src/converters.pyx":379
+  /* "root_numpy/src/converters.pyx":394
  *         # build a dataptr pointing to outer, so we can shift and write each
  *         # of the subvectors
  *         cdef char* dataptr = <char*> outer.data             # <<<<<<<<<<<<<<
@@ -10038,10 +10281,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         cdef unsigned long i
  */
 
-#line 379 "root_numpy/src/converters.pyx"
+#line 394 "root_numpy/src/converters.pyx"
   __pyx_v_dataptr = ((char *)__pyx_v_outer->data);
 
-  /* "root_numpy/src/converters.pyx":382
+  /* "root_numpy/src/converters.pyx":397
  *         # loop through all subvectors
  *         cdef unsigned long i
  *         for i in range(numele):             # <<<<<<<<<<<<<<
@@ -10049,16 +10292,16 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *             write_array(col.name, &dataptr[i*objsize], fa, this.nptypecode,
  */
 
-#line 382 "root_numpy/src/converters.pyx"
+#line 397 "root_numpy/src/converters.pyx"
   __pyx_t_3 = __pyx_v_numele;
 
-#line 382 "root_numpy/src/converters.pyx"
+#line 397 "root_numpy/src/converters.pyx"
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
 
-#line 382 "root_numpy/src/converters.pyx"
+#line 397 "root_numpy/src/converters.pyx"
     __pyx_v_i = __pyx_t_4;
 
-    /* "root_numpy/src/converters.pyx":383
+    /* "root_numpy/src/converters.pyx":398
  *         cdef unsigned long i
  *         for i in range(numele):
  *             fa = this.v2a.convert(&tmp[0][i])             # <<<<<<<<<<<<<<
@@ -10066,10 +10309,10 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *                         tmp[0][i].size(), this.elesize)
  */
 
-#line 383 "root_numpy/src/converters.pyx"
+#line 398 "root_numpy/src/converters.pyx"
     __pyx_v_fa = this->v2a.convert((&((__pyx_v_tmp[0])[__pyx_v_i])));
 
-    /* "root_numpy/src/converters.pyx":384
+    /* "root_numpy/src/converters.pyx":399
  *         for i in range(numele):
  *             fa = this.v2a.convert(&tmp[0][i])
  *             write_array(col.name, &dataptr[i*objsize], fa, this.nptypecode,             # <<<<<<<<<<<<<<
@@ -10077,13 +10320,13 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         return sizeof(outerobj)
  */
 
-#line 384 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), __pyx_v_fa, this->nptypecode, ((__pyx_v_tmp[0])[__pyx_v_i]).size(), this->elesize, NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 384, __pyx_L1_error)
+#line 399 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), __pyx_v_fa, this->nptypecode, ((__pyx_v_tmp[0])[__pyx_v_i]).size(), this->elesize, NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 399, __pyx_L1_error)
 
-#line 384 "root_numpy/src/converters.pyx"
+#line 399 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":386
+  /* "root_numpy/src/converters.pyx":401
  *             write_array(col.name, &dataptr[i*objsize], fa, this.nptypecode,
  *                         tmp[0][i].size(), this.elesize)
  *         return sizeof(outerobj)             # <<<<<<<<<<<<<<
@@ -10091,13 +10334,13 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  * 
  */
 
-#line 386 "root_numpy/src/converters.pyx"
+#line 401 "root_numpy/src/converters.pyx"
   __pyx_r = (sizeof(__pyx_v_outerobj));
 
-#line 386 "root_numpy/src/converters.pyx"
+#line 401 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":357
+  /* "root_numpy/src/converters.pyx":372
  *         this.nptypecode = info[2]
  * 
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -10105,176 +10348,179 @@ int __pyx_t_13_librootnumpy_VectorVectorConverter<T> ::write(Column *__pyx_v_col
  *         # this will hold number of subvectors
  */
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorVectorConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_outer);
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 357 "root_numpy/src/converters.pyx"
+#line 372 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":391
+/* "root_numpy/src/converters.pyx":406
  * cdef cppclass VectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)
+ *         return write_array_vectorbool(col.name, here, tmp,
  */
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
 
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorBoolConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<bool>  *__pyx_v_tmp
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
 ;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_13_librootnumpy_write_array_vectorbool __pyx_t_2;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":392
+  /* "root_numpy/src/converters.pyx":407
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)
- * 
+ *         return write_array_vectorbool(col.name, here, tmp,
+ *                                       col.selector, col.max_length)
  */
 
-#line 392 "root_numpy/src/converters.pyx"
+#line 407 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<bool>  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":393
+  /* "root_numpy/src/converters.pyx":408
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)             # <<<<<<<<<<<<<<
+ *         return write_array_vectorbool(col.name, here, tmp,             # <<<<<<<<<<<<<<
+ *                                       col.selector, col.max_length)
  * 
- *     object get_dtype(Column* col):
  */
 
-#line 393 "root_numpy/src/converters.pyx"
-  __pyx_t_2.__pyx_n = 1;
+#line 408 "root_numpy/src/converters.pyx"
+  __pyx_t_2.__pyx_n = 2;
 
-#line 393 "root_numpy/src/converters.pyx"
+#line 408 "root_numpy/src/converters.pyx"
   __pyx_t_2.selector = __pyx_v_col->selector;
 
-#line 393 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array_vectorbool(__pyx_v_col->name, __pyx_v_here, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 393, __pyx_L1_error)
+#line 408 "root_numpy/src/converters.pyx"
+  __pyx_t_2.max_length = __pyx_v_col->max_length;
 
-#line 393 "root_numpy/src/converters.pyx"
+#line 408 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array_vectorbool(__pyx_v_col->name, __pyx_v_here, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 408, __pyx_L1_error)
+
+#line 408 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 393 "root_numpy/src/converters.pyx"
+#line 408 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":391
+  /* "root_numpy/src/converters.pyx":406
  * cdef cppclass VectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
  *         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)
+ *         return write_array_vectorbool(col.name, here, tmp,
  */
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
 
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 391 "root_numpy/src/converters.pyx"
+#line 406 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":395
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)
+/* "root_numpy/src/converters.pyx":411
+ *                                       col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
  *         if col.max_length == 1:
  *             # Single value
  */
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
 
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
 PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v_col) {
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_dtype", 0);
 
-  /* "root_numpy/src/converters.pyx":396
+  /* "root_numpy/src/converters.pyx":412
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -10282,13 +10528,13 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *             return np.dtype(np.bool)
  */
 
-#line 396 "root_numpy/src/converters.pyx"
+#line 412 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_col->max_length == 1) != 0);
 
-#line 396 "root_numpy/src/converters.pyx"
+#line 412 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":398
+    /* "root_numpy/src/converters.pyx":414
  *         if col.max_length == 1:
  *             # Single value
  *             return np.dtype(np.bool)             # <<<<<<<<<<<<<<
@@ -10296,58 +10542,58 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *             # Truncated
  */
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 398 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 398, __pyx_L1_error)
+#line 414 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 414, __pyx_L1_error)
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 398 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_bool); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 398, __pyx_L1_error)
+#line 414 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_bool); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 414, __pyx_L1_error)
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 398 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 398, __pyx_L1_error)
+#line 414 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 414, __pyx_L1_error)
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_3);
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_3);
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 398 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 398, __pyx_L1_error)
+#line 414 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 414, __pyx_L1_error)
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_3;
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 398 "root_numpy/src/converters.pyx"
+#line 414 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":396
+    /* "root_numpy/src/converters.pyx":412
  * 
  *     object get_dtype(Column* col):
  *         if col.max_length == 1:             # <<<<<<<<<<<<<<
@@ -10355,10 +10601,10 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *             return np.dtype(np.bool)
  */
 
-#line 396 "root_numpy/src/converters.pyx"
+#line 412 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":399
+  /* "root_numpy/src/converters.pyx":415
  *             # Single value
  *             return np.dtype(np.bool)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -10366,13 +10612,13 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *             return (np.dtype(np.bool), col.max_length)
  */
 
-#line 399 "root_numpy/src/converters.pyx"
+#line 415 "root_numpy/src/converters.pyx"
   __pyx_t_1 = (__pyx_v_col->max_length != 0);
 
-#line 399 "root_numpy/src/converters.pyx"
+#line 415 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":401
+    /* "root_numpy/src/converters.pyx":417
  *         elif col.max_length:
  *             # Truncated
  *             return (np.dtype(np.bool), col.max_length)             # <<<<<<<<<<<<<<
@@ -10380,88 +10626,88 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *         return np.object
  */
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_r);
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_bool); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_bool); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyInt_From_unsigned_int(__pyx_v_col->max_length); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 401 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 401, __pyx_L1_error)
+#line 417 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 417, __pyx_L1_error)
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_3);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_3);
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __pyx_t_2 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_t_4;
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     __pyx_t_4 = 0;
 
-#line 401 "root_numpy/src/converters.pyx"
+#line 417 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":399
+    /* "root_numpy/src/converters.pyx":415
  *             # Single value
  *             return np.dtype(np.bool)
  *         elif col.max_length:             # <<<<<<<<<<<<<<
@@ -10469,10 +10715,10 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *             return (np.dtype(np.bool), col.max_length)
  */
 
-#line 399 "root_numpy/src/converters.pyx"
+#line 415 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":403
+  /* "root_numpy/src/converters.pyx":419
  *             return (np.dtype(np.bool), col.max_length)
  *         # Pointer to array
  *         return np.object             # <<<<<<<<<<<<<<
@@ -10480,81 +10726,81 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  * 
  */
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_r);
 
-#line 403 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 403, __pyx_L1_error)
+#line 419 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 419, __pyx_L1_error)
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 403 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 403, __pyx_L1_error)
+#line 419 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_object); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 419, __pyx_L1_error)
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_3;
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   __pyx_t_3 = 0;
 
-#line 403 "root_numpy/src/converters.pyx"
+#line 419 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":395
- *         return write_array_vectorbool(col.name, here, tmp, col.selector)
+  /* "root_numpy/src/converters.pyx":411
+ *                                       col.selector, col.max_length)
  * 
  *     object get_dtype(Column* col):             # <<<<<<<<<<<<<<
  *         if col.max_length == 1:
  *             # Single value
  */
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
 
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorBoolConverter.get_dtype", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 395 "root_numpy/src/converters.pyx"
+#line 411 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":408
+/* "root_numpy/src/converters.pyx":424
  * cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -10562,61 +10808,61 @@ PyObject *__pyx_t_13_librootnumpy_VectorBoolConverter::get_dtype(Column *__pyx_v
  *         # this will hold number of subvectors
  */
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<std::vector<bool> >  *__pyx_v_tmp
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_numele
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objsize
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objtypecode
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_dims[1]
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   PyArrayObject *__pyx_v_outer = 0
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_outerobj
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   char *__pyx_v_dataptr
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_i
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 ;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_3;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_4;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":409
+  /* "root_numpy/src/converters.pyx":425
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -10624,10 +10870,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         cdef unsigned long numele
  */
 
-#line 409 "root_numpy/src/converters.pyx"
+#line 425 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<std::vector<bool> >  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":413
+  /* "root_numpy/src/converters.pyx":429
  *         cdef unsigned long numele
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -10635,22 +10881,22 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         numele = tmp[0].size()
  */
 
-#line 413 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 413, __pyx_L1_error)
+#line 429 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 429, __pyx_L1_error)
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((PyArray_Descr *)__pyx_t_1)->elsize;
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __pyx_v_objsize = __pyx_t_2;
 
-  /* "root_numpy/src/converters.pyx":414
+  /* "root_numpy/src/converters.pyx":430
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT             # <<<<<<<<<<<<<<
@@ -10658,10 +10904,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         # create an outer array container that dataptr points to,
  */
 
-#line 414 "root_numpy/src/converters.pyx"
+#line 430 "root_numpy/src/converters.pyx"
   __pyx_v_objtypecode = NPY_OBJECT;
 
-  /* "root_numpy/src/converters.pyx":415
+  /* "root_numpy/src/converters.pyx":431
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT
  *         numele = tmp[0].size()             # <<<<<<<<<<<<<<
@@ -10669,10 +10915,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         # containing pointers from write_array().
  */
 
-#line 415 "root_numpy/src/converters.pyx"
+#line 431 "root_numpy/src/converters.pyx"
   __pyx_v_numele = (__pyx_v_tmp[0]).size();
 
-  /* "root_numpy/src/converters.pyx":420
+  /* "root_numpy/src/converters.pyx":436
  *         # define an (numele)-dimensional outer array to hold our subvectors fa
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele             # <<<<<<<<<<<<<<
@@ -10680,10 +10926,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  */
 
-#line 420 "root_numpy/src/converters.pyx"
+#line 436 "root_numpy/src/converters.pyx"
   (__pyx_v_dims[0]) = __pyx_v_numele;
 
-  /* "root_numpy/src/converters.pyx":421
+  /* "root_numpy/src/converters.pyx":437
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)             # <<<<<<<<<<<<<<
@@ -10691,22 +10937,22 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         # increase one since we are writing directly in the array
  */
 
-#line 421 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 421, __pyx_L1_error)
+#line 437 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 437, __pyx_L1_error)
 
-#line 421 "root_numpy/src/converters.pyx"
+#line 437 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 421 "root_numpy/src/converters.pyx"
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 421, __pyx_L1_error)
+#line 437 "root_numpy/src/converters.pyx"
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 437, __pyx_L1_error)
 
-#line 421 "root_numpy/src/converters.pyx"
+#line 437 "root_numpy/src/converters.pyx"
   __pyx_v_outer = ((PyArrayObject *)__pyx_t_1);
 
-#line 421 "root_numpy/src/converters.pyx"
+#line 437 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":422
+  /* "root_numpy/src/converters.pyx":438
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref             # <<<<<<<<<<<<<<
@@ -10714,10 +10960,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         Py_INCREF(outer)
  */
 
-#line 422 "root_numpy/src/converters.pyx"
+#line 438 "root_numpy/src/converters.pyx"
   __pyx_v_outerobj = ((PyObject *)__pyx_v_outer);
 
-  /* "root_numpy/src/converters.pyx":424
+  /* "root_numpy/src/converters.pyx":440
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  *         # increase one since we are writing directly in the array
  *         Py_INCREF(outer)             # <<<<<<<<<<<<<<
@@ -10725,10 +10971,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         memcpy(here, &outerobj, sizeof(PyObject*))
  */
 
-#line 424 "root_numpy/src/converters.pyx"
+#line 440 "root_numpy/src/converters.pyx"
   Py_INCREF(((PyObject *)__pyx_v_outer));
 
-  /* "root_numpy/src/converters.pyx":426
+  /* "root_numpy/src/converters.pyx":442
  *         Py_INCREF(outer)
  *         # now write PyObject* to the array
  *         memcpy(here, &outerobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -10736,10 +10982,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         # of the subvectors
  */
 
-#line 426 "root_numpy/src/converters.pyx"
+#line 442 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, (&__pyx_v_outerobj), (sizeof(PyObject *)));
 
-  /* "root_numpy/src/converters.pyx":429
+  /* "root_numpy/src/converters.pyx":445
  *         # build a dataptr pointing to outer, so we can shift and write each
  *         # of the subvectors
  *         cdef char* dataptr = <char*> outer.data             # <<<<<<<<<<<<<<
@@ -10747,10 +10993,10 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         cdef unsigned long i
  */
 
-#line 429 "root_numpy/src/converters.pyx"
+#line 445 "root_numpy/src/converters.pyx"
   __pyx_v_dataptr = ((char *)__pyx_v_outer->data);
 
-  /* "root_numpy/src/converters.pyx":432
+  /* "root_numpy/src/converters.pyx":448
  *         # loop through all subvectors
  *         cdef unsigned long i
  *         for i in range(numele):             # <<<<<<<<<<<<<<
@@ -10758,16 +11004,16 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         return sizeof(outerobj)
  */
 
-#line 432 "root_numpy/src/converters.pyx"
+#line 448 "root_numpy/src/converters.pyx"
   __pyx_t_3 = __pyx_v_numele;
 
-#line 432 "root_numpy/src/converters.pyx"
+#line 448 "root_numpy/src/converters.pyx"
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
 
-#line 432 "root_numpy/src/converters.pyx"
+#line 448 "root_numpy/src/converters.pyx"
     __pyx_v_i = __pyx_t_4;
 
-    /* "root_numpy/src/converters.pyx":433
+    /* "root_numpy/src/converters.pyx":449
  *         cdef unsigned long i
  *         for i in range(numele):
  *             write_array_vectorbool(col.name, &dataptr[i*objsize], &tmp[0][i])             # <<<<<<<<<<<<<<
@@ -10775,13 +11021,13 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  * 
  */
 
-#line 433 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array_vectorbool(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 433, __pyx_L1_error)
+#line 449 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array_vectorbool(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 449, __pyx_L1_error)
 
-#line 433 "root_numpy/src/converters.pyx"
+#line 449 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":434
+  /* "root_numpy/src/converters.pyx":450
  *         for i in range(numele):
  *             write_array_vectorbool(col.name, &dataptr[i*objsize], &tmp[0][i])
  *         return sizeof(outerobj)             # <<<<<<<<<<<<<<
@@ -10789,13 +11035,13 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  * 
  */
 
-#line 434 "root_numpy/src/converters.pyx"
+#line 450 "root_numpy/src/converters.pyx"
   __pyx_r = (sizeof(__pyx_v_outerobj));
 
-#line 434 "root_numpy/src/converters.pyx"
+#line 450 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":408
+  /* "root_numpy/src/converters.pyx":424
  * cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
  *     # Requires special treament since vector<bool> stores contents as bits...
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -10803,40 +11049,40 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         # this will hold number of subvectors
  */
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorVectorBoolConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_outer);
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 408 "root_numpy/src/converters.pyx"
+#line 424 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":438
+/* "root_numpy/src/converters.pyx":454
  * 
  * cdef cppclass StringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -10844,37 +11090,37 @@ int __pyx_t_13_librootnumpy_VectorVectorBoolConverter::write(Column *__pyx_v_col
  *         py_bytes = str(s[0])
  */
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::string *__pyx_v_s
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_py_bytes = NULL
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_tmpobj
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 ;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":439
+  /* "root_numpy/src/converters.pyx":455
  * cdef cppclass StringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:
  *         cdef string* s = <string*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -10882,10 +11128,10 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
  */
 
-#line 439 "root_numpy/src/converters.pyx"
+#line 455 "root_numpy/src/converters.pyx"
   __pyx_v_s = ((std::string *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":440
+  /* "root_numpy/src/converters.pyx":456
  *     int write(Column* col, void* here) except -1:
  *         cdef string* s = <string*> col.GetValuePointer()
  *         py_bytes = str(s[0])             # <<<<<<<<<<<<<<
@@ -10893,43 +11139,43 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         # increase one since we are writing directly in the array
  */
 
-#line 440 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string((__pyx_v_s[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 440, __pyx_L1_error)
+#line 456 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string((__pyx_v_s[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 456, __pyx_L1_error)
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 440 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 440, __pyx_L1_error)
+#line 456 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 456, __pyx_L1_error)
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_t_1);
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-#line 440 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 440, __pyx_L1_error)
+#line 456 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 456, __pyx_L1_error)
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __pyx_v_py_bytes = __pyx_t_1;
 
-#line 440 "root_numpy/src/converters.pyx"
+#line 456 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":441
+  /* "root_numpy/src/converters.pyx":457
  *         cdef string* s = <string*> col.GetValuePointer()
  *         py_bytes = str(s[0])
  *         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref             # <<<<<<<<<<<<<<
@@ -10937,10 +11183,10 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         Py_INCREF(py_bytes)
  */
 
-#line 441 "root_numpy/src/converters.pyx"
+#line 457 "root_numpy/src/converters.pyx"
   __pyx_v_tmpobj = ((PyObject *)__pyx_v_py_bytes);
 
-  /* "root_numpy/src/converters.pyx":443
+  /* "root_numpy/src/converters.pyx":459
  *         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
  *         # increase one since we are writing directly in the array
  *         Py_INCREF(py_bytes)             # <<<<<<<<<<<<<<
@@ -10948,10 +11194,10 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         memcpy(here, &tmpobj, sizeof(PyObject*))
  */
 
-#line 443 "root_numpy/src/converters.pyx"
+#line 459 "root_numpy/src/converters.pyx"
   Py_INCREF(__pyx_v_py_bytes);
 
-  /* "root_numpy/src/converters.pyx":445
+  /* "root_numpy/src/converters.pyx":461
  *         Py_INCREF(py_bytes)
  *         # now write PyObject* to the array
  *         memcpy(here, &tmpobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -10959,10 +11205,10 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  * 
  */
 
-#line 445 "root_numpy/src/converters.pyx"
+#line 461 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, (&__pyx_v_tmpobj), (sizeof(PyObject *)));
 
-  /* "root_numpy/src/converters.pyx":446
+  /* "root_numpy/src/converters.pyx":462
  *         # now write PyObject* to the array
  *         memcpy(here, &tmpobj, sizeof(PyObject*))
  *         return sizeof(tmpobj)             # <<<<<<<<<<<<<<
@@ -10970,13 +11216,13 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  * 
  */
 
-#line 446 "root_numpy/src/converters.pyx"
+#line 462 "root_numpy/src/converters.pyx"
   __pyx_r = (sizeof(__pyx_v_tmpobj));
 
-#line 446 "root_numpy/src/converters.pyx"
+#line 462 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":438
+  /* "root_numpy/src/converters.pyx":454
  * 
  * cdef cppclass StringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -10984,43 +11230,43 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         py_bytes = str(s[0])
  */
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("StringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_py_bytes);
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 438 "root_numpy/src/converters.pyx"
+#line 454 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":450
+/* "root_numpy/src/converters.pyx":466
  * 
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -11028,31 +11274,31 @@ int __pyx_t_13_librootnumpy_StringConverter::write(Column *__pyx_v_col, void *__
  *         return write_array_vectorstring(col.name, here, tmp, col.selector)
  */
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
 
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<std::string>  *__pyx_v_tmp
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
 ;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_13_librootnumpy_write_array_vectorstring __pyx_t_2;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":451
+  /* "root_numpy/src/converters.pyx":467
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -11060,10 +11306,10 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
  * 
  */
 
-#line 451 "root_numpy/src/converters.pyx"
+#line 467 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<std::string>  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":452
+  /* "root_numpy/src/converters.pyx":468
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
  *         return write_array_vectorstring(col.name, here, tmp, col.selector)             # <<<<<<<<<<<<<<
@@ -11071,22 +11317,22 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
  * 
  */
 
-#line 452 "root_numpy/src/converters.pyx"
+#line 468 "root_numpy/src/converters.pyx"
   __pyx_t_2.__pyx_n = 1;
 
-#line 452 "root_numpy/src/converters.pyx"
+#line 468 "root_numpy/src/converters.pyx"
   __pyx_t_2.selector = __pyx_v_col->selector;
 
-#line 452 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array_vectorstring(__pyx_v_col->name, __pyx_v_here, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 452, __pyx_L1_error)
+#line 468 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_f_13_librootnumpy_write_array_vectorstring(__pyx_v_col->name, __pyx_v_here, __pyx_v_tmp, &__pyx_t_2); if (unlikely(__pyx_t_1 == -1)) __PYX_ERR(1, 468, __pyx_L1_error)
 
-#line 452 "root_numpy/src/converters.pyx"
+#line 468 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_t_1;
 
-#line 452 "root_numpy/src/converters.pyx"
+#line 468 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":450
+  /* "root_numpy/src/converters.pyx":466
  * 
  * cdef cppclass VectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -11094,34 +11340,34 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
  *         return write_array_vectorstring(col.name, here, tmp, col.selector)
  */
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
 
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 450 "root_numpy/src/converters.pyx"
+#line 466 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":456
+/* "root_numpy/src/converters.pyx":472
  * 
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -11129,61 +11375,61 @@ int __pyx_t_13_librootnumpy_VectorStringConverter::write(Column *__pyx_v_col, vo
  *         # this will hold number of subvectors
  */
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_col, void *__pyx_v_here) {
   std::vector<std::vector<std::string> >  *__pyx_v_tmp
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_numele
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objsize
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_objtypecode
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t __pyx_v_dims[1]
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   PyArrayObject *__pyx_v_outer = 0
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_outerobj
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   char *__pyx_v_dataptr
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
   unsigned long __pyx_v_i
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 ;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   int __pyx_r;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_3;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   unsigned long __pyx_t_4;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "root_numpy/src/converters.pyx":457
+  /* "root_numpy/src/converters.pyx":473
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:
  *         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()             # <<<<<<<<<<<<<<
@@ -11191,10 +11437,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         cdef unsigned long numele
  */
 
-#line 457 "root_numpy/src/converters.pyx"
+#line 473 "root_numpy/src/converters.pyx"
   __pyx_v_tmp = ((std::vector<std::vector<std::string> >  *)__pyx_v_col->GetValuePointer());
 
-  /* "root_numpy/src/converters.pyx":461
+  /* "root_numpy/src/converters.pyx":477
  *         cdef unsigned long numele
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -11202,22 +11448,22 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         numele = tmp[0].size()
  */
 
-#line 461 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 461, __pyx_L1_error)
+#line 477 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_dtype), __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 477, __pyx_L1_error)
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((PyArray_Descr *)__pyx_t_1)->elsize;
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __pyx_v_objsize = __pyx_t_2;
 
-  /* "root_numpy/src/converters.pyx":462
+  /* "root_numpy/src/converters.pyx":478
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT             # <<<<<<<<<<<<<<
@@ -11225,10 +11471,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         # create an outer array container that dataptr points to,
  */
 
-#line 462 "root_numpy/src/converters.pyx"
+#line 478 "root_numpy/src/converters.pyx"
   __pyx_v_objtypecode = NPY_OBJECT;
 
-  /* "root_numpy/src/converters.pyx":463
+  /* "root_numpy/src/converters.pyx":479
  *         cdef int objsize = np.dtype('O').itemsize
  *         cdef int objtypecode = np.NPY_OBJECT
  *         numele = tmp[0].size()             # <<<<<<<<<<<<<<
@@ -11236,10 +11482,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         # containing pointers from write_array().
  */
 
-#line 463 "root_numpy/src/converters.pyx"
+#line 479 "root_numpy/src/converters.pyx"
   __pyx_v_numele = (__pyx_v_tmp[0]).size();
 
-  /* "root_numpy/src/converters.pyx":468
+  /* "root_numpy/src/converters.pyx":484
  *         # define an (numele)-dimensional outer array to hold our subvectors fa
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele             # <<<<<<<<<<<<<<
@@ -11247,10 +11493,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  */
 
-#line 468 "root_numpy/src/converters.pyx"
+#line 484 "root_numpy/src/converters.pyx"
   (__pyx_v_dims[0]) = __pyx_v_numele;
 
-  /* "root_numpy/src/converters.pyx":469
+  /* "root_numpy/src/converters.pyx":485
  *         cdef SIZE_t dims[1]
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)             # <<<<<<<<<<<<<<
@@ -11258,22 +11504,22 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         # increase one since we are writing directly in the array
  */
 
-#line 469 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 469, __pyx_L1_error)
+#line 485 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = PyArray_EMPTY(1, __pyx_v_dims, __pyx_v_objtypecode, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 485, __pyx_L1_error)
 
-#line 469 "root_numpy/src/converters.pyx"
+#line 485 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 469 "root_numpy/src/converters.pyx"
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 469, __pyx_L1_error)
+#line 485 "root_numpy/src/converters.pyx"
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 485, __pyx_L1_error)
 
-#line 469 "root_numpy/src/converters.pyx"
+#line 485 "root_numpy/src/converters.pyx"
   __pyx_v_outer = ((PyArrayObject *)__pyx_t_1);
 
-#line 469 "root_numpy/src/converters.pyx"
+#line 485 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":470
+  /* "root_numpy/src/converters.pyx":486
  *         dims[0] = numele
  *         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref             # <<<<<<<<<<<<<<
@@ -11281,10 +11527,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         Py_INCREF(outer)
  */
 
-#line 470 "root_numpy/src/converters.pyx"
+#line 486 "root_numpy/src/converters.pyx"
   __pyx_v_outerobj = ((PyObject *)__pyx_v_outer);
 
-  /* "root_numpy/src/converters.pyx":472
+  /* "root_numpy/src/converters.pyx":488
  *         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
  *         # increase one since we are writing directly in the array
  *         Py_INCREF(outer)             # <<<<<<<<<<<<<<
@@ -11292,10 +11538,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         memcpy(here, &outerobj, sizeof(PyObject*))
  */
 
-#line 472 "root_numpy/src/converters.pyx"
+#line 488 "root_numpy/src/converters.pyx"
   Py_INCREF(((PyObject *)__pyx_v_outer));
 
-  /* "root_numpy/src/converters.pyx":474
+  /* "root_numpy/src/converters.pyx":490
  *         Py_INCREF(outer)
  *         # now write PyObject* to the array
  *         memcpy(here, &outerobj, sizeof(PyObject*))             # <<<<<<<<<<<<<<
@@ -11303,10 +11549,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         # of the subvectors
  */
 
-#line 474 "root_numpy/src/converters.pyx"
+#line 490 "root_numpy/src/converters.pyx"
   memcpy(__pyx_v_here, (&__pyx_v_outerobj), (sizeof(PyObject *)));
 
-  /* "root_numpy/src/converters.pyx":477
+  /* "root_numpy/src/converters.pyx":493
  *         # build a dataptr pointing to outer, so we can shift and write each
  *         # of the subvectors
  *         cdef char* dataptr = <char*> outer.data             # <<<<<<<<<<<<<<
@@ -11314,10 +11560,10 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         cdef unsigned long i
  */
 
-#line 477 "root_numpy/src/converters.pyx"
+#line 493 "root_numpy/src/converters.pyx"
   __pyx_v_dataptr = ((char *)__pyx_v_outer->data);
 
-  /* "root_numpy/src/converters.pyx":480
+  /* "root_numpy/src/converters.pyx":496
  *         # loop through all subvectors
  *         cdef unsigned long i
  *         for i in range(numele):             # <<<<<<<<<<<<<<
@@ -11325,16 +11571,16 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         return sizeof(outerobj)
  */
 
-#line 480 "root_numpy/src/converters.pyx"
+#line 496 "root_numpy/src/converters.pyx"
   __pyx_t_3 = __pyx_v_numele;
 
-#line 480 "root_numpy/src/converters.pyx"
+#line 496 "root_numpy/src/converters.pyx"
   for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
 
-#line 480 "root_numpy/src/converters.pyx"
+#line 496 "root_numpy/src/converters.pyx"
     __pyx_v_i = __pyx_t_4;
 
-    /* "root_numpy/src/converters.pyx":481
+    /* "root_numpy/src/converters.pyx":497
  *         cdef unsigned long i
  *         for i in range(numele):
  *             write_array_vectorstring(col.name, &dataptr[i*objsize], &tmp[0][i])             # <<<<<<<<<<<<<<
@@ -11342,13 +11588,13 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  * 
  */
 
-#line 481 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array_vectorstring(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 481, __pyx_L1_error)
+#line 497 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_f_13_librootnumpy_write_array_vectorstring(__pyx_v_col->name, (&(__pyx_v_dataptr[(__pyx_v_i * __pyx_v_objsize)])), (&((__pyx_v_tmp[0])[__pyx_v_i])), NULL); if (unlikely(__pyx_t_2 == -1)) __PYX_ERR(1, 497, __pyx_L1_error)
 
-#line 481 "root_numpy/src/converters.pyx"
+#line 497 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":482
+  /* "root_numpy/src/converters.pyx":498
  *         for i in range(numele):
  *             write_array_vectorstring(col.name, &dataptr[i*objsize], &tmp[0][i])
  *         return sizeof(outerobj)             # <<<<<<<<<<<<<<
@@ -11356,13 +11602,13 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  * 
  */
 
-#line 482 "root_numpy/src/converters.pyx"
+#line 498 "root_numpy/src/converters.pyx"
   __pyx_r = (sizeof(__pyx_v_outerobj));
 
-#line 482 "root_numpy/src/converters.pyx"
+#line 498 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":456
+  /* "root_numpy/src/converters.pyx":472
  * 
  * cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
  *     int write(Column* col, void* here) except -1:             # <<<<<<<<<<<<<<
@@ -11370,40 +11616,40 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *         # this will hold number of subvectors
  */
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("VectorVectorStringConverter.write", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __pyx_r = -1;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF((PyObject *)__pyx_v_outer);
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 456 "root_numpy/src/converters.pyx"
+#line 472 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":560
+/* "root_numpy/src/converters.pyx":576
  * 
  * 
  * cdef Converter* find_converter_by_typename(string typename):             # <<<<<<<<<<<<<<
@@ -11411,28 +11657,28 @@ int __pyx_t_13_librootnumpy_VectorVectorStringConverter::write(Column *__pyx_v_c
  *     if it == CONVERTERS.end():
  */
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
 
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
 static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter_by_typename(std::string __pyx_v_typename) {
   std::map<std::string,__pyx_t_13_librootnumpy_Converter *> ::iterator __pyx_v_it
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
 ;
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_Converter *__pyx_r;
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("find_converter_by_typename", 0);
 
-  /* "root_numpy/src/converters.pyx":561
+  /* "root_numpy/src/converters.pyx":577
  * 
  * cdef Converter* find_converter_by_typename(string typename):
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.find(typename)             # <<<<<<<<<<<<<<
@@ -11440,10 +11686,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  *         return NULL
  */
 
-#line 561 "root_numpy/src/converters.pyx"
+#line 577 "root_numpy/src/converters.pyx"
   __pyx_v_it = __pyx_v_13_librootnumpy_CONVERTERS.find(__pyx_v_typename);
 
-  /* "root_numpy/src/converters.pyx":562
+  /* "root_numpy/src/converters.pyx":578
  * cdef Converter* find_converter_by_typename(string typename):
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.find(typename)
  *     if it == CONVERTERS.end():             # <<<<<<<<<<<<<<
@@ -11451,13 +11697,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  *     return deref(it).second
  */
 
-#line 562 "root_numpy/src/converters.pyx"
+#line 578 "root_numpy/src/converters.pyx"
   __pyx_t_1 = ((__pyx_v_it == __pyx_v_13_librootnumpy_CONVERTERS.end()) != 0);
 
-#line 562 "root_numpy/src/converters.pyx"
+#line 578 "root_numpy/src/converters.pyx"
   if (__pyx_t_1) {
 
-    /* "root_numpy/src/converters.pyx":563
+    /* "root_numpy/src/converters.pyx":579
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.find(typename)
  *     if it == CONVERTERS.end():
  *         return NULL             # <<<<<<<<<<<<<<
@@ -11465,13 +11711,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  * 
  */
 
-#line 563 "root_numpy/src/converters.pyx"
+#line 579 "root_numpy/src/converters.pyx"
     __pyx_r = NULL;
 
-#line 563 "root_numpy/src/converters.pyx"
+#line 579 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":562
+    /* "root_numpy/src/converters.pyx":578
  * cdef Converter* find_converter_by_typename(string typename):
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.find(typename)
  *     if it == CONVERTERS.end():             # <<<<<<<<<<<<<<
@@ -11479,10 +11725,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  *     return deref(it).second
  */
 
-#line 562 "root_numpy/src/converters.pyx"
+#line 578 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":564
+  /* "root_numpy/src/converters.pyx":580
  *     if it == CONVERTERS.end():
  *         return NULL
  *     return deref(it).second             # <<<<<<<<<<<<<<
@@ -11490,13 +11736,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  * 
  */
 
-#line 564 "root_numpy/src/converters.pyx"
+#line 580 "root_numpy/src/converters.pyx"
   __pyx_r = (*__pyx_v_it).second;
 
-#line 564 "root_numpy/src/converters.pyx"
+#line 580 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":560
+  /* "root_numpy/src/converters.pyx":576
  * 
  * 
  * cdef Converter* find_converter_by_typename(string typename):             # <<<<<<<<<<<<<<
@@ -11504,25 +11750,25 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  *     if it == CONVERTERS.end():
  */
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
 
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 560 "root_numpy/src/converters.pyx"
+#line 576 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":567
+/* "root_numpy/src/converters.pyx":583
  * 
  * 
  * cdef Converter* get_array_converter(string typename, arraydef):             # <<<<<<<<<<<<<<
@@ -11530,85 +11776,85 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_find_converter
  *     arraytokens = arraydef.strip('[]')
  */
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_converter(std::string __pyx_v_typename, PyObject *__pyx_v_arraydef) {
   PyObject *__pyx_v_arraytokens = NULL
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_shape = NULL
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_Converter *__pyx_v_conv
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_Converter *__pyx_v_basic_conv
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_ndim = NULL
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_idim = NULL
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_token = NULL
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 ;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_Converter *__pyx_r;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_2 = NULL;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   int __pyx_t_3;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   Py_ssize_t __pyx_t_4;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   PyObject *(*__pyx_t_5)(PyObject *);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_6 = NULL;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   std::string __pyx_t_7;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   size_t __pyx_t_8;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   long __pyx_t_9;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   long __pyx_t_10;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t __pyx_t_11;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   int __pyx_t_12;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE __pyx_t_13;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_array_converter", 0);
 
-  /* "root_numpy/src/converters.pyx":569
+  /* "root_numpy/src/converters.pyx":585
  * cdef Converter* get_array_converter(string typename, arraydef):
  *     # Determine shape ignoring possible variable first dimension
  *     arraytokens = arraydef.strip('[]')             # <<<<<<<<<<<<<<
@@ -11616,28 +11862,28 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_conv
  *         arraytokens = arraytokens.split('][')
  */
 
-#line 569 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 569, __pyx_L1_error)
+#line 585 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_strip); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 585, __pyx_L1_error)
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 569 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 569, __pyx_L1_error)
+#line 585 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 585, __pyx_L1_error)
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __pyx_v_arraytokens = __pyx_t_2;
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __pyx_t_2 = 0;
 
-  /* "root_numpy/src/converters.pyx":570
+  /* "root_numpy/src/converters.pyx":586
  *     # Determine shape ignoring possible variable first dimension
  *     arraytokens = arraydef.strip('[]')
  *     if arraytokens:             # <<<<<<<<<<<<<<
@@ -11645,13 +11891,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_conv
  *     shape = tuple([int(token) for token in arraytokens])
  */
 
-#line 570 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_arraytokens); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 570, __pyx_L1_error)
+#line 586 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_arraytokens); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 586, __pyx_L1_error)
 
-#line 570 "root_numpy/src/converters.pyx"
+#line 586 "root_numpy/src/converters.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/converters.pyx":571
+    /* "root_numpy/src/converters.pyx":587
  *     arraytokens = arraydef.strip('[]')
  *     if arraytokens:
  *         arraytokens = arraytokens.split('][')             # <<<<<<<<<<<<<<
@@ -11659,28 +11905,28 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_conv
  * 
  */
 
-#line 571 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraytokens, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 571, __pyx_L1_error)
+#line 587 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraytokens, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 587, __pyx_L1_error)
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 571 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 571, __pyx_L1_error)
+#line 587 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 587, __pyx_L1_error)
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
     __Pyx_DECREF_SET(__pyx_v_arraytokens, __pyx_t_1);
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
     __pyx_t_1 = 0;
 
-    /* "root_numpy/src/converters.pyx":570
+    /* "root_numpy/src/converters.pyx":586
  *     # Determine shape ignoring possible variable first dimension
  *     arraytokens = arraydef.strip('[]')
  *     if arraytokens:             # <<<<<<<<<<<<<<
@@ -11688,10 +11934,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_conv
  *     shape = tuple([int(token) for token in arraytokens])
  */
 
-#line 570 "root_numpy/src/converters.pyx"
+#line 586 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":572
+  /* "root_numpy/src/converters.pyx":588
  *     if arraytokens:
  *         arraytokens = arraytokens.split('][')
  *     shape = tuple([int(token) for token in arraytokens])             # <<<<<<<<<<<<<<
@@ -11699,169 +11945,169 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_array_conv
  *     # Variable-length array
  */
 
-#line 572 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   if (likely(PyList_CheckExact(__pyx_v_arraytokens)) || PyTuple_CheckExact(__pyx_v_arraytokens)) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __pyx_t_2 = __pyx_v_arraytokens; __Pyx_INCREF(__pyx_t_2); __pyx_t_4 = 0;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __pyx_t_5 = NULL;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   } else {
     __pyx_t_4 = -1; 
-#line 572 "root_numpy/src/converters.pyx"
-__pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+__pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 572 "root_numpy/src/converters.pyx"
-    __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+    __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   }
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   for (;;) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     if (likely(!__pyx_t_5)) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       if (likely(PyList_CheckExact(__pyx_t_2))) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_2)) break;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 572 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #else
 
-#line 572 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_6);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #endif
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       } else {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 572 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_6); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #else
 
-#line 572 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_6);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         #endif
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       }
     } else 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
 {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       __pyx_t_6 = __pyx_t_5(__pyx_t_2);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       if (unlikely(!__pyx_t_6)) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         PyObject* exc_type = PyErr_Occurred();
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         if (exc_type) {
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
           if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
 
-#line 572 "root_numpy/src/converters.pyx"
-          else __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+          else __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         }
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
         break;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       }
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     }
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF_SET(__pyx_v_token, __pyx_t_6);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __pyx_t_6 = 0;
 
-#line 572 "root_numpy/src/converters.pyx"
-    __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_v_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+    __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_v_token); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_6);
 
-#line 572 "root_numpy/src/converters.pyx"
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   }
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 572 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyList_AsTuple(((PyObject*)__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 572, __pyx_L1_error)
+#line 588 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyList_AsTuple(((PyObject*)__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 588, __pyx_L1_error)
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __pyx_v_shape = ((PyObject*)__pyx_t_2);
 
-#line 572 "root_numpy/src/converters.pyx"
+#line 588 "root_numpy/src/converters.pyx"
   __pyx_t_2 = 0;
 
-  /* "root_numpy/src/converters.pyx":575
+  /* "root_numpy/src/converters.pyx":591
  * 
  *     # Variable-length array
  *     if arraydef.startswith('[]'):             # <<<<<<<<<<<<<<
@@ -11869,31 +12115,31 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         if conv == NULL:
  */
 
-#line 575 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_startswith); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 575, __pyx_L1_error)
+#line 591 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_startswith); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 591, __pyx_L1_error)
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 575 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 575, __pyx_L1_error)
+#line 591 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 591, __pyx_L1_error)
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 575 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 575, __pyx_L1_error)
+#line 591 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 591, __pyx_L1_error)
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/converters.pyx":576
+    /* "root_numpy/src/converters.pyx":592
  *     # Variable-length array
  *     if arraydef.startswith('[]'):
  *         conv = find_converter_by_typename(typename + arraydef)             # <<<<<<<<<<<<<<
@@ -11901,31 +12147,31 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # Create new converter on demand
  */
 
-#line 576 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 576, __pyx_L1_error)
+#line 592 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 592, __pyx_L1_error)
 
-#line 576 "root_numpy/src/converters.pyx"
+#line 592 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 576 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_arraydef); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 576, __pyx_L1_error)
+#line 592 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_arraydef); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 592, __pyx_L1_error)
 
-#line 576 "root_numpy/src/converters.pyx"
+#line 592 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 576 "root_numpy/src/converters.pyx"
+#line 592 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 576 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 576, __pyx_L1_error)
+#line 592 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 592, __pyx_L1_error)
 
-#line 576 "root_numpy/src/converters.pyx"
+#line 592 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 576 "root_numpy/src/converters.pyx"
+#line 592 "root_numpy/src/converters.pyx"
     __pyx_v_conv = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_t_7);
 
-    /* "root_numpy/src/converters.pyx":577
+    /* "root_numpy/src/converters.pyx":593
  *     if arraydef.startswith('[]'):
  *         conv = find_converter_by_typename(typename + arraydef)
  *         if conv == NULL:             # <<<<<<<<<<<<<<
@@ -11933,13 +12179,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             basic_conv = find_converter_by_typename(typename)
  */
 
-#line 577 "root_numpy/src/converters.pyx"
+#line 593 "root_numpy/src/converters.pyx"
     __pyx_t_3 = ((__pyx_v_conv == NULL) != 0);
 
-#line 577 "root_numpy/src/converters.pyx"
+#line 593 "root_numpy/src/converters.pyx"
     if (__pyx_t_3) {
 
-      /* "root_numpy/src/converters.pyx":579
+      /* "root_numpy/src/converters.pyx":595
  *         if conv == NULL:
  *             # Create new converter on demand
  *             basic_conv = find_converter_by_typename(typename)             # <<<<<<<<<<<<<<
@@ -11947,10 +12193,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *                 return NULL
  */
 
-#line 579 "root_numpy/src/converters.pyx"
+#line 595 "root_numpy/src/converters.pyx"
       __pyx_v_basic_conv = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_v_typename);
 
-      /* "root_numpy/src/converters.pyx":580
+      /* "root_numpy/src/converters.pyx":596
  *             # Create new converter on demand
  *             basic_conv = find_converter_by_typename(typename)
  *             if basic_conv == NULL:             # <<<<<<<<<<<<<<
@@ -11958,13 +12204,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # the variable-length dimension is excluded from leaf_shape above
  */
 
-#line 580 "root_numpy/src/converters.pyx"
+#line 596 "root_numpy/src/converters.pyx"
       __pyx_t_3 = ((__pyx_v_basic_conv == NULL) != 0);
 
-#line 580 "root_numpy/src/converters.pyx"
+#line 596 "root_numpy/src/converters.pyx"
       if (__pyx_t_3) {
 
-        /* "root_numpy/src/converters.pyx":581
+        /* "root_numpy/src/converters.pyx":597
  *             basic_conv = find_converter_by_typename(typename)
  *             if basic_conv == NULL:
  *                 return NULL             # <<<<<<<<<<<<<<
@@ -11972,13 +12218,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # so add 1 here:
  */
 
-#line 581 "root_numpy/src/converters.pyx"
+#line 597 "root_numpy/src/converters.pyx"
         __pyx_r = NULL;
 
-#line 581 "root_numpy/src/converters.pyx"
+#line 597 "root_numpy/src/converters.pyx"
         goto __pyx_L0;
 
-        /* "root_numpy/src/converters.pyx":580
+        /* "root_numpy/src/converters.pyx":596
  *             # Create new converter on demand
  *             basic_conv = find_converter_by_typename(typename)
  *             if basic_conv == NULL:             # <<<<<<<<<<<<<<
@@ -11986,10 +12232,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # the variable-length dimension is excluded from leaf_shape above
  */
 
-#line 580 "root_numpy/src/converters.pyx"
+#line 596 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":584
+      /* "root_numpy/src/converters.pyx":600
  *             # the variable-length dimension is excluded from leaf_shape above
  *             # so add 1 here:
  *             ndim = len(shape) + 1             # <<<<<<<<<<<<<<
@@ -11997,22 +12243,22 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             if dims == NULL:
  */
 
-#line 584 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v_shape); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(1, 584, __pyx_L1_error)
+#line 600 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_GET_SIZE(__pyx_v_shape); if (unlikely(__pyx_t_4 == -1)) __PYX_ERR(1, 600, __pyx_L1_error)
 
-#line 584 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = PyInt_FromSsize_t((__pyx_t_4 + 1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 584, __pyx_L1_error)
+#line 600 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = PyInt_FromSsize_t((__pyx_t_4 + 1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 600, __pyx_L1_error)
 
-#line 584 "root_numpy/src/converters.pyx"
+#line 600 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 584 "root_numpy/src/converters.pyx"
+#line 600 "root_numpy/src/converters.pyx"
       __pyx_v_ndim = __pyx_t_2;
 
-#line 584 "root_numpy/src/converters.pyx"
+#line 600 "root_numpy/src/converters.pyx"
       __pyx_t_2 = 0;
 
-      /* "root_numpy/src/converters.pyx":585
+      /* "root_numpy/src/converters.pyx":601
  *             # so add 1 here:
  *             ndim = len(shape) + 1
  *             dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))             # <<<<<<<<<<<<<<
@@ -12020,31 +12266,31 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *                 raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  */
 
-#line 585 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyInt_FromSize_t((sizeof(__pyx_t_13_librootnumpy_SIZE_t))); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 585, __pyx_L1_error)
+#line 601 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __Pyx_PyInt_FromSize_t((sizeof(__pyx_t_13_librootnumpy_SIZE_t))); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 601, __pyx_L1_error)
 
-#line 585 "root_numpy/src/converters.pyx"
+#line 601 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 585 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PyNumber_Multiply(__pyx_v_ndim, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 585, __pyx_L1_error)
+#line 601 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PyNumber_Multiply(__pyx_v_ndim, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 601, __pyx_L1_error)
 
-#line 585 "root_numpy/src/converters.pyx"
+#line 601 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 585 "root_numpy/src/converters.pyx"
+#line 601 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 585 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = __Pyx_PyInt_As_size_t(__pyx_t_1); if (unlikely((__pyx_t_8 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 585, __pyx_L1_error)
+#line 601 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = __Pyx_PyInt_As_size_t(__pyx_t_1); if (unlikely((__pyx_t_8 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 601, __pyx_L1_error)
 
-#line 585 "root_numpy/src/converters.pyx"
+#line 601 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 585 "root_numpy/src/converters.pyx"
+#line 601 "root_numpy/src/converters.pyx"
       __pyx_v_dims = ((__pyx_t_13_librootnumpy_SIZE_t *)malloc(__pyx_t_8));
 
-      /* "root_numpy/src/converters.pyx":586
+      /* "root_numpy/src/converters.pyx":602
  *             ndim = len(shape) + 1
  *             dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *             if dims == NULL:             # <<<<<<<<<<<<<<
@@ -12052,13 +12298,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # only the first dimension can vary in length
  */
 
-#line 586 "root_numpy/src/converters.pyx"
+#line 602 "root_numpy/src/converters.pyx"
       __pyx_t_3 = ((__pyx_v_dims == NULL) != 0);
 
-#line 586 "root_numpy/src/converters.pyx"
+#line 602 "root_numpy/src/converters.pyx"
       if (__pyx_t_3) {
 
-        /* "root_numpy/src/converters.pyx":587
+        /* "root_numpy/src/converters.pyx":603
  *             dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *             if dims == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))             # <<<<<<<<<<<<<<
@@ -12066,64 +12312,64 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # so dims[0] is set dynamically for each entry
  */
 
-#line 587 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyInt_FromSize_t((sizeof(__pyx_t_13_librootnumpy_SIZE_t))); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyInt_FromSize_t((sizeof(__pyx_t_13_librootnumpy_SIZE_t))); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 603, __pyx_L1_error)
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 587 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = PyNumber_Multiply(__pyx_v_ndim, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = PyNumber_Multiply(__pyx_v_ndim, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 603, __pyx_L1_error)
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 587 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 603, __pyx_L1_error)
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 587 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 603, __pyx_L1_error)
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_1);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __pyx_t_1 = 0;
 
-#line 587 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 603, __pyx_L1_error)
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_Raise(__pyx_t_1, 0, 0, 0);
 
-#line 587 "root_numpy/src/converters.pyx"
+#line 603 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 587 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 587, __pyx_L1_error)
+#line 603 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 603, __pyx_L1_error)
 
-        /* "root_numpy/src/converters.pyx":586
+        /* "root_numpy/src/converters.pyx":602
  *             ndim = len(shape) + 1
  *             dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *             if dims == NULL:             # <<<<<<<<<<<<<<
@@ -12131,10 +12377,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             # only the first dimension can vary in length
  */
 
-#line 586 "root_numpy/src/converters.pyx"
+#line 602 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":590
+      /* "root_numpy/src/converters.pyx":606
  *             # only the first dimension can vary in length
  *             # so dims[0] is set dynamically for each entry
  *             for idim from 1 <= idim < ndim:             # <<<<<<<<<<<<<<
@@ -12142,25 +12388,25 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             conv = new VaryArrayConverter(
  */
 
-#line 590 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_v_ndim); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(1, 590, __pyx_L1_error)
+#line 606 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = __Pyx_PyInt_As_long(__pyx_v_ndim); if (unlikely((__pyx_t_9 == (long)-1) && PyErr_Occurred())) __PYX_ERR(1, 606, __pyx_L1_error)
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
       for (__pyx_t_10 = 1; __pyx_t_10 < __pyx_t_9; __pyx_t_10++) {
 
-#line 590 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 590, __pyx_L1_error)
+#line 606 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyInt_From_long(__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 606, __pyx_L1_error)
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF_SET(__pyx_v_idim, __pyx_t_1);
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
         __pyx_t_1 = 0;
 
-        /* "root_numpy/src/converters.pyx":591
+        /* "root_numpy/src/converters.pyx":607
  *             # so dims[0] is set dynamically for each entry
  *             for idim from 1 <= idim < ndim:
  *                 dims[idim] = shape[idim - 1]             # <<<<<<<<<<<<<<
@@ -12168,40 +12414,40 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *                 <BasicConverter*> basic_conv, ndim, dims)
  */
 
-#line 591 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyInt_SubtractObjC(__pyx_v_idim, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 591, __pyx_L1_error)
+#line 607 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyInt_SubtractObjC(__pyx_v_idim, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 607, __pyx_L1_error)
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 591 "root_numpy/src/converters.pyx"
-        __pyx_t_2 = PyObject_GetItem(__pyx_v_shape, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 591, __pyx_L1_error)
+#line 607 "root_numpy/src/converters.pyx"
+        __pyx_t_2 = PyObject_GetItem(__pyx_v_shape, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 607, __pyx_L1_error)
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_2);
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 591 "root_numpy/src/converters.pyx"
-        __pyx_t_11 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_2); if (unlikely((__pyx_t_11 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(1, 591, __pyx_L1_error)
+#line 607 "root_numpy/src/converters.pyx"
+        __pyx_t_11 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_2); if (unlikely((__pyx_t_11 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(1, 607, __pyx_L1_error)
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 591 "root_numpy/src/converters.pyx"
-        __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_v_idim); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 591, __pyx_L1_error)
+#line 607 "root_numpy/src/converters.pyx"
+        __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_v_idim); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(1, 607, __pyx_L1_error)
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
         (__pyx_v_dims[__pyx_t_4]) = __pyx_t_11;
 
-#line 591 "root_numpy/src/converters.pyx"
-        __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_v_idim); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) __PYX_ERR(1, 590, __pyx_L1_error)
+#line 607 "root_numpy/src/converters.pyx"
+        __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_v_idim); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) __PYX_ERR(1, 606, __pyx_L1_error)
 
-#line 591 "root_numpy/src/converters.pyx"
+#line 607 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":590
+      /* "root_numpy/src/converters.pyx":606
  *             # only the first dimension can vary in length
  *             # so dims[0] is set dynamically for each entry
  *             for idim from 1 <= idim < ndim:             # <<<<<<<<<<<<<<
@@ -12209,19 +12455,19 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             conv = new VaryArrayConverter(
  */
 
-#line 590 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 590, __pyx_L1_error)
+#line 606 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 606, __pyx_L1_error)
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF_SET(__pyx_v_idim, __pyx_t_2);
 
-#line 590 "root_numpy/src/converters.pyx"
+#line 606 "root_numpy/src/converters.pyx"
       __pyx_t_2 = 0;
 
-      /* "root_numpy/src/converters.pyx":593
+      /* "root_numpy/src/converters.pyx":609
  *                 dims[idim] = shape[idim - 1]
  *             conv = new VaryArrayConverter(
  *                 <BasicConverter*> basic_conv, ndim, dims)             # <<<<<<<<<<<<<<
@@ -12229,10 +12475,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         return conv
  */
 
-#line 593 "root_numpy/src/converters.pyx"
-      __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_v_ndim); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 593, __pyx_L1_error)
+#line 609 "root_numpy/src/converters.pyx"
+      __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_v_ndim); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 609, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":592
+      /* "root_numpy/src/converters.pyx":608
  *             for idim from 1 <= idim < ndim:
  *                 dims[idim] = shape[idim - 1]
  *             conv = new VaryArrayConverter(             # <<<<<<<<<<<<<<
@@ -12240,10 +12486,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
  */
 
-#line 592 "root_numpy/src/converters.pyx"
+#line 608 "root_numpy/src/converters.pyx"
       __pyx_v_conv = new __pyx_t_13_librootnumpy_VaryArrayConverter(((__pyx_t_13_librootnumpy_BasicConverter *)__pyx_v_basic_conv), __pyx_t_12, __pyx_v_dims);
 
-      /* "root_numpy/src/converters.pyx":594
+      /* "root_numpy/src/converters.pyx":610
  *             conv = new VaryArrayConverter(
  *                 <BasicConverter*> basic_conv, ndim, dims)
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))             # <<<<<<<<<<<<<<
@@ -12251,64 +12497,64 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  * 
  */
 
-#line 594 "root_numpy/src/converters.pyx"
-      __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 594, __pyx_L1_error)
+#line 610 "root_numpy/src/converters.pyx"
+      __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 610, __pyx_L1_error)
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_2);
 
-#line 594 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_v_arraydef); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 594, __pyx_L1_error)
+#line 610 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_v_arraydef); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 610, __pyx_L1_error)
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 594 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 594, __pyx_L1_error)
+#line 610 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 610, __pyx_L1_error)
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       try {
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
         __pyx_t_13 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_7, __pyx_v_conv);
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       } catch(...) {
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
         __Pyx_CppExn2PyErr();
 
-#line 594 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 594, __pyx_L1_error)
+#line 610 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 610, __pyx_L1_error)
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       }
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       try {
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
         __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_13);
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       } catch(...) {
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
         __Pyx_CppExn2PyErr();
 
-#line 594 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 594, __pyx_L1_error)
+#line 610 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 610, __pyx_L1_error)
 
-#line 594 "root_numpy/src/converters.pyx"
+#line 610 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":577
+      /* "root_numpy/src/converters.pyx":593
  *     if arraydef.startswith('[]'):
  *         conv = find_converter_by_typename(typename + arraydef)
  *         if conv == NULL:             # <<<<<<<<<<<<<<
@@ -12316,10 +12562,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             basic_conv = find_converter_by_typename(typename)
  */
 
-#line 577 "root_numpy/src/converters.pyx"
+#line 593 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":595
+    /* "root_numpy/src/converters.pyx":611
  *                 <BasicConverter*> basic_conv, ndim, dims)
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
  *         return conv             # <<<<<<<<<<<<<<
@@ -12327,13 +12573,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *     # Fixed-length array
  */
 
-#line 595 "root_numpy/src/converters.pyx"
+#line 611 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_v_conv;
 
-#line 595 "root_numpy/src/converters.pyx"
+#line 611 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":575
+    /* "root_numpy/src/converters.pyx":591
  * 
  *     # Variable-length array
  *     if arraydef.startswith('[]'):             # <<<<<<<<<<<<<<
@@ -12341,10 +12587,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         if conv == NULL:
  */
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":598
+  /* "root_numpy/src/converters.pyx":614
  * 
  *     # Fixed-length array
  *     conv = find_converter_by_typename(typename + arraydef)             # <<<<<<<<<<<<<<
@@ -12352,31 +12598,31 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         # Create new converter on demand
  */
 
-#line 598 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 598, __pyx_L1_error)
+#line 614 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 614, __pyx_L1_error)
 
-#line 598 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 598 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_arraydef); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 598, __pyx_L1_error)
+#line 614 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_v_arraydef); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 614, __pyx_L1_error)
 
-#line 598 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_2);
 
-#line 598 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 598 "root_numpy/src/converters.pyx"
-  __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 598, __pyx_L1_error)
+#line 614 "root_numpy/src/converters.pyx"
+  __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_2); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 614, __pyx_L1_error)
 
-#line 598 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 598 "root_numpy/src/converters.pyx"
+#line 614 "root_numpy/src/converters.pyx"
   __pyx_v_conv = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_t_7);
 
-  /* "root_numpy/src/converters.pyx":599
+  /* "root_numpy/src/converters.pyx":615
  *     # Fixed-length array
  *     conv = find_converter_by_typename(typename + arraydef)
  *     if conv == NULL:             # <<<<<<<<<<<<<<
@@ -12384,13 +12630,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         basic_conv = find_converter_by_typename(typename)
  */
 
-#line 599 "root_numpy/src/converters.pyx"
+#line 615 "root_numpy/src/converters.pyx"
   __pyx_t_3 = ((__pyx_v_conv == NULL) != 0);
 
-#line 599 "root_numpy/src/converters.pyx"
+#line 615 "root_numpy/src/converters.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/converters.pyx":601
+    /* "root_numpy/src/converters.pyx":617
  *     if conv == NULL:
  *         # Create new converter on demand
  *         basic_conv = find_converter_by_typename(typename)             # <<<<<<<<<<<<<<
@@ -12398,10 +12644,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             return NULL
  */
 
-#line 601 "root_numpy/src/converters.pyx"
+#line 617 "root_numpy/src/converters.pyx"
     __pyx_v_basic_conv = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_v_typename);
 
-    /* "root_numpy/src/converters.pyx":602
+    /* "root_numpy/src/converters.pyx":618
  *         # Create new converter on demand
  *         basic_conv = find_converter_by_typename(typename)
  *         if basic_conv == NULL:             # <<<<<<<<<<<<<<
@@ -12409,13 +12655,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         conv = new FixedArrayConverter(
  */
 
-#line 602 "root_numpy/src/converters.pyx"
+#line 618 "root_numpy/src/converters.pyx"
     __pyx_t_3 = ((__pyx_v_basic_conv == NULL) != 0);
 
-#line 602 "root_numpy/src/converters.pyx"
+#line 618 "root_numpy/src/converters.pyx"
     if (__pyx_t_3) {
 
-      /* "root_numpy/src/converters.pyx":603
+      /* "root_numpy/src/converters.pyx":619
  *         basic_conv = find_converter_by_typename(typename)
  *         if basic_conv == NULL:
  *             return NULL             # <<<<<<<<<<<<<<
@@ -12423,13 +12669,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *             <BasicConverter*> basic_conv, <PyObject*> shape)
  */
 
-#line 603 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
       __pyx_r = NULL;
 
-#line 603 "root_numpy/src/converters.pyx"
+#line 619 "root_numpy/src/converters.pyx"
       goto __pyx_L0;
 
-      /* "root_numpy/src/converters.pyx":602
+      /* "root_numpy/src/converters.pyx":618
  *         # Create new converter on demand
  *         basic_conv = find_converter_by_typename(typename)
  *         if basic_conv == NULL:             # <<<<<<<<<<<<<<
@@ -12437,10 +12683,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         conv = new FixedArrayConverter(
  */
 
-#line 602 "root_numpy/src/converters.pyx"
+#line 618 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":604
+    /* "root_numpy/src/converters.pyx":620
  *         if basic_conv == NULL:
  *             return NULL
  *         conv = new FixedArrayConverter(             # <<<<<<<<<<<<<<
@@ -12448,10 +12694,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
  */
 
-#line 604 "root_numpy/src/converters.pyx"
+#line 620 "root_numpy/src/converters.pyx"
     __pyx_v_conv = new __pyx_t_13_librootnumpy_FixedArrayConverter(((__pyx_t_13_librootnumpy_BasicConverter *)__pyx_v_basic_conv), ((PyObject *)__pyx_v_shape));
 
-    /* "root_numpy/src/converters.pyx":606
+    /* "root_numpy/src/converters.pyx":622
  *         conv = new FixedArrayConverter(
  *             <BasicConverter*> basic_conv, <PyObject*> shape)
  *         CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))             # <<<<<<<<<<<<<<
@@ -12459,64 +12705,64 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  * 
  */
 
-#line 606 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 606, __pyx_L1_error)
+#line 622 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_typename); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 622, __pyx_L1_error)
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_2);
 
-#line 606 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_v_arraydef); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 606, __pyx_L1_error)
+#line 622 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_v_arraydef); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 622, __pyx_L1_error)
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-#line 606 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 606, __pyx_L1_error)
+#line 622 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 622, __pyx_L1_error)
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     try {
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
       __pyx_t_13 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_7, __pyx_v_conv);
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 606 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 606, __pyx_L1_error)
+#line 622 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 622, __pyx_L1_error)
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     }
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     try {
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
       __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_13);
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 606 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 606, __pyx_L1_error)
+#line 622 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 622, __pyx_L1_error)
 
-#line 606 "root_numpy/src/converters.pyx"
+#line 622 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":599
+    /* "root_numpy/src/converters.pyx":615
  *     # Fixed-length array
  *     conv = find_converter_by_typename(typename + arraydef)
  *     if conv == NULL:             # <<<<<<<<<<<<<<
@@ -12524,10 +12770,10 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *         basic_conv = find_converter_by_typename(typename)
  */
 
-#line 599 "root_numpy/src/converters.pyx"
+#line 615 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":607
+  /* "root_numpy/src/converters.pyx":623
  *             <BasicConverter*> basic_conv, <PyObject*> shape)
  *         CONVERTERS.insert(CONVERTERS_ITEM_TYPE(typename + arraydef, conv))
  *     return conv             # <<<<<<<<<<<<<<
@@ -12535,13 +12781,13 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  * 
  */
 
-#line 607 "root_numpy/src/converters.pyx"
+#line 623 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_v_conv;
 
-#line 607 "root_numpy/src/converters.pyx"
+#line 623 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":567
+  /* "root_numpy/src/converters.pyx":583
  * 
  * 
  * cdef Converter* get_array_converter(string typename, arraydef):             # <<<<<<<<<<<<<<
@@ -12549,58 +12795,58 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *     arraytokens = arraydef.strip('[]')
  */
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_2);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("_librootnumpy.get_array_converter", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_arraytokens);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_shape);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_ndim);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_idim);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_token);
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 567 "root_numpy/src/converters.pyx"
+#line 583 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":610
+/* "root_numpy/src/converters.pyx":626
  * 
  * 
  * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
@@ -12608,97 +12854,97 @@ __pyx_t_2 = PyObject_GetIter(__pyx_v_arraytokens); if (unlikely(!__pyx_t_2)) __P
  *     cdef Converter* conv
  */
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(TLeaf *__pyx_v_leaf, struct __pyx_opt_args_13_librootnumpy_get_converter *__pyx_optional_args) {
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   char __pyx_v_type_code = ((char)'\x00');
   __pyx_t_13_librootnumpy_Converter *__pyx_v_conv
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   TLeaf *__pyx_v_leaf_count
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_leaf_length
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   CYTHON_UNUSED const char *__pyx_v_leaf_name
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   const char *__pyx_v_leaf_title
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_leaf_type = NULL
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_match = NULL
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_arraydef = NULL
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 ;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_Converter *__pyx_r;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_6 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   std::string __pyx_t_7;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE __pyx_t_8;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   int __pyx_t_9;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_10 = NULL;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   int __pyx_t_11;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("get_converter", 0);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   if (__pyx_optional_args) {
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
     if (__pyx_optional_args->__pyx_n > 0) {
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
       __pyx_v_type_code = __pyx_optional_args->type_code;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
     }
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":614
+  /* "root_numpy/src/converters.pyx":630
  *     cdef Converter* conv
  *     cdef Converter* basic_conv
  *     cdef TLeaf* leaf_count = leaf.GetLeafCount()             # <<<<<<<<<<<<<<
@@ -12706,10 +12952,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     cdef int ndim, idim, leaf_length
  */
 
-#line 614 "root_numpy/src/converters.pyx"
+#line 630 "root_numpy/src/converters.pyx"
   __pyx_v_leaf_count = __pyx_v_leaf->GetLeafCount();
 
-  /* "root_numpy/src/converters.pyx":618
+  /* "root_numpy/src/converters.pyx":634
  *     cdef int ndim, idim, leaf_length
  * 
  *     leaf_name = leaf.GetName()             # <<<<<<<<<<<<<<
@@ -12717,10 +12963,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     leaf_type = resolve_type(leaf.GetTypeName())
  */
 
-#line 618 "root_numpy/src/converters.pyx"
+#line 634 "root_numpy/src/converters.pyx"
   __pyx_v_leaf_name = __pyx_v_leaf->GetName();
 
-  /* "root_numpy/src/converters.pyx":619
+  /* "root_numpy/src/converters.pyx":635
  * 
  *     leaf_name = leaf.GetName()
  *     leaf_title = leaf.GetTitle()             # <<<<<<<<<<<<<<
@@ -12728,10 +12974,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  * 
  */
 
-#line 619 "root_numpy/src/converters.pyx"
+#line 635 "root_numpy/src/converters.pyx"
   __pyx_v_leaf_title = __pyx_v_leaf->GetTitle();
 
-  /* "root_numpy/src/converters.pyx":620
+  /* "root_numpy/src/converters.pyx":636
  *     leaf_name = leaf.GetName()
  *     leaf_title = leaf.GetTitle()
  *     leaf_type = resolve_type(leaf.GetTypeName())             # <<<<<<<<<<<<<<
@@ -12739,19 +12985,19 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     # Special case for null-terminated char array string
  */
 
-#line 620 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_f_13_librootnumpy_resolve_type(__pyx_v_leaf->GetTypeName()); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 620, __pyx_L1_error)
+#line 636 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_f_13_librootnumpy_resolve_type(__pyx_v_leaf->GetTypeName()); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 636, __pyx_L1_error)
 
-#line 620 "root_numpy/src/converters.pyx"
+#line 636 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 620 "root_numpy/src/converters.pyx"
+#line 636 "root_numpy/src/converters.pyx"
   __pyx_v_leaf_type = ((PyObject*)__pyx_t_1);
 
-#line 620 "root_numpy/src/converters.pyx"
+#line 636 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":623
+  /* "root_numpy/src/converters.pyx":639
  * 
  *     # Special case for null-terminated char array string
  *     if type_code == 'C':             # <<<<<<<<<<<<<<
@@ -12759,13 +13005,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
  */
 
-#line 623 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((__pyx_v_type_code == 'C') != 0);
 
-#line 623 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":624
+    /* "root_numpy/src/converters.pyx":640
  *     # Special case for null-terminated char array string
  *     if type_code == 'C':
  *         leaf_length = leaf.GetLenStatic()             # <<<<<<<<<<<<<<
@@ -12773,10 +13019,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         if conv == NULL:
  */
 
-#line 624 "root_numpy/src/converters.pyx"
+#line 640 "root_numpy/src/converters.pyx"
     __pyx_v_leaf_length = __pyx_v_leaf->GetLenStatic();
 
-    /* "root_numpy/src/converters.pyx":625
+    /* "root_numpy/src/converters.pyx":641
  *     if type_code == 'C':
  *         leaf_length = leaf.GetLenStatic()
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))             # <<<<<<<<<<<<<<
@@ -12784,175 +13030,175 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *             conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination
  */
 
-#line 625 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d_C, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d_C, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 625 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_leaf_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_leaf_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __pyx_t_5 = NULL;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       if (likely(__pyx_t_5)) {
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_INCREF(__pyx_t_5);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_INCREF(function);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_DECREF_SET(__pyx_t_3, function);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       }
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     }
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     if (!__pyx_t_5) {
 
-#line 625 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     } else {
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCALL
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       if (PyFunction_Check(__pyx_t_3)) {
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
 
-#line 625 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       } else
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       #endif
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCCALL
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
 
-#line 625 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       } else
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       #endif
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       {
 
-#line 625 "root_numpy/src/converters.pyx"
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_6);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_4);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __pyx_t_4 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
       }
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     }
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
-    __pyx_t_3 = PyNumber_Add(__pyx_v_leaf_type, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+    __pyx_t_3 = PyNumber_Add(__pyx_v_leaf_type, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_3);
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_3); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 625, __pyx_L1_error)
+#line 641 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_3); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 641, __pyx_L1_error)
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 625 "root_numpy/src/converters.pyx"
+#line 641 "root_numpy/src/converters.pyx"
     __pyx_v_conv = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_t_7);
 
-    /* "root_numpy/src/converters.pyx":626
+    /* "root_numpy/src/converters.pyx":642
  *         leaf_length = leaf.GetLenStatic()
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
  *         if conv == NULL:             # <<<<<<<<<<<<<<
@@ -12960,13 +13206,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
  */
 
-#line 626 "root_numpy/src/converters.pyx"
+#line 642 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((__pyx_v_conv == NULL) != 0);
 
-#line 626 "root_numpy/src/converters.pyx"
+#line 642 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":627
+      /* "root_numpy/src/converters.pyx":643
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
  *         if conv == NULL:
  *             conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination             # <<<<<<<<<<<<<<
@@ -12974,10 +13220,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         return conv
  */
 
-#line 627 "root_numpy/src/converters.pyx"
+#line 643 "root_numpy/src/converters.pyx"
       __pyx_v_conv = new __pyx_t_13_librootnumpy_CharArrayConverter((__pyx_v_leaf_length - 1));
 
-      /* "root_numpy/src/converters.pyx":628
+      /* "root_numpy/src/converters.pyx":644
  *         if conv == NULL:
  *             conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))             # <<<<<<<<<<<<<<
@@ -12985,208 +13231,208 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  * 
  */
 
-#line 628 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d_C, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d_C, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 628 "root_numpy/src/converters.pyx"
-      __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_leaf_length); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+      __pyx_t_6 = __Pyx_PyInt_From_int(__pyx_v_leaf_length); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __pyx_t_4 = NULL;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_1);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_4)) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_4);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_1, function);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         }
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       }
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       if (!__pyx_t_4) {
 
-#line 628 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       } else {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         #if CYTHON_FAST_PYCALL
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         if (PyFunction_Check(__pyx_t_1)) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
 
-#line 628 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         } else
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         #endif
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         #if CYTHON_FAST_PYCCALL
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
 
-#line 628 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         } else
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         #endif
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         {
 
-#line 628 "root_numpy/src/converters.pyx"
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_5);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_6);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_6);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __pyx_t_6 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         }
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       }
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PyNumber_Add(__pyx_v_leaf_type, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PyNumber_Add(__pyx_v_leaf_type, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       try {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __pyx_t_8 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_7, __pyx_v_conv);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       } catch(...) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __Pyx_CppExn2PyErr();
 
-#line 628 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       }
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       try {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_8);
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       } catch(...) {
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
         __Pyx_CppExn2PyErr();
 
-#line 628 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 628, __pyx_L1_error)
+#line 644 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 644, __pyx_L1_error)
 
-#line 628 "root_numpy/src/converters.pyx"
+#line 644 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":626
+      /* "root_numpy/src/converters.pyx":642
  *         leaf_length = leaf.GetLenStatic()
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
  *         if conv == NULL:             # <<<<<<<<<<<<<<
@@ -13194,10 +13440,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
  */
 
-#line 626 "root_numpy/src/converters.pyx"
+#line 642 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":629
+    /* "root_numpy/src/converters.pyx":645
  *             conv = new CharArrayConverter(leaf_length - 1)  # exclude null-termination
  *             CONVERTERS.insert(CONVERTERS_ITEM_TYPE(leaf_type + '[{0:d}]/C'.format(leaf_length), conv))
  *         return conv             # <<<<<<<<<<<<<<
@@ -13205,13 +13451,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     match = re.match(LEAF_PATTERN, leaf_title)
  */
 
-#line 629 "root_numpy/src/converters.pyx"
+#line 645 "root_numpy/src/converters.pyx"
     __pyx_r = __pyx_v_conv;
 
-#line 629 "root_numpy/src/converters.pyx"
+#line 645 "root_numpy/src/converters.pyx"
     goto __pyx_L0;
 
-    /* "root_numpy/src/converters.pyx":623
+    /* "root_numpy/src/converters.pyx":639
  * 
  *     # Special case for null-terminated char array string
  *     if type_code == 'C':             # <<<<<<<<<<<<<<
@@ -13219,10 +13465,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         conv = find_converter_by_typename(leaf_type + '[{0:d}]/C'.format(leaf_length))
  */
 
-#line 623 "root_numpy/src/converters.pyx"
+#line 639 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":631
+  /* "root_numpy/src/converters.pyx":647
  *         return conv
  * 
  *     match = re.match(LEAF_PATTERN, leaf_title)             # <<<<<<<<<<<<<<
@@ -13230,187 +13476,187 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         arraydef = match.group(1)
  */
 
-#line 631 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_re); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_re); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 631 "root_numpy/src/converters.pyx"
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_match); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_match); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_5);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_LEAF_PATTERN); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_LEAF_PATTERN); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_3);
 
-#line 631 "root_numpy/src/converters.pyx"
-  __pyx_t_6 = __Pyx_PyStr_FromString(__pyx_v_leaf_title); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+  __pyx_t_6 = __Pyx_PyStr_FromString(__pyx_v_leaf_title); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_6);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __pyx_t_4 = NULL;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __pyx_t_9 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     if (likely(__pyx_t_4)) {
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_4);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(function);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       __Pyx_DECREF_SET(__pyx_t_5, function);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       __pyx_t_9 = 1;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     }
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   }
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   #if CYTHON_FAST_PYCALL
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   if (PyFunction_Check(__pyx_t_5)) {
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_3, __pyx_t_6};
 
-#line 631 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   } else
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   #endif
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   #if CYTHON_FAST_PYCCALL
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_3, __pyx_t_6};
 
-#line 631 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   } else
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   #endif
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   {
 
-#line 631 "root_numpy/src/converters.pyx"
-    __pyx_t_10 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+    __pyx_t_10 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_10);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     if (__pyx_t_4) {
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_4); __pyx_t_4 = NULL;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     }
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_3);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_3);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GIVEREF(__pyx_t_6);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_t_6);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __pyx_t_3 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __pyx_t_6 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 631, __pyx_L1_error)
+#line 647 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 647, __pyx_L1_error)
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   }
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __pyx_v_match = __pyx_t_1;
 
-#line 631 "root_numpy/src/converters.pyx"
+#line 647 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":632
+  /* "root_numpy/src/converters.pyx":648
  * 
  *     match = re.match(LEAF_PATTERN, leaf_title)
  *     if match is not None:             # <<<<<<<<<<<<<<
@@ -13418,16 +13664,16 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         if arraydef is not None:
  */
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
   __pyx_t_2 = (__pyx_v_match != Py_None);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
   __pyx_t_11 = (__pyx_t_2 != 0);
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
   if (__pyx_t_11) {
 
-    /* "root_numpy/src/converters.pyx":633
+    /* "root_numpy/src/converters.pyx":649
  *     match = re.match(LEAF_PATTERN, leaf_title)
  *     if match is not None:
  *         arraydef = match.group(1)             # <<<<<<<<<<<<<<
@@ -13435,28 +13681,28 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *             if leaf_count != NULL:
  */
 
-#line 633 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_match, __pyx_n_s_group); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 633, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_match, __pyx_n_s_group); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 649, __pyx_L1_error)
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 633 "root_numpy/src/converters.pyx"
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 633, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 649, __pyx_L1_error)
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_5);
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
     __pyx_v_arraydef = __pyx_t_5;
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
     __pyx_t_5 = 0;
 
-    /* "root_numpy/src/converters.pyx":634
+    /* "root_numpy/src/converters.pyx":650
  *     if match is not None:
  *         arraydef = match.group(1)
  *         if arraydef is not None:             # <<<<<<<<<<<<<<
@@ -13464,16 +13710,16 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *                 # Ignore length-leaf name and use [] to denote variable-length first dimension
  */
 
-#line 634 "root_numpy/src/converters.pyx"
+#line 650 "root_numpy/src/converters.pyx"
     __pyx_t_11 = (__pyx_v_arraydef != Py_None);
 
-#line 634 "root_numpy/src/converters.pyx"
+#line 650 "root_numpy/src/converters.pyx"
     __pyx_t_2 = (__pyx_t_11 != 0);
 
-#line 634 "root_numpy/src/converters.pyx"
+#line 650 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":635
+      /* "root_numpy/src/converters.pyx":651
  *         arraydef = match.group(1)
  *         if arraydef is not None:
  *             if leaf_count != NULL:             # <<<<<<<<<<<<<<
@@ -13481,13 +13727,13 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]
  */
 
-#line 635 "root_numpy/src/converters.pyx"
+#line 651 "root_numpy/src/converters.pyx"
       __pyx_t_2 = ((__pyx_v_leaf_count != NULL) != 0);
 
-#line 635 "root_numpy/src/converters.pyx"
+#line 651 "root_numpy/src/converters.pyx"
       if (__pyx_t_2) {
 
-        /* "root_numpy/src/converters.pyx":637
+        /* "root_numpy/src/converters.pyx":653
  *             if leaf_count != NULL:
  *                 # Ignore length-leaf name and use [] to denote variable-length first dimension
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]             # <<<<<<<<<<<<<<
@@ -13495,46 +13741,46 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     return find_converter_by_typename(leaf_type)
  */
 
-#line 637 "root_numpy/src/converters.pyx"
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_find); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 653 "root_numpy/src/converters.pyx"
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_arraydef, __pyx_n_s_find); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 653, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_5);
 
-#line 637 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 653 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 653, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
-        __pyx_t_5 = __Pyx_PyObject_GetSlice(__pyx_v_arraydef, 0, 0, &__pyx_t_1, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 653 "root_numpy/src/converters.pyx"
+        __pyx_t_5 = __Pyx_PyObject_GetSlice(__pyx_v_arraydef, 0, 0, &__pyx_t_1, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 653, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_5);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = PyNumber_Add(__pyx_kp_s__11, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 653 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = PyNumber_Add(__pyx_kp_s__11, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 653, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __Pyx_DECREF_SET(__pyx_v_arraydef, __pyx_t_1);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
         __pyx_t_1 = 0;
 
-        /* "root_numpy/src/converters.pyx":635
+        /* "root_numpy/src/converters.pyx":651
  *         arraydef = match.group(1)
  *         if arraydef is not None:
  *             if leaf_count != NULL:             # <<<<<<<<<<<<<<
@@ -13542,10 +13788,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]
  */
 
-#line 635 "root_numpy/src/converters.pyx"
+#line 651 "root_numpy/src/converters.pyx"
       }
 
-      /* "root_numpy/src/converters.pyx":638
+      /* "root_numpy/src/converters.pyx":654
  *                 # Ignore length-leaf name and use [] to denote variable-length first dimension
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]
  *             return get_array_converter(leaf_type, arraydef)             # <<<<<<<<<<<<<<
@@ -13553,16 +13799,16 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  * 
  */
 
-#line 638 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_v_leaf_type); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 638, __pyx_L1_error)
+#line 654 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_v_leaf_type); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 654, __pyx_L1_error)
 
-#line 638 "root_numpy/src/converters.pyx"
+#line 654 "root_numpy/src/converters.pyx"
       __pyx_r = __pyx_f_13_librootnumpy_get_array_converter(__pyx_t_7, __pyx_v_arraydef);
 
-#line 638 "root_numpy/src/converters.pyx"
+#line 654 "root_numpy/src/converters.pyx"
       goto __pyx_L0;
 
-      /* "root_numpy/src/converters.pyx":634
+      /* "root_numpy/src/converters.pyx":650
  *     if match is not None:
  *         arraydef = match.group(1)
  *         if arraydef is not None:             # <<<<<<<<<<<<<<
@@ -13570,10 +13816,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *                 # Ignore length-leaf name and use [] to denote variable-length first dimension
  */
 
-#line 634 "root_numpy/src/converters.pyx"
+#line 650 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":632
+    /* "root_numpy/src/converters.pyx":648
  * 
  *     match = re.match(LEAF_PATTERN, leaf_title)
  *     if match is not None:             # <<<<<<<<<<<<<<
@@ -13581,10 +13827,10 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *         if arraydef is not None:
  */
 
-#line 632 "root_numpy/src/converters.pyx"
+#line 648 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":639
+  /* "root_numpy/src/converters.pyx":655
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]
  *             return get_array_converter(leaf_type, arraydef)
  *     return find_converter_by_typename(leaf_type)             # <<<<<<<<<<<<<<
@@ -13592,16 +13838,16 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  * 
  */
 
-#line 639 "root_numpy/src/converters.pyx"
-  __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_v_leaf_type); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 639, __pyx_L1_error)
+#line 655 "root_numpy/src/converters.pyx"
+  __pyx_t_7 = __pyx_convert_string_from_py_std__in_string(__pyx_v_leaf_type); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 655, __pyx_L1_error)
 
-#line 639 "root_numpy/src/converters.pyx"
+#line 655 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_f_13_librootnumpy_find_converter_by_typename(__pyx_t_7);
 
-#line 639 "root_numpy/src/converters.pyx"
+#line 655 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":610
+  /* "root_numpy/src/converters.pyx":626
  * 
  * 
  * cdef Converter* get_converter(TLeaf* leaf, char type_code='\0') except *:             # <<<<<<<<<<<<<<
@@ -13609,61 +13855,61 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     cdef Converter* conv
  */
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_6);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_10);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_AddTraceback("_librootnumpy.get_converter", __pyx_clineno, __pyx_lineno, __pyx_filename);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_leaf_type);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_match);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_arraydef);
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 610 "root_numpy/src/converters.pyx"
+#line 626 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":643
+/* "root_numpy/src/converters.pyx":659
  * 
  * @atexit.register
  * def cleanup():             # <<<<<<<<<<<<<<
@@ -13671,70 +13917,70 @@ static __pyx_t_13_librootnumpy_Converter *__pyx_f_13_librootnumpy_get_converter(
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  */
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 /* Python wrapper */
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_1cleanup(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyMethodDef __pyx_mdef_13_librootnumpy_1cleanup = 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 {"cleanup", (PyCFunction)__pyx_pw_13_librootnumpy_1cleanup, METH_NOARGS, 0};
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 static PyObject *__pyx_pw_13_librootnumpy_1cleanup(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("cleanup (wrapper)", 0);
   __pyx_r = 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 __pyx_pf_13_librootnumpy_cleanup(__pyx_self);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 }
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_self) {
   std::map<std::string,__pyx_t_13_librootnumpy_Converter *> ::iterator __pyx_v_it
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 ;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   PyObject *__pyx_r = NULL;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   int __pyx_t_1;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("cleanup", 0);
 
-  /* "root_numpy/src/converters.pyx":645
+  /* "root_numpy/src/converters.pyx":661
  * def cleanup():
  *     # Delete all converters when module is town down
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()             # <<<<<<<<<<<<<<
@@ -13742,10 +13988,10 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  *         del deref(it).second
  */
 
-#line 645 "root_numpy/src/converters.pyx"
+#line 661 "root_numpy/src/converters.pyx"
   __pyx_v_it = __pyx_v_13_librootnumpy_CONVERTERS.begin();
 
-  /* "root_numpy/src/converters.pyx":646
+  /* "root_numpy/src/converters.pyx":662
  *     # Delete all converters when module is town down
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  *     while it != CONVERTERS.end():             # <<<<<<<<<<<<<<
@@ -13753,16 +13999,16 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  *         inc(it)
  */
 
-#line 646 "root_numpy/src/converters.pyx"
+#line 662 "root_numpy/src/converters.pyx"
   while (1) {
 
-#line 646 "root_numpy/src/converters.pyx"
+#line 662 "root_numpy/src/converters.pyx"
     __pyx_t_1 = ((__pyx_v_it != __pyx_v_13_librootnumpy_CONVERTERS.end()) != 0);
 
-#line 646 "root_numpy/src/converters.pyx"
+#line 662 "root_numpy/src/converters.pyx"
     if (!__pyx_t_1) break;
 
-    /* "root_numpy/src/converters.pyx":647
+    /* "root_numpy/src/converters.pyx":663
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  *     while it != CONVERTERS.end():
  *         del deref(it).second             # <<<<<<<<<<<<<<
@@ -13770,10 +14016,10 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  * 
  */
 
-#line 647 "root_numpy/src/converters.pyx"
+#line 663 "root_numpy/src/converters.pyx"
     delete (*__pyx_v_it).second;
 
-    /* "root_numpy/src/converters.pyx":648
+    /* "root_numpy/src/converters.pyx":664
  *     while it != CONVERTERS.end():
  *         del deref(it).second
  *         inc(it)             # <<<<<<<<<<<<<<
@@ -13781,13 +14027,13 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  * 
  */
 
-#line 648 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
     (++__pyx_v_it);
 
-#line 648 "root_numpy/src/converters.pyx"
+#line 664 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":643
+  /* "root_numpy/src/converters.pyx":659
  * 
  * @atexit.register
  * def cleanup():             # <<<<<<<<<<<<<<
@@ -13795,28 +14041,28 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  */
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_XGIVEREF(__pyx_r);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":657
+/* "root_numpy/src/converters.pyx":673
  * cdef cppclass NP2ROOTConverter:
  * 
  *     void fill_from(void* source):             # <<<<<<<<<<<<<<
@@ -13824,31 +14070,31 @@ static PyObject *__pyx_pf_13_librootnumpy_cleanup(CYTHON_UNUSED PyObject *__pyx_
  * 
  */
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
 
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
 void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__pyx_v_source) {
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("fill_from", 0);
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
 
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 657 "root_numpy/src/converters.pyx"
+#line 673 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":666
+/* "root_numpy/src/converters.pyx":682
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -13856,16 +14102,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
 
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(TTree *__pyx_v_tree, std::string __pyx_v_name, std::string __pyx_v_roottype, int __pyx_v_length, int __pyx_v_elembytes, struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ *__pyx_optional_args) {
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   int __pyx_v_ndim = ((int)0);
 
-  /* "root_numpy/src/converters.pyx":668
+  /* "root_numpy/src/converters.pyx":684
  *     __init__(TTree* tree, string name, string roottype,
  *              int length, int elembytes,
  *              int ndim=0, SIZE_t* dims=NULL):             # <<<<<<<<<<<<<<
@@ -13873,88 +14119,88 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         cdef int axis
  */
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims = ((__pyx_t_13_librootnumpy_SIZE_t *)NULL);
   std::string __pyx_v_leaflist
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_axis
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_token = NULL
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
 ;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   std::string __pyx_t_1;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_3 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   int __pyx_t_5;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   int __pyx_t_6;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   int __pyx_t_7;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_8 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_9 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_10 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   char *__pyx_t_11;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_12 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_13 = NULL;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<init>", 0);
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   if (__pyx_optional_args) {
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     if (__pyx_optional_args->__pyx_n > 0) {
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       __pyx_v_ndim = __pyx_optional_args->ndim;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       if (__pyx_optional_args->__pyx_n > 1) {
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
         __pyx_v_dims = __pyx_optional_args->dims;
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
       }
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
     }
 
-#line 668 "root_numpy/src/converters.pyx"
+#line 684 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":671
+  /* "root_numpy/src/converters.pyx":687
  *         cdef string leaflist
  *         cdef int axis
  *         this.nbytes = length * elembytes             # <<<<<<<<<<<<<<
@@ -13962,10 +14208,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             # include null-termination
  */
 
-#line 671 "root_numpy/src/converters.pyx"
+#line 687 "root_numpy/src/converters.pyx"
   this->nbytes = (__pyx_v_length * __pyx_v_elembytes);
 
-  /* "root_numpy/src/converters.pyx":672
+  /* "root_numpy/src/converters.pyx":688
  *         cdef int axis
  *         this.nbytes = length * elembytes
  *         if roottype.compare('C') == 0:             # <<<<<<<<<<<<<<
@@ -13973,16 +14219,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes + 1)
  */
 
-#line 672 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 672, __pyx_L1_error)
+#line 688 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 688, __pyx_L1_error)
 
-#line 672 "root_numpy/src/converters.pyx"
+#line 688 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((__pyx_v_roottype.compare(__pyx_t_1) == 0) != 0);
 
-#line 672 "root_numpy/src/converters.pyx"
+#line 688 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":674
+    /* "root_numpy/src/converters.pyx":690
  *         if roottype.compare('C') == 0:
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)             # <<<<<<<<<<<<<<
@@ -13990,10 +14236,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))
  */
 
-#line 674 "root_numpy/src/converters.pyx"
+#line 690 "root_numpy/src/converters.pyx"
     this->value = malloc((nbytes + 1));
 
-    /* "root_numpy/src/converters.pyx":675
+    /* "root_numpy/src/converters.pyx":691
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -14001,13 +14247,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             (<char*> this.value)[nbytes] = '\0'
  */
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 691 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((this->value == NULL) != 0);
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 691 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":676
+      /* "root_numpy/src/converters.pyx":692
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))             # <<<<<<<<<<<<<<
@@ -14015,55 +14261,55 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 676 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyInt_From_long((nbytes + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 676, __pyx_L1_error)
+#line 692 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyInt_From_long((nbytes + 1)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 692, __pyx_L1_error)
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 676 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 676, __pyx_L1_error)
+#line 692 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 692, __pyx_L1_error)
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 676 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 676, __pyx_L1_error)
+#line 692 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 692, __pyx_L1_error)
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_4);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __pyx_t_4 = 0;
 
-#line 676 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 676, __pyx_L1_error)
+#line 692 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 692, __pyx_L1_error)
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_4, 0, 0, 0);
 
-#line 676 "root_numpy/src/converters.pyx"
+#line 692 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 676 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 676, __pyx_L1_error)
+#line 692 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 692, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":675
+      /* "root_numpy/src/converters.pyx":691
  *             # include null-termination
  *             this.value = malloc(nbytes + 1)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -14071,10 +14317,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             (<char*> this.value)[nbytes] = '\0'
  */
 
-#line 675 "root_numpy/src/converters.pyx"
+#line 691 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":677
+    /* "root_numpy/src/converters.pyx":693
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % (nbytes + 1))
  *             (<char*> this.value)[nbytes] = '\0'             # <<<<<<<<<<<<<<
@@ -14082,10 +14328,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes)
  */
 
-#line 677 "root_numpy/src/converters.pyx"
+#line 693 "root_numpy/src/converters.pyx"
     (((char *)this->value)[nbytes]) = '\x00';
 
-    /* "root_numpy/src/converters.pyx":672
+    /* "root_numpy/src/converters.pyx":688
  *         cdef int axis
  *         this.nbytes = length * elembytes
  *         if roottype.compare('C') == 0:             # <<<<<<<<<<<<<<
@@ -14093,13 +14339,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.value = malloc(nbytes + 1)
  */
 
-#line 672 "root_numpy/src/converters.pyx"
+#line 688 "root_numpy/src/converters.pyx"
     goto __pyx_L3;
 
-#line 672 "root_numpy/src/converters.pyx"
+#line 688 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":679
+  /* "root_numpy/src/converters.pyx":695
  *             (<char*> this.value)[nbytes] = '\0'
  *         else:
  *             this.value = malloc(nbytes)             # <<<<<<<<<<<<<<
@@ -14107,13 +14353,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)
  */
 
-#line 679 "root_numpy/src/converters.pyx"
+#line 695 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 679 "root_numpy/src/converters.pyx"
+#line 695 "root_numpy/src/converters.pyx"
     this->value = malloc(nbytes);
 
-    /* "root_numpy/src/converters.pyx":680
+    /* "root_numpy/src/converters.pyx":696
  *         else:
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -14121,13 +14367,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         # Construct leaflist name
  */
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 696 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((this->value == NULL) != 0);
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 696 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":681
+      /* "root_numpy/src/converters.pyx":697
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)             # <<<<<<<<<<<<<<
@@ -14135,55 +14381,55 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist = name
  */
 
-#line 681 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyInt_From_int(nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 681, __pyx_L1_error)
+#line 697 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyInt_From_int(nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 697, __pyx_L1_error)
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 681 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 681, __pyx_L1_error)
+#line 697 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 697, __pyx_L1_error)
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 681 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 681, __pyx_L1_error)
+#line 697 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 697, __pyx_L1_error)
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_3);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-#line 681 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 681, __pyx_L1_error)
+#line 697 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 697, __pyx_L1_error)
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
 
-#line 681 "root_numpy/src/converters.pyx"
+#line 697 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 681 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 681, __pyx_L1_error)
+#line 697 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 697, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":680
+      /* "root_numpy/src/converters.pyx":696
  *         else:
  *             this.value = malloc(nbytes)
  *             if this.value == NULL:             # <<<<<<<<<<<<<<
@@ -14191,16 +14437,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         # Construct leaflist name
  */
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 696 "root_numpy/src/converters.pyx"
     }
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 696 "root_numpy/src/converters.pyx"
   }
 
-#line 680 "root_numpy/src/converters.pyx"
+#line 696 "root_numpy/src/converters.pyx"
   __pyx_L3:;
 
-  /* "root_numpy/src/converters.pyx":683
+  /* "root_numpy/src/converters.pyx":699
  *                 raise MemoryError("could not allocate %d bytes" % nbytes)
  *         # Construct leaflist name
  *         leaflist = name             # <<<<<<<<<<<<<<
@@ -14208,10 +14454,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             for axis in range(ndim):
  */
 
-#line 683 "root_numpy/src/converters.pyx"
+#line 699 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist = __pyx_v_name;
 
-  /* "root_numpy/src/converters.pyx":684
+  /* "root_numpy/src/converters.pyx":700
  *         # Construct leaflist name
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:             # <<<<<<<<<<<<<<
@@ -14219,40 +14465,40 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  */
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   __pyx_t_5 = ((__pyx_v_ndim > 0) != 0);
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   if (__pyx_t_5) {
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   } else {
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
     __pyx_t_2 = __pyx_t_5;
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
     goto __pyx_L7_bool_binop_done;
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   }
 
-#line 684 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 684, __pyx_L1_error)
+#line 700 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 700, __pyx_L1_error)
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   __pyx_t_5 = ((__pyx_v_roottype.compare(__pyx_t_1) != 0) != 0);
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   __pyx_t_2 = __pyx_t_5;
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   __pyx_L7_bool_binop_done:;
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":685
+    /* "root_numpy/src/converters.pyx":701
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):             # <<<<<<<<<<<<<<
@@ -14260,16 +14506,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 leaflist.append(<char*> token)
  */
 
-#line 685 "root_numpy/src/converters.pyx"
+#line 701 "root_numpy/src/converters.pyx"
     __pyx_t_6 = __pyx_v_ndim;
 
-#line 685 "root_numpy/src/converters.pyx"
+#line 701 "root_numpy/src/converters.pyx"
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
 
-#line 685 "root_numpy/src/converters.pyx"
+#line 701 "root_numpy/src/converters.pyx"
       __pyx_v_axis = __pyx_t_7;
 
-      /* "root_numpy/src/converters.pyx":686
+      /* "root_numpy/src/converters.pyx":702
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')             # <<<<<<<<<<<<<<
@@ -14277,181 +14523,181 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist.append(b'/')
  */
 
-#line 686 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_0_d, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 686 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[__pyx_v_axis])); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = __Pyx_PyInt_From_Py_intptr_t((__pyx_v_dims[__pyx_v_axis])); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __pyx_t_9 = NULL;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_4);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_9)) {
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_9);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_4, function);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         }
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       }
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       if (!__pyx_t_9) {
 
-#line 686 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       } else {
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         #if CYTHON_FAST_PYCALL
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         if (PyFunction_Check(__pyx_t_4)) {
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
 
-#line 686 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         } else
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         #endif
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         #if CYTHON_FAST_PYCCALL
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
 
-#line 686 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         } else
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         #endif
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         {
 
-#line 686 "root_numpy/src/converters.pyx"
-          __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+          __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_10);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_8);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           PyTuple_SET_ITEM(__pyx_t_10, 0+1, __pyx_t_8);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __pyx_t_8 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
-          __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+          __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_GOTREF(__pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
           __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
         }
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       }
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_encode); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF_SET(__pyx_v_token, __pyx_t_3);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-      /* "root_numpy/src/converters.pyx":687
+      /* "root_numpy/src/converters.pyx":703
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  *                 leaflist.append(<char*> token)             # <<<<<<<<<<<<<<
@@ -14459,16 +14705,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         leaflist.append(roottype)
  */
 
-#line 687 "root_numpy/src/converters.pyx"
-      __pyx_t_11 = __Pyx_PyObject_AsString(__pyx_v_token); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(1, 687, __pyx_L1_error)
+#line 703 "root_numpy/src/converters.pyx"
+      __pyx_t_11 = __Pyx_PyObject_AsString(__pyx_v_token); if (unlikely((!__pyx_t_11) && PyErr_Occurred())) __PYX_ERR(1, 703, __pyx_L1_error)
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 703 "root_numpy/src/converters.pyx"
       __pyx_v_leaflist.append(((char *)__pyx_t_11));
 
-#line 687 "root_numpy/src/converters.pyx"
+#line 703 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":684
+    /* "root_numpy/src/converters.pyx":700
  *         # Construct leaflist name
  *         leaflist = name
  *         if ndim > 0 and roottype.compare('C') != 0:             # <<<<<<<<<<<<<<
@@ -14476,10 +14722,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  */
 
-#line 684 "root_numpy/src/converters.pyx"
+#line 700 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":688
+  /* "root_numpy/src/converters.pyx":704
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')
  *                 leaflist.append(<char*> token)
  *         leaflist.append(b'/')             # <<<<<<<<<<<<<<
@@ -14487,10 +14733,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         this.branch = tree.GetBranch(name.c_str())
  */
 
-#line 688 "root_numpy/src/converters.pyx"
+#line 704 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist.append(((char *)"/"));
 
-  /* "root_numpy/src/converters.pyx":689
+  /* "root_numpy/src/converters.pyx":705
  *                 leaflist.append(<char*> token)
  *         leaflist.append(b'/')
  *         leaflist.append(roottype)             # <<<<<<<<<<<<<<
@@ -14498,10 +14744,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         if this.branch == NULL:
  */
 
-#line 689 "root_numpy/src/converters.pyx"
+#line 705 "root_numpy/src/converters.pyx"
   __pyx_v_leaflist.append(__pyx_v_roottype);
 
-  /* "root_numpy/src/converters.pyx":690
+  /* "root_numpy/src/converters.pyx":706
  *         leaflist.append(b'/')
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())             # <<<<<<<<<<<<<<
@@ -14509,10 +14755,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.branch = tree.Branch(name.c_str(), this.value, leaflist.c_str())
  */
 
-#line 690 "root_numpy/src/converters.pyx"
+#line 706 "root_numpy/src/converters.pyx"
   this->branch = __pyx_v_tree->GetBranch(__pyx_v_name.c_str());
 
-  /* "root_numpy/src/converters.pyx":691
+  /* "root_numpy/src/converters.pyx":707
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:             # <<<<<<<<<<<<<<
@@ -14520,13 +14766,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 691 "root_numpy/src/converters.pyx"
+#line 707 "root_numpy/src/converters.pyx"
   __pyx_t_2 = ((this->branch == NULL) != 0);
 
-#line 691 "root_numpy/src/converters.pyx"
+#line 707 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":692
+    /* "root_numpy/src/converters.pyx":708
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:
  *             this.branch = tree.Branch(name.c_str(), this.value, leaflist.c_str())             # <<<<<<<<<<<<<<
@@ -14534,10 +14780,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             # check type compatibility of existing branch
  */
 
-#line 692 "root_numpy/src/converters.pyx"
+#line 708 "root_numpy/src/converters.pyx"
     this->branch = __pyx_v_tree->Branch(__pyx_v_name.c_str(), this->value, __pyx_v_leaflist.c_str());
 
-    /* "root_numpy/src/converters.pyx":691
+    /* "root_numpy/src/converters.pyx":707
  *         leaflist.append(roottype)
  *         this.branch = tree.GetBranch(name.c_str())
  *         if this.branch == NULL:             # <<<<<<<<<<<<<<
@@ -14545,13 +14791,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         else:
  */
 
-#line 691 "root_numpy/src/converters.pyx"
+#line 707 "root_numpy/src/converters.pyx"
     goto __pyx_L11;
 
-#line 691 "root_numpy/src/converters.pyx"
+#line 707 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":695
+  /* "root_numpy/src/converters.pyx":711
  *         else:
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:             # <<<<<<<<<<<<<<
@@ -14559,34 +14805,34 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "field '{0}' of type '{1}' is not compatible "
  */
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
   /*else*/ {
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     try {
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
       __pyx_t_1 = std::string(this->branch->GetTitle());
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 695 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 695, __pyx_L1_error)
+#line 711 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 711, __pyx_L1_error)
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     }
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     __pyx_t_2 = ((__pyx_v_leaflist.compare(__pyx_t_1) != 0) != 0);
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     if (__pyx_t_2) {
 
-      /* "root_numpy/src/converters.pyx":698
+      /* "root_numpy/src/converters.pyx":714
  *                 raise TypeError(
  *                     "field '{0}' of type '{1}' is not compatible "
  *                     "with existing branch of type '{2}'".format(             # <<<<<<<<<<<<<<
@@ -14594,13 +14840,13 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *             this.branch.SetAddress(this.value)
  */
 
-#line 698 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_field_0_of_type_1_is_not_compati, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 698, __pyx_L1_error)
+#line 714 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_field_0_of_type_1_is_not_compati, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 714, __pyx_L1_error)
 
-#line 698 "root_numpy/src/converters.pyx"
+#line 714 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-      /* "root_numpy/src/converters.pyx":699
+      /* "root_numpy/src/converters.pyx":715
  *                     "field '{0}' of type '{1}' is not compatible "
  *                     "with existing branch of type '{2}'".format(
  *                         name, leaflist, str(this.branch.GetTitle())))             # <<<<<<<<<<<<<<
@@ -14608,211 +14854,211 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         this.branch.SetStatus(1)
  */
 
-#line 699 "root_numpy/src/converters.pyx"
-      __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 699, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+      __pyx_t_10 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(1, 715, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_10);
 
-#line 699 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_leaflist); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 699, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = __pyx_convert_PyStr_string_to_py_std__in_string(__pyx_v_leaflist); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 715, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 699 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = __Pyx_PyStr_FromString(this->branch->GetTitle()); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 699, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = __Pyx_PyStr_FromString(this->branch->GetTitle()); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 715, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
-      __pyx_t_12 = PyTuple_New(1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 699, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+      __pyx_t_12 = PyTuple_New(1); if (unlikely(!__pyx_t_12)) __PYX_ERR(1, 715, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_12);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __pyx_t_9 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_12, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 699, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = __Pyx_PyObject_Call(((PyObject *)(&PyString_Type)), __pyx_t_12, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 715, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __pyx_t_6 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_4);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         if (likely(__pyx_t_12)) {
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(__pyx_t_12);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           __Pyx_INCREF(function);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           __Pyx_DECREF_SET(__pyx_t_4, function);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           __pyx_t_6 = 1;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         }
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       }
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCALL
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       if (PyFunction_Check(__pyx_t_4)) {
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[4] = {__pyx_t_12, __pyx_t_10, __pyx_t_8, __pyx_t_9};
 
-#line 699 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 698, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 714, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       } else
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       #endif
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       #if CYTHON_FAST_PYCCALL
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         PyObject *__pyx_temp[4] = {__pyx_t_12, __pyx_t_10, __pyx_t_8, __pyx_t_9};
 
-#line 699 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 698, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_6, 3+__pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 714, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       } else
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       #endif
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       {
 
-#line 699 "root_numpy/src/converters.pyx"
-        __pyx_t_13 = PyTuple_New(3+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(1, 698, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+        __pyx_t_13 = PyTuple_New(3+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(1, 714, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_13);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         if (__pyx_t_12) {
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         }
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_10);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_t_10);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_8);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_t_8);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GIVEREF(__pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_t_9);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __pyx_t_10 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __pyx_t_8 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __pyx_t_9 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_13, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 698, __pyx_L1_error)
+#line 715 "root_numpy/src/converters.pyx"
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_13, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 714, __pyx_L1_error)
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_3);
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       }
 
-#line 699 "root_numpy/src/converters.pyx"
+#line 715 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "root_numpy/src/converters.pyx":696
+      /* "root_numpy/src/converters.pyx":712
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:
  *                 raise TypeError(             # <<<<<<<<<<<<<<
@@ -14820,40 +15066,40 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "with existing branch of type '{2}'".format(
  */
 
-#line 696 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 696, __pyx_L1_error)
+#line 712 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 712, __pyx_L1_error)
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_3);
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __pyx_t_3 = 0;
 
-#line 696 "root_numpy/src/converters.pyx"
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 696, __pyx_L1_error)
+#line 712 "root_numpy/src/converters.pyx"
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 712, __pyx_L1_error)
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_3);
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
 
-#line 696 "root_numpy/src/converters.pyx"
+#line 712 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-#line 696 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 696, __pyx_L1_error)
+#line 712 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 712, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":695
+      /* "root_numpy/src/converters.pyx":711
  *         else:
  *             # check type compatibility of existing branch
  *             if leaflist.compare(string(this.branch.GetTitle())) != 0:             # <<<<<<<<<<<<<<
@@ -14861,10 +15107,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *                     "field '{0}' of type '{1}' is not compatible "
  */
 
-#line 695 "root_numpy/src/converters.pyx"
+#line 711 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":700
+    /* "root_numpy/src/converters.pyx":716
  *                     "with existing branch of type '{2}'".format(
  *                         name, leaflist, str(this.branch.GetTitle())))
  *             this.branch.SetAddress(this.value)             # <<<<<<<<<<<<<<
@@ -14872,16 +15118,16 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  * 
  */
 
-#line 700 "root_numpy/src/converters.pyx"
+#line 716 "root_numpy/src/converters.pyx"
     this->branch->SetAddress(this->value);
 
-#line 700 "root_numpy/src/converters.pyx"
+#line 716 "root_numpy/src/converters.pyx"
   }
 
-#line 700 "root_numpy/src/converters.pyx"
+#line 716 "root_numpy/src/converters.pyx"
   __pyx_L11:;
 
-  /* "root_numpy/src/converters.pyx":701
+  /* "root_numpy/src/converters.pyx":717
  *                         name, leaflist, str(this.branch.GetTitle())))
  *             this.branch.SetAddress(this.value)
  *         this.branch.SetStatus(1)             # <<<<<<<<<<<<<<
@@ -14889,10 +15135,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *     __dealloc__():
  */
 
-#line 701 "root_numpy/src/converters.pyx"
+#line 717 "root_numpy/src/converters.pyx"
   this->branch->SetStatus(1);
 
-  /* "root_numpy/src/converters.pyx":666
+  /* "root_numpy/src/converters.pyx":682
  *     TBranch* branch
  * 
  *     __init__(TTree* tree, string name, string roottype,             # <<<<<<<<<<<<<<
@@ -14900,55 +15146,55 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *              int ndim=0, SIZE_t* dims=NULL):
  */
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
 
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_3);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_8);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_9);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_10);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_12);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_13);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("FixedNP2ROOTConverter.<init>", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_token);
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 666 "root_numpy/src/converters.pyx"
+#line 682 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":703
+/* "root_numpy/src/converters.pyx":719
  *         this.branch.SetStatus(1)
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -14956,19 +15202,19 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  * 
  */
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
 
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
  __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::~__pyx_t_13_librootnumpy_FixedNP2ROOTConverter(void) {
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("<del>", 0);
 
-  /* "root_numpy/src/converters.pyx":704
+  /* "root_numpy/src/converters.pyx":720
  * 
  *     __dealloc__():
  *         free(this.value)             # <<<<<<<<<<<<<<
@@ -14976,10 +15222,10 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *     void fill_from(void* source):
  */
 
-#line 704 "root_numpy/src/converters.pyx"
+#line 720 "root_numpy/src/converters.pyx"
   free(this->value);
 
-  /* "root_numpy/src/converters.pyx":703
+  /* "root_numpy/src/converters.pyx":719
  *         this.branch.SetStatus(1)
  * 
  *     __dealloc__():             # <<<<<<<<<<<<<<
@@ -14987,19 +15233,19 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  * 
  */
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
 
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 703 "root_numpy/src/converters.pyx"
+#line 719 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":706
+/* "root_numpy/src/converters.pyx":722
  *         free(this.value)
  * 
  *     void fill_from(void* source):             # <<<<<<<<<<<<<<
@@ -15007,19 +15253,19 @@ void __pyx_t_13_librootnumpy_NP2ROOTConverter::fill_from(CYTHON_UNUSED void *__p
  *         this.branch.Fill()
  */
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
 
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
 void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_source) {
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("fill_from", 0);
 
-  /* "root_numpy/src/converters.pyx":707
+  /* "root_numpy/src/converters.pyx":723
  * 
  *     void fill_from(void* source):
  *         memcpy(this.value, source, this.nbytes)             # <<<<<<<<<<<<<<
@@ -15027,10 +15273,10 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  * 
  */
 
-#line 707 "root_numpy/src/converters.pyx"
+#line 723 "root_numpy/src/converters.pyx"
   memcpy(this->value, __pyx_v_source, this->nbytes);
 
-  /* "root_numpy/src/converters.pyx":708
+  /* "root_numpy/src/converters.pyx":724
  *     void fill_from(void* source):
  *         memcpy(this.value, source, this.nbytes)
  *         this.branch.Fill()             # <<<<<<<<<<<<<<
@@ -15038,10 +15284,10 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  * 
  */
 
-#line 708 "root_numpy/src/converters.pyx"
+#line 724 "root_numpy/src/converters.pyx"
   this->branch->Fill();
 
-  /* "root_numpy/src/converters.pyx":706
+  /* "root_numpy/src/converters.pyx":722
  *         free(this.value)
  * 
  *     void fill_from(void* source):             # <<<<<<<<<<<<<<
@@ -15049,19 +15295,19 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  *         this.branch.Fill()
  */
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
 
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 706 "root_numpy/src/converters.pyx"
+#line 722 "root_numpy/src/converters.pyx"
 }
 
-/* "root_numpy/src/converters.pyx":711
+/* "root_numpy/src/converters.pyx":727
  * 
  * 
  * cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):             # <<<<<<<<<<<<<<
@@ -15069,97 +15315,97 @@ void __pyx_t_13_librootnumpy_FixedNP2ROOTConverter::fill_from(void *__pyx_v_sour
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  */
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np2root_converter(TTree *__pyx_v_tree, PyObject *__pyx_v_name, PyObject *__pyx_v_dtype) {
   __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_v_conv
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_axis
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_ndim
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   int __pyx_v_length
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   __pyx_t_13_librootnumpy_SIZE_t *__pyx_v_dims
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_subdtype = NULL
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_shape = NULL
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_elembytes = NULL
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
   PyObject *__pyx_v_roottype = NULL
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 ;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_r;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyDeclarations
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_1 = NULL;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   int __pyx_t_2;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   int __pyx_t_3;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_4 = NULL;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_5 = NULL;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   PyObject *(*__pyx_t_6)(PyObject *);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   Py_ssize_t __pyx_t_7;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   int __pyx_t_8;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   int __pyx_t_9;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_SIZE_t __pyx_t_10;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   PyObject *__pyx_t_11 = NULL;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   std::string __pyx_t_12;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   std::string __pyx_t_13;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_t_13_librootnumpy_FixedNP2ROOTConverter *__pyx_t_14;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   struct __pyx_opt_args_21FixedNP2ROOTConverter___init__ __pyx_t_15;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_RefNannySetupContext("find_np2root_converter", 0);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_INCREF(__pyx_v_dtype);
 
-  /* "root_numpy/src/converters.pyx":715
+  /* "root_numpy/src/converters.pyx":731
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  *     # Handle np.object (array) columns
  *     cdef NP2ROOTConverter* conv = NULL             # <<<<<<<<<<<<<<
@@ -15167,10 +15413,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     cdef int length = 1
  */
 
-#line 715 "root_numpy/src/converters.pyx"
+#line 731 "root_numpy/src/converters.pyx"
   __pyx_v_conv = NULL;
 
-  /* "root_numpy/src/converters.pyx":716
+  /* "root_numpy/src/converters.pyx":732
  *     # Handle np.object (array) columns
  *     cdef NP2ROOTConverter* conv = NULL
  *     cdef int axis, ndim = 0             # <<<<<<<<<<<<<<
@@ -15178,10 +15424,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     cdef SIZE_t* dims = NULL
  */
 
-#line 716 "root_numpy/src/converters.pyx"
+#line 732 "root_numpy/src/converters.pyx"
   __pyx_v_ndim = 0;
 
-  /* "root_numpy/src/converters.pyx":717
+  /* "root_numpy/src/converters.pyx":733
  *     cdef NP2ROOTConverter* conv = NULL
  *     cdef int axis, ndim = 0
  *     cdef int length = 1             # <<<<<<<<<<<<<<
@@ -15189,10 +15435,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     subdtype = dtype.subdtype
  */
 
-#line 717 "root_numpy/src/converters.pyx"
+#line 733 "root_numpy/src/converters.pyx"
   __pyx_v_length = 1;
 
-  /* "root_numpy/src/converters.pyx":718
+  /* "root_numpy/src/converters.pyx":734
  *     cdef int axis, ndim = 0
  *     cdef int length = 1
  *     cdef SIZE_t* dims = NULL             # <<<<<<<<<<<<<<
@@ -15200,10 +15446,10 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *     if subdtype is not None:
  */
 
-#line 718 "root_numpy/src/converters.pyx"
+#line 734 "root_numpy/src/converters.pyx"
   __pyx_v_dims = NULL;
 
-  /* "root_numpy/src/converters.pyx":719
+  /* "root_numpy/src/converters.pyx":735
  *     cdef int length = 1
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype             # <<<<<<<<<<<<<<
@@ -15211,19 +15457,19 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         # Fixed-size subarray type
  */
 
-#line 719 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_subdtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 719, __pyx_L1_error)
+#line 735 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_subdtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 735, __pyx_L1_error)
 
-#line 719 "root_numpy/src/converters.pyx"
+#line 735 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 719 "root_numpy/src/converters.pyx"
+#line 735 "root_numpy/src/converters.pyx"
   __pyx_v_subdtype = __pyx_t_1;
 
-#line 719 "root_numpy/src/converters.pyx"
+#line 735 "root_numpy/src/converters.pyx"
   __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":720
+  /* "root_numpy/src/converters.pyx":736
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype
  *     if subdtype is not None:             # <<<<<<<<<<<<<<
@@ -15231,16 +15477,16 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         dtype, shape = subdtype
  */
 
-#line 720 "root_numpy/src/converters.pyx"
+#line 736 "root_numpy/src/converters.pyx"
   __pyx_t_2 = (__pyx_v_subdtype != Py_None);
 
-#line 720 "root_numpy/src/converters.pyx"
+#line 736 "root_numpy/src/converters.pyx"
   __pyx_t_3 = (__pyx_t_2 != 0);
 
-#line 720 "root_numpy/src/converters.pyx"
+#line 736 "root_numpy/src/converters.pyx"
   if (__pyx_t_3) {
 
-    /* "root_numpy/src/converters.pyx":722
+    /* "root_numpy/src/converters.pyx":738
  *     if subdtype is not None:
  *         # Fixed-size subarray type
  *         dtype, shape = subdtype             # <<<<<<<<<<<<<<
@@ -15248,163 +15494,163 @@ static __pyx_t_13_librootnumpy_NP2ROOTConverter *__pyx_f_13_librootnumpy_find_np
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  */
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_v_subdtype))) || (PyList_CheckExact(__pyx_v_subdtype))) {
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_v_subdtype;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #if !CYTHON_COMPILING_IN_PYPY
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #else
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #endif
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       if (unlikely(size != 2)) {
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 722 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       }
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         __pyx_t_4 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       } else {
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
         __pyx_t_4 = PyList_GET_ITEM(sequence, 1); 
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       }
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_1);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_4);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #else
 
-#line 722 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 722 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       #endif
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     } else {
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 722 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = PyObject_GetIter(__pyx_v_subdtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = PyObject_GetIter(__pyx_v_subdtype); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
       index = 0; __pyx_t_1 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_1)) 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
 goto __pyx_L4_unpacking_failed;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
       index = 1; __pyx_t_4 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_4)) 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
 goto __pyx_L4_unpacking_failed;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 722 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       goto __pyx_L5_unpacking_done;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __pyx_L4_unpacking_failed:;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 722 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 722, __pyx_L1_error)
+#line 738 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 738, __pyx_L1_error)
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
       __pyx_L5_unpacking_done:;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     }
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     __Pyx_DECREF_SET(__pyx_v_dtype, __pyx_t_1);
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     __pyx_t_1 = 0;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     __pyx_v_shape = __pyx_t_4;
 
-#line 722 "root_numpy/src/converters.pyx"
+#line 738 "root_numpy/src/converters.pyx"
     __pyx_t_4 = 0;
 
-    /* "root_numpy/src/converters.pyx":723
+    /* "root_numpy/src/converters.pyx":739
  *         # Fixed-size subarray type
  *         dtype, shape = subdtype
  *         ndim = len(shape)             # <<<<<<<<<<<<<<
@@ -15412,13 +15658,13 @@ goto __pyx_L4_unpacking_failed;
  *         if dims == NULL:
  */
 
-#line 723 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = PyObject_Length(__pyx_v_shape); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(1, 723, __pyx_L1_error)
+#line 739 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = PyObject_Length(__pyx_v_shape); if (unlikely(__pyx_t_7 == -1)) __PYX_ERR(1, 739, __pyx_L1_error)
 
-#line 723 "root_numpy/src/converters.pyx"
+#line 739 "root_numpy/src/converters.pyx"
     __pyx_v_ndim = __pyx_t_7;
 
-    /* "root_numpy/src/converters.pyx":724
+    /* "root_numpy/src/converters.pyx":740
  *         dtype, shape = subdtype
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))             # <<<<<<<<<<<<<<
@@ -15426,10 +15672,10 @@ goto __pyx_L4_unpacking_failed;
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  */
 
-#line 724 "root_numpy/src/converters.pyx"
+#line 740 "root_numpy/src/converters.pyx"
     __pyx_v_dims = ((__pyx_t_13_librootnumpy_SIZE_t *)malloc((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))));
 
-    /* "root_numpy/src/converters.pyx":725
+    /* "root_numpy/src/converters.pyx":741
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:             # <<<<<<<<<<<<<<
@@ -15437,13 +15683,13 @@ goto __pyx_L4_unpacking_failed;
  *         for axis in range(ndim):
  */
 
-#line 725 "root_numpy/src/converters.pyx"
+#line 741 "root_numpy/src/converters.pyx"
     __pyx_t_3 = ((__pyx_v_dims == NULL) != 0);
 
-#line 725 "root_numpy/src/converters.pyx"
+#line 741 "root_numpy/src/converters.pyx"
     if (__pyx_t_3) {
 
-      /* "root_numpy/src/converters.pyx":726
+      /* "root_numpy/src/converters.pyx":742
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))             # <<<<<<<<<<<<<<
@@ -15451,55 +15697,55 @@ goto __pyx_L4_unpacking_failed;
  *             dims[axis] = shape[axis]
  */
 
-#line 726 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = __Pyx_PyInt_FromSize_t((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 726, __pyx_L1_error)
+#line 742 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = __Pyx_PyInt_FromSize_t((__pyx_v_ndim * (sizeof(__pyx_t_13_librootnumpy_SIZE_t)))); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 742, __pyx_L1_error)
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 726 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 726, __pyx_L1_error)
+#line 742 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyString_Format(__pyx_kp_s_could_not_allocate_d_bytes, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 742, __pyx_L1_error)
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 726 "root_numpy/src/converters.pyx"
-      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 726, __pyx_L1_error)
+#line 742 "root_numpy/src/converters.pyx"
+      __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 742, __pyx_L1_error)
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_4);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_1);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __pyx_t_1 = 0;
 
-#line 726 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 726, __pyx_L1_error)
+#line 742 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 742, __pyx_L1_error)
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
 
-#line 726 "root_numpy/src/converters.pyx"
+#line 742 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 726 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 726, __pyx_L1_error)
+#line 742 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 742, __pyx_L1_error)
 
-      /* "root_numpy/src/converters.pyx":725
+      /* "root_numpy/src/converters.pyx":741
  *         ndim = len(shape)
  *         dims = <SIZE_t*> malloc(ndim * sizeof(SIZE_t))
  *         if dims == NULL:             # <<<<<<<<<<<<<<
@@ -15507,10 +15753,10 @@ goto __pyx_L4_unpacking_failed;
  *         for axis in range(ndim):
  */
 
-#line 725 "root_numpy/src/converters.pyx"
+#line 741 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":727
+    /* "root_numpy/src/converters.pyx":743
  *         if dims == NULL:
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  *         for axis in range(ndim):             # <<<<<<<<<<<<<<
@@ -15518,16 +15764,16 @@ goto __pyx_L4_unpacking_failed;
  *             length *= dims[axis]
  */
 
-#line 727 "root_numpy/src/converters.pyx"
+#line 743 "root_numpy/src/converters.pyx"
     __pyx_t_8 = __pyx_v_ndim;
 
-#line 727 "root_numpy/src/converters.pyx"
+#line 743 "root_numpy/src/converters.pyx"
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
 
-#line 727 "root_numpy/src/converters.pyx"
+#line 743 "root_numpy/src/converters.pyx"
       __pyx_v_axis = __pyx_t_9;
 
-      /* "root_numpy/src/converters.pyx":728
+      /* "root_numpy/src/converters.pyx":744
  *             raise MemoryError("could not allocate %d bytes" % (ndim * sizeof(SIZE_t)))
  *         for axis in range(ndim):
  *             dims[axis] = shape[axis]             # <<<<<<<<<<<<<<
@@ -15535,22 +15781,22 @@ goto __pyx_L4_unpacking_failed;
  *     if dtype in TYPES_NUMPY2ROOT:
  */
 
-#line 728 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_shape, __pyx_v_axis, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 728, __pyx_L1_error)
+#line 744 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_shape, __pyx_v_axis, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 744, __pyx_L1_error)
 
-#line 728 "root_numpy/src/converters.pyx"
+#line 744 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 728 "root_numpy/src/converters.pyx"
-      __pyx_t_10 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_1); if (unlikely((__pyx_t_10 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(1, 728, __pyx_L1_error)
+#line 744 "root_numpy/src/converters.pyx"
+      __pyx_t_10 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_1); if (unlikely((__pyx_t_10 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(1, 744, __pyx_L1_error)
 
-#line 728 "root_numpy/src/converters.pyx"
+#line 744 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 728 "root_numpy/src/converters.pyx"
+#line 744 "root_numpy/src/converters.pyx"
       (__pyx_v_dims[__pyx_v_axis]) = __pyx_t_10;
 
-      /* "root_numpy/src/converters.pyx":729
+      /* "root_numpy/src/converters.pyx":745
  *         for axis in range(ndim):
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]             # <<<<<<<<<<<<<<
@@ -15558,13 +15804,13 @@ goto __pyx_L4_unpacking_failed;
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  */
 
-#line 729 "root_numpy/src/converters.pyx"
+#line 745 "root_numpy/src/converters.pyx"
       __pyx_v_length = (__pyx_v_length * (__pyx_v_dims[__pyx_v_axis]));
 
-#line 729 "root_numpy/src/converters.pyx"
+#line 745 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":720
+    /* "root_numpy/src/converters.pyx":736
  *     cdef SIZE_t* dims = NULL
  *     subdtype = dtype.subdtype
  *     if subdtype is not None:             # <<<<<<<<<<<<<<
@@ -15572,10 +15818,10 @@ goto __pyx_L4_unpacking_failed;
  *         dtype, shape = subdtype
  */
 
-#line 720 "root_numpy/src/converters.pyx"
+#line 736 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":730
+  /* "root_numpy/src/converters.pyx":746
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:             # <<<<<<<<<<<<<<
@@ -15583,25 +15829,25 @@ goto __pyx_L4_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  */
 
-#line 730 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 730, __pyx_L1_error)
+#line 746 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 746, __pyx_L1_error)
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 730 "root_numpy/src/converters.pyx"
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_dtype, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 730, __pyx_L1_error)
+#line 746 "root_numpy/src/converters.pyx"
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_dtype, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(1, 746, __pyx_L1_error)
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
   __pyx_t_2 = (__pyx_t_3 != 0);
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":731
+    /* "root_numpy/src/converters.pyx":747
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]             # <<<<<<<<<<<<<<
@@ -15609,184 +15855,184 @@ goto __pyx_L4_unpacking_failed;
  *     elif dtype.kind == 'S':
  */
 
-#line 731 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES_NUMPY2ROOT); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 731 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = PyObject_GetItem(__pyx_t_1, __pyx_v_dtype); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = PyObject_GetItem(__pyx_t_1, __pyx_v_dtype); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_t_4))) || (PyList_CheckExact(__pyx_t_4))) {
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_t_4;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #if !CYTHON_COMPILING_IN_PYPY
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #else
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #endif
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       if (unlikely(size != 2)) {
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 731 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       }
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         __pyx_t_5 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       } else {
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
         __pyx_t_5 = PyList_GET_ITEM(sequence, 1); 
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       }
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_1);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_5);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #else
 
-#line 731 "root_numpy/src/converters.pyx"
-      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 731 "root_numpy/src/converters.pyx"
-      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+      __pyx_t_5 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       #endif
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     } else {
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 731 "root_numpy/src/converters.pyx"
-      __pyx_t_11 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+      __pyx_t_11 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_11);
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __pyx_t_6 = Py_TYPE(__pyx_t_11)->tp_iternext;
       index = 0; __pyx_t_1 = __pyx_t_6(__pyx_t_11); if (unlikely(!__pyx_t_1)) 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
 goto __pyx_L10_unpacking_failed;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
       index = 1; __pyx_t_5 = __pyx_t_6(__pyx_t_11); if (unlikely(!__pyx_t_5)) 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
 goto __pyx_L10_unpacking_failed;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_5);
 
-#line 731 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_11), 2) < 0) __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_11), 2) < 0) __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       goto __pyx_L11_unpacking_done;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __pyx_L10_unpacking_failed:;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __pyx_t_6 = NULL;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 731 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 731, __pyx_L1_error)
+#line 747 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 747, __pyx_L1_error)
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
       __pyx_L11_unpacking_done:;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     }
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __pyx_v_elembytes = __pyx_t_1;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __pyx_t_1 = 0;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __pyx_v_roottype = __pyx_t_5;
 
-#line 731 "root_numpy/src/converters.pyx"
+#line 747 "root_numpy/src/converters.pyx"
     __pyx_t_5 = 0;
 
-    /* "root_numpy/src/converters.pyx":732
+    /* "root_numpy/src/converters.pyx":748
  *     if dtype in TYPES_NUMPY2ROOT:
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)             # <<<<<<<<<<<<<<
@@ -15794,31 +16040,31 @@ goto __pyx_L10_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  */
 
-#line 732 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 732, __pyx_L1_error)
+#line 748 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 748, __pyx_L1_error)
 
-#line 732 "root_numpy/src/converters.pyx"
-    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_roottype); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 732, __pyx_L1_error)
+#line 748 "root_numpy/src/converters.pyx"
+    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_roottype); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 748, __pyx_L1_error)
 
-#line 732 "root_numpy/src/converters.pyx"
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_elembytes); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 732, __pyx_L1_error)
+#line 748 "root_numpy/src/converters.pyx"
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_elembytes); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 748, __pyx_L1_error)
 
-#line 732 "root_numpy/src/converters.pyx"
+#line 748 "root_numpy/src/converters.pyx"
     __pyx_t_15.__pyx_n = 2;
 
-#line 732 "root_numpy/src/converters.pyx"
+#line 748 "root_numpy/src/converters.pyx"
     __pyx_t_15.ndim = __pyx_v_ndim;
 
-#line 732 "root_numpy/src/converters.pyx"
+#line 748 "root_numpy/src/converters.pyx"
     __pyx_t_15.dims = __pyx_v_dims;
 
-#line 732 "root_numpy/src/converters.pyx"
+#line 748 "root_numpy/src/converters.pyx"
     __pyx_t_14 = new __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(__pyx_v_tree, __pyx_t_12, __pyx_t_13, __pyx_v_length, __pyx_t_8, &__pyx_t_15); 
 
-#line 732 "root_numpy/src/converters.pyx"
+#line 748 "root_numpy/src/converters.pyx"
     __pyx_v_conv = __pyx_t_14;
 
-    /* "root_numpy/src/converters.pyx":730
+    /* "root_numpy/src/converters.pyx":746
  *             dims[axis] = shape[axis]
  *             length *= dims[axis]
  *     if dtype in TYPES_NUMPY2ROOT:             # <<<<<<<<<<<<<<
@@ -15826,13 +16072,13 @@ goto __pyx_L10_unpacking_failed;
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  */
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
     goto __pyx_L9;
 
-#line 730 "root_numpy/src/converters.pyx"
+#line 746 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":733
+  /* "root_numpy/src/converters.pyx":749
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':             # <<<<<<<<<<<<<<
@@ -15840,22 +16086,22 @@ goto __pyx_L10_unpacking_failed;
  *     free(dims)
  */
 
-#line 733 "root_numpy/src/converters.pyx"
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_kind); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 733, __pyx_L1_error)
+#line 749 "root_numpy/src/converters.pyx"
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_kind); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 749, __pyx_L1_error)
 
-#line 733 "root_numpy/src/converters.pyx"
+#line 749 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_4);
 
-#line 733 "root_numpy/src/converters.pyx"
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 733, __pyx_L1_error)
+#line 749 "root_numpy/src/converters.pyx"
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_S, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(1, 749, __pyx_L1_error)
 
-#line 733 "root_numpy/src/converters.pyx"
+#line 749 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 733 "root_numpy/src/converters.pyx"
+#line 749 "root_numpy/src/converters.pyx"
   if (__pyx_t_2) {
 
-    /* "root_numpy/src/converters.pyx":734
+    /* "root_numpy/src/converters.pyx":750
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)             # <<<<<<<<<<<<<<
@@ -15863,28 +16109,28 @@ goto __pyx_L10_unpacking_failed;
  *     return conv
  */
 
-#line 734 "root_numpy/src/converters.pyx"
-    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 734, __pyx_L1_error)
+#line 750 "root_numpy/src/converters.pyx"
+    __pyx_t_13 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 750, __pyx_L1_error)
 
-#line 734 "root_numpy/src/converters.pyx"
-    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 734, __pyx_L1_error)
+#line 750 "root_numpy/src/converters.pyx"
+    __pyx_t_12 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_C); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 750, __pyx_L1_error)
 
-#line 734 "root_numpy/src/converters.pyx"
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 734, __pyx_L1_error)
+#line 750 "root_numpy/src/converters.pyx"
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_dtype, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 750, __pyx_L1_error)
 
-#line 734 "root_numpy/src/converters.pyx"
+#line 750 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_4);
 
-#line 734 "root_numpy/src/converters.pyx"
-    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 734, __pyx_L1_error)
+#line 750 "root_numpy/src/converters.pyx"
+    __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_4); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 750, __pyx_L1_error)
 
-#line 734 "root_numpy/src/converters.pyx"
+#line 750 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-#line 734 "root_numpy/src/converters.pyx"
+#line 750 "root_numpy/src/converters.pyx"
     __pyx_v_conv = new __pyx_t_13_librootnumpy_FixedNP2ROOTConverter(__pyx_v_tree, __pyx_t_13, __pyx_t_12, __pyx_t_8, 1, NULL);
 
-    /* "root_numpy/src/converters.pyx":733
+    /* "root_numpy/src/converters.pyx":749
  *         elembytes, roottype = TYPES_NUMPY2ROOT[dtype]
  *         conv = new FixedNP2ROOTConverter(tree, name, roottype, length, elembytes, ndim, dims)
  *     elif dtype.kind == 'S':             # <<<<<<<<<<<<<<
@@ -15892,35 +16138,35 @@ goto __pyx_L10_unpacking_failed;
  *     free(dims)
  */
 
-#line 733 "root_numpy/src/converters.pyx"
+#line 749 "root_numpy/src/converters.pyx"
   }
 
-#line 733 "root_numpy/src/converters.pyx"
+#line 749 "root_numpy/src/converters.pyx"
   __pyx_L9:;
 
-  /* "root_numpy/src/converters.pyx":735
+  /* "root_numpy/src/converters.pyx":751
  *     elif dtype.kind == 'S':
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  *     free(dims)             # <<<<<<<<<<<<<<
  *     return conv
  */
 
-#line 735 "root_numpy/src/converters.pyx"
+#line 751 "root_numpy/src/converters.pyx"
   free(__pyx_v_dims);
 
-  /* "root_numpy/src/converters.pyx":736
+  /* "root_numpy/src/converters.pyx":752
  *         conv = new FixedNP2ROOTConverter(tree, name, 'C', dtype.itemsize, 1)
  *     free(dims)
  *     return conv             # <<<<<<<<<<<<<<
  */
 
-#line 736 "root_numpy/src/converters.pyx"
+#line 752 "root_numpy/src/converters.pyx"
   __pyx_r = __pyx_v_conv;
 
-#line 736 "root_numpy/src/converters.pyx"
+#line 752 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
 
-  /* "root_numpy/src/converters.pyx":711
+  /* "root_numpy/src/converters.pyx":727
  * 
  * 
  * cdef NP2ROOTConverter* find_np2root_converter(TTree* tree, name, dtype):             # <<<<<<<<<<<<<<
@@ -15928,58 +16174,58 @@ goto __pyx_L10_unpacking_failed;
  *     # np.float16 needs special treatment. ROOT doesn't support 16-bit floats.
  */
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   /* function exit code */
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_L1_error:;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_1);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_4);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_5);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_t_11);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_WriteUnraisable("_librootnumpy.find_np2root_converter", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_r = 0;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __pyx_L0:;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_subdtype);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_shape);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_elembytes);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_roottype);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_XDECREF(__pyx_v_dtype);
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   __Pyx_RefNannyFinishContext();
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
   return __pyx_r;
 
-#line 711 "root_numpy/src/converters.pyx"
+#line 727 "root_numpy/src/converters.pyx"
 }
 
 /* "root_numpy/src/tree.pyx":4
@@ -84184,8 +84430,8 @@ static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 29, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 69, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(1, 91, __pyx_L1_error)
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 587, __pyx_L1_error)
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 696, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 603, __pyx_L1_error)
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 712, __pyx_L1_error)
   __pyx_builtin_IOError = __Pyx_GetBuiltinName(__pyx_n_s_IOError); if (!__pyx_builtin_IOError) __PYX_ERR(2, 7, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(2, 41, __pyx_L1_error)
   __pyx_builtin_IndexError = __Pyx_GetBuiltinName(__pyx_n_s_IndexError); if (!__pyx_builtin_IndexError) __PYX_ERR(2, 147, __pyx_L1_error)
@@ -84207,7 +84453,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "root_numpy/src/converters.pyx":160
+  /* "root_numpy/src/converters.pyx":175
  *                                    name, dims[0]))
  *         dims[0] = selector.num_selected
  *     cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -84215,16 +84461,16 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
  */
 
-#line 160 "root_numpy/src/converters.pyx"
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 160, __pyx_L1_error)
+#line 175 "root_numpy/src/converters.pyx"
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple_)) __PYX_ERR(1, 175, __pyx_L1_error)
 
-#line 160 "root_numpy/src/converters.pyx"
+#line 175 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple_);
 
-#line 160 "root_numpy/src/converters.pyx"
+#line 175 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "root_numpy/src/converters.pyx":363
+  /* "root_numpy/src/converters.pyx":378
  *         cdef T* fa
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -84232,16 +84478,16 @@ static int __Pyx_InitCachedConstants(void) {
  *         numele = tmp[0].size()
  */
 
-#line 363 "root_numpy/src/converters.pyx"
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 363, __pyx_L1_error)
+#line 378 "root_numpy/src/converters.pyx"
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(1, 378, __pyx_L1_error)
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__2);
 
-#line 363 "root_numpy/src/converters.pyx"
+#line 378 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "root_numpy/src/converters.pyx":413
+  /* "root_numpy/src/converters.pyx":429
  *         cdef unsigned long numele
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -84249,16 +84495,16 @@ static int __Pyx_InitCachedConstants(void) {
  *         numele = tmp[0].size()
  */
 
-#line 413 "root_numpy/src/converters.pyx"
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 413, __pyx_L1_error)
+#line 429 "root_numpy/src/converters.pyx"
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 429, __pyx_L1_error)
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__3);
 
-#line 413 "root_numpy/src/converters.pyx"
+#line 429 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "root_numpy/src/converters.pyx":461
+  /* "root_numpy/src/converters.pyx":477
  *         cdef unsigned long numele
  *         # these are defined solely for the outer array wrapper
  *         cdef int objsize = np.dtype('O').itemsize             # <<<<<<<<<<<<<<
@@ -84266,16 +84512,16 @@ static int __Pyx_InitCachedConstants(void) {
  *         numele = tmp[0].size()
  */
 
-#line 461 "root_numpy/src/converters.pyx"
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 461, __pyx_L1_error)
+#line 477 "root_numpy/src/converters.pyx"
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_O); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 477, __pyx_L1_error)
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__4);
 
-#line 461 "root_numpy/src/converters.pyx"
+#line 477 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "root_numpy/src/converters.pyx":569
+  /* "root_numpy/src/converters.pyx":585
  * cdef Converter* get_array_converter(string typename, arraydef):
  *     # Determine shape ignoring possible variable first dimension
  *     arraytokens = arraydef.strip('[]')             # <<<<<<<<<<<<<<
@@ -84283,16 +84529,16 @@ static int __Pyx_InitCachedConstants(void) {
  *         arraytokens = arraytokens.split('][')
  */
 
-#line 569 "root_numpy/src/converters.pyx"
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s__5); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 569, __pyx_L1_error)
+#line 585 "root_numpy/src/converters.pyx"
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s__5); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 585, __pyx_L1_error)
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__6);
 
-#line 569 "root_numpy/src/converters.pyx"
+#line 585 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "root_numpy/src/converters.pyx":571
+  /* "root_numpy/src/converters.pyx":587
  *     arraytokens = arraydef.strip('[]')
  *     if arraytokens:
  *         arraytokens = arraytokens.split('][')             # <<<<<<<<<<<<<<
@@ -84300,16 +84546,16 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  */
 
-#line 571 "root_numpy/src/converters.pyx"
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 571, __pyx_L1_error)
+#line 587 "root_numpy/src/converters.pyx"
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 587, __pyx_L1_error)
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__8);
 
-#line 571 "root_numpy/src/converters.pyx"
+#line 587 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "root_numpy/src/converters.pyx":575
+  /* "root_numpy/src/converters.pyx":591
  * 
  *     # Variable-length array
  *     if arraydef.startswith('[]'):             # <<<<<<<<<<<<<<
@@ -84317,16 +84563,16 @@ static int __Pyx_InitCachedConstants(void) {
  *         if conv == NULL:
  */
 
-#line 575 "root_numpy/src/converters.pyx"
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s__5); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 575, __pyx_L1_error)
+#line 591 "root_numpy/src/converters.pyx"
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s__5); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 591, __pyx_L1_error)
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__9);
 
-#line 575 "root_numpy/src/converters.pyx"
+#line 591 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "root_numpy/src/converters.pyx":633
+  /* "root_numpy/src/converters.pyx":649
  *     match = re.match(LEAF_PATTERN, leaf_title)
  *     if match is not None:
  *         arraydef = match.group(1)             # <<<<<<<<<<<<<<
@@ -84334,16 +84580,16 @@ static int __Pyx_InitCachedConstants(void) {
  *             if leaf_count != NULL:
  */
 
-#line 633 "root_numpy/src/converters.pyx"
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_int_1); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 633, __pyx_L1_error)
+#line 649 "root_numpy/src/converters.pyx"
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_int_1); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 649, __pyx_L1_error)
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__10);
 
-#line 633 "root_numpy/src/converters.pyx"
+#line 649 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "root_numpy/src/converters.pyx":637
+  /* "root_numpy/src/converters.pyx":653
  *             if leaf_count != NULL:
  *                 # Ignore length-leaf name and use [] to denote variable-length first dimension
  *                 arraydef = '[' + arraydef[arraydef.find(']'):]             # <<<<<<<<<<<<<<
@@ -84351,16 +84597,16 @@ static int __Pyx_InitCachedConstants(void) {
  *     return find_converter_by_typename(leaf_type)
  */
 
-#line 637 "root_numpy/src/converters.pyx"
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s__12); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 637, __pyx_L1_error)
+#line 653 "root_numpy/src/converters.pyx"
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s__12); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 653, __pyx_L1_error)
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__13);
 
-#line 637 "root_numpy/src/converters.pyx"
+#line 653 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "root_numpy/src/converters.pyx":686
+  /* "root_numpy/src/converters.pyx":702
  *         if ndim > 0 and roottype.compare('C') != 0:
  *             for axis in range(ndim):
  *                 token = ('[{0:d}]'.format(dims[axis])).encode('utf-8')             # <<<<<<<<<<<<<<
@@ -84368,13 +84614,13 @@ static int __Pyx_InitCachedConstants(void) {
  *         leaflist.append(b'/')
  */
 
-#line 686 "root_numpy/src/converters.pyx"
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 686, __pyx_L1_error)
+#line 702 "root_numpy/src/converters.pyx"
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 702, __pyx_L1_error)
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__14);
 
-#line 686 "root_numpy/src/converters.pyx"
+#line 702 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "root_numpy/src/tree.pyx":125
@@ -85174,7 +85420,7 @@ static int __Pyx_InitCachedConstants(void) {
 #line 34 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__66);
 
-  /* "root_numpy/src/converters.pyx":643
+  /* "root_numpy/src/converters.pyx":659
  * 
  * @atexit.register
  * def cleanup():             # <<<<<<<<<<<<<<
@@ -85182,17 +85428,17 @@ static int __Pyx_InitCachedConstants(void) {
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  */
 
-#line 643 "root_numpy/src/converters.pyx"
-  __pyx_tuple__67 = PyTuple_Pack(1, __pyx_n_s_it); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(1, 643, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+  __pyx_tuple__67 = PyTuple_Pack(1, __pyx_n_s_it); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(1, 659, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_tuple__67);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_GIVEREF(__pyx_tuple__67);
 
-#line 643 "root_numpy/src/converters.pyx"
-  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_cleanup, 643, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(1, 643, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_endw_workspace_root_numpy, __pyx_n_s_cleanup, 659, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(1, 659, __pyx_L1_error)
 
   /* "root_numpy/src/tree.pyx":33
  * 
@@ -89054,7 +89300,7 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
 #line 38 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":490
+  /* "root_numpy/src/converters.pyx":506
  * 
  * # basic type converters
  * for ctypename, (ctype, dtype, dtypecode) in TYPES.items():             # <<<<<<<<<<<<<<
@@ -89062,541 +89308,541 @@ PyMODINIT_FUNC PyInit__librootnumpy(void)
  *         ctype, new BasicConverter(
  */
 
-#line 490 "root_numpy/src/converters.pyx"
-  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_TYPES); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_8);
 
-#line 490 "root_numpy/src/converters.pyx"
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_items); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_items); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_7);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __pyx_t_8 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     if (likely(__pyx_t_8)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_8);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(function);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF_SET(__pyx_t_7, function);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   if (__pyx_t_8) {
 
-#line 490 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   } else {
 
-#line 490 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __pyx_t_7 = __pyx_t_1; __Pyx_INCREF(__pyx_t_7); __pyx_t_10 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __pyx_t_11 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   } else {
     __pyx_t_10 = -1; 
-#line 490 "root_numpy/src/converters.pyx"
-__pyx_t_7 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+__pyx_t_7 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_7);
 
-#line 490 "root_numpy/src/converters.pyx"
-    __pyx_t_11 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    __pyx_t_11 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_11)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   for (;;) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     if (likely(!__pyx_t_11)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (likely(PyList_CheckExact(__pyx_t_7))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_7)) break;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 490 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #else
 
-#line 490 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       } else {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 490 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_10); __Pyx_INCREF(__pyx_t_1); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #else
 
-#line 490 "root_numpy/src/converters.pyx"
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_7, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __Pyx_GOTREF(__pyx_t_1);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
     } else 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_1 = __pyx_t_11(__pyx_t_7);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (unlikely(!__pyx_t_1)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         PyObject* exc_type = PyErr_Occurred();
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         if (exc_type) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
           if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
 
-#line 490 "root_numpy/src/converters.pyx"
-          else __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+          else __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         break;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_1);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_t_1))) || (PyList_CheckExact(__pyx_t_1))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_t_1;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #if !CYTHON_COMPILING_IN_PYPY
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #else
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (unlikely(size != 2)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 490 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_8 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_6 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       } else {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_8 = PyList_GET_ITEM(sequence, 0); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_6 = PyList_GET_ITEM(sequence, 1); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_8);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_6);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #else
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_8 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     } else {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = Py_TYPE(__pyx_t_9)->tp_iternext;
       index = 0; __pyx_t_8 = __pyx_t_12(__pyx_t_9); if (unlikely(!__pyx_t_8)) 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 goto __pyx_L14_unpacking_failed;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_8);
       index = 1; __pyx_t_6 = __pyx_t_12(__pyx_t_9); if (unlikely(!__pyx_t_6)) 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 goto __pyx_L14_unpacking_failed;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_6);
 
-#line 490 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_9), 2) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_9), 2) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       goto __pyx_L15_unpacking_done;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_L14_unpacking_failed:;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 490 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_L15_unpacking_done:;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     }
 
-#line 490 "root_numpy/src/converters.pyx"
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctypename, __pyx_t_8) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctypename, __pyx_t_8) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     if ((likely(PyTuple_CheckExact(__pyx_t_6))) || (PyList_CheckExact(__pyx_t_6))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       PyObject* sequence = __pyx_t_6;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #if !CYTHON_COMPILING_IN_PYPY
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t size = Py_SIZE(sequence);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #else
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t size = PySequence_Size(sequence);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (unlikely(size != 3)) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         if (size > 3) __Pyx_RaiseTooManyValuesError(3);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
 
-#line 490 "root_numpy/src/converters.pyx"
-        __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+        __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (likely(PyTuple_CheckExact(sequence))) {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_9 = PyTuple_GET_ITEM(sequence, 0); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_13 = PyTuple_GET_ITEM(sequence, 1); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_14 = PyTuple_GET_ITEM(sequence, 2); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       } else {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_9 = PyList_GET_ITEM(sequence, 0); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_13 = PyList_GET_ITEM(sequence, 1); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
         __pyx_t_14 = PyList_GET_ITEM(sequence, 2); 
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_9);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_13);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_14);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #else
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_9 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_13 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_13)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_13 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_13)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_13);
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_14 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_14 = PySequence_ITEM(sequence, 2); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_14);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       #endif
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     } else {
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       Py_ssize_t index = -1;
 
-#line 490 "root_numpy/src/converters.pyx"
-      __pyx_t_15 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_15)) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __pyx_t_15 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_15)) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_15);
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = Py_TYPE(__pyx_t_15)->tp_iternext;
       index = 0; __pyx_t_9 = __pyx_t_12(__pyx_t_15); if (unlikely(!__pyx_t_9)) 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 goto __pyx_L16_unpacking_failed;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_9);
       index = 1; __pyx_t_13 = __pyx_t_12(__pyx_t_15); if (unlikely(!__pyx_t_13)) 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 goto __pyx_L16_unpacking_failed;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_13);
       index = 2; __pyx_t_14 = __pyx_t_12(__pyx_t_15); if (unlikely(!__pyx_t_14)) 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
 goto __pyx_L16_unpacking_failed;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_14);
 
-#line 490 "root_numpy/src/converters.pyx"
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_15), 3) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_12(__pyx_t_15), 3) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       goto __pyx_L17_unpacking_done;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_L16_unpacking_failed:;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_t_12 = NULL;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
 
-#line 490 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
       __pyx_L17_unpacking_done:;
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     }
 
-#line 490 "root_numpy/src/converters.pyx"
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctype, __pyx_t_9) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_ctype, __pyx_t_9) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtype, __pyx_t_13) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtype, __pyx_t_13) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
-#line 490 "root_numpy/src/converters.pyx"
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtypecode, __pyx_t_14) < 0) __PYX_ERR(1, 490, __pyx_L1_error)
+#line 506 "root_numpy/src/converters.pyx"
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_dtypecode, __pyx_t_14) < 0) __PYX_ERR(1, 506, __pyx_L1_error)
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-    /* "root_numpy/src/converters.pyx":492
+    /* "root_numpy/src/converters.pyx":508
  * for ctypename, (ctype, dtype, dtypecode) in TYPES.items():
  *     CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  *         ctype, new BasicConverter(             # <<<<<<<<<<<<<<
@@ -89604,19 +89850,19 @@ goto __pyx_L16_unpacking_failed;
  * 
  */
 
-#line 492 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_ctype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 492, __pyx_L1_error)
+#line 508 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_ctype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 508, __pyx_L1_error)
 
-#line 492 "root_numpy/src/converters.pyx"
+#line 508 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 492 "root_numpy/src/converters.pyx"
-    __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 492, __pyx_L1_error)
+#line 508 "root_numpy/src/converters.pyx"
+    __pyx_t_16 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 508, __pyx_L1_error)
 
-#line 492 "root_numpy/src/converters.pyx"
+#line 508 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "root_numpy/src/converters.pyx":493
+    /* "root_numpy/src/converters.pyx":509
  *     CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  *         ctype, new BasicConverter(
  *             dtype.itemsize, dtype.name, dtypecode)))             # <<<<<<<<<<<<<<
@@ -89624,61 +89870,61 @@ goto __pyx_L16_unpacking_failed;
  * # vector<> converters
  */
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_itemsize); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_6);
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_6); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtype); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtype); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_6);
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_t_1); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtypecode); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_dtypecode); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_1);
 
-#line 493 "root_numpy/src/converters.pyx"
-    __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 493, __pyx_L1_error)
+#line 509 "root_numpy/src/converters.pyx"
+    __pyx_t_18 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_18 == (int)-1) && PyErr_Occurred())) __PYX_ERR(1, 509, __pyx_L1_error)
 
-#line 493 "root_numpy/src/converters.pyx"
+#line 509 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "root_numpy/src/converters.pyx":491
+    /* "root_numpy/src/converters.pyx":507
  * # basic type converters
  * for ctypename, (ctype, dtype, dtypecode) in TYPES.items():
  *     CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
@@ -89686,43 +89932,43 @@ goto __pyx_L16_unpacking_failed;
  *             dtype.itemsize, dtype.name, dtypecode)))
  */
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     try {
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
       __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_16, new __pyx_t_13_librootnumpy_BasicConverter(__pyx_t_2, __pyx_t_17, __pyx_t_18));
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 491 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 491, __pyx_L1_error)
+#line 507 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 507, __pyx_L1_error)
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     }
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     try {
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
       __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     } catch(...) {
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
       __Pyx_CppExn2PyErr();
 
-#line 491 "root_numpy/src/converters.pyx"
-      __PYX_ERR(1, 491, __pyx_L1_error)
+#line 507 "root_numpy/src/converters.pyx"
+      __PYX_ERR(1, 507, __pyx_L1_error)
 
-#line 491 "root_numpy/src/converters.pyx"
+#line 507 "root_numpy/src/converters.pyx"
     }
 
-    /* "root_numpy/src/converters.pyx":490
+    /* "root_numpy/src/converters.pyx":506
  * 
  * # basic type converters
  * for ctypename, (ctype, dtype, dtypecode) in TYPES.items():             # <<<<<<<<<<<<<<
@@ -89730,13 +89976,13 @@ goto __pyx_L16_unpacking_failed;
  *         ctype, new BasicConverter(
  */
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   }
 
-#line 490 "root_numpy/src/converters.pyx"
+#line 506 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "root_numpy/src/converters.pyx":497
+  /* "root_numpy/src/converters.pyx":513
  * # vector<> converters
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  *     'vector<bool>', new VectorBoolConverter()))             # <<<<<<<<<<<<<<
@@ -89744,28 +89990,28 @@ goto __pyx_L16_unpacking_failed;
  *     'vector<char>', new VectorConverter[char]()))
  */
 
-#line 497 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_bool); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 497, __pyx_L1_error)
+#line 513 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_bool); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 513, __pyx_L1_error)
 
-#line 497 "root_numpy/src/converters.pyx"
+#line 513 "root_numpy/src/converters.pyx"
   try {
 
-#line 497 "root_numpy/src/converters.pyx"
+#line 513 "root_numpy/src/converters.pyx"
     __pyx_t_20 = new __pyx_t_13_librootnumpy_VectorBoolConverter();
 
-#line 497 "root_numpy/src/converters.pyx"
+#line 513 "root_numpy/src/converters.pyx"
   } catch(...) {
 
-#line 497 "root_numpy/src/converters.pyx"
+#line 513 "root_numpy/src/converters.pyx"
     __Pyx_CppExn2PyErr();
 
-#line 497 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 497, __pyx_L1_error)
+#line 513 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 513, __pyx_L1_error)
 
-#line 497 "root_numpy/src/converters.pyx"
+#line 513 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":496
+  /* "root_numpy/src/converters.pyx":512
  * 
  * # vector<> converters
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
@@ -89773,451 +90019,11 @@ goto __pyx_L16_unpacking_failed;
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
-#line 496 "root_numpy/src/converters.pyx"
+#line 512 "root_numpy/src/converters.pyx"
   try {
 
-#line 496 "root_numpy/src/converters.pyx"
+#line 512 "root_numpy/src/converters.pyx"
     __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_20);
-
-#line 496 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 496 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 496 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 496, __pyx_L1_error)
-
-#line 496 "root_numpy/src/converters.pyx"
-  }
-
-#line 496 "root_numpy/src/converters.pyx"
-  try {
-
-#line 496 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 496 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 496 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 496 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 496, __pyx_L1_error)
-
-#line 496 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":499
- *     'vector<bool>', new VectorBoolConverter()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<char>', new VectorConverter[char]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
- */
-
-#line 499 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 499, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":498
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<bool>', new VectorBoolConverter()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<char>', new VectorConverter[char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 498 "root_numpy/src/converters.pyx"
-  try {
-
-#line 498 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<char> ());
-
-#line 498 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 498 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 498 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 498, __pyx_L1_error)
-
-#line 498 "root_numpy/src/converters.pyx"
-  }
-
-#line 498 "root_numpy/src/converters.pyx"
-  try {
-
-#line 498 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 498 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 498 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 498 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 498, __pyx_L1_error)
-
-#line 498 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":501
- *     'vector<char>', new VectorConverter[char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<short>', new VectorConverter[short]()))
- */
-
-#line 501 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 501, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":500
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<char>', new VectorConverter[char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 500 "root_numpy/src/converters.pyx"
-  try {
-
-#line 500 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_char> ());
-
-#line 500 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 500 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 500 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 500, __pyx_L1_error)
-
-#line 500 "root_numpy/src/converters.pyx"
-  }
-
-#line 500 "root_numpy/src/converters.pyx"
-  try {
-
-#line 500 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 500 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 500 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 500 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 500, __pyx_L1_error)
-
-#line 500 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":503
- *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<short>', new VectorConverter[short]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
- */
-
-#line 503 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 503, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":502
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<short>', new VectorConverter[short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 502 "root_numpy/src/converters.pyx"
-  try {
-
-#line 502 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<short> ());
-
-#line 502 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 502 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 502 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 502, __pyx_L1_error)
-
-#line 502 "root_numpy/src/converters.pyx"
-  }
-
-#line 502 "root_numpy/src/converters.pyx"
-  try {
-
-#line 502 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 502 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 502 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 502 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 502, __pyx_L1_error)
-
-#line 502 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":505
- *     'vector<short>', new VectorConverter[short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<int>', new VectorConverter[int]()))
- */
-
-#line 505 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 505, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":504
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<short>', new VectorConverter[short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 504 "root_numpy/src/converters.pyx"
-  try {
-
-#line 504 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_short> ());
-
-#line 504 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 504 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 504 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 504, __pyx_L1_error)
-
-#line 504 "root_numpy/src/converters.pyx"
-  }
-
-#line 504 "root_numpy/src/converters.pyx"
-  try {
-
-#line 504 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 504 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 504 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 504 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 504, __pyx_L1_error)
-
-#line 504 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":507
- *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<int>', new VectorConverter[int]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
- */
-
-#line 507 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 507, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":506
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<int>', new VectorConverter[int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 506 "root_numpy/src/converters.pyx"
-  try {
-
-#line 506 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<int> ());
-
-#line 506 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 506 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 506 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 506, __pyx_L1_error)
-
-#line 506 "root_numpy/src/converters.pyx"
-  }
-
-#line 506 "root_numpy/src/converters.pyx"
-  try {
-
-#line 506 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 506 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 506 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 506 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 506, __pyx_L1_error)
-
-#line 506 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":509
- *     'vector<int>', new VectorConverter[int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long>', new VectorConverter[long]()))
- */
-
-#line 509 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 509, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":508
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<int>', new VectorConverter[int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 508 "root_numpy/src/converters.pyx"
-  try {
-
-#line 508 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_int> ());
-
-#line 508 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 508 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 508 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 508, __pyx_L1_error)
-
-#line 508 "root_numpy/src/converters.pyx"
-  }
-
-#line 508 "root_numpy/src/converters.pyx"
-  try {
-
-#line 508 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 508 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 508 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 508 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 508, __pyx_L1_error)
-
-#line 508 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":511
- *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long>', new VectorConverter[long]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
- */
-
-#line 511 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 511, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":510
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<long>', new VectorConverter[long]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 510 "root_numpy/src/converters.pyx"
-  try {
-
-#line 510 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<long> ());
-
-#line 510 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 510 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 510 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 510, __pyx_L1_error)
-
-#line 510 "root_numpy/src/converters.pyx"
-  }
-
-#line 510 "root_numpy/src/converters.pyx"
-  try {
-
-#line 510 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 510 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 510 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 510 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 510, __pyx_L1_error)
-
-#line 510 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":513
- *     'vector<long>', new VectorConverter[long]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long long>', new VectorConverter[long_long]()))
- */
-
-#line 513 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 513, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":512
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long>', new VectorConverter[long]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 512 "root_numpy/src/converters.pyx"
-  try {
-
-#line 512 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_long> ());
 
 #line 512 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90250,21 +90056,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":515
- *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
+ *     'vector<bool>', new VectorBoolConverter()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long long>', new VectorConverter[long_long]()))             # <<<<<<<<<<<<<<
+ *     'vector<char>', new VectorConverter[char]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+ *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
  */
 
 #line 515 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 515, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 515, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":514
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
+ *     'vector<bool>', new VectorBoolConverter()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<long long>', new VectorConverter[long_long]()))
+ *     'vector<char>', new VectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90272,7 +90078,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 514 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_long_long> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<char> ());
 
 #line 514 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90305,21 +90111,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":517
- *     'vector<long long>', new VectorConverter[long_long]()))
+ *     'vector<char>', new VectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))             # <<<<<<<<<<<<<<
+ *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<float>', new VectorConverter[float]()))
+ *     'vector<short>', new VectorConverter[short]()))
  */
 
 #line 517 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 517, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 517, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":516
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<long long>', new VectorConverter[long_long]()))
+ *     'vector<char>', new VectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+ *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90327,7 +90133,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 516 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_long_long> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_char> ());
 
 #line 516 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90360,21 +90166,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":519
- *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+ *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<float>', new VectorConverter[float]()))             # <<<<<<<<<<<<<<
+ *     'vector<short>', new VectorConverter[short]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<double>', new VectorConverter[double]()))
+ *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
  */
 
 #line 519 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_float); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 519, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 519, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":518
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
+ *     'vector<unsigned char>', new VectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<float>', new VectorConverter[float]()))
+ *     'vector<short>', new VectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90382,7 +90188,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 518 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<float> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<short> ());
 
 #line 518 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90415,29 +90221,29 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":521
- *     'vector<float>', new VectorConverter[float]()))
+ *     'vector<short>', new VectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<double>', new VectorConverter[double]()))             # <<<<<<<<<<<<<<
- * 
- * # vector<vector<> > converters
+ *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<int>', new VectorConverter[int]()))
  */
 
 #line 521 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_double); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 521, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 521, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":520
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<float>', new VectorConverter[float]()))
+ *     'vector<short>', new VectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<double>', new VectorConverter[double]()))
- * 
+ *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
 #line 520 "root_numpy/src/converters.pyx"
   try {
 
 #line 520 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<double> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_short> ());
 
 #line 520 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90469,40 +90275,77 @@ goto __pyx_L16_unpacking_failed;
 #line 520 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":525
- * # vector<vector<> > converters
+  /* "root_numpy/src/converters.pyx":523
+ *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<bool> >', new VectorVectorBoolConverter()))             # <<<<<<<<<<<<<<
+ *     'vector<int>', new VectorConverter[int]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<char> >', new VectorVectorConverter[char]()))
+ *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
  */
 
-#line 525 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_bool); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 525, __pyx_L1_error)
+#line 523 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 523, __pyx_L1_error)
 
-#line 525 "root_numpy/src/converters.pyx"
+  /* "root_numpy/src/converters.pyx":522
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<unsigned short>', new VectorConverter[unsigned_short]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<int>', new VectorConverter[int]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 522 "root_numpy/src/converters.pyx"
   try {
 
-#line 525 "root_numpy/src/converters.pyx"
-    __pyx_t_21 = new __pyx_t_13_librootnumpy_VectorVectorBoolConverter();
+#line 522 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<int> ());
 
-#line 525 "root_numpy/src/converters.pyx"
+#line 522 "root_numpy/src/converters.pyx"
   } catch(...) {
 
-#line 525 "root_numpy/src/converters.pyx"
+#line 522 "root_numpy/src/converters.pyx"
     __Pyx_CppExn2PyErr();
 
-#line 525 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 525, __pyx_L1_error)
+#line 522 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 522, __pyx_L1_error)
 
-#line 525 "root_numpy/src/converters.pyx"
+#line 522 "root_numpy/src/converters.pyx"
   }
 
+#line 522 "root_numpy/src/converters.pyx"
+  try {
+
+#line 522 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 522 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 522 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 522 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 522, __pyx_L1_error)
+
+#line 522 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":525
+ *     'vector<int>', new VectorConverter[int]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<long>', new VectorConverter[long]()))
+ */
+
+#line 525 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 525, __pyx_L1_error)
+
   /* "root_numpy/src/converters.pyx":524
- * 
- * # vector<vector<> > converters
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<int>', new VectorConverter[int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
+ *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90510,7 +90353,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 524 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_21);
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_int> ());
 
 #line 524 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90543,21 +90386,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":527
- *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
+ *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<char> >', new VectorVectorConverter[char]()))             # <<<<<<<<<<<<<<
+ *     'vector<long>', new VectorConverter[long]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
+ *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
  */
 
 #line 527 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 527, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 527, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":526
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
+ *     'vector<unsigned int>', new VectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<char> >', new VectorVectorConverter[char]()))
+ *     'vector<long>', new VectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90565,7 +90408,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 526 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<char> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<long> ());
 
 #line 526 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90598,21 +90441,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":529
- *     'vector<vector<char> >', new VectorVectorConverter[char]()))
+ *     'vector<long>', new VectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))             # <<<<<<<<<<<<<<
+ *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<short> >', new VectorVectorConverter[short]()))
+ *     'vector<long long>', new VectorConverter[long_long]()))
  */
 
 #line 529 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 529, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 529, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":528
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<char> >', new VectorVectorConverter[char]()))
+ *     'vector<long>', new VectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
+ *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90620,7 +90463,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 528 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_char> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_long> ());
 
 #line 528 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90653,21 +90496,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":531
- *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
+ *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<short> >', new VectorVectorConverter[short]()))             # <<<<<<<<<<<<<<
+ *     'vector<long long>', new VectorConverter[long_long]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
  */
 
 #line 531 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 531, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 531, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":530
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
+ *     'vector<unsigned long>', new VectorConverter[unsigned_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<short> >', new VectorVectorConverter[short]()))
+ *     'vector<long long>', new VectorConverter[long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90675,7 +90518,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 530 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<short> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_long_long> ());
 
 #line 530 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90708,21 +90551,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":533
- *     'vector<vector<short> >', new VectorVectorConverter[short]()))
+ *     'vector<long long>', new VectorConverter[long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))             # <<<<<<<<<<<<<<
+ *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ *     'vector<float>', new VectorConverter[float]()))
  */
 
 #line 533 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 533, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_unsigned_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 533, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":532
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<short> >', new VectorVectorConverter[short]()))
+ *     'vector<long long>', new VectorConverter[long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90730,7 +90573,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 532 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_short> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<__pyx_t_13_librootnumpy_unsigned_long_long> ());
 
 #line 532 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90763,21 +90606,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":535
- *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<int> >', new VectorVectorConverter[int]()))             # <<<<<<<<<<<<<<
+ *     'vector<float>', new VectorConverter[float]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
+ *     'vector<double>', new VectorConverter[double]()))
  */
 
 #line 535 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 535, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_float); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 535, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":534
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ *     'vector<unsigned long long>', new VectorConverter[unsigned_long_long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ *     'vector<float>', new VectorConverter[float]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90785,7 +90628,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 534 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<int> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<float> ());
 
 #line 534 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90818,29 +90661,29 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":537
- *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ *     'vector<float>', new VectorConverter[float]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long> >', new VectorVectorConverter[long]()))
+ *     'vector<double>', new VectorConverter[double]()))             # <<<<<<<<<<<<<<
+ * 
+ * # vector<vector<> > converters
  */
 
 #line 537 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 537, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_double); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 537, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":536
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ *     'vector<float>', new VectorConverter[float]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<double>', new VectorConverter[double]()))
+ * 
  */
 
 #line 536 "root_numpy/src/converters.pyx"
   try {
 
 #line 536 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_int> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorConverter<double> ());
 
 #line 536 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90870,79 +90713,42 @@ goto __pyx_L16_unpacking_failed;
     __PYX_ERR(1, 536, __pyx_L1_error)
 
 #line 536 "root_numpy/src/converters.pyx"
-  }
-
-  /* "root_numpy/src/converters.pyx":539
- *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long> >', new VectorVectorConverter[long]()))             # <<<<<<<<<<<<<<
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
- */
-
-#line 539 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 539, __pyx_L1_error)
-
-  /* "root_numpy/src/converters.pyx":538
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<long> >', new VectorVectorConverter[long]()))
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- */
-
-#line 538 "root_numpy/src/converters.pyx"
-  try {
-
-#line 538 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<long> ());
-
-#line 538 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 538 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 538 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 538, __pyx_L1_error)
-
-#line 538 "root_numpy/src/converters.pyx"
-  }
-
-#line 538 "root_numpy/src/converters.pyx"
-  try {
-
-#line 538 "root_numpy/src/converters.pyx"
-    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
-
-#line 538 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 538 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 538 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 538, __pyx_L1_error)
-
-#line 538 "root_numpy/src/converters.pyx"
   }
 
   /* "root_numpy/src/converters.pyx":541
- *     'vector<vector<long> >', new VectorVectorConverter[long]()))
+ * # vector<vector<> > converters
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<bool> >', new VectorVectorBoolConverter()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ *     'vector<vector<char> >', new VectorVectorConverter[char]()))
  */
 
 #line 541 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 541, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_bool); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 541, __pyx_L1_error)
+
+#line 541 "root_numpy/src/converters.pyx"
+  try {
+
+#line 541 "root_numpy/src/converters.pyx"
+    __pyx_t_21 = new __pyx_t_13_librootnumpy_VectorVectorBoolConverter();
+
+#line 541 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 541 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 541 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 541, __pyx_L1_error)
+
+#line 541 "root_numpy/src/converters.pyx"
+  }
 
   /* "root_numpy/src/converters.pyx":540
- * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long> >', new VectorVectorConverter[long]()))
+ * 
+ * # vector<vector<> > converters
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -90950,7 +90756,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 540 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_long> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_21);
 
 #line 540 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -90983,21 +90789,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":543
- *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<char> >', new VectorVectorConverter[char]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
  */
 
 #line 543 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 543, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 543, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":542
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ *     'vector<vector<bool> >', new VectorVectorBoolConverter()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ *     'vector<vector<char> >', new VectorVectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -91005,7 +90811,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 542 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_long_long> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<char> ());
 
 #line 542 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91038,21 +90844,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":545
- *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ *     'vector<vector<char> >', new VectorVectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ *     'vector<vector<short> >', new VectorVectorConverter[short]()))
  */
 
 #line 545 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 545, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_char); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 545, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":544
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ *     'vector<vector<char> >', new VectorVectorConverter[char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -91060,7 +90866,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 544 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_long_long> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_char> ());
 
 #line 544 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91093,21 +90899,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":547
- *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<float> >', new VectorVectorConverter[float]()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<short> >', new VectorVectorConverter[short]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<double> >', new VectorVectorConverter[double]()))
+ *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
  */
 
 #line 547 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_float); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 547, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 547, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":546
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ *     'vector<vector<unsigned char> >', new VectorVectorConverter[unsigned_char]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ *     'vector<vector<short> >', new VectorVectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -91115,7 +90921,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 546 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<float> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<short> ());
 
 #line 546 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91148,29 +90954,29 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":549
- *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ *     'vector<vector<short> >', new VectorVectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<double> >', new VectorVectorConverter[double]()))             # <<<<<<<<<<<<<<
- * 
- * # string converters
+ *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<int> >', new VectorVectorConverter[int]()))
  */
 
 #line 549 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_double); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 549, __pyx_L1_error)
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_short); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 549, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":548
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ *     'vector<vector<short> >', new VectorVectorConverter[short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<double> >', new VectorVectorConverter[double]()))
- * 
+ *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
 #line 548 "root_numpy/src/converters.pyx"
   try {
 
 #line 548 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<double> ());
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_short> ());
 
 #line 548 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91202,40 +91008,77 @@ goto __pyx_L16_unpacking_failed;
 #line 548 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":553
- * # string converters
+  /* "root_numpy/src/converters.pyx":551
+ *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'string', new StringConverter()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<int> >', new VectorVectorConverter[int]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<string>', new VectorStringConverter()))
+ *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
  */
 
-#line 553 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 553, __pyx_L1_error)
+#line 551 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 551, __pyx_L1_error)
 
-#line 553 "root_numpy/src/converters.pyx"
+  /* "root_numpy/src/converters.pyx":550
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned short> >', new VectorVectorConverter[unsigned_short]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 550 "root_numpy/src/converters.pyx"
   try {
 
-#line 553 "root_numpy/src/converters.pyx"
-    __pyx_t_22 = new __pyx_t_13_librootnumpy_StringConverter();
+#line 550 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<int> ());
 
-#line 553 "root_numpy/src/converters.pyx"
+#line 550 "root_numpy/src/converters.pyx"
   } catch(...) {
 
-#line 553 "root_numpy/src/converters.pyx"
+#line 550 "root_numpy/src/converters.pyx"
     __Pyx_CppExn2PyErr();
 
-#line 553 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 553, __pyx_L1_error)
+#line 550 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 550, __pyx_L1_error)
 
-#line 553 "root_numpy/src/converters.pyx"
+#line 550 "root_numpy/src/converters.pyx"
   }
 
+#line 550 "root_numpy/src/converters.pyx"
+  try {
+
+#line 550 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 550 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 550 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 550 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 550, __pyx_L1_error)
+
+#line 550 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":553
+ *     'vector<vector<int> >', new VectorVectorConverter[int]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<long> >', new VectorVectorConverter[long]()))
+ */
+
+#line 553 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_int); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 553, __pyx_L1_error)
+
   /* "root_numpy/src/converters.pyx":552
- * 
- * # string converters
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<int> >', new VectorVectorConverter[int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'string', new StringConverter()))
+ *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -91243,7 +91086,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 552 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_22);
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_int> ());
 
 #line 552 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91276,39 +91119,21 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":555
- *     'string', new StringConverter()))
+ *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<string>', new VectorStringConverter()))             # <<<<<<<<<<<<<<
+ *     'vector<vector<long> >', new VectorVectorConverter[long]()))             # <<<<<<<<<<<<<<
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<string> >', new VectorVectorStringConverter()))
+ *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
  */
 
 #line 555 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 555, __pyx_L1_error)
-
-#line 555 "root_numpy/src/converters.pyx"
-  try {
-
-#line 555 "root_numpy/src/converters.pyx"
-    __pyx_t_23 = new __pyx_t_13_librootnumpy_VectorStringConverter();
-
-#line 555 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 555 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 555 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 555, __pyx_L1_error)
-
-#line 555 "root_numpy/src/converters.pyx"
-  }
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 555, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":554
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'string', new StringConverter()))
+ *     'vector<vector<unsigned int> >', new VectorVectorConverter[unsigned_int]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<string>', new VectorStringConverter()))
+ *     'vector<vector<long> >', new VectorVectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
@@ -91316,7 +91141,7 @@ goto __pyx_L16_unpacking_failed;
   try {
 
 #line 554 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_23);
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<long> ());
 
 #line 554 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91349,47 +91174,29 @@ goto __pyx_L16_unpacking_failed;
   }
 
   /* "root_numpy/src/converters.pyx":557
- *     'vector<string>', new VectorStringConverter()))
+ *     'vector<vector<long> >', new VectorVectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<vector<string> >', new VectorVectorStringConverter()))             # <<<<<<<<<<<<<<
- * 
- * 
+ *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
  */
 
 #line 557 "root_numpy/src/converters.pyx"
-  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 557, __pyx_L1_error)
-
-#line 557 "root_numpy/src/converters.pyx"
-  try {
-
-#line 557 "root_numpy/src/converters.pyx"
-    __pyx_t_24 = new __pyx_t_13_librootnumpy_VectorVectorStringConverter();
-
-#line 557 "root_numpy/src/converters.pyx"
-  } catch(...) {
-
-#line 557 "root_numpy/src/converters.pyx"
-    __Pyx_CppExn2PyErr();
-
-#line 557 "root_numpy/src/converters.pyx"
-    __PYX_ERR(1, 557, __pyx_L1_error)
-
-#line 557 "root_numpy/src/converters.pyx"
-  }
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 557, __pyx_L1_error)
 
   /* "root_numpy/src/converters.pyx":556
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
- *     'vector<string>', new VectorStringConverter()))
+ *     'vector<vector<long> >', new VectorVectorConverter[long]()))
  * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
- *     'vector<vector<string> >', new VectorVectorStringConverter()))
- * 
+ *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
  */
 
 #line 556 "root_numpy/src/converters.pyx"
   try {
 
 #line 556 "root_numpy/src/converters.pyx"
-    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_24);
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_long> ());
 
 #line 556 "root_numpy/src/converters.pyx"
   } catch(...) {
@@ -91421,7 +91228,446 @@ goto __pyx_L16_unpacking_failed;
 #line 556 "root_numpy/src/converters.pyx"
   }
 
-  /* "root_numpy/src/converters.pyx":642
+  /* "root_numpy/src/converters.pyx":559
+ *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ */
+
+#line 559 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 559, __pyx_L1_error)
+
+  /* "root_numpy/src/converters.pyx":558
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned long> >', new VectorVectorConverter[unsigned_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 558 "root_numpy/src/converters.pyx"
+  try {
+
+#line 558 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_long_long> ());
+
+#line 558 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 558 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 558 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 558, __pyx_L1_error)
+
+#line 558 "root_numpy/src/converters.pyx"
+  }
+
+#line 558 "root_numpy/src/converters.pyx"
+  try {
+
+#line 558 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 558 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 558 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 558 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 558, __pyx_L1_error)
+
+#line 558 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":561
+ *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ */
+
+#line 561 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_unsigned_long_long); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 561, __pyx_L1_error)
+
+  /* "root_numpy/src/converters.pyx":560
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<long long> >', new VectorVectorConverter[long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 560 "root_numpy/src/converters.pyx"
+  try {
+
+#line 560 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<__pyx_t_13_librootnumpy_unsigned_long_long> ());
+
+#line 560 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 560 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 560 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 560, __pyx_L1_error)
+
+#line 560 "root_numpy/src/converters.pyx"
+  }
+
+#line 560 "root_numpy/src/converters.pyx"
+  try {
+
+#line 560 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 560 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 560 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 560 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 560, __pyx_L1_error)
+
+#line 560 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":563
+ *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<float> >', new VectorVectorConverter[float]()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<double> >', new VectorVectorConverter[double]()))
+ */
+
+#line 563 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_float); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 563, __pyx_L1_error)
+
+  /* "root_numpy/src/converters.pyx":562
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<unsigned long long> >', new VectorVectorConverter[unsigned_long_long]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 562 "root_numpy/src/converters.pyx"
+  try {
+
+#line 562 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<float> ());
+
+#line 562 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 562 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 562 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 562, __pyx_L1_error)
+
+#line 562 "root_numpy/src/converters.pyx"
+  }
+
+#line 562 "root_numpy/src/converters.pyx"
+  try {
+
+#line 562 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 562 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 562 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 562 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 562, __pyx_L1_error)
+
+#line 562 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":565
+ *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<double> >', new VectorVectorConverter[double]()))             # <<<<<<<<<<<<<<
+ * 
+ * # string converters
+ */
+
+#line 565 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_double); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 565, __pyx_L1_error)
+
+  /* "root_numpy/src/converters.pyx":564
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<float> >', new VectorVectorConverter[float]()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<double> >', new VectorVectorConverter[double]()))
+ * 
+ */
+
+#line 564 "root_numpy/src/converters.pyx"
+  try {
+
+#line 564 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, new __pyx_t_13_librootnumpy_VectorVectorConverter<double> ());
+
+#line 564 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 564 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 564 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 564, __pyx_L1_error)
+
+#line 564 "root_numpy/src/converters.pyx"
+  }
+
+#line 564 "root_numpy/src/converters.pyx"
+  try {
+
+#line 564 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 564 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 564 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 564 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 564, __pyx_L1_error)
+
+#line 564 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":569
+ * # string converters
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'string', new StringConverter()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<string>', new VectorStringConverter()))
+ */
+
+#line 569 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 569, __pyx_L1_error)
+
+#line 569 "root_numpy/src/converters.pyx"
+  try {
+
+#line 569 "root_numpy/src/converters.pyx"
+    __pyx_t_22 = new __pyx_t_13_librootnumpy_StringConverter();
+
+#line 569 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 569 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 569 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 569, __pyx_L1_error)
+
+#line 569 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":568
+ * 
+ * # string converters
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'string', new StringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 568 "root_numpy/src/converters.pyx"
+  try {
+
+#line 568 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_22);
+
+#line 568 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 568 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 568 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 568, __pyx_L1_error)
+
+#line 568 "root_numpy/src/converters.pyx"
+  }
+
+#line 568 "root_numpy/src/converters.pyx"
+  try {
+
+#line 568 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 568 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 568 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 568 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 568, __pyx_L1_error)
+
+#line 568 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":571
+ *     'string', new StringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<string>', new VectorStringConverter()))             # <<<<<<<<<<<<<<
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<string> >', new VectorVectorStringConverter()))
+ */
+
+#line 571 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 571, __pyx_L1_error)
+
+#line 571 "root_numpy/src/converters.pyx"
+  try {
+
+#line 571 "root_numpy/src/converters.pyx"
+    __pyx_t_23 = new __pyx_t_13_librootnumpy_VectorStringConverter();
+
+#line 571 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 571 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 571 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 571, __pyx_L1_error)
+
+#line 571 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":570
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'string', new StringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<string>', new VectorStringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ */
+
+#line 570 "root_numpy/src/converters.pyx"
+  try {
+
+#line 570 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_23);
+
+#line 570 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 570 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 570 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 570, __pyx_L1_error)
+
+#line 570 "root_numpy/src/converters.pyx"
+  }
+
+#line 570 "root_numpy/src/converters.pyx"
+  try {
+
+#line 570 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 570 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 570 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 570 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 570, __pyx_L1_error)
+
+#line 570 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":573
+ *     'vector<string>', new VectorStringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<vector<string> >', new VectorVectorStringConverter()))             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+
+#line 573 "root_numpy/src/converters.pyx"
+  __pyx_t_17 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_vector_vector_string); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 573, __pyx_L1_error)
+
+#line 573 "root_numpy/src/converters.pyx"
+  try {
+
+#line 573 "root_numpy/src/converters.pyx"
+    __pyx_t_24 = new __pyx_t_13_librootnumpy_VectorVectorStringConverter();
+
+#line 573 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 573 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 573 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 573, __pyx_L1_error)
+
+#line 573 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":572
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(
+ *     'vector<string>', new VectorStringConverter()))
+ * CONVERTERS.insert(CONVERTERS_ITEM_TYPE(             # <<<<<<<<<<<<<<
+ *     'vector<vector<string> >', new VectorVectorStringConverter()))
+ * 
+ */
+
+#line 572 "root_numpy/src/converters.pyx"
+  try {
+
+#line 572 "root_numpy/src/converters.pyx"
+    __pyx_t_19 = __pyx_t_13_librootnumpy_CONVERTERS_ITEM_TYPE(__pyx_t_17, __pyx_t_24);
+
+#line 572 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 572 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 572 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 572, __pyx_L1_error)
+
+#line 572 "root_numpy/src/converters.pyx"
+  }
+
+#line 572 "root_numpy/src/converters.pyx"
+  try {
+
+#line 572 "root_numpy/src/converters.pyx"
+    __pyx_v_13_librootnumpy_CONVERTERS.insert(__pyx_t_19);
+
+#line 572 "root_numpy/src/converters.pyx"
+  } catch(...) {
+
+#line 572 "root_numpy/src/converters.pyx"
+    __Pyx_CppExn2PyErr();
+
+#line 572 "root_numpy/src/converters.pyx"
+    __PYX_ERR(1, 572, __pyx_L1_error)
+
+#line 572 "root_numpy/src/converters.pyx"
+  }
+
+  /* "root_numpy/src/converters.pyx":658
  * 
  * 
  * @atexit.register             # <<<<<<<<<<<<<<
@@ -91429,22 +91675,22 @@ goto __pyx_L16_unpacking_failed;
  *     # Delete all converters when module is town down
  */
 
-#line 642 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_atexit); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 658 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_atexit); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 658 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 642 "root_numpy/src/converters.pyx"
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_register); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 658 "root_numpy/src/converters.pyx"
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_register); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 658 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_6);
 
-#line 642 "root_numpy/src/converters.pyx"
+#line 658 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "root_numpy/src/converters.pyx":643
+  /* "root_numpy/src/converters.pyx":659
  * 
  * @atexit.register
  * def cleanup():             # <<<<<<<<<<<<<<
@@ -91452,154 +91698,154 @@ goto __pyx_L16_unpacking_failed;
  *     cdef cpp_map[string, Converter*].iterator it = CONVERTERS.begin()
  */
 
-#line 643 "root_numpy/src/converters.pyx"
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_1cleanup, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 643, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13_librootnumpy_1cleanup, NULL, __pyx_n_s_librootnumpy); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 659, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_GOTREF(__pyx_t_1);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __pyx_t_8 = NULL;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_6);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     if (likely(__pyx_t_8)) {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(__pyx_t_8);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_INCREF(function);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_DECREF_SET(__pyx_t_6, function);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     }
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   }
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   if (!__pyx_t_8) {
 
-#line 643 "root_numpy/src/converters.pyx"
-    __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+    __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     __Pyx_GOTREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   } else {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     #if CYTHON_FAST_PYCALL
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     if (PyFunction_Check(__pyx_t_6)) {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_1};
 
-#line 643 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     } else
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     #endif
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     #if CYTHON_FAST_PYCCALL
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_1};
 
-#line 643 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     } else
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     #endif
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     {
 
-#line 643 "root_numpy/src/converters.pyx"
-      __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+      __pyx_t_14 = PyTuple_New(1+1); if (unlikely(!__pyx_t_14)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_14);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_8); __pyx_t_8 = NULL;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GIVEREF(__pyx_t_1);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       PyTuple_SET_ITEM(__pyx_t_14, 0+1, __pyx_t_1);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __pyx_t_1 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_14, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 642, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_14, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 658, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_GOTREF(__pyx_t_7);
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
     }
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   }
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-#line 643 "root_numpy/src/converters.pyx"
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cleanup, __pyx_t_7) < 0) __PYX_ERR(1, 643, __pyx_L1_error)
+#line 659 "root_numpy/src/converters.pyx"
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cleanup, __pyx_t_7) < 0) __PYX_ERR(1, 659, __pyx_L1_error)
 
-#line 643 "root_numpy/src/converters.pyx"
+#line 659 "root_numpy/src/converters.pyx"
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "root_numpy/src/tree.pyx":33
@@ -93419,56 +93665,8 @@ bad:
     return 0;
 }
 
-/* SetItemInt */
-    static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
-    int r;
-    if (!j) return -1;
-    r = PyObject_SetItem(o, j, v);
-    Py_DECREF(j);
-    return r;
-}
-static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v, int is_list,
-                                               CYTHON_NCP_UNUSED int wraparound, CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
-    if (is_list || PyList_CheckExact(o)) {
-        Py_ssize_t n = (!wraparound) ? i : ((likely(i >= 0)) ? i : i + PyList_GET_SIZE(o));
-        if ((!boundscheck) || likely((n >= 0) & (n < PyList_GET_SIZE(o)))) {
-            PyObject* old = PyList_GET_ITEM(o, n);
-            Py_INCREF(v);
-            PyList_SET_ITEM(o, n, v);
-            Py_DECREF(old);
-            return 1;
-        }
-    } else {
-        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
-        if (likely(m && m->sq_ass_item)) {
-            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
-                Py_ssize_t l = m->sq_length(o);
-                if (likely(l >= 0)) {
-                    i += l;
-                } else {
-                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
-                        return -1;
-                    PyErr_Clear();
-                }
-            }
-            return m->sq_ass_item(o, i, v);
-        }
-    }
-#else
-#if CYTHON_COMPILING_IN_PYPY
-    if (is_list || (PySequence_Check(o) && !PyDict_Check(o))) {
-#else
-    if (is_list || PySequence_Check(o)) {
-#endif
-        return PySequence_SetItem(o, i, v);
-    }
-#endif
-    return __Pyx_SetItemInt_Generic(o, PyInt_FromSsize_t(i), v);
-}
-
 /* WriteUnraisableException */
-      static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+    static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
                                   CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
                                   int full_traceback, CYTHON_UNUSED int nogil) {
     PyObject *old_exc, *old_val, *old_tb;
@@ -93510,7 +93708,7 @@ static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObje
 }
 
 /* PyObjectCallMethO */
-      #if CYTHON_COMPILING_IN_CPYTHON
+    #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
     PyObject *self, *result;
     PyCFunction cfunc;
@@ -93530,7 +93728,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject
 #endif
 
 /* PyObjectCallOneArg */
-      #if CYTHON_COMPILING_IN_CPYTHON
+    #if CYTHON_COMPILING_IN_CPYTHON
 static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
     PyObject *result;
     PyObject *args = PyTuple_New(1);
@@ -93574,7 +93772,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 #endif
 
 /* GetItemInt */
-        static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
+      static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
     PyObject *r;
     if (!j) return NULL;
     r = PyObject_GetItem(o, j);
@@ -93655,7 +93853,7 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, 
 }
 
 /* PyIntBinop */
-        #if !CYTHON_COMPILING_IN_PYPY
+      #if !CYTHON_COMPILING_IN_PYPY
 static PyObject* __Pyx_PyInt_SubtractObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, CYTHON_UNUSED int inplace) {
     #if PY_MAJOR_VERSION < 3
     if (likely(PyInt_CheckExact(op1))) {
@@ -93771,7 +93969,7 @@ static PyObject* __Pyx_PyInt_SubtractObjC(PyObject *op1, PyObject *op2, CYTHON_U
 #endif
 
 /* SliceObject */
-        static CYTHON_INLINE PyObject* __Pyx_PyObject_GetSlice(PyObject* obj,
+      static CYTHON_INLINE PyObject* __Pyx_PyObject_GetSlice(PyObject* obj,
         Py_ssize_t cstart, Py_ssize_t cstop,
         PyObject** _py_start, PyObject** _py_stop, PyObject** _py_slice,
         int has_cstart, int has_cstop, CYTHON_UNUSED int wraparound) {
@@ -93868,20 +94066,20 @@ bad:
 }
 
 /* RaiseTooManyValuesToUnpack */
-        static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
+      static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
     PyErr_Format(PyExc_ValueError,
                  "too many values to unpack (expected %" CYTHON_FORMAT_SSIZE_T "d)", expected);
 }
 
 /* RaiseNeedMoreValuesToUnpack */
-        static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
+      static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
     PyErr_Format(PyExc_ValueError,
                  "need more than %" CYTHON_FORMAT_SSIZE_T "d value%.1s to unpack",
                  index, (index == 1) ? "" : "s");
 }
 
 /* IterFinish */
-        static CYTHON_INLINE int __Pyx_IterFinish(void) {
+      static CYTHON_INLINE int __Pyx_IterFinish(void) {
 #if CYTHON_FAST_THREAD_STATE
     PyThreadState *tstate = PyThreadState_GET();
     PyObject* exc_type = tstate->curexc_type;
@@ -93916,7 +94114,7 @@ bad:
 }
 
 /* UnpackItemEndCheck */
-        static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected) {
+      static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected) {
     if (unlikely(retval)) {
         Py_DECREF(retval);
         __Pyx_RaiseTooManyValuesError(expected);
@@ -93928,7 +94126,7 @@ bad:
 }
 
 /* BytesEquals */
-        static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
+      static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int equals) {
 #if CYTHON_COMPILING_IN_PYPY
     return PyObject_RichCompareBool(s1, s2, equals);
 #else
@@ -93966,7 +94164,7 @@ bad:
 }
 
 /* UnicodeEquals */
-        static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals) {
+      static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals) {
 #if CYTHON_COMPILING_IN_PYPY
     return PyObject_RichCompareBool(s1, s2, equals);
 #else
@@ -94050,7 +94248,7 @@ return_ne:
 }
 
 /* PyObjectCallMethod1 */
-        static PyObject* __Pyx_PyObject_CallMethod1(PyObject* obj, PyObject* method_name, PyObject* arg) {
+      static PyObject* __Pyx_PyObject_CallMethod1(PyObject* obj, PyObject* method_name, PyObject* arg) {
     PyObject *method, *result = NULL;
     method = __Pyx_PyObject_GetAttrStr(obj, method_name);
     if (unlikely(!method)) goto done;
@@ -94096,7 +94294,7 @@ done:
 }
 
 /* append */
-        static CYTHON_INLINE int __Pyx_PyObject_Append(PyObject* L, PyObject* x) {
+      static CYTHON_INLINE int __Pyx_PyObject_Append(PyObject* L, PyObject* x) {
     if (likely(PyList_CheckExact(L))) {
         if (unlikely(__Pyx_PyList_Append(L, x) < 0)) return -1;
     } else {
@@ -94109,7 +94307,7 @@ done:
 }
 
 /* RaiseDoubleKeywords */
-        static void __Pyx_RaiseDoubleKeywordsError(
+      static void __Pyx_RaiseDoubleKeywordsError(
     const char* func_name,
     PyObject* kw_name)
 {
@@ -94123,7 +94321,7 @@ done:
 }
 
 /* ParseKeywords */
-        static int __Pyx_ParseOptionalKeywords(
+      static int __Pyx_ParseOptionalKeywords(
     PyObject *kwds,
     PyObject **argnames[],
     PyObject *kwds2,
@@ -94225,7 +94423,7 @@ bad:
 }
 
 /* RaiseArgTupleInvalid */
-        static void __Pyx_RaiseArgtupleInvalid(
+      static void __Pyx_RaiseArgtupleInvalid(
     const char* func_name,
     int exact,
     Py_ssize_t num_min,
@@ -94251,14 +94449,14 @@ bad:
 }
 
 /* StringJoin */
-        #if !CYTHON_COMPILING_IN_CPYTHON
+      #if !CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyBytes_Join(PyObject* sep, PyObject* values) {
     return PyObject_CallMethodObjArgs(sep, __pyx_n_s_join, values, NULL);
 }
 #endif
 
 /* PyObjectCallNoArg */
-        #if CYTHON_COMPILING_IN_CPYTHON
+      #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(func)) {
@@ -94279,12 +94477,12 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 #endif
 
 /* RaiseNoneIterError */
-          static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
+        static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
 }
 
 /* pyobject_as_double */
-          static double __Pyx__PyObject_AsDouble(PyObject* obj) {
+        static double __Pyx__PyObject_AsDouble(PyObject* obj) {
     PyObject* float_value;
 #if !CYTHON_USE_TYPE_SLOTS
     float_value = PyNumber_Float(obj);  if (0) goto bad;
@@ -94324,12 +94522,12 @@ bad:
 }
 
 /* None */
-          static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
+        static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
     PyErr_Format(PyExc_UnboundLocalError, "local variable '%s' referenced before assignment", varname);
 }
 
 /* PyIntBinop */
-          #if !CYTHON_COMPILING_IN_PYPY
+        #if !CYTHON_COMPILING_IN_PYPY
 static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, CYTHON_UNUSED int inplace) {
     #if PY_MAJOR_VERSION < 3
     if (likely(PyInt_CheckExact(op1))) {
@@ -94445,7 +94643,7 @@ static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED
 #endif
 
 /* SaveResetException */
-          #if CYTHON_FAST_THREAD_STATE
+        #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
     *type = tstate->exc_type;
     *value = tstate->exc_value;
@@ -94469,7 +94667,7 @@ static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject 
 #endif
 
 /* PyErrExceptionMatches */
-          #if CYTHON_FAST_THREAD_STATE
+        #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tstate, PyObject* err) {
     PyObject *exc_type = tstate->curexc_type;
     if (exc_type == err) return 1;
@@ -94479,7 +94677,7 @@ static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tsta
 #endif
 
 /* GetException */
-          #if CYTHON_FAST_THREAD_STATE
+        #if CYTHON_FAST_THREAD_STATE
 static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
 #else
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb) {
@@ -94540,7 +94738,7 @@ bad:
 }
 
 /* SwapException */
-            #if CYTHON_FAST_THREAD_STATE
+          #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx__ExceptionSwap(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
     PyObject *tmp_type, *tmp_value, *tmp_tb;
     tmp_type = tstate->exc_type;
@@ -94565,7 +94763,7 @@ static CYTHON_INLINE void __Pyx_ExceptionSwap(PyObject **type, PyObject **value,
 #endif
 
 /* ArgTypeTest */
-            static void __Pyx_RaiseArgumentTypeInvalid(const char* name, PyObject *obj, PyTypeObject *type) {
+          static void __Pyx_RaiseArgumentTypeInvalid(const char* name, PyObject *obj, PyTypeObject *type) {
     PyErr_Format(PyExc_TypeError,
         "Argument '%.200s' has incorrect type (expected %.200s, got %.200s)",
         name, type->tp_name, Py_TYPE(obj)->tp_name);
@@ -94592,7 +94790,7 @@ static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, in
 }
 
 /* BufferFormatCheck */
-            static CYTHON_INLINE int __Pyx_IsLittleEndian(void) {
+          static CYTHON_INLINE int __Pyx_IsLittleEndian(void) {
   unsigned int n = 1;
   return *(unsigned char*)(&n) != 0;
 }
@@ -95142,9 +95340,57 @@ static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info) {
 }
 
 /* BufferFallbackError */
-              static void __Pyx_RaiseBufferFallbackError(void) {
+            static void __Pyx_RaiseBufferFallbackError(void) {
   PyErr_SetString(PyExc_ValueError,
      "Buffer acquisition failed on assignment; and then reacquiring the old buffer failed too!");
+}
+
+/* SetItemInt */
+            static CYTHON_INLINE int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
+    int r;
+    if (!j) return -1;
+    r = PyObject_SetItem(o, j, v);
+    Py_DECREF(j);
+    return r;
+}
+static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v, int is_list,
+                                               CYTHON_NCP_UNUSED int wraparound, CYTHON_NCP_UNUSED int boundscheck) {
+#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
+    if (is_list || PyList_CheckExact(o)) {
+        Py_ssize_t n = (!wraparound) ? i : ((likely(i >= 0)) ? i : i + PyList_GET_SIZE(o));
+        if ((!boundscheck) || likely((n >= 0) & (n < PyList_GET_SIZE(o)))) {
+            PyObject* old = PyList_GET_ITEM(o, n);
+            Py_INCREF(v);
+            PyList_SET_ITEM(o, n, v);
+            Py_DECREF(old);
+            return 1;
+        }
+    } else {
+        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
+        if (likely(m && m->sq_ass_item)) {
+            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
+                Py_ssize_t l = m->sq_length(o);
+                if (likely(l >= 0)) {
+                    i += l;
+                } else {
+                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
+                        return -1;
+                    PyErr_Clear();
+                }
+            }
+            return m->sq_ass_item(o, i, v);
+        }
+    }
+#else
+#if CYTHON_COMPILING_IN_PYPY
+    if (is_list || (PySequence_Check(o) && !PyDict_Check(o))) {
+#else
+    if (is_list || PySequence_Check(o)) {
+#endif
+        return PySequence_SetItem(o, i, v);
+    }
+#endif
+    return __Pyx_SetItemInt_Generic(o, PyInt_FromSsize_t(i), v);
 }
 
 /* BufferIndexError */
