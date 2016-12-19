@@ -200,8 +200,11 @@ def root2array(filenames,
 
     if isinstance(branches, string_types):
         # single branch selected
+        flatten = branches
         branches = [branches]
-        flatten = True
+    elif isinstance(branches, tuple):
+        flatten = branches[0]
+        branches = [branches]
     else:
         flatten = False
 
@@ -216,7 +219,7 @@ def root2array(filenames,
 
     if flatten:
         # select single column
-        return arr[branches[0]]
+        return arr[flatten]
     return arr
 
 
@@ -372,8 +375,11 @@ def tree2array(tree,
 
     if isinstance(branches, string_types):
         # single branch selected
+        flatten = branches
         branches = [branches]
-        flatten = True
+    elif isinstance(branches, tuple):
+        flatten = branches[0]
+        branches = [branches]
     else:
         flatten = False
 
@@ -386,7 +392,7 @@ def tree2array(tree,
 
     if flatten:
         # select single column
-        return arr[branches[0]]
+        return arr[flatten]
     return arr
 
 
