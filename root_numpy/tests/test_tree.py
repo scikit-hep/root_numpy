@@ -502,6 +502,46 @@ def test_struct():
                 ('branch2_floatleaf', '<f4')]))
 
 
+def check_truncate_impute(filename):
+    filename = load(filename)
+    # first convert array and find object columns
+    arr = rnp.root2array(filename)
+    assert_true(len(arr))
+    object_fields = [field for field in arr.dtype.names if arr.dtype[field] == 'O']
+    fields_1d = [field for field in object_fields
+                 if arr[field][0].dtype != 'O' and len(arr[field][0].shape) == 1]
+    fields_md = list(set(object_fields) - set(fields_1d))
+    assert_true(fields_1d)
+    assert_true(fields_md)
+
+    arr1 = rnp.root2array(filename, branches=[(f, 0) for f in fields_1d])
+    assert_true(len(arr1))
+    assert_equal(set(arr1.dtype.names), set(fields_1d))
+    # Giving length of 1 will result in the same output
+    arr2 = rnp.root2array(filename, branches=[(f, 0, 1) for f in fields_1d])
+    assert_array_equal(arr1, arr2)
+    # fill_value of 1 instead of 0 should change output array
+    arr2 = rnp.root2array(filename, branches=[(f, 1, 1) for f in fields_1d])
+    assert_raises(AssertionError, assert_array_equal, arr1, arr2)
+    # check dtype shape
+    arr3 = rnp.root2array(filename, branches=[(f, 0, 3) for f in fields_1d])
+    for field in fields_1d:
+        assert_equal(arr3.dtype[field].shape, (3,))
+
+    # length must be at least 1
+    assert_raises(ValueError, rnp.root2array, filename, branches=[(fields_1d[0], 0, 0)])
+    # tuple is not of length 2 or 3
+    assert_raises(ValueError, rnp.root2array, filename, branches=[(fields_1d[0], 1, 1, 1)])
+    assert_raises(ValueError, rnp.root2array, filename, branches=(fields_1d[0], 1, 1, 1))
+    # can only truncate 1d arrays
+    assert_raises(TypeError, rnp.root2array, filename, branches=(fields_md[0], 0))
+
+
+def test_truncate_impute():
+    for filename in ['vector.root', 'vary1.root']:
+        yield check_truncate_impute, filename
+
+
 def test_array2tree():
     a = np.array([
         (12345, 2., 2.1, True),

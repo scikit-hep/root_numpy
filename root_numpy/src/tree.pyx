@@ -267,11 +267,11 @@ cdef object tree2array(TTree* tree, branches,
                         branch_dict[branch_spec[0]] = (idx, branch_spec[2])
                     else:
                         raise ValueError(
-                            ("invalid branch tuple: {0}. "
-                             "A branch tuple must contain two elements "
-                             "(branch_name, default_value) or three elements "
-                             "(branch_name, fill_value, max_length) "
-                             "to yield a single value or truncate, respectively").format(branch_spec))
+                            "invalid branch tuple: {0}. "
+                            "A branch tuple must contain two elements "
+                            "(branch_name, fill_value) or three elements "
+                            "(branch_name, fill_value, length) "
+                            "to yield a single value or truncate, respectively".format(branch_spec))
                     branch_defaults[branch_spec[0]] = branch_spec[1]
                 else:
                     branch_dict[branch_spec] = (idx, 0)

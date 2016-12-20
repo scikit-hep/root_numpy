@@ -209,6 +209,13 @@ def root2array(filenames,
         flatten = branches
         branches = [branches]
     elif isinstance(branches, tuple):
+        if len(branches) not in (2, 3):
+            raise ValueError(
+                "invalid branch tuple: {0}. "
+                "A branch tuple must contain two elements "
+                "(branch_name, fill_value) or three elements "
+                "(branch_name, fill_value, length) "
+                "to yield a single value or truncate, respectively".format(branches))
         flatten = branches[0]
         branches = [branches]
     else:
@@ -390,6 +397,13 @@ def tree2array(tree,
         flatten = branches
         branches = [branches]
     elif isinstance(branches, tuple):
+        if len(branches) not in (2, 3):
+            raise ValueError(
+                "invalid branch tuple: {0}. "
+                "A branch tuple must contain two elements "
+                "(branch_name, fill_value) or three elements "
+                "(branch_name, fill_value, length) "
+                "to yield a single value or truncate, respectively".format(branches))
         flatten = branches[0]
         branches = [branches]
     else:

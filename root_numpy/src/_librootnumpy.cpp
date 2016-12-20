@@ -3113,7 +3113,7 @@ static const char __pyx_k_home_endw_workspace_root_numpy[] = "/home/endw/workspa
 static const char __pyx_k_cannot_convert_leaf_0_of_branch[] = "cannot convert leaf '{0}' of branch '{1}' with type '{2}'";
 static const char __pyx_k_failed_to_allocate_memory_for_0[] = "failed to allocate memory for {0} array of {1} records with {2} fields";
 static const char __pyx_k_ignoring_duplicate_branch_named[] = "ignoring duplicate branch named '{0}'";
-static const char __pyx_k_invalid_branch_tuple_0_A_branch[] = "invalid branch tuple: {0}. A branch tuple must contain two elements (branch_name, default_value) or three elements (branch_name, fill_value, max_length) to yield a single value or truncate, respectively";
+static const char __pyx_k_invalid_branch_tuple_0_A_branch[] = "invalid branch tuple: {0}. A branch tuple must contain two elements (branch_name, fill_value) or three elements (branch_name, fill_value, length) to yield a single value or truncate, respectively";
 static const char __pyx_k_leaf_list_for_branch_0_is_empty[] = "leaf list for branch '{0}' is empty";
 static const char __pyx_k_lengths_of_object_selection_0_1[] = "lengths of object selection '{0}' ({1}) and object array '{2}' ({3}) are not equal";
 static const char __pyx_k_none_of_the_input_files_contain[] = "none of the input files contain the requested tree '{0}'";
@@ -8344,7 +8344,7 @@ PyObject *__pyx_t_13_librootnumpy_VaryArrayConverter::get_dtype(Column *__pyx_v_
  *         return np.object
  * 
  *     bool can_truncate():             # <<<<<<<<<<<<<<
- *         return True
+ *         return this.ndim == 1
  * 
  */
 
@@ -8366,13 +8366,13 @@ bool __pyx_t_13_librootnumpy_VaryArrayConverter::can_truncate(void) {
   /* "root_numpy/src/converters.pyx":284
  * 
  *     bool can_truncate():
- *         return True             # <<<<<<<<<<<<<<
+ *         return this.ndim == 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
 
 #line 284 "root_numpy/src/converters.pyx"
-  __pyx_r = 1;
+  __pyx_r = (this->ndim == 1);
 
 #line 284 "root_numpy/src/converters.pyx"
   goto __pyx_L0;
@@ -8381,7 +8381,7 @@ bool __pyx_t_13_librootnumpy_VaryArrayConverter::can_truncate(void) {
  *         return np.object
  * 
  *     bool can_truncate():             # <<<<<<<<<<<<<<
- *         return True
+ *         return this.ndim == 1
  * 
  */
 
@@ -24431,17 +24431,17 @@ __pyx_t_8 = PyObject_GetIter(__pyx_v_branches); if (unlikely(!__pyx_t_8)) __PYX_
  *                         branch_dict[branch_spec[0]] = (idx, branch_spec[2])
  *                     else:
  *                         raise ValueError(             # <<<<<<<<<<<<<<
- *                             ("invalid branch tuple: {0}. "
- *                              "A branch tuple must contain two elements "
+ *                             "invalid branch tuple: {0}. "
+ *                             "A branch tuple must contain two elements "
  */
 
 #line 269 "root_numpy/src/tree.pyx"
           /*else*/ {
 
             /* "root_numpy/src/tree.pyx":274
- *                              "(branch_name, default_value) or three elements "
- *                              "(branch_name, fill_value, max_length) "
- *                              "to yield a single value or truncate, respectively").format(branch_spec))             # <<<<<<<<<<<<<<
+ *                             "(branch_name, fill_value) or three elements "
+ *                             "(branch_name, fill_value, length) "
+ *                             "to yield a single value or truncate, respectively".format(branch_spec))             # <<<<<<<<<<<<<<
  *                     branch_defaults[branch_spec[0]] = branch_spec[1]
  *                 else:
  */
@@ -24585,8 +24585,8 @@ __pyx_t_8 = PyObject_GetIter(__pyx_v_branches); if (unlikely(!__pyx_t_8)) __PYX_
  *                         branch_dict[branch_spec[0]] = (idx, branch_spec[2])
  *                     else:
  *                         raise ValueError(             # <<<<<<<<<<<<<<
- *                             ("invalid branch tuple: {0}. "
- *                              "A branch tuple must contain two elements "
+ *                             "invalid branch tuple: {0}. "
+ *                             "A branch tuple must contain two elements "
  */
 
 #line 269 "root_numpy/src/tree.pyx"
@@ -24629,8 +24629,8 @@ __pyx_t_8 = PyObject_GetIter(__pyx_v_branches); if (unlikely(!__pyx_t_8)) __PYX_
           __pyx_L19:;
 
           /* "root_numpy/src/tree.pyx":275
- *                              "(branch_name, fill_value, max_length) "
- *                              "to yield a single value or truncate, respectively").format(branch_spec))
+ *                             "(branch_name, fill_value, length) "
+ *                             "to yield a single value or truncate, respectively".format(branch_spec))
  *                     branch_defaults[branch_spec[0]] = branch_spec[1]             # <<<<<<<<<<<<<<
  *                 else:
  *                     branch_dict[branch_spec] = (idx, 0)

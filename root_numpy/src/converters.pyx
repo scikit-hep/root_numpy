@@ -281,7 +281,7 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         return np.object
 
     bool can_truncate():
-        return True
+        return this.ndim == 1
 
 
 cdef cppclass FixedArrayConverter(Converter):
