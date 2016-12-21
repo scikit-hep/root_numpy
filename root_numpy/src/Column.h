@@ -14,7 +14,8 @@ class Column
     Column(std::string _name, std::string _type):
         name(_name),
         type(_type),
-        selector(NULL){}
+        selector(NULL),
+        max_length(0){}
 
     virtual ~Column(){}
     virtual int GetLen() = 0;
@@ -29,6 +30,8 @@ class Column
     std::string type;
     // Optional selector
     Selector* selector;
+    // Perform truncation?
+    unsigned int max_length;
 };
 
 

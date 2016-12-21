@@ -117,7 +117,7 @@ def extract_docstring(filename):
                 first_par = paragraphs[0]
         break
     end_row = erow + 1 + start_row
-    if lines and lines[end_row - 2] == 'print __doc__\n':
+    if lines and lines[end_row - 2] == 'print(__doc__)\n':
         end_row += 1
     return docstring, first_par, end_row
 
@@ -171,6 +171,10 @@ def generate_example_rst(app):
     </style>
 
 .. _examples-index:
+
+Examples
+========
+
 """)
     # Here we don't use an os.walk, but we recurse only twice: flat is
     # better than nested.
@@ -191,11 +195,9 @@ def generate_dir_rst(dir, fhindex, example_dir, root_dir, plot_gallery):
         target_dir = root_dir
         src_dir = example_dir
     if not os.path.exists(os.path.join(src_dir, 'README.txt')):
-        print 80 * '_'
-        print ('Example directory %s does not have a README.txt file'
-                        % src_dir)
-        print 'Skipping this directory'
-        print 80 * '_'
+        print('Example directory %s does not have a README.txt file' % src_dir)
+        print('Skipping this directory')
+        print(80 * '_')
         return
     fhindex.write("""
 
@@ -212,6 +214,12 @@ def generate_dir_rst(dir, fhindex, example_dir, root_dir, plot_gallery):
         if not a.startswith('plot') and a.endswith('.py'):
             return 'zz' + a
         return a
+
+    fhindex.write("""
+
+.. toctree::
+
+""")
     for fname in sorted(os.listdir(src_dir), key=sort_key):
         if fname.endswith('py'):
             generate_file_rst(fname, target_dir, src_dir, plot_gallery)
@@ -226,13 +234,10 @@ def generate_dir_rst(dir, fhindex, example_dir, root_dir, plot_gallery):
             #else:
             #    fhindex.write('   :target: ./%s.html\n\n' % link_name[:-3])
             fhindex.write("""
-
-.. toctree::
-
    %s/%s
-
 """ % (dir, fname[:-3]))
     fhindex.write("""
+
 .. raw:: html
 
     <div style="clear: both"></div>
@@ -295,7 +300,7 @@ def generate_file_rst(fname, target_dir, src_dir, plot_gallery):
                 os.stat(first_image_file).st_mtime <=
                                     os.stat(src_file).st_mtime):
             # We need to execute the code
-            print 'plotting %s' % fname
+            print('plotting %s' % fname)
             t0 = time()
             import matplotlib.pyplot as plt
             plt.close('all')
@@ -341,20 +346,26 @@ def generate_file_rst(fname, target_dir, src_dir, plot_gallery):
                     plt.savefig(image_path % fig_num)
                     figure_list.append(image_fname % fig_num)
                 for canvas in ROOT.gROOT.GetListOfCanvases():
-                    canvas.SaveAs(root_image_path % root_fig_num)
-                    canvas.Close()
-                    figure_list.append(root_image_fname % root_fig_num)
-                    root_fig_num += 1
+                    maybe_root_filename = os.path.join(os.path.dirname(src_file), canvas.name)
+                    if os.path.isfile(maybe_root_filename):
+                        os.rename(maybe_root_filename, os.path.join(image_dir, canvas.name))
+                        figure_list.append(canvas.name)
+                        canvas.Close()
+                    else:
+                        canvas.SaveAs(root_image_path % root_fig_num)
+                        canvas.Close()
+                        figure_list.append(root_image_fname % root_fig_num)
+                        root_fig_num += 1
             except:
-                print 80 * '_'
-                print '%s is not compiling:' % fname
+                print(80 * '_')
+                print('%s is not compiling:' % fname)
                 traceback.print_exc()
-                print 80 * '_'
+                print(80 * '_')
             finally:
                 os.chdir(cwd)
                 sys.stdout = orig_stdout
 
-            print " - time elapsed : %.2g sec" % time_elapsed
+            print(" - time elapsed : %.2g sec" % time_elapsed)
         else:
             figure_list = [f[len(image_dir):]
                             for f in glob.glob(image_path % '[1-9]')]

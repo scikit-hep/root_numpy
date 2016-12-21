@@ -17,4 +17,4 @@ root_numpy
    start
    faq
    reference/index
-   examples
+   auto_examples/index

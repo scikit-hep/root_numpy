@@ -7,6 +7,7 @@ from array import array
 import numpy as np
 from numpy.random import RandomState
 from root_numpy.tmva import add_classification_events, evaluate_reader
+from root_numpy import ROOT_VERSION
 import matplotlib.pyplot as plt
 from ROOT import TMVA, TFile, TCut
 
@@ -39,7 +40,10 @@ factory = TMVA.Factory('classifier', output,
                        'AnalysisType=Multiclass:'
                        '!V:Silent:!DrawProgressBar')
 
-data = TMVA.DataLoader('.')
+if ROOT_VERSION >= '6.07/04':
+    data = TMVA.DataLoader('.')
+else:
+    data = factory
 for n in range(2):
     data.AddVariable('f{0}'.format(n), 'F')
 
@@ -50,9 +54,13 @@ add_classification_events(data, X_test, y_test, weights=w_test, test=True)
 data.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 
 # Train an MLP
-factory.BookMethod(data, 'MLP', 'MLP',
-                   'NeuronType=tanh:NCycles=200:HiddenLayers=N+2,2:'
-                   'TestRate=5:EstimatorType=MSE')
+if ROOT_VERSION >= '6.07/04':
+    BookMethod = factory.BookMethod
+else:
+    BookMethod = TMVA.Factory.BookMethod
+BookMethod(data, 'MLP', 'MLP',
+           'NeuronType=tanh:NCycles=200:HiddenLayers=N+2,2:'
+           'TestRate=5:EstimatorType=MSE')
 factory.TrainAllMethods()
 
 # Classify the test dataset with the BDT
@@ -68,7 +76,8 @@ plot_step = 0.02
 class_names = "ABC"
 cmap = plt.get_cmap('Paired')
 
-plt.figure(figsize=(5, 5))
+fig = plt.figure(figsize=(5, 5))
+fig.patch.set_alpha(0)
 x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
 y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, plot_step),

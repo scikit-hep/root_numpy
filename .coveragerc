@@ -8,8 +8,9 @@ omit =
     */root/*
     */root_numpy/extern/*
     */root_numpy/setup_utils.py
-    */setup.py
+    */tests/*
     */tests.py
+    */setup.py
 [report]
 exclude_lines =
     # Enable the standard pragma

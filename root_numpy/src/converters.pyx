@@ -47,14 +47,16 @@ cdef inline unicode resolve_type(const char* typename):
     return resolvedtype
 
 
-# create numpy array of given type code with
-# given numelement and size of each element
-# and write it to buffer
-cdef inline int create_numpyarray(string name,
-                                  void* buffer, void* src, int typecode,
-                                  unsigned long numele, int elesize,
-                                  int ndim=1, SIZE_t* dims=NULL,
-                                  Selector* selector=NULL) except -1:
+cdef inline int write_array(string name,
+                            void* here, void* src, int typecode,
+                            unsigned long numele, int elesize,
+                            int ndim=1, SIZE_t* dims=NULL,
+                            Selector* selector=NULL,
+                            unsigned int max_length=0) except -1:
+    """
+    create numpy array of type typecode with numele elements and size of
+    each element elesize and write it to the array
+    """
     cdef unsigned long i = 0, j = 0
     cdef SIZE_t* _dims = dims
     cdef SIZE_t default_dims[1]
@@ -69,32 +71,47 @@ cdef inline int create_numpyarray(string name,
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, _dims[0]))
         _dims[0] = selector.num_selected
-    cdef np.ndarray tmp = np.PyArray_EMPTY(ndim, _dims, typecode, 0)
-    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
-    # incref since we are placing in buffer directly
-    Py_INCREF(tmp)
-    # copy to tmp.data
-    cdef unsigned long nbytes = numele * elesize
+    cdef void* dest
+    cdef np.ndarray tmp
+    cdef PyObject* tmpobj = NULL
+    cdef unsigned long nbytes
+    if max_length:
+        dest = here
+        nbytes = min(max_length, numele) * elesize
+    else:
+        tmp = np.PyArray_EMPTY(ndim, _dims, typecode, 0)
+        tmpobj = <PyObject*> tmp # borrow ref
+        # incref since we are writing directly in the array
+        Py_INCREF(tmp)
+        dest = tmp.data
+        nbytes = numele * elesize
+    # copy to dest
     if selector != NULL:
         # copy with selection
         for i in range(selector.selected.size()):
             if selector.selected[i]:
-                memcpy(static_cast['char*'](tmp.data) + j * elesize,
+                memcpy(static_cast['char*'](dest) + j * elesize,
                        static_cast['char*'](src) + i * elesize,
                        elesize)
                 j += 1
+                if max_length:
+                    if j == max_length:
+                        break
     else:
         # quick copy
-        memcpy(tmp.data, src, nbytes)
-    # now write PyObject* to buffer
-    memcpy(buffer, &tmpobj, sizeof(PyObject*))
-    return sizeof(tmpobj)
+        memcpy(dest, src, nbytes)
+    if not max_length:
+        # now write PyObject* to the array
+        memcpy(here, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+    return max_length * elesize
 
 
 # special treatment for vector<bool>
-cdef inline int create_numpyarray_vectorbool(string name,
-                                             void* buffer, vector[bool]* src,
-                                             Selector* selector=NULL) except -1:
+cdef inline int write_array_vectorbool(string name,
+                                       void* here, vector[bool]* src,
+                                       Selector* selector=NULL,
+                                       unsigned int max_length=0) except -1:
     cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
@@ -107,28 +124,42 @@ cdef inline int create_numpyarray_vectorbool(string name,
                                    selector.selection.GetTitle(), selector.selected.size(),
                                    name, dims[0]))
         dims[0] = selector.num_selected
-    cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
-    cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
-    # incref since we are placing in buffer directly
-    Py_INCREF(tmp)
+    cdef np.ndarray tmp
+    cdef PyObject* tmpobj = NULL
+    if max_length:
+        dest = here
+    else:
+        tmp = np.PyArray_EMPTY(1, dims, np.NPY_BOOL, 0)
+        tmpobj = <PyObject*> tmp # borrow ref
+        # incref since we are writing directly in the array
+        Py_INCREF(tmp)
+        dest = tmp.data
     if selector != NULL:
         # copy with selection
         for i in range(selector.selected.size()):
             if selector.selected[i]:
-                tmp[j] = deref(src)[i]
+                (<bool*> dest)[j] = deref(src)[i]
                 j += 1
+                if max_length:
+                    if j == max_length:
+                        break
     else:
         # can't use memcpy here...
         for i in range(numele):
-            tmp[i] = deref(src)[i]
-    # now write PyObject* to buffer
-    memcpy(buffer, &tmpobj, sizeof(PyObject*))
-    return sizeof(tmpobj)
+            (<bool*> dest)[i] = deref(src)[i]
+            if max_length:
+                if i == max_length - 1:
+                    break
+    if not max_length:
+        # now write PyObject* to the array
+        memcpy(here, &tmpobj, sizeof(PyObject*))
+        return sizeof(tmpobj)
+    return max_length * sizeof(bool)
 
 
-cdef inline int create_numpyarray_vectorstring(string name,
-                                               void* buffer, vector[string]* src,
-                                               Selector* selector=NULL) except -1:
+cdef inline int write_array_vectorstring(string name,
+                                         void* here, vector[string]* src,
+                                         Selector* selector=NULL) except -1:
     cdef unsigned long i = 0, j = 0
     cdef unsigned long numele = src.size()
     cdef SIZE_t dims[1]
@@ -144,7 +175,7 @@ cdef inline int create_numpyarray_vectorstring(string name,
     cdef int objsize = np.dtype('O').itemsize
     cdef np.ndarray tmp = np.PyArray_EMPTY(1, dims, np.NPY_OBJECT, 0)
     cdef PyObject* tmpobj = <PyObject*> tmp # borrow ref
-    # incref since we are placing in buffer directly
+    # incref since we are writing directly in the array
     Py_INCREF(tmp)
     cdef PyObject* tmpstrobj
     cdef char* dataptr = <char*> tmp.data
@@ -164,21 +195,24 @@ cdef inline int create_numpyarray_vectorstring(string name,
             Py_INCREF(py_bytes)
             tmpstrobj = <PyObject*> py_bytes
             memcpy(&dataptr[i*objsize], &tmpstrobj, sizeof(PyObject*))
-    # now write PyObject* to buffer
-    memcpy(buffer, &tmpobj, sizeof(PyObject*))
+    # now write PyObject* to the array
+    memcpy(here, &tmpobj, sizeof(PyObject*))
     return sizeof(tmpobj)
 
 
 cdef cppclass Converter:
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         pass
 
-    object get_nptype():
+    object get_dtype(Column* col):
         pass
 
-    int get_nptypecode():
+    int get_dtypecode():
         pass
+
+    bool can_truncate():
+        return False
 
 
 cdef cppclass BasicConverter(Converter):
@@ -191,24 +225,24 @@ cdef cppclass BasicConverter(Converter):
         this.nptypecode = nptypecode
         this.nptype = nptype
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef void* src = col.GetValuePointer()
-        memcpy(buffer, src, this.size)
+        memcpy(here, src, this.size)
         return this.size
 
-    object get_nptype():
+    object get_dtype(Column* col):
         return np.dtype(this.nptype)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.nptypecode
 
 
 cdef cppclass ObjectConverterBase(Converter):
 
-    object get_nptype():
+    object get_dtype(Column* col):
         return np.object
 
-    int get_nptypecode():
+    int get_dtypecode():
         return np.NPY_OBJECT
 
 
@@ -223,18 +257,31 @@ cdef cppclass VaryArrayConverter(ObjectConverterBase):
         this.conv = conv
         this.dims = dims
         this.ndim = ndim
-        this.typecode = conv.get_nptypecode()
+        this.typecode = conv.get_dtypecode()
         this.elesize = conv.size
 
     __dealloc__():
         free(this.dims)
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         # only the first dimension can vary in length
         this.dims[0] = col.GetCountLen()
-        return create_numpyarray(col.name, buffer, col.GetValuePointer(),
-                                 this.typecode, col.GetLen(), this.elesize,
-                                 this.ndim, this.dims, col.selector)
+        return write_array(col.name, here, col.GetValuePointer(),
+                           this.typecode, col.GetLen(), this.elesize,
+                           this.ndim, this.dims, col.selector, col.max_length)
+
+    object get_dtype(Column* col):
+        if col.max_length == 1:
+            # Single value
+            return np.dtype(this.conv.nptype)
+        elif col.max_length:
+            # Truncated
+            return (np.dtype(this.conv.nptype), col.max_length)
+        # Pointer to array
+        return np.object
+
+    bool can_truncate():
+        return this.ndim == 1
 
 
 cdef cppclass FixedArrayConverter(Converter):
@@ -249,15 +296,15 @@ cdef cppclass FixedArrayConverter(Converter):
     __dealloc__():
         Py_XDECREF(this.shape)
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef int nbytes = col.GetSize()
-        memcpy(buffer, col.GetValuePointer(), nbytes)
+        memcpy(here, col.GetValuePointer(), nbytes)
         return nbytes
 
-    object get_nptype():
+    object get_dtype(Column* col):
         return (np.dtype(this.conv.nptype), <object> this.shape)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.conv.nptypecode
 
 
@@ -269,18 +316,18 @@ cdef cppclass CharArrayConverter(Converter):
         this.conv = <BasicConverter*> CONVERTERS['char']
         this.size = size
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef int nbytes = col.GetSize() - sizeof(char)  # exclude null-termination
         cdef int length = strlen(<char*> col.GetValuePointer())
-        memcpy(buffer, col.GetValuePointer(), nbytes)
+        memcpy(here, col.GetValuePointer(), nbytes)
         if length < nbytes:
-            memset((<char*> buffer) + length, '\0', nbytes - length)
+            memset((<char*> here) + length, '\0', nbytes - length)
         return nbytes
 
-    object get_nptype():
+    object get_dtype(Column* col):
         return 'S{0:d}'.format(this.size)
 
-    int get_nptypecode():
+    int get_dtypecode():
         return this.conv.nptypecode
 
 
@@ -288,22 +335,36 @@ cdef cppclass VectorConverter[T](ObjectConverterBase):
     int elesize
     int nptypecode
     Vector2Array[T] v2a
+    string nptype
 
     __init__():
         cdef TypeName[T] ast = TypeName[T]()
         info = TYPES[ast.name]
+        this.nptype = info[1].name
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[T]* tmp = <vector[T]*> col.GetValuePointer()
         cdef unsigned long numele = tmp.size()
-        # check cython auto-generated code
-        # if it really does &((*tmp)[0])
+        # This should be &((*tmp)[0])
         cdef T* fa = this.v2a.convert(tmp)
-        return create_numpyarray(col.name, buffer, fa, this.nptypecode,
-                                 numele, this.elesize, 1, NULL,
-                                 col.selector)
+        return write_array(col.name, here, fa, this.nptypecode,
+                           numele, this.elesize, 1, NULL,
+                           col.selector, col.max_length)
+
+    object get_dtype(Column* col):
+        if col.max_length == 1:
+            # Single value
+            return np.dtype(this.nptype)
+        elif col.max_length:
+            # Truncated
+            return (np.dtype(this.nptype), col.max_length)
+        # Pointer to array
+        return np.object
+
+    bool can_truncate():
+        return True
 
 
 cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
@@ -317,7 +378,7 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         this.elesize = info[1].itemsize
         this.nptypecode = info[2]
 
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[vector[T]]* tmp = <vector[vector[T]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
@@ -327,16 +388,16 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         cdef int objtypecode = np.NPY_OBJECT
         numele = tmp[0].size()
         # create an outer array container that dataptr points to,
-        # containing pointers from create_numpyarray().
+        # containing pointers from write_array().
         # define an (numele)-dimensional outer array to hold our subvectors fa
         cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
-        # increase one since we are putting in buffer directly
+        # increase one since we are writing directly in the array
         Py_INCREF(outer)
-        # now write PyObject* to buffer
-        memcpy(buffer, &outerobj, sizeof(PyObject*))
+        # now write PyObject* to the array
+        memcpy(here, &outerobj, sizeof(PyObject*))
         # build a dataptr pointing to outer, so we can shift and write each
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
@@ -344,21 +405,35 @@ cdef cppclass VectorVectorConverter[T](ObjectConverterBase):
         cdef unsigned long i
         for i in range(numele):
             fa = this.v2a.convert(&tmp[0][i])
-            create_numpyarray(col.name, &dataptr[i*objsize], fa, this.nptypecode,
-                              tmp[0][i].size(), this.elesize)
+            write_array(col.name, &dataptr[i*objsize], fa, this.nptypecode,
+                        tmp[0][i].size(), this.elesize)
         return sizeof(outerobj)
 
 
 cdef cppclass VectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[bool]* tmp = <vector[bool]*> col.GetValuePointer()
-        return create_numpyarray_vectorbool(col.name, buffer, tmp, col.selector)
+        return write_array_vectorbool(col.name, here, tmp,
+                                      col.selector, col.max_length)
+
+    object get_dtype(Column* col):
+        if col.max_length == 1:
+            # Single value
+            return np.dtype(np.bool)
+        elif col.max_length:
+            # Truncated
+            return (np.dtype(np.bool), col.max_length)
+        # Pointer to array
+        return np.object
+
+    bool can_truncate():
+        return True
 
 
 cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
     # Requires special treament since vector<bool> stores contents as bits...
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[vector[bool]]* tmp = <vector[vector[bool]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
@@ -367,46 +442,46 @@ cdef cppclass VectorVectorBoolConverter(ObjectConverterBase):
         cdef int objtypecode = np.NPY_OBJECT
         numele = tmp[0].size()
         # create an outer array container that dataptr points to,
-        # containing pointers from create_numpyarray().
+        # containing pointers from write_array().
         # define an (numele)-dimensional outer array to hold our subvectors fa
         cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
-        # increase one since we are putting in buffer directly
+        # increase one since we are writing directly in the array
         Py_INCREF(outer)
-        # now write PyObject* to buffer
-        memcpy(buffer, &outerobj, sizeof(PyObject*))
+        # now write PyObject* to the array
+        memcpy(here, &outerobj, sizeof(PyObject*))
         # build a dataptr pointing to outer, so we can shift and write each
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
         # loop through all subvectors
         cdef unsigned long i
         for i in range(numele):
-            create_numpyarray_vectorbool(col.name, &dataptr[i*objsize], &tmp[0][i])
+            write_array_vectorbool(col.name, &dataptr[i*objsize], &tmp[0][i])
         return sizeof(outerobj)
 
 
 cdef cppclass StringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef string* s = <string*> col.GetValuePointer()
         py_bytes = str(s[0])
         cdef PyObject* tmpobj = <PyObject*> py_bytes # borrow ref
-        # increase one since we are putting in buffer directly
+        # increase one since we are writing directly in the array
         Py_INCREF(py_bytes)
-        # now write PyObject* to buffer
-        memcpy(buffer, &tmpobj, sizeof(PyObject*))
+        # now write PyObject* to the array
+        memcpy(here, &tmpobj, sizeof(PyObject*))
         return sizeof(tmpobj)
 
 
 cdef cppclass VectorStringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[string]* tmp = <vector[string]*> col.GetValuePointer()
-        return create_numpyarray_vectorstring(col.name, buffer, tmp, col.selector)
+        return write_array_vectorstring(col.name, here, tmp, col.selector)
 
 
 cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
-    int write(Column* col, void* buffer) except -1:
+    int write(Column* col, void* here) except -1:
         cdef vector[vector[string]]* tmp = <vector[vector[string]]*> col.GetValuePointer()
         # this will hold number of subvectors
         cdef unsigned long numele
@@ -415,23 +490,23 @@ cdef cppclass VectorVectorStringConverter(ObjectConverterBase):
         cdef int objtypecode = np.NPY_OBJECT
         numele = tmp[0].size()
         # create an outer array container that dataptr points to,
-        # containing pointers from create_numpyarray().
+        # containing pointers from write_array().
         # define an (numele)-dimensional outer array to hold our subvectors fa
         cdef SIZE_t dims[1]
         dims[0] = numele
         cdef np.ndarray outer = np.PyArray_EMPTY(1, dims, objtypecode, 0)
         cdef PyObject* outerobj = <PyObject*> outer # borrow ref
-        # increase one since we are putting in buffer directly
+        # increase one since we are writing directly in the array
         Py_INCREF(outer)
-        # now write PyObject* to buffer
-        memcpy(buffer, &outerobj, sizeof(PyObject*))
+        # now write PyObject* to the array
+        memcpy(here, &outerobj, sizeof(PyObject*))
         # build a dataptr pointing to outer, so we can shift and write each
         # of the subvectors
         cdef char* dataptr = <char*> outer.data
         # loop through all subvectors
         cdef unsigned long i
         for i in range(numele):
-            create_numpyarray_vectorstring(col.name, &dataptr[i*objsize], &tmp[0][i])
+            write_array_vectorstring(col.name, &dataptr[i*objsize], &tmp[0][i])
         return sizeof(outerobj)
 
 

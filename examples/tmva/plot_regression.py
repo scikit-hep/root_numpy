@@ -6,6 +6,7 @@ Regression with NumPy and TMVA
 import numpy as np
 import matplotlib.pyplot as plt
 from root_numpy.tmva import add_regression_events, evaluate_reader
+from root_numpy import ROOT_VERSION
 from ROOT import TMVA, TFile, TCut
 from array import array
 
@@ -24,7 +25,10 @@ factory = TMVA.Factory('regressor', output,
                        'AnalysisType=Regression:'
                        '!V:Silent:!DrawProgressBar')
 
-data = TMVA.DataLoader('.')
+if ROOT_VERSION >= '6.07/04':
+    data = TMVA.DataLoader('.')
+else:
+    data = factory
 data.AddVariable('x', 'F')
 data.AddTarget('y', 'F')
 
@@ -33,12 +37,16 @@ add_regression_events(data, X, y, test=True)
 # The following line is necessary if events have been added individually:
 data.PrepareTrainingAndTestTree(TCut('1'), '')
 
-factory.BookMethod(data, 'BDT', 'BDT1',
-                   'nCuts=20:NTrees=1:MaxDepth=4:BoostType=AdaBoostR2:'
-                   'SeparationType=RegressionVariance')
-factory.BookMethod(data, 'BDT', 'BDT2',
-                   'nCuts=20:NTrees=300:MaxDepth=4:BoostType=AdaBoostR2:'
-                   'SeparationType=RegressionVariance')
+if ROOT_VERSION >= '6.07/04':
+    BookMethod = factory.BookMethod
+else:
+    BookMethod = TMVA.Factory.BookMethod
+BookMethod(data, 'BDT', 'BDT1',
+           'nCuts=20:NTrees=1:MaxDepth=4:BoostType=AdaBoostR2:'
+           'SeparationType=RegressionVariance')
+BookMethod(data, 'BDT', 'BDT2',
+           'nCuts=20:NTrees=300:MaxDepth=4:BoostType=AdaBoostR2:'
+           'SeparationType=RegressionVariance')
 factory.TrainAllMethods()
 
 # Predict the regression target
@@ -50,7 +58,8 @@ y_1 = evaluate_reader(reader, 'BDT1', X)
 y_2 = evaluate_reader(reader, 'BDT2', X)
 
 # Plot the results
-plt.figure()
+fig = plt.figure()
+fig.patch.set_alpha(0)
 plt.scatter(X, y, c="k", label="training samples")
 plt.plot(X, y_1, c="g", label="1 tree", linewidth=2)
 plt.plot(X, y_2, c="r", label="300 trees", linewidth=2)

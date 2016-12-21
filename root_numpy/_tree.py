@@ -141,11 +141,17 @@ def root2array(filenames,
     treename : str, optional (default=None)
         Name of the tree to convert (optional if each file contains exactly one
         tree).
-    branches : list of strings or string, optional (default=None)
-        List of branch names and expressions to include as columns of the
-        array or a single branch name or expression to convert into a
-        one-dimensional array. If None then include all branches that can be
-        converted.
+    branches : list of strings and tuples or a string or tuple, optional (default=None)
+        List of branches and expressions to include as columns of the array or
+        a single branch or expression in which case a nonstructured array is
+        returned. If None then include all branches that can be converted.
+        Branches or expressions that result in variable-length subarrays can be
+        truncated at a fixed length by using the tuple ``(branch_or_expression,
+        fill_value, length)`` or converted into a single value with
+        ``(branch_or_expression, fill_value)`` where ``length==1`` is implied.
+        ``fill_value`` is used when the original array is shorted than
+        ``length``. This truncation is after any object selection performed
+        with the ``object_selection`` argument.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     object_selection : dict, optional (default=None)
@@ -200,8 +206,18 @@ def root2array(filenames,
 
     if isinstance(branches, string_types):
         # single branch selected
+        flatten = branches
         branches = [branches]
-        flatten = True
+    elif isinstance(branches, tuple):
+        if len(branches) not in (2, 3):
+            raise ValueError(
+                "invalid branch tuple: {0}. "
+                "A branch tuple must contain two elements "
+                "(branch_name, fill_value) or three elements "
+                "(branch_name, fill_value, length) "
+                "to yield a single value or truncate, respectively".format(branches))
+        flatten = branches[0]
+        branches = [branches]
     else:
         flatten = False
 
@@ -216,7 +232,7 @@ def root2array(filenames,
 
     if flatten:
         # select single column
-        return arr[branches[0]]
+        return arr[flatten]
     return arr
 
 
@@ -285,11 +301,17 @@ def tree2array(tree,
     ----------
     tree : ROOT TTree instance
         The ROOT TTree to convert into an array.
-    branches : list of strings or string, optional (default=None)
-        List of branch names and expressions to include as columns of the
-        array or a single branch name or expression to convert into a
-        one-dimensional array. If None then include all branches that can be
-        converted.
+    branches : list of strings and tuples or a string or tuple, optional (default=None)
+        List of branches and expressions to include as columns of the array or
+        a single branch or expression in which case a nonstructured array is
+        returned. If None then include all branches that can be converted.
+        Branches or expressions that result in variable-length subarrays can be
+        truncated at a fixed length by using the tuple ``(branch_or_expression,
+        fill_value, length)`` or converted into a single value with
+        ``(branch_or_expression, fill_value)`` where ``length==1`` is implied.
+        ``fill_value`` is used when the original array is shorted than
+        ``length``. This truncation is after any object selection performed
+        with the ``object_selection`` argument.
     selection : str, optional (default=None)
         Only include entries fulfilling this condition.
     object_selection : dict, optional (default=None)
@@ -372,8 +394,18 @@ def tree2array(tree,
 
     if isinstance(branches, string_types):
         # single branch selected
+        flatten = branches
         branches = [branches]
-        flatten = True
+    elif isinstance(branches, tuple):
+        if len(branches) not in (2, 3):
+            raise ValueError(
+                "invalid branch tuple: {0}. "
+                "A branch tuple must contain two elements "
+                "(branch_name, fill_value) or three elements "
+                "(branch_name, fill_value, length) "
+                "to yield a single value or truncate, respectively".format(branches))
+        flatten = branches[0]
+        branches = [branches]
     else:
         flatten = False
 
@@ -386,7 +418,7 @@ def tree2array(tree,
 
     if flatten:
         # select single column
-        return arr[branches[0]]
+        return arr[flatten]
     return arr
 
 

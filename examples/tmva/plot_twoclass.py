@@ -8,6 +8,7 @@ import numpy as np
 from numpy.random import RandomState
 import matplotlib.pyplot as plt
 from root_numpy.tmva import add_classification_events, evaluate_reader
+from root_numpy import ROOT_VERSION
 from ROOT import TMVA, TFile, TCut
 
 plt.style.use('ggplot')
@@ -36,7 +37,10 @@ output = TFile('tmva_output.root', 'recreate')
 factory = TMVA.Factory('classifier', output,
                        'AnalysisType=Classification:'
                        '!V:Silent:!DrawProgressBar')
-data = TMVA.DataLoader('.')
+if ROOT_VERSION >= '6.07/04':
+    data = TMVA.DataLoader('.')
+else:
+    data = factory
 for n in range(n_vars):
     data.AddVariable('f{0}'.format(n), 'F')
 
@@ -47,10 +51,14 @@ add_classification_events(data, X_test, y_test, weights=w_test, test=True)
 data.PrepareTrainingAndTestTree(TCut('1'), 'NormMode=EqualNumEvents')
 
 # Train a classifier
-factory.BookMethod(data, 'Fisher', 'Fisher',
-                   'Fisher:VarTransform=None:CreateMVAPdfs:'
-                   'PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:'
-                   'NsmoothMVAPdf=10')
+if ROOT_VERSION >= '6.07/04':
+    BookMethod = factory.BookMethod
+else:
+    BookMethod = TMVA.Factory.BookMethod
+BookMethod(data, 'Fisher', 'Fisher',
+           'Fisher:VarTransform=None:CreateMVAPdfs:'
+           'PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:'
+           'NsmoothMVAPdf=10')
 factory.TrainAllMethods()
 
 # Classify the test dataset with the classifier
@@ -65,7 +73,8 @@ plot_step = 0.02
 class_names = "AB"
 cmap = plt.get_cmap('bwr')
 
-plt.figure(figsize=(10, 5))
+fig = plt.figure(figsize=(10, 5))
+fig.patch.set_alpha(0)
 
 # Plot the decision boundaries
 plt.subplot(121)
@@ -95,17 +104,17 @@ plt.ylabel('y')
 plt.title('Decision Boundary')
 
 # Plot the two-class decision scores
-plot_range = (twoclass_output.min(), twoclass_output.max())
-plt.subplot(122)
+ax = plt.subplot(122)
+ax.xaxis.grid(False)
 for i, n, c in zip([-1, 1], class_names, plot_colors):
     plt.hist(twoclass_output[y_test == i],
-             bins=10,
-             range=plot_range,
+             bins=20,
+             range=(-4, 4),
              facecolor=c,
              label='Class %s' % n,
              alpha=.5, histtype='stepfilled')
 x1, x2, y1, y2 = plt.axis()
-plt.axis((x1, x2, y1, y2 * 1.2))
+plt.axis((x1, x2, y1, 140))
 plt.legend(loc='upper right')
 plt.ylabel('Samples')
 plt.xlabel('Score')

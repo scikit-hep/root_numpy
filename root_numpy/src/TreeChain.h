@@ -43,9 +43,8 @@ class TreeChain
 {
     public:
 
-    TreeChain(TTree* tree, bool ischain, long long cache_size):
+    TreeChain(TTree* tree, long long cache_size):
         tree(tree),
-        ischain(ischain),
         itree(-1),
         ientry(0),
         cache_size(cache_size)
@@ -286,6 +285,8 @@ class TreeChain
     {
         TBranch* branch;
         TLeaf* leaf;
+        TFile* file;
+        TChain* chain;
         std::string bname, lname;
 
         // Update all BranchColumn leaves
@@ -298,9 +299,15 @@ class TreeChain
             if (branch == NULL)
             {
                 std::cerr << "WARNING: cannot find branch " << bname;
-                if (ischain)
+                // Am I a TChain?
+                chain = dynamic_cast<TChain*>(tree);
+                if (chain != NULL)
                 {
-                    std::cerr << " in file " << ((TChain*) tree)->GetFile()->GetName();
+                    file = chain->GetFile();
+                    if (file != NULL)
+                    {
+                        std::cerr << " in file " << file->GetName();
+                    }
                 }
                 std::cerr << std::endl;
                 continue;
@@ -370,7 +377,6 @@ class TreeChain
     };
 
     TTree* tree;
-    bool ischain;
     int itree;
     long long ientry;
     long long cache_size;

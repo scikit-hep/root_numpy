@@ -23,6 +23,7 @@ cdef extern from "Column.h":
         string name
         string type
         Selector* selector
+        unsigned_int max_length
         int GetLen()
         int GetCountLen()
         int GetSize()
@@ -31,40 +32,15 @@ cdef extern from "Column.h":
     
     cdef cppclass FormulaArrayColumn[T](Column):
         FormulaArrayColumn(string, string, TTreeFormula*)
-        string name
-        string type
-        int GetLen()
-        int GetSize()
-        void* GetValuePointer()
-        const_char* GetTypeName()
 
     cdef cppclass FormulaFixedArrayColumn[T](FormulaArrayColumn):
         FormulaFixedArrayColumn(string, string, TTreeFormula*)
-        string name
-        string type
-        int GetLen()
-        int GetSize()
-        void* GetValuePointer()
-        const_char* GetTypeName()
 
     cdef cppclass FormulaColumn[T](FormulaArrayColumn):
         FormulaColumn(string, string, TTreeFormula*)
-        string name
-        string type
-        int GetLen()
-        int GetSize()
-        void* GetValuePointer()
-        const_char* GetTypeName()
     
     cdef cppclass BranchColumn(Column):
         BranchColumn(string, TLeaf*)
-        string name
-        string type
-        int GetLen()
-        int GetCountLen()
-        int GetSize()
-        void* GetValuePointer()
-        const_char* GetTypeName()
 
 cdef extern from "Selector.h":
     cdef cppclass Selector:
@@ -75,7 +51,7 @@ cdef extern from "Selector.h":
 
 cdef extern from "TreeChain.h":
     cdef cppclass TreeChain:
-        TreeChain(TTree*, bool, long_long)
+        TreeChain(TTree*, long_long)
         int Prepare()
         int Next()
         void AddColumn(string, string, BranchColumn*)

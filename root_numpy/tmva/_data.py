@@ -101,7 +101,7 @@ def add_classification_events(obj, events, labels, signal_label=None,
 
 
 def add_regression_events(obj, events, targets, weights=None, test=False):
-    """Add regression events to a TMVA::Factory from NumPy arrays.
+    """Add regression events to a TMVA::Factory or TMVA::DataLoader from NumPy arrays.
 
     Parameters
     ----------
