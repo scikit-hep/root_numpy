@@ -514,27 +514,33 @@ def check_truncate_impute(filename):
     assert_true(fields_1d)
     assert_true(fields_md)
 
-    arr1 = rnp.root2array(filename, branches=[(f, 0) for f in fields_1d])
-    assert_true(len(arr1))
-    assert_equal(set(arr1.dtype.names), set(fields_1d))
-    # Giving length of 1 will result in the same output
-    arr2 = rnp.root2array(filename, branches=[(f, 0, 1) for f in fields_1d])
-    assert_array_equal(arr1, arr2)
-    # fill_value of 1 instead of 0 should change output array
-    arr2 = rnp.root2array(filename, branches=[(f, 1, 1) for f in fields_1d])
-    assert_raises(AssertionError, assert_array_equal, arr1, arr2)
-    # check dtype shape
-    arr3 = rnp.root2array(filename, branches=[(f, 0, 3) for f in fields_1d])
-    for field in fields_1d:
-        assert_equal(arr3.dtype[field].shape, (3,))
+    rfile = ROOT.TFile.Open(filename)
+    tree = rfile.Get(rnp.list_trees(filename)[0])
 
-    # length must be at least 1
-    assert_raises(ValueError, rnp.root2array, filename, branches=[(fields_1d[0], 0, 0)])
-    # tuple is not of length 2 or 3
-    assert_raises(ValueError, rnp.root2array, filename, branches=[(fields_1d[0], 1, 1, 1)])
-    assert_raises(ValueError, rnp.root2array, filename, branches=(fields_1d[0], 1, 1, 1))
-    # can only truncate 1d arrays
-    assert_raises(TypeError, rnp.root2array, filename, branches=(fields_md[0], 0))
+    # test both root2array and tree2array
+    for func, arg in [(rnp.root2array, filename), (rnp.tree2array, tree)]:
+
+        arr1 = func(arg, branches=[(f, 0) for f in fields_1d])
+        assert_true(len(arr1))
+        assert_equal(set(arr1.dtype.names), set(fields_1d))
+        # Giving length of 1 will result in the same output
+        arr2 = func(arg, branches=[(f, 0, 1) for f in fields_1d])
+        assert_array_equal(arr1, arr2)
+        # fill_value of 1 instead of 0 should change output array
+        arr2 = func(arg, branches=[(f, 1, 1) for f in fields_1d])
+        assert_raises(AssertionError, assert_array_equal, arr1, arr2)
+        # check dtype shape
+        arr3 = func(arg, branches=[(f, 0, 3) for f in fields_1d])
+        for field in fields_1d:
+            assert_equal(arr3.dtype[field].shape, (3,))
+
+        # length must be at least 1
+        assert_raises(ValueError, func, arg, branches=[(fields_1d[0], 0, 0)])
+        # tuple is not of length 2 or 3
+        assert_raises(ValueError, func, arg, branches=[(fields_1d[0], 1, 1, 1)])
+        assert_raises(ValueError, func, arg, branches=(fields_1d[0], 1, 1, 1))
+        # can only truncate 1d arrays
+        assert_raises(TypeError, func, arg, branches=(fields_md[0], 0))
 
 
 def test_truncate_impute():
