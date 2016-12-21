@@ -513,6 +513,8 @@ def check_truncate_impute(filename):
     fields_md = list(set(object_fields) - set(fields_1d))
     assert_true(fields_1d)
     assert_true(fields_md)
+    fields_1d.sort()
+    fields_md.sort()
 
     rfile = ROOT.TFile.Open(filename)
     tree = rfile.Get(rnp.list_trees(filename)[0])
@@ -541,6 +543,12 @@ def check_truncate_impute(filename):
         assert_raises(ValueError, func, arg, branches=(fields_1d[0], 1, 1, 1))
         # can only truncate 1d arrays
         assert_raises(TypeError, func, arg, branches=(fields_md[0], 0))
+
+        # expressions
+        arr1 = func(arg, branches='{0}==0'.format(fields_1d[0]))
+        assert_equal(arr1.dtype, 'O')
+        arr2 = func(arg, branches=('{0}==0'.format(fields_1d[0]), 0))
+        assert_equal(arr2.dtype, arr1[0].dtype)
 
 
 def test_truncate_impute():
