@@ -79,12 +79,6 @@ install-user: clean
 sdist: clean
 	@$(PYTHON) setup.py sdist
 
-register:
-	@$(PYTHON) setup.py register
-
-upload: clean
-	@$(PYTHON) setup.py sdist upload
-
 valgrind: inplace
 	valgrind --log-file=valgrind.log --tool=memcheck --leak-check=full \
 		 --suppressions=etc/valgrind-python.supp \
