@@ -207,8 +207,6 @@ def setup_package():
         maintainer_email='noel@dawe.me',
         license='new BSD',
         url='http://rootpy.github.io/root_numpy',
-        download_url='http://pypi.python.org/packages/source/r/'
-                    'root_numpy/root_numpy-{0}.tar.gz'.format(__version__),
         packages=packages,
         package_data={
             'root_numpy': ['testdata/*.root', 'config.json'],
