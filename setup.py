@@ -146,6 +146,7 @@ librootnumpy = Extension(
 ext_modules = [librootnumpy]
 packages = [
     'root_numpy',
+    'root_numpy.tests',
     'root_numpy.testdata',
     'root_numpy.extern',
     ]
