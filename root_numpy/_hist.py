@@ -260,7 +260,7 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
     return array
 
 
-def array2hist(array, hist):
+def array2hist(array, hist, errors=None):
     """Convert a NumPy array into a ROOT histogram
 
     Parameters
@@ -270,6 +270,9 @@ def array2hist(array, hist):
         ROOT histogram.
     hist : ROOT TH1, TH2, or TH3
         A ROOT histogram.
+    errors : numpy array
+        A numpy array of errors with matching dimensionality as the
+        bin contents array. If not given, no errors are set
 
     Returns
     -------
@@ -381,6 +384,14 @@ def array2hist(array, hist):
     dtype = np.dtype(DTYPE_ROOT2NUMPY[hist_type])
     # No copy is made if the dtype is the same as input
     _array = np.ascontiguousarray(array, dtype=dtype)
+    if errors is not None:
+        if errors.shape != array.shape:
+            raise ValueError("Contents and errors are not compatible")
+        # errors are specified as doubles in SetError function
+        _errors = np.ascontiguousarray(errors, dtype=np.float64)
+    else:
+        _errors = None
+
     if _array.ndim != len(shape):
         raise ValueError(
             "array and histogram do not have "
@@ -400,8 +411,16 @@ def array2hist(array, hist):
         array_overflow = np.zeros(shape, dtype=dtype)
         array_overflow[tuple(slices)] = _array
         _array = array_overflow
+
+        if _errors is not None:
+            errors_overflow = np.zeros(shape, dtype=np.float64)
+            errors_overflow[tuple(slices)] = _errors
+            _errors = errors_overflow
+
     ARRAY_NUMPY2ROOT[len(shape)][hist_type](
         ROOT.AsCObject(hist), np.ravel(np.transpose(_array)))
     # Set the number of entries to the number of array elements
     hist.SetEntries(_array.size)
+    if _errors is not None:
+        hist.SetError(np.ravel(_errors.T))
     return hist

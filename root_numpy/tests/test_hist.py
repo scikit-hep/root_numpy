@@ -136,6 +136,27 @@ def check_array2hist(hist):
     arr_hist = rnp.hist2array(hist)
     assert_array_equal(arr_hist, arr)
 
+    # Check behaviour if errors are supplied
+    errors = arr * 0.1
+    _hist = hist.Clone()
+    _hist.Reset()
+    rnp.array2hist(arr, _hist, errors=errors)
+    arr_hist = rnp.hist2array(_hist)
+    assert_array_equal(arr_hist, arr)
+    if hist.GetDimension() == 1:
+        errors_from_hist = np.array([_hist.GetBinError(ix)
+                                     for ix in range(1, _hist.GetNbinsX() + 1)])
+    if hist.GetDimension() == 2:
+        errors_from_hist = np.array([[_hist.GetBinError(ix, iy)
+                                      for iy in range(1, _hist.GetNbinsY() + 1)]
+                                     for ix in range(1, _hist.GetNbinsX() + 1)])
+    if hist.GetDimension() == 3:
+        errors_from_hist = np.array([[[_hist.GetBinError(ix, iy, iz)
+                                       for iz in range(1, _hist.GetNbinsZ() + 1)]
+                                      for iy in range(1, _hist.GetNbinsY() + 1)]
+                                     for ix in range(1, _hist.GetNbinsX() + 1)])
+    assert_array_equal(errors, errors_from_hist)
+
     shape_overflow = shape + 2
     arr_overflow = RNG.randint(0, 10, size=shape_overflow)
     hist_overflow = hist.Clone()
@@ -170,11 +191,20 @@ def test_array2hist():
     assert_raises(ValueError, rnp.array2hist,
                   np.arange(4).reshape(2, 2),
                   ROOT.TH2D('test', '', 4, 0, 1, 3, 0, 1))
+    # shape of errors and content array does not match
+    assert_raises(ValueError, rnp.array2hist,
+                  np.arange(4).reshape(2, 2),
+                  ROOT.TH2D('test', '', 4, 0, 1, 4, 0, 1),
+                  np.arange(6).reshape(2, 3))
 
     for ndim in (1, 2, 3):
         for hist_type in 'DFISC':
             hist = make_histogram(hist_type, shape=(5,) * ndim, fill=False)
             yield check_array2hist, hist
+
+    # Check for histograms with unequal dimensions (reveals issues with transposing)
+    hist = make_histogram(hist_type, shape=(5, 6, 7), fill=False)
+    check_array2hist(hist)
 
 
 def test_fill_hist():
