@@ -216,7 +216,7 @@ def test_blockwise_inner_join():
             ('al', '|O8'),
             ('ar', '<i8'),
             ('fk', '<i8')])
-    assert_equal(str(a2), str(exp2)) # numpy testing doesn't like subarray
+    assert_array_equal(a2, exp2)
     assert_equal(a2.dtype, exp2.dtype)
 
     # scalar join
@@ -230,5 +230,5 @@ def test_blockwise_inner_join():
             ('al', '|O8'),
             ('ar', '<i8'),
             ('fk', '<i8')])
-    assert_equal(str(a3), str(exp3)) # numpy testing doesn't like subarray
+    assert_array_equal(a3, exp3)
     assert_equal(a3.dtype, exp3.dtype)
