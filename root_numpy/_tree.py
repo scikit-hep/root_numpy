@@ -149,7 +149,7 @@ def root2array(filenames,
         truncated at a fixed length by using the tuple ``(branch_or_expression,
         fill_value, length)`` or converted into a single value with
         ``(branch_or_expression, fill_value)`` where ``length==1`` is implied.
-        ``fill_value`` is used when the original array is shorted than
+        ``fill_value`` is used when the original array is shorter than
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
@@ -309,7 +309,7 @@ def tree2array(tree,
         truncated at a fixed length by using the tuple ``(branch_or_expression,
         fill_value, length)`` or converted into a single value with
         ``(branch_or_expression, fill_value)`` where ``length==1`` is implied.
-        ``fill_value`` is used when the original array is shorted than
+        ``fill_value`` is used when the original array is shorter than
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
