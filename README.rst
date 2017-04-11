@@ -1,6 +1,6 @@
 .. -*- mode: rst -*-
 
-`[see the full documentation] <http://rootpy.github.com/root_numpy/>`_
+`[see the full documentation] <http://scikit-hep.org/root_numpy>`_
 
 root_numpy: The interface between ROOT and NumPy
 ================================================
