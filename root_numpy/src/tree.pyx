@@ -336,7 +336,7 @@ cdef object tree2array(TTree* tree, branches,
             shortname = leaf_array.GetEntries() == 1
 
             if perform_object_selection:
-                # Find selector for this branch is present
+                # Find selector for this branch if present
                 selector_map_it = selector_map.find(string(branch_name))
                 if selector_map_it != selector_map.end():
                     selector = deref(selector_map_it).second
@@ -423,6 +423,18 @@ cdef object tree2array(TTree* tree, branches,
                 # rolling over to the next tree.
                 chain.AddFormula(formula)
 
+                if perform_object_selection:
+                    # Find selector for this expression if present
+                    selector_map_it = selector_map.find(expression)
+                    if selector_map_it != selector_map.end():
+                        selector = deref(selector_map_it).second
+                        # Remove this item from the map to check for branches
+                        # present in the object_selection but not in the tree or
+                        # any fields of the output array
+                        selector_map.erase(selector_map_it)
+                    else:
+                        selector = NULL
+
                 """
                 ROOT's definition of "multiplicity":
 
@@ -439,7 +451,10 @@ cdef object tree2array(TTree* tree, branches,
                     else:
                         col = new FormulaColumn['double'](expression, 'Double_t', formula)
                         conv = find_converter_by_typename('double')
-
+                    if selector != NULL:
+                        raise TypeError(
+                            "attempting to apply selection on column '{0}' "
+                            "that is not of type object".format(expression))
                 elif formula.GetMultiplicity() == -1 or formula.GetMultiplicity() == 1:
                     # variable number of values per entry
                     if formula.IsInteger(False):
@@ -448,7 +463,7 @@ cdef object tree2array(TTree* tree, branches,
                     else:
                         col = new FormulaArrayColumn['double'](expression, 'Double_t', formula)
                         conv = get_array_converter('double', '[]')
-
+                    col.selector = selector
                 else:
                     # fixed number of values per entry
                     if formula.IsInteger(False):
@@ -457,7 +472,10 @@ cdef object tree2array(TTree* tree, branches,
                     else:
                         col = new FormulaFixedArrayColumn['double'](expression, 'Double_t', formula)
                         conv = get_array_converter('double', '[{0:d}]'.format(formula.GetNdata()))
-
+                    if selector != NULL:
+                        raise TypeError(
+                            "attempting to apply selection on column '{0}' "
+                            "that is not of type object".format(expression))
                 if conv == NULL:
                     # Oops, this should never happen
                     raise AssertionError(
