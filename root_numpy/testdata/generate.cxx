@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <iostream>
 #include <vector>
 #include <string>
 
@@ -7,14 +8,20 @@
 #include "TNtuple.h"
 #include "TRandom.h"
 #include "TLorentzVector.h"
+#include "TLine.h"
+#include "TClonesArray.h"
 
 
 using std::vector;
 using std::string;
+using std::cout;
+using std::endl;
 
 
 void make_ntuple()
 {
+    cout << "writing ntuple.root ..." << endl;
+
     TFile f("ntuple.root", "RECREATE");
     TNtuple ntuple("ntuple", "ntuple", "x:y:z");
     for (int i = 0; i < 10; ++i)
@@ -27,6 +34,8 @@ void make_ntuple()
 
 void make_vector()
 {
+    cout << "writing vector.root ..." << endl;
+
     TFile f("vector.root", "RECREATE");
     TTree t("tree", "tree with vectors");
 
@@ -109,6 +118,8 @@ void make_vector()
 
 void make_single(int id, double weight)
 {
+    cout << "writing single" << id << ".root ..." << endl;
+
     char buffer[255];
     sprintf(buffer, "single%d.root", id);
     TFile file(buffer, "RECREATE");
@@ -130,6 +141,8 @@ void make_single(int id, double weight)
 
 void make_fixed_length(int id)
 {
+    cout << "writing fixed" << id << ".root ..." << endl;
+
     char buffer[255];
     sprintf(buffer, "fixed%d.root", id);
     TFile file(buffer, "RECREATE");
@@ -176,6 +189,8 @@ void make_fixed_length(int id)
 
 void make_variable_length(int id)
 {
+    cout << "writing vary" << id << ".root ..." << endl;
+
     char c[100];
     unsigned char uc[100];
     short s[100];
@@ -264,6 +279,8 @@ void make_variable_length(int id)
 
 void make_trees()
 {
+    cout << "writing trees.root ..." << endl;
+
     TFile file("trees.root", "RECREATE");
     TTree tree("tree", "tree");
     double x, y;
@@ -291,6 +308,8 @@ void make_trees()
 
 void make_struct()
 {
+    cout << "writing struct.root ..." << endl;
+
     struct branchstruct
     {
         int intleaf;
@@ -323,6 +342,8 @@ void make_struct()
 
 void make_random()
 {
+    cout << "writing test.root ..." << endl;
+
     TFile file("test.root", "RECREATE");
     TTree tree("tree", "tree");
     int i;   tree.Branch("i", &i, "i/I");
@@ -343,6 +364,8 @@ void make_random()
 
 void make_string()
 {
+    cout << "writing string.root ..." << endl;
+
     TFile file("string.root", "RECREATE");
     TTree tree("tree", "tree with string branches");
     string message("Hello World!");
@@ -368,39 +391,94 @@ void make_string()
 
 void make_object(int id)
 {
+    cout << "writing object" << id << ".root ..." << endl;
+
     char buffer[255];
     sprintf(buffer, "object%d.root", id);
     TFile file(buffer, "RECREATE");
     TTree tree("tree", "tree with object branches");
     int entry;
     TLorentzVector vect;
+    vector<TLorentzVector> vects;
+    TClonesArray* lines = new TClonesArray("TLine");
+    TClonesArray& lines_ref = *lines;
+
     tree.Branch("entry", &entry, "i/I");
     // TLorentzVector is split across multiple subbranches
     tree.Branch("vect", &vect);
+    tree.Branch("vects", &vects);
+    tree.Branch("lines", &lines);
+    lines->BypassStreamer();
     for (entry=0; entry<10; ++entry)
     {
         vect.SetPtEtaPhiM(entry + id, entry + id, 0, 0);
+        lines_ref.Clear();
+        for (int j=0; j<entry; ++j)
+        {
+            new(lines_ref[j]) TLine(id, entry, j, 0);
+        }
+        vects.push_back(vect);
         tree.Fill();
     }
     tree.Write();
     file.Close();
 }
 
-int main(void)
+int main(int argc, char* argv[])
 {
-    make_ntuple();
-    make_single(1, 2.);
-    make_single(2, 3.);
-    make_fixed_length(1);
-    make_fixed_length(2);
-    make_variable_length(1);
-    make_variable_length(2);
-    make_trees();
-    make_vector();
-    make_struct();
-    make_random();
-    make_string();
-    make_object(1);
-    make_object(2);
+    if (argc == 1) {
+        make_ntuple();
+        make_single(1, 2.);
+        make_single(2, 3.);
+        make_fixed_length(1);
+        make_fixed_length(2);
+        make_variable_length(1);
+        make_variable_length(2);
+        make_trees();
+        make_vector();
+        make_struct();
+        make_random();
+        make_string();
+        make_object(1);
+        make_object(2);
+    } else {
+        vector<string> args(argv, argv + argc);
+        for (size_t i = 1; i < args.size(); ++i) {
+            if (args[i] == "ntuple") {
+                make_ntuple();
+            }
+            else if (args[i] == "single") {
+                make_single(1, 2.);
+                make_single(2, 3.);
+            }
+            else if (args[i] == "fixed") {
+                make_fixed_length(1);
+                make_fixed_length(2);
+            }
+            else if (args[i] == "variable") {
+                make_variable_length(1);
+                make_variable_length(2);
+            }
+            else if (args[i] == "trees") {
+                make_trees();
+            }
+            else if (args[i] == "vector") {
+                make_vector();
+            }
+            else if (args[i] == "struct") {
+                make_struct();
+            }
+            else if (args[i] == "random") {
+                make_random();
+            }
+            else if (args[i] == "string") {
+                make_string();
+            }
+            else if (args[i] == "object") {
+                make_object(1);
+                make_object(2);
+            }
+        }
+    }
     return 0;
 }

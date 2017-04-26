@@ -246,8 +246,6 @@ def test_variable_length_arrays():
         assert_equal(len(b[i]), a.len_n[i])
 
 
-
-
 def test_single_branch():
     f = get_file('single1.root')
     tree = f.Get('tree')
@@ -336,6 +334,13 @@ def test_object_selection():
 
     assert_raises(ValueError, rnp.root2array, load('vary*.root'),
                   branches='n_int', object_selection={'n_int % 2 == 0': ['n_int', 'n_int']})
+
+    # test object selection on variable-length expression
+    a = rnp.root2array(load('object*.root'), branches='lines.GetX1()',
+                       object_selection={'lines.GetX1() > 3': 'lines.GetX1()'})
+
+    for suba in a:
+        assert_true((suba > 3).all())
 
     # test with vectors
     a = rnp.root2array(load('vector.root'), branches='v_i',

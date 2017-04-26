@@ -23,7 +23,7 @@ else
       endif
     endif
   endif
-endif 
+endif
 
 # Name of the executable
 EXE = generate
@@ -39,7 +39,7 @@ default: $(EXE)
 # Rule to create the dictionaries
 dicts.cxx: LinkDef.h
 	@echo "Generating dictionaries"
-	@rootcint -f $@ -c $(CXXFLAGS) -p $^
+	@rootcling -f $@ -c $(CXXFLAGS) -p classes.h $^
 
 # Rule to create the executable
 $(EXE): dicts.cxx $(CPPLIST)
@@ -52,3 +52,4 @@ clean:
 	@rm -f $(EXE)
 	@rm -f dicts.cxx
 	@rm -f dicts.h
+	@rm -f dicts_rdict.pcm
