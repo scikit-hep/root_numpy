@@ -329,9 +329,11 @@ def test_object_selection():
     for suba in a:
         assert_true((suba % 2 == 0).all())
 
+    # branch does not exist
     assert_raises(ValueError, rnp.root2array, load('vary*.root'),
                   branches='n_int', object_selection={'n_int % 2 == 0': 'DNE'})
 
+    # duplicate branch in selection list
     assert_raises(ValueError, rnp.root2array, load('vary*.root'),
                   branches='n_int', object_selection={'n_int % 2 == 0': ['n_int', 'n_int']})
 
@@ -341,6 +343,13 @@ def test_object_selection():
 
     for suba in a:
         assert_true((suba > 3).all())
+
+    # attempting to apply object selection on fixed-length array
+    # currently not implemented since this changes the output type from
+    # fixed-length to variable-length
+    assert_raises(TypeError, rnp.root2array, load("fixed*.root"),
+                  branches='n_int',
+                  object_selection={'n_int % 2 == 0': 'n_int'})
 
     # test with vectors
     a = rnp.root2array(load('vector.root'), branches='v_i',
