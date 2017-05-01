@@ -7,8 +7,8 @@ root_numpy: The interface between ROOT and NumPy
 
 .. image:: https://img.shields.io/pypi/v/root_numpy.svg
    :target: https://pypi.python.org/pypi/root_numpy
-.. image:: https://travis-ci.org/rootpy/root_numpy.png
-   :target: https://travis-ci.org/rootpy/root_numpy
+.. image:: https://api.travis-ci.org/scikit-hep/root_numpy.png
+   :target: https://travis-ci.org/scikit-hep/root_numpy
 .. image:: https://coveralls.io/repos/rootpy/root_numpy/badge.svg?branch=master
    :target: https://coveralls.io/r/rootpy/root_numpy?branch=master
 .. image:: https://landscape.io/github/rootpy/root_numpy/master/landscape.svg?style=flat
