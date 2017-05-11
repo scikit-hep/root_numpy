@@ -17,7 +17,7 @@
       "affiliation": "Mahidol University International College"
     },
     {
-      "@id": "",
+      "@id": "http://orcid.org/0000-0001-6616-3433",
       "@type": "Person",
       "email": "gstark@cern.ch",
       "name": "Giordon Stark",
