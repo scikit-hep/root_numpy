@@ -1,0 +1,37 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0003-0202-3284",
+      "@type": "Person",
+      "email": "edmund.dawe@unimelb.edu.au",
+      "name": "Noel Dawe",
+      "affiliation": "The University of Melbourne"
+    },
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "piti118@gmail.com",
+      "name": "Piti Ongmongkolkul",
+      "affiliation": "Mahidol University International College"
+    },
+    {
+      "@id": "",
+      "@type": "Person",
+      "email": "gstark@cern.ch",
+      "name": "Giordon Stark",
+      "affiliation": "The University of Chicago"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/scikit-hep/root_numpy",
+  "datePublished": "2017-05-11",
+  "dateModified": "2017-05-11",
+  "dateCreated": "2017-05-11",
+  "description": "root_numpy is a Python extension module that provides an interface between the ROOT software framework and NumPy",
+  "keywords": "Python, C++, NumPy, CERN, ROOT",
+  "license": "BSD",
+  "title": "root_numpy",
+  "version": "4.7.2"
+}
