@@ -1,6 +1,7 @@
 default:
 	@pandoc \
 	-V repository=https://github.com/scikit-hep/root_numpy \
+	-V archive_doi=http://doi.org/10.5281/zenodo.574909 \
       	-S -o paper.tex -V geometry:margin=1in \
       	--filter pandoc-citeproc paper.md \
 	--bibliography paper.bib --biblatex \
