@@ -5,7 +5,7 @@
     {
       "@id": "http://orcid.org/0000-0003-0202-3284",
       "@type": "Person",
-      "email": "edmund.dawe@unimelb.edu.au",
+      "email": "noel@dawe.me",
       "name": "Edmund Noel Dawe",
       "affiliation": "The University of Melbourne"
     },
@@ -19,7 +19,7 @@
     {
       "@id": "http://orcid.org/0000-0001-6616-3433",
       "@type": "Person",
-      "email": "gstark@cern.ch",
+      "email": "kratsg@gmail.com",
       "name": "Giordon Stark",
       "affiliation": "The University of Chicago"
     }
