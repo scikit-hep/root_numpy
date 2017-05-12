@@ -43,7 +43,7 @@ in the same way as ROOT's `TTree::Draw()`. root_numpy's internals are compiled
 C++ and can read and convert data with comparable speed to ROOT as shown in
 Figure \ref{benchmark}.
 
-root_numpy also provides functions for converting between ROOT histogams and
+root_numpy also provides functions for converting between ROOT histograms and
 NumPy arrays, sampling or evaluating ROOT functions as NumPy arrays, and an
 interface to TMVA [@TMVA], ROOT's machine learning toolkit.
 
