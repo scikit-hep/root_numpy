@@ -28,11 +28,11 @@ bibliography: paper.bib
 
 # Summary
 
-root_numpy [@root_numpy_repo] is a Python extension module providing an
-interface between CERN's ROOT software framework [@ROOT] and NumPy [@NumPy].
-root_numpy enables researchers typically operating within the C++ domain of
-ROOT to analyse data in ROOT format within the broad and growing ecosystem of
-scientific Python packages.
+root_numpy is a Python extension module providing an interface between CERN's
+ROOT software framework [@ROOT] and NumPy [@NumPy]. root_numpy enables
+researchers typically operating within the C++ domain of ROOT to analyse data
+in ROOT format within the broad and growing ecosystem of scientific Python
+packages.
 
 At the core of root_numpy are functions for converting a ROOT `TTree` into a
 structured NumPy array as well as converting a NumPy array back into a ROOT
@@ -45,6 +45,6 @@ same way as ROOT's `TTree::Draw()`. root_numpy's internals are compiled C++ and
 can therefore handle large amounts of data much faster than equivalent pure
 Python implementations.
 
-![root_numpy benchmark](../benchmarks/bench_tree2array.png)
+![root_numpy benchmark](../benchmarks/bench_tree2array.pdf)
 
 # References
