@@ -56,16 +56,16 @@ for entries in num_entries:
     print("  {0:10.5f}".format(root_numpy_times[-1]), end="")
     print("  {0:10.5f}".format(root_times[-1]))
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 3.5))
 
 ax1.plot(num_entries, root_numpy_times, '-o', label='root_numpy.tree2array()', linewidth=1.5)
 ax1.plot(num_entries, root_times, '--o', label='ROOT.TTree.Draw()', linewidth=1.5)
 ax1.set_xscale("log", nonposx='clip')
 ax1.set_yscale("log", nonposx='clip')
-ax1.legend(loc=(0.05, 0.7), frameon=False, fontsize=10)
+ax1.legend(loc=(0.03, 0.7), frameon=False, fontsize=10)
 ax1.set_ylabel('time [s]')
 ax1.set_xlabel('number of entries')
-ax1.text(0.05, 0.95, 'tree contains a single branch',
+ax1.text(0.03, 0.97, 'tree contains a single branch',
          verticalalignment='top', horizontalalignment='left',
          transform=ax1.transAxes, fontsize=12)
 
@@ -79,12 +79,13 @@ for branches in num_branches:
     tree = make_tree(1000000, branches=branches)
     branchnames = [branch.GetName() for branch in tree.GetListOfBranches()]
     branchname = ':'.join(branchnames)
+    iterations = 5
     root_numpy_times.append(
         min(timeit.Timer('tree2array(tree)',
-                         setup='from root_numpy import tree2array; from __main__ import tree').repeat(3, 3)) / 3)
+                         setup='from root_numpy import tree2array; from __main__ import tree').repeat(3, iterations)) / iterations)
     root_times.append(
         min(timeit.Timer('draw("{0}", "", "goff candle")'.format(branchname),
-                         setup='from __main__ import tree; draw = tree.Draw').repeat(3, 3)) / 3)
+                         setup='from __main__ import tree; draw = tree.Draw').repeat(3, iterations)) / iterations)
     print("  {0:10.5f}".format(root_numpy_times[-1]), end="")
     print("  {0:10.5f}".format(root_times[-1]))
 
@@ -93,10 +94,10 @@ ax2.plot(num_branches, root_times, '--o', label='ROOT.TTree.Draw()', linewidth=1
 #ax2.legend(loc='lower right', frameon=False, fontsize=12)
 ax2.set_ylabel('time [s]')
 ax2.set_xlabel('number of branches')
-ax2.text(0.05, 0.95, 'tree contains 1M entries per branch',
+ax2.text(0.03, 0.97, 'tree contains 1M entries per branch',
          verticalalignment='top', horizontalalignment='left',
          transform=ax2.transAxes, fontsize=12)
-ax2.text(0.05, 0.85, hardware,
+ax2.text(0.03, 0.87, hardware,
          verticalalignment='top', horizontalalignment='left',
          transform=ax2.transAxes, fontsize=10)
 

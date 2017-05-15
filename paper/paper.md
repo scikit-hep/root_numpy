@@ -28,20 +28,17 @@ bibliography: paper.bib
 
 # Summary
 
-root_numpy is a Python extension module providing an interface between CERN's
-ROOT [@ROOT] software framework and NumPy [@NumPy]. root_numpy enables
-researchers typically operating within the C++ domain of ROOT to analyse data
-in ROOT format within the broad and growing ecosystem of scientific Python
-packages.
+root_numpy is a Python extension module interfacing NumPy [@NumPy] with CERN's
+ROOT [@ROOT] software framework, providing the ability to analyse
+ROOT data within the broad ecosystem of scientific Python packages.
 
-At the core of root_numpy are functions for converting data between a ROOT
-`TTree` and a structured NumPy array. root_numpy can convert `TTree` branches
-(columns) of fundamental types and strings, as well as variable-length and
-fixed-length multidimensional arrays and (nested) `std::vector<>`s. root_numpy
-can also create columns in the output NumPy array from mathematical expressions
-in the same way as ROOT's `TTree::Draw()`. root_numpy's internals are compiled
-C++ and can read and convert data with comparable speed to ROOT as shown in
-Figure \ref{benchmark}.
+At its core are functions for converting between ROOT `TTree`s and structured
+NumPy arrays. root_numpy can convert `TTree` branches (columns) of fundamental
+types and strings, as well as variable-length and fixed-length multidimensional
+arrays and (nested) `std::vector`s. root_numpy can also create columns in the
+output NumPy array from mathematical expressions like ROOT's `TTree::Draw()`.
+root_numpy's internals are compiled C++ and can handle data with comparable
+speed to ROOT as shown in Figure \ref{benchmark}.
 
 root_numpy also provides functions for converting between ROOT histograms and
 NumPy arrays, sampling or evaluating ROOT functions as NumPy arrays, and an
