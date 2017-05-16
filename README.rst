@@ -9,12 +9,12 @@ root_numpy: The interface between ROOT and NumPy
    :target: https://pypi.python.org/pypi/root_numpy
 .. image:: https://api.travis-ci.org/scikit-hep/root_numpy.png
    :target: https://travis-ci.org/scikit-hep/root_numpy
-.. image:: https://coveralls.io/repos/rootpy/root_numpy/badge.svg?branch=master
-   :target: https://coveralls.io/r/rootpy/root_numpy?branch=master
-.. image:: https://landscape.io/github/rootpy/root_numpy/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/rootpy/root_numpy/master
-.. image:: https://zenodo.org/badge/14091/rootpy/root_numpy.svg
-   :target: https://zenodo.org/badge/latestdoi/14091/rootpy/root_numpy
+.. image:: https://coveralls.io/repos/github/scikit-hep/root_numpy/badge.svg?branch=master
+   :target: https://coveralls.io/github/scikit-hep/root_numpy?branch=master
+.. image:: https://landscape.io/github/scikit-hep/root_numpy/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/scikit-hep/root_numpy/master
+.. image:: https://zenodo.org/badge/3823872.svg
+   :target: https://zenodo.org/badge/latestdoi/3823872
 
 root_numpy is a Python extension module that provides an efficient interface
 between `ROOT <http://root.cern.ch/>`_ and `NumPy <http://www.numpy.org/>`_.
