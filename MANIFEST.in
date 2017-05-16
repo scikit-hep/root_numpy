@@ -3,4 +3,3 @@ recursive-include examples *.py
 include *.py
 include README.rst
 include LICENSE
-include AUTHORS
