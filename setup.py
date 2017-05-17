@@ -207,7 +207,7 @@ def setup_package():
         maintainer='Noel Dawe',
         maintainer_email='noel@dawe.me',
         license='new BSD',
-        url='http://rootpy.github.io/root_numpy',
+        url='http://scikit-hep.org/root_numpy',
         packages=packages,
         package_data={
             'root_numpy': ['testdata/*.root', 'config.json'],
