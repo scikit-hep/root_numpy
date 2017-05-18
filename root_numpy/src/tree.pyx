@@ -9,6 +9,8 @@ cdef list_objects_recursive(TDirectory* rdir, objects, vector[TClass*]& classes,
     cdef vector[TClass*].iterator it
     cdef int nkeys = keys.GetEntries()
     cdef TKey* key
+    unique_objects = set()  # multiple cycles of the same key may exist
+    directories = list()
     for i in range(nkeys):
         key = <TKey*> keys.At(i)
         clsname = str(key.GetClassName())
@@ -18,16 +20,20 @@ cdef list_objects_recursive(TDirectory* rdir, objects, vector[TClass*]& classes,
                 it = classes.begin()
                 while it != classes.end():
                     if tclass.InheritsFrom(deref(it)):
-                        objects.append(path + str(key.GetName()))
+                        unique_objects.add(path + str(key.GetName()))
                         break
                     inc(it)
         else:
-            objects.append(path + str(key.GetName()))
+            unique_objects.add(path + str(key.GetName()))
         if clsname == "TDirectoryFile":
-            # recursively enter lower directory levels
-            list_objects_recursive(<TDirectory*> rdir.Get(key.GetName()),
-                                   objects, classes,
-                                   path=path + key.GetName() + "/")
+            directories.append(str(key.GetName()))
+    objects.extend(unique_objects)
+    # recurse on subdirectories
+    for dirname in directories:
+        # recursively enter lower directory levels
+        list_objects_recursive(<TDirectory*> rdir.Get(dirname),
+                               objects, classes,
+                               path=path + dirname + "/")
 
 
 def list_objects(fname, types=None):
