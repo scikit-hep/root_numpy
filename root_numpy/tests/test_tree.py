@@ -39,11 +39,17 @@ def test_list_trees():
     assert_equal(trees, ['ntuple'])
     # Multiple key cycles of the same tree
     with temp() as rfile:
-        tree = ROOT.TTree("tree", "tree")
+        tree = ROOT.TTree('tree', 'tree')
         rfile.Write()
         assert_equal(len(rnp.list_trees(rfile.GetName())), 1)
         rfile.Write()
         assert_equal(len(rnp.list_trees(rfile.GetName())), 1)
+        rdir = rfile.mkdir('dir')
+        rdir.cd()
+        tree = ROOT.TTree('tree', 'tree')
+        rfile.Write()
+        assert_equal(set(rnp.list_trees(rfile.GetName())),
+                     set(['tree', 'dir/tree']))
 
 
 def test_list_branches():
