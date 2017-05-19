@@ -153,10 +153,13 @@ def root2array(filenames,
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
-        Only include entries fulfilling this condition.
+        Only include entries fulfilling this condition. If the condition
+        evaluates to multiple values per tree entry (e.g. conditions on array
+        branches) then an entry will be included if the condition evaluates to
+        true for at least one array element.
     object_selection : dict, optional (default=None)
         A dictionary mapping selection strings to branch names or lists of
-        branch names. Only elements passing the selection strings will be
+        branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
         specified must be variable-length array-type branches.
     start, stop, step: int, optional (default=None)
@@ -313,10 +316,13 @@ def tree2array(tree,
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
-        Only include entries fulfilling this condition.
+        Only include entries fulfilling this condition. If the condition
+        evaluates to multiple values per tree entry (e.g. conditions on array
+        branches) then an entry will be included if the condition evaluates to
+        true for at least one array element.
     object_selection : dict, optional (default=None)
         A dictionary mapping selection strings to branch names or lists of
-        branch names. Only elements passing the selection strings will be
+        branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
         specified must be variable-length array-type branches.
     start, stop, step: int, optional (default=None)
