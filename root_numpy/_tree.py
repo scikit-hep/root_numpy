@@ -161,7 +161,12 @@ def root2array(filenames,
         A dictionary mapping selection strings to branch names or lists of
         branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
-        specified must be variable-length array-type branches.
+        specified must be variable-length array-type branches and the length of
+        the selection and branches it acts on must match for each tree entry.
+        For example ``object_selection={'a > 0': ['a', 'b']}`` will include all
+        elements of 'a' and corresponding elements of 'b' where 'a > 0' for
+        each tree entry. 'a' and 'b' must have the same length in every tree
+        entry.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of
@@ -324,7 +329,12 @@ def tree2array(tree,
         A dictionary mapping selection strings to branch names or lists of
         branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
-        specified must be variable-length array-type branches.
+        specified must be variable-length array-type branches and the length of
+        the selection and branches it acts on must match for each tree entry.
+        For example ``object_selection={'a > 0': ['a', 'b']}`` will include all
+        elements of 'a' and corresponding elements of 'b' where 'a > 0' for
+        each tree entry. 'a' and 'b' must have the same length in every tree
+        entry.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of
