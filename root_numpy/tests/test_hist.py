@@ -127,6 +127,17 @@ def test_hist2array_edges():
             hist = ROOT.THnSparse.CreateSparse("", "", make_histogram('D', shape=(bins,) * ndim))
             yield check_hist2array_edges, hist, ndim, bins
 
+def check_hist2array_sumw2(hist, ndim, bins):
+    _, sumw2 = rnp.hist2array(hist, return_sumw2=True)
+    assert_equal(len(sumw2), ndim)
+    for axis_sumw2 in sumw2:
+        assert_array_equal(axis_sumw2, np.arange(bins,dtype=np.double))
+
+def test_hist2array_sumw2():
+    for ndim in (1, 2, 3):
+        for bins in (1, 2, 5):
+            hist = make_histogram('D', shape=(bins,) * ndim)
+            yield check_hist2array_sumw2, hist, ndim, bins
 
 def check_array2hist(hist):
     shape = np.array([hist.GetNbinsX(), hist.GetNbinsY(), hist.GetNbinsZ()])
