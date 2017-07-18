@@ -2,7 +2,7 @@ import ROOT
 import root_numpy as rnp
 from numpy.testing import assert_array_equal
 from nose.tools import assert_raises
-from . import RNG
+from . import RNG, silence_serr
 
 
 def test_evaluate_func():
@@ -39,7 +39,9 @@ def test_evaluate_func():
     assert_raises(ValueError, rnp.evaluate, f3, arr_1d)
     assert_raises(ValueError, rnp.evaluate, f3, arr_2d)
 
-    assert_raises(ValueError, rnp.evaluate, "f", arr_1d)
+    with silence_serr():  # silence cling error
+        assert_raises(ValueError, rnp.evaluate, "f", arr_1d)
+
     assert_raises(ValueError, rnp.evaluate, "x*y", arr_1d)
     assert_raises(ValueError, rnp.evaluate, "x", arr_2d)
     assert_raises(ValueError, rnp.evaluate, "x*y", arr_3d)

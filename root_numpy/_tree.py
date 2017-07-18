@@ -153,12 +153,20 @@ def root2array(filenames,
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
-        Only include entries fulfilling this condition.
+        Only include entries fulfilling this condition. If the condition
+        evaluates to multiple values per tree entry (e.g. conditions on array
+        branches) then an entry will be included if the condition evaluates to
+        true for at least one array element.
     object_selection : dict, optional (default=None)
         A dictionary mapping selection strings to branch names or lists of
-        branch names. Only elements passing the selection strings will be
+        branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
-        specified must be variable-length array-type branches.
+        specified must be variable-length array-type branches and the length of
+        the selection and branches it acts on must match for each tree entry.
+        For example ``object_selection={'a > 0': ['a', 'b']}`` will include all
+        elements of 'a' and corresponding elements of 'b' where 'a > 0' for
+        each tree entry. 'a' and 'b' must have the same length in every tree
+        entry.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of
@@ -313,12 +321,20 @@ def tree2array(tree,
         ``length``. This truncation is after any object selection performed
         with the ``object_selection`` argument.
     selection : str, optional (default=None)
-        Only include entries fulfilling this condition.
+        Only include entries fulfilling this condition. If the condition
+        evaluates to multiple values per tree entry (e.g. conditions on array
+        branches) then an entry will be included if the condition evaluates to
+        true for at least one array element.
     object_selection : dict, optional (default=None)
         A dictionary mapping selection strings to branch names or lists of
-        branch names. Only elements passing the selection strings will be
+        branch names. Only array elements passing the selection strings will be
         included in the output array per entry in the tree. The branches
-        specified must be variable-length array-type branches.
+        specified must be variable-length array-type branches and the length of
+        the selection and branches it acts on must match for each tree entry.
+        For example ``object_selection={'a > 0': ['a', 'b']}`` will include all
+        elements of 'a' and corresponding elements of 'b' where 'a > 0' for
+        each tree entry. 'a' and 'b' must have the same length in every tree
+        entry.
     start, stop, step: int, optional (default=None)
         The meaning of the ``start``, ``stop`` and ``step`` parameters is the
         same as for Python slices. If a range is supplied (by setting some of

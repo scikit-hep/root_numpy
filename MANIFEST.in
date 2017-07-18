@@ -1,5 +1,7 @@
+include MANIFEST.in
 recursive-include root_numpy *.root *.h *.cpp *.pyx *.pxi
 recursive-include examples *.py
 include *.py
 include README.rst
 include LICENSE
+global-exclude *.pyc *.pyo *.pyd
