@@ -261,8 +261,8 @@ cdef object tree2array(TTree* tree, branches,
             branch_dict = dict()
             for idx, branch_spec in enumerate(branches):
                 if isinstance(branch_spec, tuple):
-                    # branch_spec should be (branch_name, default_value) or
-                    # (branch_name, cropped_length, fill_value)
+                    # branch_spec should be (branch_name, fill_value) or
+                    # (branch_name, fill_value, length)
                     if len(branch_spec) == 2:
                         # max_length is implicitly equal to one
                         branch_dict[branch_spec[0]] = (idx, 1)
