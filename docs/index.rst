@@ -16,5 +16,6 @@ root_numpy
    install
    start
    faq
+   contributing
    reference/index
    auto_examples/index
