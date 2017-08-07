@@ -41,6 +41,7 @@ root_numpy
    stretch
    dup_idx
    blockwise_inner_join
+   RootNumpyUnconvertibleWarning
 
 root_numpy.tmva
 ---------------
