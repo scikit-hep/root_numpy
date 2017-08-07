@@ -34,19 +34,19 @@ memory.
 Instead, just use ROOT directly. Deactivate the branches before calling
 the tree's ``CloneTree()`` method. Only the activated branches are copied::
 
-   from root_numpy import testdata
-   from rootpy import asrootpy
-   from rootpy.io import root_open
+	from root_numpy import testdata
+	import ROOT
 
-   rfile = root_open(testdata.get_filepath('single1.root'))
-   tree = rfile['tree']
-   print tree.branchnames  # prints ['n_int', 'f_float', 'd_double']
+	rfile = ROOT.TFile.Open(testdata.get_filepath('single1.root'))
+	tree = rfile.Get('tree')
+	print([b.GetName() for b in tree.GetListOfBranches()])  # prints ['n_int', 'f_float', 'd_double']
 
-   # remove the branch named 'd_double'
-   tree.SetBranchStatus('d_double', 0)
+	# remove the branch named 'd_double'
+	tree.SetBranchStatus('d_double', 0)
 
-   # copy the tree into a new file
-   with root_open('output.root', 'w'):
-       newtree = asrootpy(tree.CloneTree())
-       newtree.Write()
-       print newtree.branchnames  # prints ['n_int', 'f_float']
+	# copy the tree into a new file
+	rfile_out = ROOT.TFile.Open('output.root', 'recreate')
+	newtree = tree.CloneTree()
+	newtree.Write()
+	print([b.GetName() for b in newtree.GetListOfBranches()])  # prints ['n_int', 'f_float']
+
