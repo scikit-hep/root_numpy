@@ -5,7 +5,11 @@ Bootstrap a TTree with NumPy
 ============================
 
 This example demonstrates how to sample entries in a TTree with replacement
-with the help of NumPy and root_numpy.
+with the help of NumPy and root_numpy. This example depends on
+`rootpy <http://www.rootpy.org/>`_ which can be installed with pip::
+
+    pip install --user rootpy
+
 """
 from rootpy.extern.six.moves import range
 from rootpy.tree import Tree, TreeModel, FloatCol
