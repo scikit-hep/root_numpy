@@ -92,12 +92,12 @@ Running the Tests
 =================
 
 Testing requires the `nose <https://nose.readthedocs.org/en/latest/>`_ package.
-Once `root_numpy` is installed, it may be tested (from outside the source
-directory) by running::
+
+From outside the source directory `rootpy_numpy` may be tested by running::
 
    nosetests --exe -s -v root_numpy
 
-`root_numpy` can also be tested before installing by running this from inside
+Your copy of the `root_numpy` source may also be tested by runnnig this inside
 the source directory::
 
    make test
