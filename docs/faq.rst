@@ -1,9 +1,9 @@
 
 .. currentmodule:: root_numpy
 
-==============
-root_numpy FAQ
-==============
+===
+FAQ
+===
 
 This is a list of Frequently Asked Questions about root_numpy. Feel free to
 suggest new entries!
