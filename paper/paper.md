@@ -28,21 +28,23 @@ bibliography: paper.bib
 
 # Summary
 
-root_numpy is a Python extension module interfacing NumPy [@NumPy] with CERN's
-ROOT [@ROOT] software framework, providing the ability to analyse
-ROOT data within the broad ecosystem of scientific Python packages.
+root_numpy interfaces NumPy [@NumPy] with CERN's ROOT [@ROOT] software
+framework, providing the ability to analyse ROOT data within the broad
+ecosystem of scientific Python packages.
 
 At its core are functions for converting between ROOT `TTree`s and structured
 NumPy arrays. root_numpy can convert `TTree` branches (columns) of fundamental
 types and strings, as well as variable-length and fixed-length multidimensional
 arrays and (nested) `std::vector`s. root_numpy can also create columns in the
 output NumPy array from mathematical expressions like ROOT's `TTree::Draw()`.
-root_numpy's internals are compiled C++ and can handle data with comparable
-speed to ROOT as shown in Figure \ref{benchmark}.
+root_numpy's internals are written in Cython [@Cython], installed as compiled
+C++ extensions, and can handle data with comparable speed to ROOT as shown in
+Figure \ref{benchmark}. root_numpy can also convert between ROOT histograms and
+NumPy arrays, and sample or evaluate ROOT functions as NumPy arrays.
 
-root_numpy also provides functions for converting between ROOT histograms and
-NumPy arrays, sampling or evaluating ROOT functions as NumPy arrays, and an
-interface to TMVA [@TMVA], ROOT's machine learning toolkit.
+root_numpy interfaces NumPy with TMVA [@TMVA], ROOT's machine learning toolkit,
+but naturally allows ROOT users to take advantage of scikit-learn
+[@scikit-learn] and TensorFlow [@TensorFlow].
 
 ![Benchmarking root_numpy's `tree2array()` function against ROOT's `TTree::Draw()`\label{benchmark}](../benchmarks/bench_tree2array.pdf)
 
