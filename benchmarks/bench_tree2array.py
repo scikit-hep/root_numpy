@@ -2,7 +2,7 @@ from __future__ import print_function
 
 from rootpy.io import TemporaryFile
 import rootpy
-from root_numpy import array2tree
+from root_numpy import array2tree, tree2array
 import numpy as np
 import uuid
 import random
@@ -27,10 +27,19 @@ rfile = TemporaryFile()
 def randomword(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
 
-def make_tree(entries, branches=10, dtype=np.double):
+def make_tree(entries, branches=1, dtype=np.double):
     dtype = np.dtype([(randomword(20), dtype) for idx in range(branches)])
     array = np.zeros(entries, dtype=dtype)
     return array2tree(array, name=uuid.uuid4().hex)
+
+# warm up
+print("warming up... ", end="")
+for i in range(30):
+    tree = make_tree(100, branches=1)
+    branchname = tree.GetListOfBranches()[0].GetName()
+    tree2array(tree)
+    tree.Draw(branchname, "", "goff")
+print("done\n")
 
 # time vs entries
 num_entries = np.logspace(1, 7, 20, dtype=np.int)
@@ -73,18 +82,19 @@ ax1.text(0.03, 0.97, 'tree contains a single branch',
 num_branches = np.linspace(1, 10, 10, dtype=np.int)
 root_numpy_times = []
 root_times = []
+iterations = 10
 print("\n{0:>10}  {1:<10}  {2:<10}".format("branches", "root_numpy", "ROOT"))
 for branches in num_branches:
     print("{0:>10}".format(branches), end="")
     tree = make_tree(1000000, branches=branches)
     branchnames = [branch.GetName() for branch in tree.GetListOfBranches()]
     branchname = ':'.join(branchnames)
-    iterations = 5
     root_numpy_times.append(
         min(timeit.Timer('tree2array(tree)',
                          setup='from root_numpy import tree2array; from __main__ import tree').repeat(3, iterations)) / iterations)
+    opt = 'candle' if branches > 1 else ''
     root_times.append(
-        min(timeit.Timer('draw("{0}", "", "goff candle")'.format(branchname),
+        min(timeit.Timer('draw("{0}", "", "goff {1}")'.format(branchname, opt),
                          setup='from __main__ import tree; draw = tree.Draw').repeat(3, iterations)) / iterations)
     print("  {0:10.5f}".format(root_numpy_times[-1]), end="")
     print("  {0:10.5f}".format(root_times[-1]))
