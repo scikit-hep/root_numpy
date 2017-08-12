@@ -2,7 +2,7 @@
 Get system hardware information
 http://stackoverflow.com/a/4194146/1002176
 """
-import cpuinfo
+import cpuinfo  # pip install --user py-cpuinfo
 import sys, os, fcntl, struct
 import pickle
 
