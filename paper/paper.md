@@ -39,13 +39,13 @@ arrays and (nested) `std::vector`s. root_numpy can also create columns in the
 output NumPy array from mathematical expressions like ROOT's `TTree::Draw()`.
 root_numpy's internals are written in Cython [@Cython], installed as compiled
 C++ extensions, and can handle data with comparable speed to ROOT as shown in
-Figure \ref{benchmark}. root_numpy can also convert between ROOT histograms and
+the figure below. root_numpy can also convert between ROOT histograms and
 NumPy arrays, and sample or evaluate ROOT functions as NumPy arrays.
 
 root_numpy interfaces NumPy with TMVA [@TMVA], ROOT's machine learning toolkit,
 but naturally allows ROOT users to take advantage of scikit-learn
 [@scikit-learn] and TensorFlow [@TensorFlow].
 
-![Benchmarking root_numpy's `tree2array()` function against ROOT's `TTree::Draw()`\label{benchmark}](../benchmarks/bench_tree2array.pdf)
+![Benchmarking root_numpy's `tree2array()` function against ROOT's `TTree::Draw()`](../benchmarks/bench_tree2array.pdf)
 
 # References
