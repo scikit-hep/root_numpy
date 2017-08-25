@@ -1,0 +1,25 @@
+
+
+.. _example_tmva_plot_multiclass.py:
+
+
+=============================================
+Multiclass Classification with NumPy and TMVA
+=============================================
+
+
+
+.. image:: images/plot_multiclass_1.png
+   :align: center
+   :scale: 80
+
+
+
+
+**Python source code:** :download:`plot_multiclass.py <plot_multiclass.py>`
+
+.. literalinclude:: plot_multiclass.py
+    :lines: 6-
+
+**Total running time of the example:**  2.61 seconds
+    

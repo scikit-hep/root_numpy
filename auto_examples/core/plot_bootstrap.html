@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bootstrap a TTree with NumPy &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Multiclass Classification with NumPy and TMVA" href="../tmva/plot_multiclass.html"/>
+        <link rel="prev" title="Examples" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">root_numpy Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Bootstrap a TTree with NumPy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+      
+    <li>Bootstrap a TTree with NumPy</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bootstrap-a-ttree-with-numpy">
+<span id="example-core-plot-bootstrap-py"></span><h1>Bootstrap a TTree with NumPy<a class="headerlink" href="#bootstrap-a-ttree-with-numpy" title="Permalink to this headline">¶</a></h1>
+<p>This example demonstrates how to sample entries in a TTree with replacement
+with the help of NumPy and root_numpy. This example depends on
+<a class="reference external" href="http://www.rootpy.org/">rootpy</a> which can be installed with pip:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">rootpy</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/bootstrap.gif"><img alt="../../_images/bootstrap.gif" class="align-center" src="../../_images/bootstrap.gif" style="width: 400.0px; height: 320.0px;" /></a>
+<p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_bootstrap.py" download=""><code class="xref download docutils literal"><span class="pre">plot_bootstrap.py</span></code></a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rootpy.extern.six.moves</span> <span class="k">import</span> <span class="nb">range</span>
+<span class="kn">from</span> <span class="nn">rootpy.tree</span> <span class="k">import</span> <span class="n">Tree</span><span class="p">,</span> <span class="n">TreeModel</span><span class="p">,</span> <span class="n">FloatCol</span>
+<span class="kn">from</span> <span class="nn">rootpy.plotting</span> <span class="k">import</span> <span class="n">Canvas</span><span class="p">,</span> <span class="n">Hist2D</span><span class="p">,</span> <span class="n">set_style</span>
+<span class="kn">from</span> <span class="nn">rootpy.io</span> <span class="k">import</span> <span class="n">root_open</span>
+<span class="kn">from</span> <span class="nn">root_numpy</span> <span class="k">import</span> <span class="n">root2array</span><span class="p">,</span> <span class="n">array2tree</span><span class="p">,</span> <span class="n">rec2array</span><span class="p">,</span> <span class="n">fill_hist</span>
+<span class="kn">import</span> <span class="nn">ROOT</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">gauss</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">ROOT</span><span class="o">.</span><span class="n">gROOT</span><span class="o">.</span><span class="n">SetBatch</span><span class="p">()</span>
+<span class="n">set_style</span><span class="p">(</span><span class="s1">&#39;ATLAS&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># create an example TTree dataset</span>
+
+<span class="k">class</span> <span class="nc">Sample</span><span class="p">(</span><span class="n">TreeModel</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">FloatCol</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">FloatCol</span><span class="p">()</span>
+
+
+<span class="k">with</span> <span class="n">root_open</span><span class="p">(</span><span class="s1">&#39;sample.root&#39;</span><span class="p">,</span> <span class="s1">&#39;recreate&#39;</span><span class="p">):</span>
+    <span class="c1"># generate toy data in a TTree</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">Sample</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">):</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">Fill</span><span class="p">()</span>
+    <span class="n">tree</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
+
+
+<span class="c1"># read in the TTree as a NumPy array</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">root2array</span><span class="p">(</span><span class="s1">&#39;sample.root&#39;</span><span class="p">,</span> <span class="s1">&#39;sample&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;bootstrap.gif&#39;</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;bootstrap.gif&#39;</span><span class="p">)</span>
+<span class="c1"># Canvas name is set here to aid the automatic documentation generation</span>
+<span class="c1"># It needs to take the GIF already saved instead of saving a png of the last</span>
+<span class="c1"># frame.</span>
+<span class="n">canvas</span> <span class="o">=</span> <span class="n">Canvas</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bootstrap.gif&#39;</span><span class="p">)</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="n">Hist2D</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">drawstyle</span><span class="o">=</span><span class="s1">&#39;LEGO2&#39;</span><span class="p">)</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">root_open</span><span class="p">(</span><span class="s1">&#39;bootstrap.root&#39;</span><span class="p">,</span> <span class="s1">&#39;recreate&#39;</span><span class="p">)</span>
+
+<span class="c1"># bootstrap 10 times</span>
+<span class="k">for</span> <span class="n">bootstrap_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># sample with replacement</span>
+    <span class="c1"># http://docs.scipy.org/doc/numpy-dev/reference/generated/numpy.random.choice.html</span>
+    <span class="n">sample_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">array_bootstrapped</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">sample_idx</span><span class="p">]</span>
+    <span class="c1"># convert back to a TTree and write it out</span>
+    <span class="n">tree_bootstrapped</span> <span class="o">=</span> <span class="n">array2tree</span><span class="p">(</span>
+        <span class="n">array_bootstrapped</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;bootstrap_</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bootstrap_idx</span><span class="p">))</span>
+    <span class="n">tree_bootstrapped</span><span class="o">.</span><span class="n">Write</span><span class="p">()</span>
+    <span class="n">tree_bootstrapped</span><span class="o">.</span><span class="n">Delete</span><span class="p">()</span>
+    <span class="c1"># fill the ROOT histogram with the numpy array</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">Reset</span><span class="p">()</span>
+    <span class="n">fill_hist</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">rec2array</span><span class="p">(</span><span class="n">array_bootstrapped</span><span class="p">))</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">Draw</span><span class="p">()</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Events&#39;</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">limits</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">range_user</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">hist</span><span class="o">.</span><span class="n">zaxis</span><span class="o">.</span><span class="n">divisions</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="s1">&#39;bootstrap.gif+50&#39;</span><span class="p">)</span>
+
+<span class="c1"># loop the gif</span>
+<span class="n">canvas</span><span class="o">.</span><span class="n">Print</span><span class="p">(</span><span class="s1">&#39;bootstrap.gif++&#39;</span><span class="p">)</span>
+<span class="n">output</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the example:</strong>  5.13 seconds</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tmva/plot_multiclass.html" class="btn btn-neutral float-right" title="Multiclass Classification with NumPy and TMVA" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Examples" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+root_numpy.fill_profile
+=======================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: fill_profile

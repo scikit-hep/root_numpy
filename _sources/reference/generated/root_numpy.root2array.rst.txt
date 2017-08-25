@@ -1,0 +1,6 @@
+root_numpy.root2array
+=====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: root2array

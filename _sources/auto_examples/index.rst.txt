@@ -1,0 +1,80 @@
+
+.. raw:: html
+
+
+    <style type="text/css">
+
+    div#sidebarbutton {
+        display: none;
+    }
+
+    .figure {
+        float: left;
+        margin: 10px;
+        width: auto;
+        height: 200px;
+        width: 180px;
+    }
+
+    .figure img {
+        display: inline;
+        }
+
+    .figure .caption {
+        width: 170px;
+        text-align: center !important;
+    }
+    </style>
+
+.. _examples-index:
+
+Examples
+========
+
+
+
+
+.. _examples:
+
+root_numpy
+----------
+
+
+
+
+
+.. toctree::
+
+
+   core/plot_bootstrap
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
+    
+
+
+.. _tmva_examples:
+
+root_numpy.tmva
+---------------
+
+
+
+
+
+.. toctree::
+
+
+   tmva/plot_multiclass
+
+   tmva/plot_regression
+
+   tmva/plot_twoclass
+
+
+.. raw:: html
+
+    <div style="clear: both"></div>
+    

@@ -1,0 +1,6 @@
+root_numpy.tmva.add_classification_events
+=========================================
+
+.. currentmodule:: root_numpy.tmva
+
+.. autofunction:: add_classification_events

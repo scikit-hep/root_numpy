@@ -1,0 +1,6 @@
+root_numpy.matrix
+=================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: matrix

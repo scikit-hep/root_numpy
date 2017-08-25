@@ -1,0 +1,25 @@
+@import url("theme.css");
+
+#root-numpy h1 {
+    font-size: 250%;
+    margin-bottom: 0;
+}
+
+h2.main-subtitle {
+    font-style: italic;
+    color: #777;
+}
+
+.wy-nav-content {
+    max-width: none;
+}
+
+div.highlight pre {
+    font-family: monospace;
+    font-size: 100%;
+}
+
+#root-numpy-reference code.xref.py.py-obj.docutils.literal {
+    color: #E74C3C;
+    font-size: 100%;
+}

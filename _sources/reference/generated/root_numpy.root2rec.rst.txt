@@ -1,0 +1,6 @@
+root_numpy.root2rec
+===================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: root2rec

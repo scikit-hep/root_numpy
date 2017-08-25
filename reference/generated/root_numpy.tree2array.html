@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy.tree2array &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="root_numpy Reference" href="../index.html"/>
+        <link rel="next" title="root_numpy.tree2rec" href="root_numpy.tree2rec.html"/>
+        <link rel="prev" title="root_numpy.root2rec" href="root_numpy.root2rec.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">root_numpy Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array.html">root_numpy.array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.matrix.html">root_numpy.matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2array.html">root_numpy.root2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2rec.html">root_numpy.root2rec</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">root_numpy.tree2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tree2rec.html">root_numpy.tree2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2tree.html">root_numpy.array2tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2root.html">root_numpy.array2root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.hist2array.html">root_numpy.hist2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2hist.html">root_numpy.array2hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_hist.html">root_numpy.fill_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_profile.html">root_numpy.fill_profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_graph.html">root_numpy.fill_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.random_sample.html">root_numpy.random_sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.evaluate.html">root_numpy.evaluate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_trees.html">root_numpy.list_trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_branches.html">root_numpy.list_branches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_directories.html">root_numpy.list_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_structures.html">root_numpy.list_structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.rec2array.html">root_numpy.rec2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stack.html">root_numpy.stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stretch.html">root_numpy.stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.dup_idx.html">root_numpy.dup_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.blockwise_inner_join.html">root_numpy.blockwise_inner_join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.RootNumpyUnconvertibleWarning.html">root_numpy.RootNumpyUnconvertibleWarning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">root_numpy Reference</a> &raquo;</li>
+      
+    <li>root_numpy.tree2array</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="root-numpy-tree2array">
+<h1>root_numpy.tree2array<a class="headerlink" href="#root-numpy-tree2array" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="root_numpy.tree2array">
+<code class="descclassname">root_numpy.</code><code class="descname">tree2array</code><span class="sig-paren">(</span><em>tree</em>, <em>branches=None</em>, <em>selection=None</em>, <em>object_selection=None</em>, <em>start=None</em>, <em>stop=None</em>, <em>step=None</em>, <em>include_weight=False</em>, <em>weight_name='weight'</em>, <em>cache_size=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#root_numpy.tree2array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a tree into a numpy structured array.</p>
+<p>Convert branches of strings and basic types such as bool, int, float,
+double, etc. as well as variable-length and fixed-length multidimensional
+arrays and 1D or 2D vectors of basic types and strings. <code class="docutils literal"><span class="pre">tree2array</span></code> can
+also create columns in the output array that are expressions involving the
+TTree branches (i.e. <code class="docutils literal"><span class="pre">'vect.Pt()</span> <span class="pre">/</span> <span class="pre">1000'</span></code>) similar to <code class="docutils literal"><span class="pre">TTree::Draw()</span></code>.
+See the notes below for important details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tree</strong> : ROOT TTree instance</p>
+<blockquote>
+<div><p>The ROOT TTree to convert into an array.</p>
+</div></blockquote>
+<p><strong>branches</strong> : list of strings and tuples or a string or tuple, optional (default=None)</p>
+<blockquote>
+<div><p>List of branches and expressions to include as columns of the array or
+a single branch or expression in which case a nonstructured array is
+returned. If None then include all branches that can be converted.
+Branches or expressions that result in variable-length subarrays can be
+truncated at a fixed length by using the tuple <code class="docutils literal"><span class="pre">(branch_or_expression,</span>
+<span class="pre">fill_value,</span> <span class="pre">length)</span></code> or converted into a single value with
+<code class="docutils literal"><span class="pre">(branch_or_expression,</span> <span class="pre">fill_value)</span></code> where <code class="docutils literal"><span class="pre">length==1</span></code> is implied.
+<code class="docutils literal"><span class="pre">fill_value</span></code> is used when the original array is shorter than
+<code class="docutils literal"><span class="pre">length</span></code>. This truncation is after any object selection performed
+with the <code class="docutils literal"><span class="pre">object_selection</span></code> argument.</p>
+</div></blockquote>
+<p><strong>selection</strong> : str, optional (default=None)</p>
+<blockquote>
+<div><p>Only include entries fulfilling this condition. If the condition
+evaluates to multiple values per tree entry (e.g. conditions on array
+branches) then an entry will be included if the condition evaluates to
+true for at least one array element.</p>
+</div></blockquote>
+<p><strong>object_selection</strong> : dict, optional (default=None)</p>
+<blockquote>
+<div><p>A dictionary mapping selection strings to branch names or lists of
+branch names. Only array elements passing the selection strings will be
+included in the output array per entry in the tree. The branches
+specified must be variable-length array-type branches and the length of
+the selection and branches it acts on must match for each tree entry.
+For example <code class="docutils literal"><span class="pre">object_selection={'a</span> <span class="pre">&gt;</span> <span class="pre">0':</span> <span class="pre">['a',</span> <span class="pre">'b']}</span></code> will include all
+elements of &#8216;a&#8217; and corresponding elements of &#8216;b&#8217; where &#8216;a &gt; 0&#8217; for
+each tree entry. &#8216;a&#8217; and &#8216;b&#8217; must have the same length in every tree
+entry.</p>
+</div></blockquote>
+<p><strong>start, stop, step: int, optional (default=None)</strong></p>
+<blockquote>
+<div><p>The meaning of the <code class="docutils literal"><span class="pre">start</span></code>, <code class="docutils literal"><span class="pre">stop</span></code> and <code class="docutils literal"><span class="pre">step</span></code> parameters is the
+same as for Python slices. If a range is supplied (by setting some of
+the <code class="docutils literal"><span class="pre">start</span></code>, <code class="docutils literal"><span class="pre">stop</span></code> or <code class="docutils literal"><span class="pre">step</span></code> parameters), only the entries in
+that range and fulfilling the <code class="docutils literal"><span class="pre">selection</span></code> condition (if defined) are
+used.</p>
+</div></blockquote>
+<p><strong>include_weight</strong> : bool, optional (default=False)</p>
+<blockquote>
+<div><p>Include a column containing the tree weight <code class="docutils literal"><span class="pre">TTree::GetWeight()</span></code>.
+Note that this will be the same value for all entries unless the tree
+is actually a TChain containing multiple trees with different weights.</p>
+</div></blockquote>
+<p><strong>weight_name</strong> : str, optional (default=&#8217;weight&#8217;)</p>
+<blockquote>
+<div><p>The field name for the weight column if <code class="docutils literal"><span class="pre">include_weight=True</span></code>.</p>
+</div></blockquote>
+<p><strong>cache_size</strong> : int, optional (default=-1)</p>
+<blockquote class="last">
+<div><p>Set the size (in bytes) of the TTreeCache used while reading a TTree. A
+value of -1 uses ROOT&#8217;s default cache size. A value of 0 disables the
+cache.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="root_numpy.root2array.html#root_numpy.root2array" title="root_numpy.root2array"><code class="xref py py-obj docutils literal"><span class="pre">root2array</span></code></a>, <a class="reference internal" href="root_numpy.array2root.html#root_numpy.array2root" title="root_numpy.array2root"><code class="xref py py-obj docutils literal"><span class="pre">array2root</span></code></a>, <a class="reference internal" href="root_numpy.array2tree.html#root_numpy.array2tree" title="root_numpy.array2tree"><code class="xref py py-obj docutils literal"><span class="pre">array2tree</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>Types are converted according to the following table:</p>
+<table border="1" class="docutils" id="conversion-table">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">ROOT</th>
+<th class="head">NumPy</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">Bool_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.bool</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Char_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.int8</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">UChar_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.uint8</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Short_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.int16</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">UShort_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.uint16</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Int_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.int32</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">UInt_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.uint32</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Float_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.float32</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">Double_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.float64</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Long64_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.int64</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">ULong64_t</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.uint64</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&lt;type&gt;[2][3]...</span></code></td>
+<td><code class="docutils literal"><span class="pre">(&lt;nptype&gt;,</span> <span class="pre">(2,</span> <span class="pre">3,</span> <span class="pre">...))</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&lt;type&gt;[nx][2]...</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.object</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">string</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.object</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">vector&lt;t&gt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.object</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">vector&lt;vector&lt;t&gt;</span> <span class="pre">&gt;</span></code></td>
+<td><code class="docutils literal"><span class="pre">np.object</span></code></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>Variable-length arrays (such as <code class="docutils literal"><span class="pre">x[nx][2]</span></code>) and vectors (such as
+<code class="docutils literal"><span class="pre">vector&lt;int&gt;</span></code>) are converted to NumPy arrays of the corresponding
+types.</li>
+<li>Fixed-length arrays are converted to fixed-length NumPy array fields.</li>
+</ul>
+<p><strong>Branches with different lengths:</strong></p>
+<p>Note that when converting trees that have branches of different lengths
+into numpy arrays, the shorter branches will be extended to match the
+length of the longest branch by repeating their last values. If all
+requested branches are shorter than the longest branch in the tree, this
+will result in a &#8220;read failure&#8221; since beyond the end of the longest
+requested branch no additional bytes will be read from the file and
+root_numpy is unable to distinguish this from other ROOT errors that result
+in no bytes being read. In this case, explicitly set the <code class="docutils literal"><span class="pre">stop</span></code> argument
+to the length of the longest requested branch.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="root_numpy.tree2rec.html" class="btn btn-neutral float-right" title="root_numpy.tree2rec" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="root_numpy.root2rec.html" class="btn btn-neutral" title="root_numpy.root2rec" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

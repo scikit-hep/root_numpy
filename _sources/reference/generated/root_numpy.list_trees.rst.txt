@@ -1,0 +1,6 @@
+root_numpy.list_trees
+=====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: list_trees

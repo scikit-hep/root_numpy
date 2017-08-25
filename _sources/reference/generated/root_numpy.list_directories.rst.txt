@@ -1,0 +1,6 @@
+root_numpy.list_directories
+===========================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: list_directories

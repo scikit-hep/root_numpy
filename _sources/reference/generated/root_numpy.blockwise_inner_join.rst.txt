@@ -1,0 +1,6 @@
+root_numpy.blockwise_inner_join
+===============================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: blockwise_inner_join

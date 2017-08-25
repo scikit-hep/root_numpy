@@ -1,0 +1,6 @@
+root_numpy.tree2rec
+===================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: tree2rec

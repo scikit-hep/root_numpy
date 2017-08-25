@@ -1,0 +1,6 @@
+root_numpy.evaluate
+===================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: evaluate

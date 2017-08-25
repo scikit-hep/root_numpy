@@ -1,0 +1,6 @@
+root_numpy.stack
+================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: stack

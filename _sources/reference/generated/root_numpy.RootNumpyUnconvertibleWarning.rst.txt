@@ -1,0 +1,6 @@
+root_numpy.RootNumpyUnconvertibleWarning
+========================================
+
+.. currentmodule:: root_numpy
+
+.. autoexception:: RootNumpyUnconvertibleWarning

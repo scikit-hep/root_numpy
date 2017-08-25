@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy.random_sample &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="root_numpy Reference" href="../index.html"/>
+        <link rel="next" title="root_numpy.evaluate" href="root_numpy.evaluate.html"/>
+        <link rel="prev" title="root_numpy.fill_graph" href="root_numpy.fill_graph.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">root_numpy Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array.html">root_numpy.array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.matrix.html">root_numpy.matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2array.html">root_numpy.root2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2rec.html">root_numpy.root2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tree2array.html">root_numpy.tree2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tree2rec.html">root_numpy.tree2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2tree.html">root_numpy.array2tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2root.html">root_numpy.array2root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.hist2array.html">root_numpy.hist2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2hist.html">root_numpy.array2hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_hist.html">root_numpy.fill_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_profile.html">root_numpy.fill_profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_graph.html">root_numpy.fill_graph</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">root_numpy.random_sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.evaluate.html">root_numpy.evaluate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_trees.html">root_numpy.list_trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_branches.html">root_numpy.list_branches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_directories.html">root_numpy.list_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_structures.html">root_numpy.list_structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.rec2array.html">root_numpy.rec2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stack.html">root_numpy.stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stretch.html">root_numpy.stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.dup_idx.html">root_numpy.dup_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.blockwise_inner_join.html">root_numpy.blockwise_inner_join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.RootNumpyUnconvertibleWarning.html">root_numpy.RootNumpyUnconvertibleWarning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">root_numpy Reference</a> &raquo;</li>
+      
+    <li>root_numpy.random_sample</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="root-numpy-random-sample">
+<h1>root_numpy.random_sample<a class="headerlink" href="#root-numpy-random-sample" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="root_numpy.random_sample">
+<code class="descclassname">root_numpy.</code><code class="descname">random_sample</code><span class="sig-paren">(</span><em>obj</em>, <em>n_samples</em>, <em>seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#root_numpy.random_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a random array by sampling a ROOT function or histogram.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : TH[1|2|3] or TF[1|2|3]</p>
+<blockquote>
+<div><p>The ROOT function or histogram to sample.</p>
+</div></blockquote>
+<p><strong>n_samples</strong> : positive int</p>
+<blockquote>
+<div><p>The number of random samples to generate.</p>
+</div></blockquote>
+<p><strong>seed</strong> : None, positive int or 0, optional (default=None)</p>
+<blockquote>
+<div><p>The random seed, set via ROOT.gRandom.SetSeed(seed):
+<a class="reference external" href="http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed">http://root.cern.ch/root/html/TRandom3.html#TRandom3:SetSeed</a>
+If 0, the seed will be random. If None (the default), ROOT.gRandom will
+not be touched and the current seed will be used.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>array</strong> : a numpy array</p>
+<blockquote class="last">
+<div><p>A numpy array with a shape corresponding to the dimensionality of the
+function or histogram. A flat array is returned when sampling TF1 or
+TH1. An array with shape [n_samples, n_dimensions] is returned when
+sampling TF2, TF3, TH2, or TH3.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="k">import</span> <span class="n">random_sample</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ROOT</span> <span class="k">import</span> <span class="n">TF1</span><span class="p">,</span> <span class="n">TF2</span><span class="p">,</span> <span class="n">TF3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random_sample</span><span class="p">(</span><span class="n">TF1</span><span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;TMath::DiLog(x)&quot;</span><span class="p">),</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([ 0.68307934,  0.9988919 ,  0.87198158, ...,  0.50331049,</span>
+<span class="go">        0.53895257,  0.57576984])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random_sample</span><span class="p">(</span><span class="n">TF2</span><span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;sin(x)*sin(y)/(x*y)&quot;</span><span class="p">),</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[ 0.93425084,  0.39990616],</span>
+<span class="go">       [ 0.00819315,  0.73108525],</span>
+<span class="go">       [ 0.00307176,  0.00427081],</span>
+<span class="go">       ...,</span>
+<span class="go">       [ 0.66931215,  0.0421913 ],</span>
+<span class="go">       [ 0.06469985,  0.10253632],</span>
+<span class="go">       [ 0.31059832,  0.75892702]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">random_sample</span><span class="p">(</span><span class="n">TF3</span><span class="p">(</span><span class="s2">&quot;f3&quot;</span><span class="p">,</span> <span class="s2">&quot;sin(x)*sin(y)*sin(z)/(x*y*z)&quot;</span><span class="p">),</span> <span class="mi">10000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([[ 0.03323949,  0.95734415,  0.39775191],</span>
+<span class="go">       [ 0.07093748,  0.01007775,  0.03330135],</span>
+<span class="go">       [ 0.80786963,  0.13641129,  0.14655269],</span>
+<span class="go">       ...,</span>
+<span class="go">       [ 0.96223632,  0.43916482,  0.05542078],</span>
+<span class="go">       [ 0.06631163,  0.0015063 ,  0.46550416],</span>
+<span class="go">       [ 0.88154752,  0.24332142,  0.66746564]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="root_numpy.evaluate.html" class="btn btn-neutral float-right" title="root_numpy.evaluate" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="root_numpy.fill_graph.html" class="btn btn-neutral" title="root_numpy.fill_graph" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

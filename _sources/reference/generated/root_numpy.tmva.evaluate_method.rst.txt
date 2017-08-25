@@ -1,0 +1,6 @@
+root_numpy.tmva.evaluate_method
+===============================
+
+.. currentmodule:: root_numpy.tmva
+
+.. autofunction:: evaluate_method

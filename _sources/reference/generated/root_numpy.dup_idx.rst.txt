@@ -1,0 +1,6 @@
+root_numpy.dup_idx
+==================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: dup_idx

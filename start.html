@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="index.html"/>
+        <link rel="next" title="FAQ" href="faq.html"/>
+        <link rel="prev" title="Installation" href="install.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-quick-tutorial">A Quick Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">root_numpy Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>If you have access to CERN&#8217;s CVMFS then you can activate an environment with
+compatible builds of python, ROOT, numpy and root_numpy with the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">LCGENV_PATH</span><span class="o">=/</span><span class="n">cvmfs</span><span class="o">/</span><span class="n">sft</span><span class="o">.</span><span class="n">cern</span><span class="o">.</span><span class="n">ch</span><span class="o">/</span><span class="n">lcg</span><span class="o">/</span><span class="n">releases</span>
+<span class="o">/</span><span class="n">cvmfs</span><span class="o">/</span><span class="n">sft</span><span class="o">.</span><span class="n">cern</span><span class="o">.</span><span class="n">ch</span><span class="o">/</span><span class="n">lcg</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">lcgenv</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="n">lcgenv</span> <span class="o">-</span><span class="n">p</span> <span class="n">LCG_85swan2</span> <span class="o">--</span><span class="n">ignore</span> <span class="n">Grid</span> <span class="n">x86_64</span><span class="o">-</span><span class="n">slc6</span><span class="o">-</span><span class="n">gcc49</span><span class="o">-</span><span class="n">opt</span> <span class="n">root_numpy</span> <span class="o">&gt;</span> <span class="n">lcgenv</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">echo</span> <span class="s1">&#39;export PATH=$HOME/.local/bin:$PATH&#39;</span> <span class="o">&gt;&gt;</span> <span class="n">lcgenv</span><span class="o">.</span><span class="n">sh</span>
+<span class="n">source</span> <span class="n">lcgenv</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>In new terminal sessions, only the last line above will be required.</p>
+<p>If you want to instead use your own installation of root_numpy along with any
+other packages you need, then continue with setting up a virtualenv. First
+install pip and virtualenv:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">bootstrap</span><span class="o">.</span><span class="n">pypa</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">get</span><span class="o">-</span><span class="n">pip</span><span class="o">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">get</span><span class="o">-</span><span class="n">pip</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">user</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">virtualenv</span>
+</pre></div>
+</div>
+<p>Then create and activate a virtualenv (change <code class="docutils literal"><span class="pre">my_env</span></code> at your will):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="n">my_env</span>
+<span class="n">source</span> <span class="n">my_env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p>Now install NumPy and root_numpy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">root_numpy</span>
+</pre></div>
+</div>
+<p>Note that neither <code class="docutils literal"><span class="pre">sudo</span></code> nor <code class="docutils literal"><span class="pre">--user</span></code> is used, because we are in a
+virtualenv.</p>
+<p>root_numpy should now be ready to use:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="k">import</span> <span class="n">root2array</span><span class="p">,</span> <span class="n">testdata</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root2array</span><span class="p">(</span><span class="n">testdata</span><span class="o">.</span><span class="n">get_filepath</span><span class="p">(</span><span class="s1">&#39;single1.root&#39;</span><span class="p">))[:</span><span class="mi">20</span><span class="p">]</span> 
+<span class="go">rec.array([(1, 1.0, 1.0), (2, 3.0, 4.0), (3, 5.0, 7.0), (4, 7.0, 10.0),</span>
+<span class="go">       (5, 9.0, 13.0), (6, 11.0, 16.0), (7, 13.0, 19.0), (8, 15.0, 22.0),</span>
+<span class="go">       (9, 17.0, 25.0), (10, 19.0, 28.0), (11, 21.0, 31.0),</span>
+<span class="go">       (12, 23.0, 34.0), (13, 25.0, 37.0), (14, 27.0, 40.0),</span>
+<span class="go">       (15, 29.0, 43.0), (16, 31.0, 46.0), (17, 33.0, 49.0),</span>
+<span class="go">       (18, 35.0, 52.0), (19, 37.0, 55.0), (20, 39.0, 58.0)],</span>
+<span class="go">      dtype=[(&#39;n_int&#39;, &#39;&lt;i4&#39;), (&#39;f_float&#39;, &#39;&lt;f4&#39;), (&#39;d_double&#39;, &#39;&lt;f8&#39;)])</span>
+</pre></div>
+</div>
+<div class="section" id="a-quick-tutorial">
+<h2>A Quick Tutorial<a class="headerlink" href="#a-quick-tutorial" title="Permalink to this headline">¶</a></h2>
+<p>For example, get a structured NumPy array from a TTree (copy and paste the
+following examples into your Python prompt):</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="n">root2array</span><span class="p">,</span> <span class="n">tree2array</span>
+<span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="n">testdata</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="n">testdata</span><span class="o">.</span><span class="n">get_filepath</span><span class="p">(</span><span class="s1">&#39;test.root&#39;</span><span class="p">)</span>
+
+<span class="c1"># Convert a TTree in a ROOT file into a NumPy structured array</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">root2array</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;tree&#39;</span><span class="p">)</span>
+<span class="c1"># The TTree name is always optional if there is only one TTree in the file</span>
+
+<span class="c1"># Or first get the TTree from the ROOT file</span>
+<span class="kn">import</span> <span class="nn">ROOT</span>
+<span class="n">rfile</span> <span class="o">=</span> <span class="n">ROOT</span><span class="o">.</span><span class="n">TFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">intree</span> <span class="o">=</span> <span class="n">rfile</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="s1">&#39;tree&#39;</span><span class="p">)</span>
+
+<span class="c1"># and convert the TTree into an array</span>
+<span class="n">array</span> <span class="o">=</span> <span class="n">tree2array</span><span class="p">(</span><span class="n">intree</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Include specific branches or expressions and only entries passing a selection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">array</span> <span class="o">=</span> <span class="n">tree2array</span><span class="p">(</span><span class="n">intree</span><span class="p">,</span>
+    <span class="n">branches</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt(y)&#39;</span><span class="p">,</span> <span class="s1">&#39;TMath::Landau(x)&#39;</span><span class="p">,</span> <span class="s1">&#39;cos(x)*sin(y)&#39;</span><span class="p">],</span>
+    <span class="n">selection</span><span class="o">=</span><span class="s1">&#39;z &gt; 0&#39;</span><span class="p">,</span>
+    <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above conversion creates an array with five columns from the branches
+x and y where z is greater than zero and only looping on the first ten entries
+in the tree while skipping every second entry.</p>
+<p>Now convert our array back into a TTree:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="n">array2tree</span><span class="p">,</span> <span class="n">array2root</span>
+
+<span class="c1"># Rename the fields</span>
+<span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt_y&#39;</span><span class="p">,</span> <span class="s1">&#39;landau_x&#39;</span><span class="p">,</span> <span class="s1">&#39;cos_x_sin_y&#39;</span><span class="p">)</span>
+
+<span class="c1"># Convert the NumPy array into a TTree</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">array2tree</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;tree&#39;</span><span class="p">)</span>
+
+<span class="c1"># Or write directly into a ROOT file without using PyROOT</span>
+<span class="n">array2root</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s1">&#39;selected_tree.root&#39;</span><span class="p">,</span> <span class="s1">&#39;tree&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>root_numpy also provides a function for filling a ROOT histogram from a NumPy
+array:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ROOT</span> <span class="kn">import</span> <span class="n">TH2D</span>
+<span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="n">fill_hist</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c1"># Fill a ROOT histogram from a NumPy array</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="n">TH2D</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">fill_hist</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">hist</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="s1">&#39;LEGO2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and a function for creating a random NumPy array by sampling a ROOT function
+or histogram:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ROOT</span> <span class="kn">import</span> <span class="n">TF2</span><span class="p">,</span> <span class="n">TH1D</span>
+<span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="n">random_sample</span>
+
+<span class="c1"># Sample a ROOT function</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">TF2</span><span class="p">(</span><span class="s1">&#39;func&#39;</span><span class="p">,</span> <span class="s1">&#39;sin(x)*sin(y)/(x*y)&#39;</span><span class="p">)</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">random_sample</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+
+<span class="c1"># Sample a ROOT histogram</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="n">TH1D</span><span class="p">(</span><span class="s1">&#39;hist&#39;</span><span class="p">,</span> <span class="s1">&#39;hist&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">hist</span><span class="o">.</span><span class="n">FillRandom</span><span class="p">(</span><span class="s1">&#39;gaus&#39;</span><span class="p">)</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">random_sample</span><span class="p">(</span><span class="n">hist</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="faq.html" class="btn btn-neutral float-right" title="FAQ" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

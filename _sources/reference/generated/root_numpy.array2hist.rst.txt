@@ -1,0 +1,6 @@
+root_numpy.array2hist
+=====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: array2hist

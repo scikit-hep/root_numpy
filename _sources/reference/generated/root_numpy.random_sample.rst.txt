@@ -1,0 +1,6 @@
+root_numpy.random_sample
+========================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: random_sample

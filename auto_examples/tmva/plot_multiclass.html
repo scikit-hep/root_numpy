@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Multiclass Classification with NumPy and TMVA &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="Examples" href="../index.html"/>
+        <link rel="next" title="Regression with NumPy and TMVA" href="plot_regression.html"/>
+        <link rel="prev" title="Bootstrap a TTree with NumPy" href="../core/plot_bootstrap.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">root_numpy Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Multiclass Classification with NumPy and TMVA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_regression.html">Regression with NumPy and TMVA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_twoclass.html">Binary Classification with NumPy and TMVA</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Examples</a> &raquo;</li>
+      
+    <li>Multiclass Classification with NumPy and TMVA</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="multiclass-classification-with-numpy-and-tmva">
+<span id="example-tmva-plot-multiclass-py"></span><h1>Multiclass Classification with NumPy and TMVA<a class="headerlink" href="#multiclass-classification-with-numpy-and-tmva" title="Permalink to this headline">¶</a></h1>
+<a class="reference internal image-reference" href="../../_images/plot_multiclass_1.png"><img alt="../../_images/plot_multiclass_1.png" class="align-center" src="../../_images/plot_multiclass_1.png" style="width: 400.0px; height: 400.0px;" /></a>
+<p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_multiclass.py" download=""><code class="xref download docutils literal"><span class="pre">plot_multiclass.py</span></code></a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">array</span> <span class="k">import</span> <span class="n">array</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="k">import</span> <span class="n">RandomState</span>
+<span class="kn">from</span> <span class="nn">root_numpy.tmva</span> <span class="k">import</span> <span class="n">add_classification_events</span><span class="p">,</span> <span class="n">evaluate_reader</span>
+<span class="kn">from</span> <span class="nn">root_numpy</span> <span class="k">import</span> <span class="n">ROOT_VERSION</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">ROOT</span> <span class="k">import</span> <span class="n">TMVA</span><span class="p">,</span> <span class="n">TFile</span><span class="p">,</span> <span class="n">TCut</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
+<span class="n">RNG</span> <span class="o">=</span> <span class="n">RandomState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Construct an example multiclass dataset</span>
+<span class="n">n_events</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">class_0</span> <span class="o">=</span> <span class="n">RNG</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+    <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">n_events</span><span class="p">)</span>
+<span class="n">class_1</span> <span class="o">=</span> <span class="n">RNG</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">n_events</span><span class="p">)</span>
+<span class="n">class_2</span> <span class="o">=</span> <span class="n">RNG</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">n_events</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">class_0</span><span class="p">,</span> <span class="n">class_1</span><span class="p">,</span> <span class="n">class_2</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">RNG</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">n_events</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">y</span><span class="p">[:</span><span class="n">class_0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*=</span> <span class="mi">0</span>
+<span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="n">class_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="n">permute</span> <span class="o">=</span> <span class="n">RNG</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">permute</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">permute</span><span class="p">]</span>
+
+<span class="c1"># Split into training and test datasets</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">w_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">n_events</span><span class="p">],</span> <span class="n">y</span><span class="p">[:</span><span class="n">n_events</span><span class="p">],</span> <span class="n">w</span><span class="p">[:</span><span class="n">n_events</span><span class="p">]</span>
+<span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">n_events</span><span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_events</span><span class="p">:],</span> <span class="n">w</span><span class="p">[</span><span class="n">n_events</span><span class="p">:]</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">TFile</span><span class="p">(</span><span class="s1">&#39;tmva_output.root&#39;</span><span class="p">,</span> <span class="s1">&#39;recreate&#39;</span><span class="p">)</span>
+<span class="n">factory</span> <span class="o">=</span> <span class="n">TMVA</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span>
+                       <span class="s1">&#39;AnalysisType=Multiclass:&#39;</span>
+                       <span class="s1">&#39;!V:Silent:!DrawProgressBar&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">ROOT_VERSION</span> <span class="o">&gt;=</span> <span class="s1">&#39;6.07/04&#39;</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">TMVA</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">factory</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">AddVariable</span><span class="p">(</span><span class="s1">&#39;f</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="s1">&#39;F&#39;</span><span class="p">)</span>
+
+<span class="c1"># Call root_numpy&#39;s utility functions to add events from the arrays</span>
+<span class="n">add_classification_events</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">w_train</span><span class="p">)</span>
+<span class="n">add_classification_events</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">w_test</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># The following line is necessary if events have been added individually:</span>
+<span class="n">data</span><span class="o">.</span><span class="n">PrepareTrainingAndTestTree</span><span class="p">(</span><span class="n">TCut</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">),</span> <span class="s1">&#39;NormMode=EqualNumEvents&#39;</span><span class="p">)</span>
+
+<span class="c1"># Train an MLP</span>
+<span class="k">if</span> <span class="n">ROOT_VERSION</span> <span class="o">&gt;=</span> <span class="s1">&#39;6.07/04&#39;</span><span class="p">:</span>
+    <span class="n">BookMethod</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">BookMethod</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">BookMethod</span> <span class="o">=</span> <span class="n">TMVA</span><span class="o">.</span><span class="n">Factory</span><span class="o">.</span><span class="n">BookMethod</span>
+<span class="n">BookMethod</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;NeuronType=tanh:NCycles=200:HiddenLayers=N+2,2:&#39;</span>
+           <span class="s1">&#39;TestRate=5:EstimatorType=MSE&#39;</span><span class="p">)</span>
+<span class="n">factory</span><span class="o">.</span><span class="n">TrainAllMethods</span><span class="p">()</span>
+
+<span class="c1"># Classify the test dataset with the BDT</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">TMVA</span><span class="o">.</span><span class="n">Reader</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">reader</span><span class="o">.</span><span class="n">AddVariable</span><span class="p">(</span><span class="s1">&#39;f</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">array</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.</span><span class="p">]))</span>
+<span class="n">reader</span><span class="o">.</span><span class="n">BookMVA</span><span class="p">(</span><span class="s1">&#39;MLP&#39;</span><span class="p">,</span> <span class="s1">&#39;weights/classifier_MLP.weights.xml&#39;</span><span class="p">)</span>
+<span class="n">class_proba</span> <span class="o">=</span> <span class="n">evaluate_reader</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Plot the decision boundaries</span>
+<span class="n">plot_colors</span> <span class="o">=</span> <span class="s2">&quot;rgb&quot;</span>
+<span class="n">plot_step</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">class_names</span> <span class="o">=</span> <span class="s2">&quot;ABC&quot;</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;Paired&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">plot_step</span><span class="p">),</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">plot_step</span><span class="p">))</span>
+
+<span class="n">Z</span> <span class="o">=</span> <span class="n">evaluate_reader</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="s1">&#39;MLP&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">xx</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">yy</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the training points</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">class_names</span><span class="p">,</span> <span class="n">plot_colors</span><span class="p">):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Class </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Decision Boundary&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Total running time of the example:</strong>  2.61 seconds</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_regression.html" class="btn btn-neutral float-right" title="Regression with NumPy and TMVA" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../core/plot_bootstrap.html" class="btn btn-neutral" title="Bootstrap a TTree with NumPy" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy.array2tree &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="root_numpy Reference" href="../index.html"/>
+        <link rel="next" title="root_numpy.array2root" href="root_numpy.array2root.html"/>
+        <link rel="prev" title="root_numpy.tree2rec" href="root_numpy.tree2rec.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">root_numpy Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array.html">root_numpy.array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.matrix.html">root_numpy.matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2array.html">root_numpy.root2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.root2rec.html">root_numpy.root2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tree2array.html">root_numpy.tree2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tree2rec.html">root_numpy.tree2rec</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">root_numpy.array2tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2root.html">root_numpy.array2root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.hist2array.html">root_numpy.hist2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.array2hist.html">root_numpy.array2hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_hist.html">root_numpy.fill_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_profile.html">root_numpy.fill_profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.fill_graph.html">root_numpy.fill_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.random_sample.html">root_numpy.random_sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.evaluate.html">root_numpy.evaluate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_trees.html">root_numpy.list_trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_branches.html">root_numpy.list_branches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_directories.html">root_numpy.list_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.list_structures.html">root_numpy.list_structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.rec2array.html">root_numpy.rec2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stack.html">root_numpy.stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.stretch.html">root_numpy.stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.dup_idx.html">root_numpy.dup_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.blockwise_inner_join.html">root_numpy.blockwise_inner_join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.RootNumpyUnconvertibleWarning.html">root_numpy.RootNumpyUnconvertibleWarning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">root_numpy Reference</a> &raquo;</li>
+      
+    <li>root_numpy.array2tree</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="root-numpy-array2tree">
+<h1>root_numpy.array2tree<a class="headerlink" href="#root-numpy-array2tree" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="root_numpy.array2tree">
+<code class="descclassname">root_numpy.</code><code class="descname">array2tree</code><span class="sig-paren">(</span><em>arr</em>, <em>name='tree'</em>, <em>tree=None</em><span class="sig-paren">)</span><a class="headerlink" href="#root_numpy.array2tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a numpy structured array into a ROOT TTree.</p>
+<p>Fields of basic types, strings, and fixed-size subarrays of basic types are
+supported. <code class="docutils literal"><span class="pre">np.object</span></code> and <code class="docutils literal"><span class="pre">np.float16</span></code> are currently not supported.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>arr</strong> : array</p>
+<blockquote>
+<div><p>A numpy structured array</p>
+</div></blockquote>
+<p><strong>name</strong> : str (optional, default=&#8217;tree&#8217;)</p>
+<blockquote>
+<div><p>Name of the created ROOT TTree if <code class="docutils literal"><span class="pre">tree</span></code> is None.</p>
+</div></blockquote>
+<p><strong>tree</strong> : ROOT TTree (optional, default=None)</p>
+<blockquote>
+<div><p>An existing ROOT TTree to be extended by the numpy array. Any branch
+with the same name as a field in the numpy array will be extended as
+long as the types are compatible, otherwise a TypeError is raised. New
+branches will be created and filled for all new fields.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>root_tree</strong> : a ROOT TTree</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="root_numpy.array2root.html#root_numpy.array2root" title="root_numpy.array2root"><code class="xref py py-obj docutils literal"><span class="pre">array2root</span></code></a>, <a class="reference internal" href="root_numpy.root2array.html#root_numpy.root2array" title="root_numpy.root2array"><code class="xref py py-obj docutils literal"><span class="pre">root2array</span></code></a>, <a class="reference internal" href="root_numpy.tree2array.html#root_numpy.tree2array" title="root_numpy.tree2array"><code class="xref py py-obj docutils literal"><span class="pre">tree2array</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p>When using the <code class="docutils literal"><span class="pre">tree</span></code> argument to extend and/or add new branches to an
+existing tree, note that it is possible to create branches of different
+lengths. This will result in a warning from ROOT when root_numpy calls the
+tree&#8217;s <code class="docutils literal"><span class="pre">SetEntries()</span></code> method. Beyond that, the tree should still be
+usable. While it might not be generally recommended to create branches with
+differing lengths, this behaviour could be required in certain situations.
+root_numpy makes no attempt to prevent such behaviour as this would be more
+strict than ROOT itself. Also see the note about converting trees that have
+branches of different lengths into numpy arrays in the documentation of
+<a class="reference internal" href="root_numpy.tree2array.html#root_numpy.tree2array" title="root_numpy.tree2array"><code class="xref py py-func docutils literal"><span class="pre">tree2array()</span></code></a>.</p>
+<p class="rubric">Examples</p>
+<p>Convert a numpy array into a tree:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="k">import</span> <span class="n">array2tree</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">),</span>
+<span class="gp">... </span>              <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">6.8</span><span class="p">)],</span>
+<span class="gp">... </span>             <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span> <span class="o">=</span> <span class="n">array2tree</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">Scan</span><span class="p">()</span>
+<span class="go">************************************************</span>
+<span class="go">*    Row   *         a *         b *         c *</span>
+<span class="go">************************************************</span>
+<span class="go">*        0 *         1 *       2.5 *       3.4 *</span>
+<span class="go">*        1 *         4 *         5 *       6.8 *</span>
+<span class="go">************************************************</span>
+</pre></div>
+</div>
+<p>Add new branches to an existing tree (continuing from the example above):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>              <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)],</span>
+<span class="gp">... </span>             <span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+<span class="gp">... </span>                    <span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array2tree</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span class="n">tree</span><span class="p">)</span>
+<span class="go">&lt;ROOT.TTree object (&quot;tree&quot;) at 0x1449970&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tree</span><span class="o">.</span><span class="n">Scan</span><span class="p">()</span>
+<span class="go">************************************************************************</span>
+<span class="go">*    Row   *         a *         b *         c *         d *         e *</span>
+<span class="go">************************************************************************</span>
+<span class="go">*        0 *         1 *       2.5 *       3.4 *         4 *        10 *</span>
+<span class="go">*        1 *         4 *         5 *       6.8 *         3 *         5 *</span>
+<span class="go">************************************************************************</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="root_numpy.array2root.html" class="btn btn-neutral float-right" title="root_numpy.array2root" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="root_numpy.tree2rec.html" class="btn btn-neutral" title="root_numpy.tree2rec" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

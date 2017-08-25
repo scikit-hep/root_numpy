@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy Reference &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../index.html"/>
+        <link rel="next" title="root_numpy.array" href="generated/root_numpy.array.html"/>
+        <link rel="prev" title="Contributing" href="../contributing.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">root_numpy Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#root-numpy">root_numpy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.array.html">root_numpy.array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.matrix.html">root_numpy.matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.root2array.html">root_numpy.root2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.root2rec.html">root_numpy.root2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tree2array.html">root_numpy.tree2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tree2rec.html">root_numpy.tree2rec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.array2tree.html">root_numpy.array2tree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.array2root.html">root_numpy.array2root</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.hist2array.html">root_numpy.hist2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.array2hist.html">root_numpy.array2hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.fill_hist.html">root_numpy.fill_hist</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.fill_profile.html">root_numpy.fill_profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.fill_graph.html">root_numpy.fill_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.random_sample.html">root_numpy.random_sample</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.evaluate.html">root_numpy.evaluate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.list_trees.html">root_numpy.list_trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.list_branches.html">root_numpy.list_branches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.list_directories.html">root_numpy.list_directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.list_structures.html">root_numpy.list_structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.rec2array.html">root_numpy.rec2array</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.stack.html">root_numpy.stack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.stretch.html">root_numpy.stretch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.dup_idx.html">root_numpy.dup_idx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.blockwise_inner_join.html">root_numpy.blockwise_inner_join</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.RootNumpyUnconvertibleWarning.html">root_numpy.RootNumpyUnconvertibleWarning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#root-numpy-tmva">root_numpy.tmva</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tmva.add_classification_events.html">root_numpy.tmva.add_classification_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tmva.add_regression_events.html">root_numpy.tmva.add_regression_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tmva.evaluate_reader.html">root_numpy.tmva.evaluate_reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/root_numpy.tmva.evaluate_method.html">root_numpy.tmva.evaluate_method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>root_numpy Reference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="root-numpy-reference">
+<span id="reference"></span><h1>root_numpy Reference<a class="headerlink" href="#root-numpy-reference" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">4.7.3.dev0</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">Aug 25, 2017</td>
+</tr>
+</tbody>
+</table>
+<p>This reference manual details the functions included in root_numpy, describing
+what they are and what they do.</p>
+<div class="section" id="root-numpy">
+<h2>root_numpy<a class="headerlink" href="#root-numpy" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.array.html#root_numpy.array" title="root_numpy.array"><code class="xref py py-obj docutils literal"><span class="pre">array</span></code></a>(arr[,&nbsp;copy])</td>
+<td>Convert a ROOT TArray into a NumPy array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.matrix.html#root_numpy.matrix" title="root_numpy.matrix"><code class="xref py py-obj docutils literal"><span class="pre">matrix</span></code></a>(mat)</td>
+<td>Convert a ROOT TMatrix into a NumPy matrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.root2array.html#root_numpy.root2array" title="root_numpy.root2array"><code class="xref py py-obj docutils literal"><span class="pre">root2array</span></code></a>(filenames[,&nbsp;treename,&nbsp;branches,&nbsp;...])</td>
+<td>Convert trees in ROOT files into a numpy structured array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.root2rec.html#root_numpy.root2rec" title="root_numpy.root2rec"><code class="xref py py-obj docutils literal"><span class="pre">root2rec</span></code></a>(filenames[,&nbsp;treename,&nbsp;branches,&nbsp;...])</td>
+<td>View the result of <a class="reference internal" href="generated/root_numpy.root2array.html#root_numpy.root2array" title="root_numpy.root2array"><code class="xref py py-func docutils literal"><span class="pre">root2array()</span></code></a> as a record array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.tree2array.html#root_numpy.tree2array" title="root_numpy.tree2array"><code class="xref py py-obj docutils literal"><span class="pre">tree2array</span></code></a>(tree[,&nbsp;branches,&nbsp;selection,&nbsp;...])</td>
+<td>Convert a tree into a numpy structured array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.tree2rec.html#root_numpy.tree2rec" title="root_numpy.tree2rec"><code class="xref py py-obj docutils literal"><span class="pre">tree2rec</span></code></a>(tree[,&nbsp;branches,&nbsp;selection,&nbsp;...])</td>
+<td>View the result of <a class="reference internal" href="generated/root_numpy.tree2array.html#root_numpy.tree2array" title="root_numpy.tree2array"><code class="xref py py-func docutils literal"><span class="pre">tree2array()</span></code></a> as a record array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.array2tree.html#root_numpy.array2tree" title="root_numpy.array2tree"><code class="xref py py-obj docutils literal"><span class="pre">array2tree</span></code></a>(arr[,&nbsp;name,&nbsp;tree])</td>
+<td>Convert a numpy structured array into a ROOT TTree.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.array2root.html#root_numpy.array2root" title="root_numpy.array2root"><code class="xref py py-obj docutils literal"><span class="pre">array2root</span></code></a>(arr,&nbsp;filename[,&nbsp;treename,&nbsp;mode])</td>
+<td>Convert a numpy array into a ROOT TTree and save it in a ROOT TFile.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.hist2array.html#root_numpy.hist2array" title="root_numpy.hist2array"><code class="xref py py-obj docutils literal"><span class="pre">hist2array</span></code></a>(hist[,&nbsp;include_overflow,&nbsp;copy,&nbsp;...])</td>
+<td>Convert a ROOT histogram into a NumPy array</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.array2hist.html#root_numpy.array2hist" title="root_numpy.array2hist"><code class="xref py py-obj docutils literal"><span class="pre">array2hist</span></code></a>(array,&nbsp;hist[,&nbsp;errors])</td>
+<td>Convert a NumPy array into a ROOT histogram</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.fill_hist.html#root_numpy.fill_hist" title="root_numpy.fill_hist"><code class="xref py py-obj docutils literal"><span class="pre">fill_hist</span></code></a>(hist,&nbsp;array[,&nbsp;weights,&nbsp;return_indices])</td>
+<td>Fill a ROOT histogram with a NumPy array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.fill_profile.html#root_numpy.fill_profile" title="root_numpy.fill_profile"><code class="xref py py-obj docutils literal"><span class="pre">fill_profile</span></code></a>(profile,&nbsp;array[,&nbsp;weights,&nbsp;...])</td>
+<td>Fill a ROOT profile with a NumPy array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.fill_graph.html#root_numpy.fill_graph" title="root_numpy.fill_graph"><code class="xref py py-obj docutils literal"><span class="pre">fill_graph</span></code></a>(graph,&nbsp;array)</td>
+<td>Fill a ROOT graph with a NumPy array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.random_sample.html#root_numpy.random_sample" title="root_numpy.random_sample"><code class="xref py py-obj docutils literal"><span class="pre">random_sample</span></code></a>(obj,&nbsp;n_samples[,&nbsp;seed])</td>
+<td>Create a random array by sampling a ROOT function or histogram.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.evaluate.html#root_numpy.evaluate" title="root_numpy.evaluate"><code class="xref py py-obj docutils literal"><span class="pre">evaluate</span></code></a>(obj,&nbsp;array)</td>
+<td>Evaluate a ROOT histogram, function, graph, or spline over an array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.list_trees.html#root_numpy.list_trees" title="root_numpy.list_trees"><code class="xref py py-obj docutils literal"><span class="pre">list_trees</span></code></a>(filename)</td>
+<td>Get list of the tree names in a ROOT file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.list_branches.html#root_numpy.list_branches" title="root_numpy.list_branches"><code class="xref py py-obj docutils literal"><span class="pre">list_branches</span></code></a>(filename[,&nbsp;treename])</td>
+<td>Get a list of the branch names of a tree in a ROOT file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.list_directories.html#root_numpy.list_directories" title="root_numpy.list_directories"><code class="xref py py-obj docutils literal"><span class="pre">list_directories</span></code></a>(filename)</td>
+<td>Get a list of the directories in a ROOT file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.list_structures.html#root_numpy.list_structures" title="root_numpy.list_structures"><code class="xref py py-obj docutils literal"><span class="pre">list_structures</span></code></a>(filename[,&nbsp;treename])</td>
+<td>Get a dictionary mapping branch names to leaf structures.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.rec2array.html#root_numpy.rec2array" title="root_numpy.rec2array"><code class="xref py py-obj docutils literal"><span class="pre">rec2array</span></code></a>(rec[,&nbsp;fields])</td>
+<td>Convert a record/structured array into an ndarray with a homogeneous data type.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.stack.html#root_numpy.stack" title="root_numpy.stack"><code class="xref py py-obj docutils literal"><span class="pre">stack</span></code></a>(recs[,&nbsp;fields])</td>
+<td>Stack common fields in multiple record arrays (concatenate them).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.stretch.html#root_numpy.stretch" title="root_numpy.stretch"><code class="xref py py-obj docutils literal"><span class="pre">stretch</span></code></a>(arr[,&nbsp;fields,&nbsp;return_indices])</td>
+<td>Stretch an array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.dup_idx.html#root_numpy.dup_idx" title="root_numpy.dup_idx"><code class="xref py py-obj docutils literal"><span class="pre">dup_idx</span></code></a>(arr)</td>
+<td>Return the indices of all duplicated array elements.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.blockwise_inner_join.html#root_numpy.blockwise_inner_join" title="root_numpy.blockwise_inner_join"><code class="xref py py-obj docutils literal"><span class="pre">blockwise_inner_join</span></code></a>(data,&nbsp;left,&nbsp;...[,&nbsp;...])</td>
+<td>Perform a blockwise inner join.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.RootNumpyUnconvertibleWarning.html#root_numpy.RootNumpyUnconvertibleWarning" title="root_numpy.RootNumpyUnconvertibleWarning"><code class="xref py py-obj docutils literal"><span class="pre">RootNumpyUnconvertibleWarning</span></code></a></td>
+<td>This warning is raised when root_numpy is unable to convert a branch into a column of a NumPy array because there is no converter for the type.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="root-numpy-tmva">
+<h2>root_numpy.tmva<a class="headerlink" href="#root-numpy-tmva" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.tmva.add_classification_events.html#root_numpy.tmva.add_classification_events" title="root_numpy.tmva.add_classification_events"><code class="xref py py-obj docutils literal"><span class="pre">add_classification_events</span></code></a>(obj,&nbsp;events,&nbsp;labels)</td>
+<td>Add classification events to a TMVA::Factory or TMVA::DataLoader from NumPy arrays.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.tmva.add_regression_events.html#root_numpy.tmva.add_regression_events" title="root_numpy.tmva.add_regression_events"><code class="xref py py-obj docutils literal"><span class="pre">add_regression_events</span></code></a>(obj,&nbsp;events,&nbsp;targets)</td>
+<td>Add regression events to a TMVA::Factory or TMVA::DataLoader from NumPy arrays.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/root_numpy.tmva.evaluate_reader.html#root_numpy.tmva.evaluate_reader" title="root_numpy.tmva.evaluate_reader"><code class="xref py py-obj docutils literal"><span class="pre">evaluate_reader</span></code></a>(reader,&nbsp;name,&nbsp;events[,&nbsp;aux])</td>
+<td>Evaluate a TMVA::Reader over a NumPy array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/root_numpy.tmva.evaluate_method.html#root_numpy.tmva.evaluate_method" title="root_numpy.tmva.evaluate_method"><code class="xref py py-obj docutils literal"><span class="pre">evaluate_method</span></code></a>(method,&nbsp;events[,&nbsp;aux])</td>
+<td>Evaluate a TMVA::MethodBase over a NumPy array.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/root_numpy.array.html" class="btn btn-neutral float-right" title="root_numpy.array" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../contributing.html" class="btn btn-neutral" title="Contributing" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

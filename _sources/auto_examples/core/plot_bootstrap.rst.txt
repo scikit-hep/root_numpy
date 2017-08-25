@@ -1,0 +1,32 @@
+
+
+.. _example_core_plot_bootstrap.py:
+
+
+============================
+Bootstrap a TTree with NumPy
+============================
+
+This example demonstrates how to sample entries in a TTree with replacement
+with the help of NumPy and root_numpy. This example depends on
+`rootpy <http://www.rootpy.org/>`_ which can be installed with pip::
+
+    pip install --user rootpy
+
+
+
+
+.. image:: images/bootstrap.gif
+   :align: center
+   :scale: 80
+
+
+
+
+**Python source code:** :download:`plot_bootstrap.py <plot_bootstrap.py>`
+
+.. literalinclude:: plot_bootstrap.py
+    :lines: 14-
+
+**Total running time of the example:**  5.13 seconds
+    

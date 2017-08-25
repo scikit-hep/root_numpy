@@ -1,0 +1,6 @@
+root_numpy.list_structures
+==========================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: list_structures

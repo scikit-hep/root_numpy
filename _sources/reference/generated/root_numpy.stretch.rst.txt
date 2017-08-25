@@ -1,0 +1,6 @@
+root_numpy.stretch
+==================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: stretch

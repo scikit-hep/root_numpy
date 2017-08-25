@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy.tmva.add_classification_events &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="../../index.html"/>
+        <link rel="up" title="root_numpy Reference" href="../index.html"/>
+        <link rel="next" title="root_numpy.tmva.add_regression_events" href="root_numpy.tmva.add_regression_events.html"/>
+        <link rel="prev" title="root_numpy.RootNumpyUnconvertibleWarning" href="root_numpy.RootNumpyUnconvertibleWarning.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">root_numpy Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#root-numpy">root_numpy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#root-numpy-tmva">root_numpy.tmva</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">root_numpy.tmva.add_classification_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tmva.add_regression_events.html">root_numpy.tmva.add_regression_events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tmva.evaluate_reader.html">root_numpy.tmva.evaluate_reader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="root_numpy.tmva.evaluate_method.html">root_numpy.tmva.evaluate_method</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">root_numpy Reference</a> &raquo;</li>
+      
+    <li>root_numpy.tmva.add_classification_events</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="root-numpy-tmva-add-classification-events">
+<h1>root_numpy.tmva.add_classification_events<a class="headerlink" href="#root-numpy-tmva-add-classification-events" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="root_numpy.tmva.add_classification_events">
+<code class="descclassname">root_numpy.tmva.</code><code class="descname">add_classification_events</code><span class="sig-paren">(</span><em>obj</em>, <em>events</em>, <em>labels</em>, <em>signal_label=None</em>, <em>weights=None</em>, <em>test=False</em><span class="sig-paren">)</span><a class="headerlink" href="#root_numpy.tmva.add_classification_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add classification events to a TMVA::Factory or TMVA::DataLoader from NumPy arrays.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>obj</strong> : TMVA::Factory or TMVA::DataLoader</p>
+<blockquote>
+<div><p>A TMVA::Factory or TMVA::DataLoader (TMVA&#8217;s interface as of ROOT
+6.07/04) instance with variables already booked in exactly the same
+order as the columns in <code class="docutils literal"><span class="pre">events</span></code>.</p>
+</div></blockquote>
+<p><strong>events</strong> : numpy array of shape [n_events, n_variables]</p>
+<blockquote>
+<div><p>A two-dimensional NumPy array containing the rows of events and columns
+of variables. The order of the columns must match the order in which
+you called <code class="docutils literal"><span class="pre">AddVariable()</span></code> for each variable.</p>
+</div></blockquote>
+<p><strong>labels</strong> : numpy array of shape [n_events]</p>
+<blockquote>
+<div><p>The class labels (signal or background) corresponding to each event in
+<code class="docutils literal"><span class="pre">events</span></code>.</p>
+</div></blockquote>
+<p><strong>signal_label</strong> : float or int, optional (default=None)</p>
+<blockquote>
+<div><p>The value in <code class="docutils literal"><span class="pre">labels</span></code> for signal events, if <code class="docutils literal"><span class="pre">labels</span></code> contains only
+two classes. If None, the highest value in <code class="docutils literal"><span class="pre">labels</span></code> is used.</p>
+</div></blockquote>
+<p><strong>weights</strong> : numpy array of shape [n_events], optional</p>
+<blockquote>
+<div><p>Event weights.</p>
+</div></blockquote>
+<p><strong>test</strong> : bool, optional (default=False)</p>
+<blockquote class="last">
+<div><p>If True, then the events will be added as test events, otherwise they
+are added as training events by default.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul>
+<li><p class="first">A TMVA::Factory or TMVA::DataLoader requires you to add both training and
+test events even if you don&#8217;t intend to call <code class="docutils literal"><span class="pre">TestAllMethods()</span></code>.</p>
+</li>
+<li><p class="first">When using MethodCuts, the first event added must be a signal event,
+otherwise TMVA will fail with <code class="docutils literal"><span class="pre">&lt;FATAL&gt;</span> <span class="pre">Interval</span> <span class="pre">:</span> <span class="pre">maximum</span> <span class="pre">lower</span> <span class="pre">than</span>
+<span class="pre">minimum</span></code>. To place a signal event first:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Get index of first signal event</span>
+<span class="n">first_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">signal_label</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Swap this with first event</span>
+<span class="n">events</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">events</span><span class="p">[</span><span class="n">first_signal</span><span class="p">]</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">first_signal</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">events</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">first_signal</span><span class="p">]</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">first_signal</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">weights</span><span class="p">[</span><span class="n">first_signal</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">first_signal</span><span class="p">],</span> <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="root_numpy.tmva.add_regression_events.html" class="btn btn-neutral float-right" title="root_numpy.tmva.add_regression_events" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="root_numpy.RootNumpyUnconvertibleWarning.html" class="btn btn-neutral" title="root_numpy.RootNumpyUnconvertibleWarning" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

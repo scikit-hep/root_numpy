@@ -1,0 +1,6 @@
+root_numpy.fill_hist
+====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: fill_hist

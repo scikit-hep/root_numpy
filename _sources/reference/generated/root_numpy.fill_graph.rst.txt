@@ -1,0 +1,6 @@
+root_numpy.fill_graph
+=====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: fill_graph

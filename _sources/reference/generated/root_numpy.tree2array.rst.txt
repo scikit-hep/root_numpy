@@ -1,0 +1,6 @@
+root_numpy.tree2array
+=====================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: tree2array

@@ -1,316 +1,262 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>root_numpy &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="#"/>
+        <link rel="next" title="Installation" href="install.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">root_numpy Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">root_numpy</a>
+      </nav>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>root_numpy &mdash; root_numpy 2.00 documentation</title>
-    
-    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '2.00',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="root_numpy 2.00 documentation" href="#" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="#">root_numpy 2.00 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>root_numpy</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="root-numpy">
 <h1>root_numpy<a class="headerlink" href="#root-numpy" title="Permalink to this headline">¶</a></h1>
-<p><strong>root_numpy</strong> is a python library for converting <a class="reference external" href="http://root.cern.ch/">ROOT</a>  TTree to <a class="reference external" href="http://numpy.scipy.org/">numpy</a> <a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.rec.html">structure array</a> or <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.recarray.html">record array</a>. The library is written in C++ and <a class="reference external" href="http://cython.org/">Cython</a> and is much faster than PyROOT. It supports scalar, array of scalar and vector of basic types(int float double etc.).</p>
-<div class="section" id="download">
-<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><p>V2.00 <a class="reference external" href="https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip">https://github.com/piti118/root_numpy/archive/root_numpy2.00.zip</a></p>
-<p>or</p>
-<p><tt class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/piti118/root_numpy</span></tt></p>
-</div></blockquote>
-</div>
-<div class="section" id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt></div></blockquote>
-</div>
-<div class="section" id="typical-usage">
-<h2>Typical Usage<a class="headerlink" href="#typical-usage" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">root_numpy</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="c">#load to numpy structured array</span>
-<span class="c">#treename is always optional if there is 1 tree in the file</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span><span class="s">&#39;treename&#39;</span><span class="p">)</span>
-<span class="c">#load to numpy</span>
-<span class="n">a_rec</span> <span class="o">=</span> <span class="n">root2rec</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span><span class="s">&#39;treename&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-</div>
-</div>
-<div class="section" id="module-root_numpy">
-<span id="full-documentation"></span><h1>Full Documentation<a class="headerlink" href="#module-root_numpy" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="root_numpy.root2array">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">root2array</tt><big>(</big><em>fnames</em>, <em>treename=None</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#root2array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.root2array" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert tree <em>treename</em> in root files specified in <em>fnames</em> to
-numpy structured array. Type conversion table 
-is given <a class="reference internal" href="#conversion-table"><em>here</em></a></p>
-<p>Arguments:</p>
-<blockquote>
-<div><p><em>fnames</em>: Root file name pattern. Wildcard is also supported by
-Python glob (not ROOT semi-broken wildcard)
-fnames can be string or list of string.</p>
-<p><em>treename</em>: name of tree to convert to numpy array.
-This is optional if the file contains exactly 1 tree.</p>
-<p><em>branches(optional)</em>: list of string for branch name to be
-extracted from tree.</p>
-<ul class="simple">
-<li>If branches is not specified or is None or is empty,
-all from the first treebranches are extracted</li>
-<li>If branches contains duplicate branches, only the first one is used.</li>
-</ul>
-<p><em>N(optional)</em>: maximum number of data that it should load
-useful for testing out stuff</p>
-<p><em>offset(optional)</em>: start index (first one is 0)</p>
-</div></blockquote>
-<p><strong>Example</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a.root</span>
-<span class="c"># remember that &#39;mytree&#39; is optional if a.root has 1 tree</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#read all branches starting from record 5 for 10 records</span>
-<span class="c">#or the end of file.</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a*.root</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a*.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># read all branches from tree named mytree from a*.root and b*.root</span>
-<span class="n">root2array</span><span class="p">([</span><span class="s">&#39;a*.root&#39;</span><span class="p">,</span> <span class="s">&#39;b*.root&#39;</span><span class="p">],</span> <span class="s">&#39;mytree&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#read branch x and y from tree named mytree from a.root</span>
-<span class="n">root2array</span><span class="p">(</span><span class="s">&#39;a.root&#39;</span><span class="p">,</span> <span class="s">&#39;mytree&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Due to
-the way TChain works, if the trees specified
-in the input files have different structures, only the
-branch in the first tree will be automatically extracted.
-You can work around this by either reordering the input
-file or specifying the branches manually.</p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.root2rec">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">root2rec</tt><big>(</big><em>fnames</em>, <em>treename=None</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#root2rec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.root2rec" title="Permalink to this definition">¶</a></dt>
-<dd><p>read branches in tree treename in file(s) given by fnames can
-convert it to numpy recarray</p>
-<p>This is equivalent to
-root2array(fnames, treename, branches).view(np.recarray)</p>
-<div class="admonition-see-also admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a></p>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.list_trees">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">list_trees</tt><big>(</big><em>fname</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#list_trees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.list_trees" title="Permalink to this definition">¶</a></dt>
-<dd><p>list trees in rootfile <em>fname</em></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.list_branches">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">list_branches</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#list_branches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.list_branches" title="Permalink to this definition">¶</a></dt>
-<dd><p>get a list of branches for given <em>fname</em> and <em>treename</em>.
-<em>treename</em> is optional if fname has only one tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lt">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lt</tt><big>(</big><em>fname</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lt" title="Permalink to this definition">¶</a></dt>
-<dd><p>shorthand for <a class="reference internal" href="#root_numpy.list_trees" title="root_numpy.list_trees"><tt class="xref py py-func docutils literal"><span class="pre">list_trees()</span></tt></a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lst">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lst</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lst" title="Permalink to this definition">¶</a></dt>
-<dd><p>return tree structures.
-<em>treename</em> is optional if fname has only one tree</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.lb">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">lb</tt><big>(</big><em>fname</em>, <em>treename=None</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#lb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.lb" title="Permalink to this definition">¶</a></dt>
-<dd><p>shorthand for <a class="reference internal" href="#root_numpy.list_branches" title="root_numpy.list_branches"><tt class="xref py py-func docutils literal"><span class="pre">list_branches()</span></tt></a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.tree2array">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">tree2array</tt><big>(</big><em>tree</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#tree2array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.tree2array" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert PyROOT TTree <em>tree</em> to numpy structured array
-see <a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a> for details on parameter</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="root_numpy.tree2rec">
-<tt class="descclassname">root_numpy.</tt><tt class="descname">tree2rec</tt><big>(</big><em>tree</em>, <em>branches=None</em>, <em>N=None</em>, <em>offset=0</em><big>)</big><a class="reference internal" href="_modules/root_numpy.html#tree2rec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#root_numpy.tree2rec" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert PyROOT TTree <em>tree</em> to numpy structured array
-see <a class="reference internal" href="#root_numpy.root2array" title="root_numpy.root2array"><tt class="xref py py-func docutils literal"><span class="pre">root2array()</span></tt></a> for details on parameters.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="type-conversion-table">
-<span id="conversion-table"></span><h1>Type Conversion Table<a class="headerlink" href="#type-conversion-table" title="Permalink to this headline">¶</a></h1>
-<p>List of primitive type converion is given this table:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="31%" />
-<col width="69%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">ROOT type</th>
-<th class="head">numpy type</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Char_t</td>
-<td>np.int8</td>
-</tr>
-<tr class="row-odd"><td>UChar_t</td>
-<td>np.uint8</td>
-</tr>
-<tr class="row-even"><td>Short_t</td>
-<td>np.int16</td>
-</tr>
-<tr class="row-odd"><td>UShort_t</td>
-<td>np.uint16</td>
-</tr>
-<tr class="row-even"><td>Int_t</td>
-<td>np.int32</td>
-</tr>
-<tr class="row-odd"><td>UInt_t</td>
-<td>np.uint32</td>
-</tr>
-<tr class="row-even"><td>Float_t</td>
-<td>np.float32</td>
-</tr>
-<tr class="row-odd"><td>Double_t</td>
-<td>np.float64</td>
-</tr>
-<tr class="row-even"><td>Long64_t</td>
-<td>np.int64</td>
-</tr>
-<tr class="row-odd"><td>ULong64_t</td>
-<td>np.uint64</td>
-</tr>
-<tr class="row-even"><td>Bool_t</td>
-<td>np.bool</td>
-</tr>
-<tr class="row-odd"><td>x[10]</td>
-<td>(np.primitivetype, (10,))</td>
-</tr>
-<tr class="row-even"><td>x[nx]</td>
-<td>np.object</td>
-</tr>
-<tr class="row-odd"><td>vector&lt;t&gt;</td>
-<td>np.object</td>
-</tr>
-</tbody>
-</table>
-<p>Variable length array (<cite>particletype[nparticle]</cite>) and vector (<cite>vector&lt;int&gt;</cite>) are converted to object of numpy array of corresponding types. Fixed length array is converted to fixed length array field in numpy.</p>
-</div>
-
-
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">root_numpy</a><ul>
-<li><a class="reference internal" href="#download">Download</a></li>
-<li><a class="reference internal" href="#install">Install</a></li>
-<li><a class="reference internal" href="#typical-usage">Typical Usage</a></li>
+<h2 class="main-subtitle">The interface between ROOT and NumPy</h2><p>root_numpy is a Python extension module that provides an efficient interface
+between <a class="reference external" href="http://root.cern.ch/">ROOT</a> and <a class="reference external" href="http://www.numpy.org/">NumPy</a>.
+root_numpy&#8217;s internals are compiled C++ and can therefore handle large amounts
+of data much faster than equivalent pure Python implementations.</p>
+<p>With your ROOT data in NumPy form, make use of NumPy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/">broad library</a>, including fancy indexing,
+slicing, broadcasting, random sampling, sorting, shape transformations, linear
+algebra operations, and more. See this <a class="reference external" href="https://docs.scipy.org/doc/numpy-dev/user/quickstart.html">tutorial</a> to get started.
+NumPy is the fundamental library of the scientific Python ecosystem. Using
+NumPy arrays opens up many new possibilities beyond what ROOT offers. Convert
+your TTrees into NumPy arrays and use <a class="reference external" href="http://www.scipy.org/">SciPy</a> for
+numerical integration and optimization, <a class="reference external" href="http://matplotlib.org/">matplotlib</a>
+for plotting, <a class="reference external" href="http://pandas.pydata.org/">pandas</a> for data analysis,
+<a class="reference external" href="http://statsmodels.sourceforge.net/">statsmodels</a> for statistical modelling,
+<a class="reference external" href="http://scikit-learn.org/">scikit-learn</a> for machine learning, and perform
+quick exploratory analysis in a <a class="reference external" href="https://jupyter.org/">Jupyter notebook</a>.</p>
+<p>At the core of root_numpy are powerful and flexible functions for converting
+<a class="reference external" href="https://root.cern.ch/doc/master/classTTree.html">ROOT TTrees</a> into
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.rec.html">structured NumPy arrays</a> as well as converting
+NumPy arrays back into ROOT TTrees. root_numpy can convert branches of strings
+and basic types such as bool, int, float, double, etc. as well as
+variable-length and fixed-length multidimensional arrays and 1D or 2D vectors
+of basic types and strings. root_numpy can also create columns in the output
+array that are expressions involving the TTree branches similar to
+<code class="docutils literal"><span class="pre">TTree::Draw()</span></code>.</p>
+<p>Did we mention that root_numpy is fast?</p>
+<img alt="_images/bench_tree2array.png" src="_images/bench_tree2array.png" />
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#getting-the-latest-source">Getting the Latest Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#manual-installation">Manual Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#automatic-installation">Automatic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#running-the-tests">Running the Tests</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-root_numpy">Full Documentation</a></li>
-<li><a class="reference internal" href="#type-conversion-table">Type Conversion Table</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="start.html#a-quick-tutorial">A Quick Tutorial</a></li>
 </ul>
-
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-add-a-new-branch-to-an-existing-tree">How do I add a new branch to an existing tree?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-remove-a-branch-from-a-tree">How do I remove a branch from a tree?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">root_numpy Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/index.html#root-numpy">root_numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#root-numpy">root_numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto_examples/index.html#root-numpy-tmva">root_numpy.tmva</a></li>
+</ul>
+</li>
+</ul>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="#">root_numpy 2.00 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
-        &copy; Copyright 2012, Piti Ongmongkolkul.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

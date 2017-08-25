@@ -1,0 +1,6 @@
+root_numpy.list_branches
+========================
+
+.. currentmodule:: root_numpy
+
+.. autofunction:: list_branches

@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; root_numpy 4.7.3.dev0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/root_numpy.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="root_numpy 4.7.3.dev0 documentation" href="index.html"/>
+        <link rel="next" title="Getting Started" href="start.html"/>
+        <link rel="prev" title="root_numpy" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> root_numpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                4.7.3.dev0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-the-latest-source">Getting the Latest Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-installation">Automatic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-tests">Running the Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">root_numpy Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">root_numpy</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>root_numpy requires that both <a class="reference external" href="http://root.cern.ch/">ROOT</a> and <a class="reference external" href="http://www.numpy.org/">NumPy</a> are installed
+and that ROOT is setup with the <code class="docutils literal"><span class="pre">$ROOTSYS</span></code> environment variable set before
+installation. root_numpy&#8217;s installation script depends on ROOT&#8217;s
+<code class="docutils literal"><span class="pre">root-config</span></code> utility to determine the ROOT compiler/linker flags
+and include paths. The installation attempts to run <code class="docutils literal"><span class="pre">root-config</span></code> and if
+unsuccessful then <code class="docutils literal"><span class="pre">$ROOTSYS/bin/root-config</span></code>. If <code class="docutils literal"><span class="pre">root-config</span></code> still cannot
+be found, the installation aborts.</p>
+<p>root_numpy has been tested with:</p>
+<ul class="simple">
+<li>ROOT 5.32, 5.34, 6.04, 6.06, 6.09</li>
+<li>NumPy 1.6, 1.7, 1.8, 1.9, 1.10, 1.11</li>
+<li>Python 2.6, 2.7, 3.4, 3.5</li>
+<li>GNU/Linux, Mac OS</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p><strong>Mac OS:</strong> libstdc++ and libc++ are not ABI-compatible.</p>
+<p>If you&#8217;re compiling root_numpy with Clang and linking against libc++, ROOT
+should also have been compiled with Clang and libc++. ROOT compiles with
+Clang and libc++ since version 5.34/11, but PyROOT had a bug that was fixed
+after that tag, so it is best to compile a newer version. You can do this
+easily with Homebrew via:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="o">--</span><span class="n">HEAD</span> <span class="n">root</span>
+</pre></div>
+</div>
+<p class="last">This issue also comes up if you&#8217;re using a Python bundle such as Anaconda
+or Enthought Canopy. These bundles build against libstdc++, the GCC C++
+standard library, which is used on Mac OS 10.5 and later. On Mac OS 10.7 and
+later, however, the default compiler links against libc++, the Clang C++
+standard library.</p>
+</div>
+</div>
+<div class="section" id="getting-the-latest-source">
+<h2>Getting the Latest Source<a class="headerlink" href="#getting-the-latest-source" title="Permalink to this headline">¶</a></h2>
+<p>Clone the repository with git:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rootpy</span><span class="o">/</span><span class="n">root_numpy</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>or checkout with svn:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">svn</span> <span class="n">checkout</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rootpy</span><span class="o">/</span><span class="n">root_numpy</span><span class="o">/</span><span class="n">trunk</span> <span class="n">root_numpy</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-installation">
+<h2>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
+<p>If you have obtained a copy of <cite>rootpy_numpy</cite> yourself use the <code class="docutils literal"><span class="pre">setup.py</span></code>
+script to install.</p>
+<p>To install in your <a class="reference external" href="http://www.python.org/dev/peps/pep-0370/">home directory</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span>
+</pre></div>
+</div>
+<p>To install system-wide (requires root privileges):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>sudo ROOTSYS=$ROOTSYS python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="automatic-installation">
+<h2>Automatic Installation<a class="headerlink" href="#automatic-installation" title="Permalink to this headline">¶</a></h2>
+<p>To install a <a class="reference external" href="http://pypi.python.org/pypi/root_numpy/">released version</a> of
+<cite>root_numpy</cite> use <a class="reference external" href="http://pypi.python.org/pypi/pip">pip</a>.</p>
+<p>To install in your <a class="reference external" href="http://www.python.org/dev/peps/pep-0370/">home directory</a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="n">root_numpy</span>
+</pre></div>
+</div>
+<p>To install system-wide (requires root privileges):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>sudo ROOTSYS=$ROOTSYS pip install root_numpy
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The above will install the latest version of root_numpy on PyPI
+and may be lacking new unreleased features. You can also use pip to
+install the latest version of root_numpy on github:</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">user</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rootpy</span><span class="o">/</span><span class="n">root_numpy</span><span class="o">/</span><span class="n">zipball</span><span class="o">/</span><span class="n">master</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="running-the-tests">
+<h2>Running the Tests<a class="headerlink" href="#running-the-tests" title="Permalink to this headline">¶</a></h2>
+<p>Testing requires the <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> package.</p>
+<p>From outside the source directory <cite>rootpy_numpy</cite> may be tested by running:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">nosetests</span> <span class="o">--</span><span class="n">exe</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">v</span> <span class="n">root_numpy</span>
+</pre></div>
+</div>
+<p>Your copy of the <cite>root_numpy</cite> source may also be tested by runnnig this inside
+the source directory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">test</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="start.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="root_numpy" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, <a target="_blank" href="https://github.com/rootpy/root_numpy/graphs/contributors">root_numpy developers and contributors</a>.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.7.3.dev0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
