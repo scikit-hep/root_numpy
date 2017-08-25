@@ -174,7 +174,9 @@ def root2array(filenames,
         that range and fulfilling the ``selection`` condition (if defined) are
         used.
     include_weight : bool, optional (default=False)
-        Include a column containing the tree weight.
+        Include a column containing the tree weight ``TTree::GetWeight()``.
+        Note that this will be the same value for all entries unless the tree
+        is actually a TChain containing multiple trees with different weights.
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
     cache_size : int, optional (default=-1)
@@ -342,7 +344,9 @@ def tree2array(tree,
         that range and fulfilling the ``selection`` condition (if defined) are
         used.
     include_weight : bool, optional (default=False)
-        Include a column containing the tree weight.
+        Include a column containing the tree weight ``TTree::GetWeight()``.
+        Note that this will be the same value for all entries unless the tree
+        is actually a TChain containing multiple trees with different weights.
     weight_name : str, optional (default='weight')
         The field name for the weight column if ``include_weight=True``.
     cache_size : int, optional (default=-1)
