@@ -725,12 +725,12 @@ def array2root(arr, filename, treename='tree', mode='update'):
         raise IOError("file {0} is not writable".format(filename))
     # If a tree with that name exists, we want to update it
     cdef TTree* tree = <TTree*> rfile.Get(treename)
-    print treename
+    print(treename)
     if "/" in treename:
         components = treename.split("/")
         dirs = components[:-1]
         for d in dirs:
-            print d
+            print(d)
             rfile.mkdir(d).cd()
         treename = components[-1]
         print treename
