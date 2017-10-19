@@ -729,8 +729,10 @@ def array2root(arr, filename, treename='tree', mode='update'):
         components = treename.split("/")
         dirs = components[:-1]
         for d in dirs:
+            print d
             rfile.mkdir(d).cd()
         treename = components[-1]
+        print treename
     tree = array2tree(arr, name=treename, tree=tree)
     tree.Write(treename, kOverwrite)
     del tree
