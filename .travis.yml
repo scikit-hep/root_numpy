@@ -17,15 +17,15 @@ matrix:
 
 #install: source ci/install.sh
 install:
-	# Deactivate the travis-provided virtual environment and setup a
-	# conda-based environment instead
-	- deactivate
-	# Install miniconda
-	- wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-	- export MINICONDA_PATH=$HOME/miniconda
+  # Deactivate the travis-provided virtual environment and setup a
+  # conda-based environment instead
+  - deactivate
+  # Install miniconda
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - export MINICONDA_PATH=$HOME/miniconda
   - bash miniconda.sh -b -p $MINICONDA_PATH
-	- export PATH=$MINICONDA_PATH/bin:$PATH
-	- conda update --yes conda
+  - export PATH=$MINICONDA_PATH/bin:$PATH
+  - conda update --yes conda
   - conda info -a # Useful for debugging any issues with conda
   - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels http://conda.anaconda.org/NLeSC  
