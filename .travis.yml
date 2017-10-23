@@ -22,21 +22,15 @@ install:
 	- deactivate
 	# Install miniconda
 	- wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-	- export MINICONDA_PATH=/home/travis/miniconda
-	- chmod +x miniconda.sh && ./miniconda.sh -b -p $MINICONDA_PATH
+	- export MINICONDA_PATH=$HOME/miniconda
+  - bash miniconda.sh -b -p $MINICONDA_PATH
 	- export PATH=$MINICONDA_PATH/bin:$PATH
 	- conda update --yes conda
-  #- if [ "${TRAVIS_OS_NAME}" == "linux" ]; then wget -nv http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi 
-  #- bash miniconda.sh -b -p $HOME/miniconda
-  #- export PATH="$HOME/miniconda/bin:$PATH"
-  #- hash -r
-  #- conda config --set always_yes yes --set changeps1 no
-  #- conda update --yes conda
   - conda info -a # Useful for debugging any issues with conda
+  - conda config --set always_yes yes --set changeps1 no
   - conda config --add channels http://conda.anaconda.org/NLeSC  
   - conda config --set show_channel_urls yes
   - conda create -q -n testenv python=${PYTHON} root=${ROOT} numpy nose sphinx
-  #- export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - pip install coverage coveralls
 
