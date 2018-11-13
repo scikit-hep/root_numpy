@@ -6,14 +6,9 @@ language: python
 
 matrix:
     include:
-        - python: 2.7
-          env: PYTHON=2.7 ROOT=5.34.32
-        - python: 2.7
-          env: PYTHON=2.7 ROOT=6.04
-        - python: 3.4
-          env: PYTHON=3.4 ROOT=5.34.32
-        - python: 3.4
-          env: PYTHON=3.4 ROOT=6.04 COVERAGE=1
+        - env: PYTHON=2.7
+        - env: PYTHON=3.6
+        - env: PYTHON=3.7 COVERAGE=1
 
 #install: source ci/install.sh
 install:
