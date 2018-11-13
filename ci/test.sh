@@ -26,5 +26,5 @@ time make test-installed
 if [ ! -z ${COVERAGE+x} ] && [ -z ${NOTMVA+x} ]; then
     # COVERAGE is set and TMVA is included in this build
     # so run the coverage
-    time make test-coverage </dev/null
+    time nosetests --with-coverage --cover-package=root_numpy
 fi
