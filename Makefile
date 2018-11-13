@@ -102,7 +102,7 @@ test-coverage: in
 	@$(NOSETESTS) -s -v -a '!slow' --with-coverage \
 		--cover-erase --cover-branches \
 		--cover-min-percentage=100 \
-		--cover-html --cover-html-dir=coverage root_numpy
+		--cover-html --cover-html-dir=coverage --cover-package=root_numpy
 	@if [ "$(INTERACTIVE)" -eq "1" ]; then \
 		$(OPEN) coverage/index.html; \
 	fi;
