@@ -4,10 +4,6 @@ from __future__ import print_function
 
 import sys
 
-# Check Python version
-if sys.version_info < (2, 6):
-    sys.exit("root_numpy only supports python 2.6 and above")
-
 if sys.version_info[0] < 3:
     import __builtin__ as builtins
 else:
@@ -204,8 +200,8 @@ def setup_package():
         long_description=''.join(open('README.rst').readlines()[7:-4]),
         author='the root_numpy developers',
         author_email='rootpy-dev@googlegroups.com',
-        maintainer='Noel Dawe',
-        maintainer_email='noel@dawe.me',
+        maintainer='The scikit-hep developers',
+        maintainer_email='scikit-hep-admins@googlegroups.com',
         license='new BSD',
         url='http://scikit-hep.org/root_numpy',
         packages=packages,
@@ -229,12 +225,10 @@ def setup_package():
             'License :: OSI Approved :: BSD License',
             'Programming Language :: Python',
             'Programming Language :: Python :: 2',
-            'Programming Language :: Python :: 2.6',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.3',
-            'Programming Language :: Python :: 3.4',
-            'Programming Language :: Python :: 3.5',
+            'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
             'Programming Language :: C++',
             'Programming Language :: Cython',
             'Development Status :: 5 - Production/Stable',

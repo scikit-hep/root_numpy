@@ -19,7 +19,7 @@ root_numpy has been tested with:
 
 * ROOT 5.32, 5.34, 6.04, 6.06, 6.09
 * NumPy 1.6, 1.7, 1.8, 1.9, 1.10, 1.11
-* Python 2.6, 2.7, 3.4, 3.5
+* Python 2.7, 3.6, 3.7
 * GNU/Linux, Mac OS
 
 .. warning:: **Mac OS:** libstdc++ and libc++ are not ABI-compatible.
@@ -101,4 +101,3 @@ Your copy of the `root_numpy` source may also be tested by runnnig this inside
 the source directory::
 
    make test
-
