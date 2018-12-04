@@ -13,8 +13,8 @@ root_numpy: The interface between ROOT and NumPy
    :target: https://coveralls.io/github/scikit-hep/root_numpy?branch=master
 .. image:: https://landscape.io/github/scikit-hep/root_numpy/master/landscape.svg?style=flat
    :target: https://landscape.io/github/scikit-hep/root_numpy/master
-.. image:: https://zenodo.org/badge/3823872.svg
-   :target: https://zenodo.org/badge/latestdoi/3823872
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.592881.svg
+   :target: https://doi.org/10.5281/zenodo.592881
 
 root_numpy is a Python extension module that provides an efficient interface
 between `ROOT <http://root.cern.ch/>`_ and `NumPy <http://www.numpy.org/>`_.
@@ -49,4 +49,3 @@ array that are expressions involving the TTree branches similar to
 Did we mention that root_numpy is fast?
 
 .. image:: benchmarks/bench_tree2array.png
-
