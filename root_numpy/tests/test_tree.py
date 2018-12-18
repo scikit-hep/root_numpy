@@ -642,3 +642,14 @@ def test_array2root():
         rnp.array2root(a, tmp.GetName(), mode='update')
         a_conv2 = rnp.root2array(tmp.GetName())
         assert_array_equal(np.hstack([a, a]), a_conv2)
+        # write into subdirectory
+        tname = 'root/sub/tree'
+        rnp.array2root(a, tmp.GetName(), treename=tname, mode='update')
+        a_conv3 = rnp.root2array(tmp.GetName(), treename=tname)
+        assert_array_equal(a, a_conv3)
+        # try creating tree with conflicting name
+        assert_raises(IOError, rnp.array2root, a, tmp.GetName(),
+                treename='root/sub', mode='update')
+        # try creating subdirectory with conflicting name
+        assert_raises(IOError, rnp.array2root, a, tmp.GetName(),
+                treename='root/sub/tree/error', mode='update')

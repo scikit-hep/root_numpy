@@ -723,10 +723,51 @@ def array2root(arr, filename, treename='tree', mode='update'):
         raise IOError("cannot open file {0}".format(filename))
     if not rfile.IsWritable():
         raise IOError("file {0} is not writable".format(filename))
+    cdef TDirectory* tdf = NULL
+    cdef TKey* key = NULL
+    cdef TList* keys = NULL
+
     # If a tree with that name exists, we want to update it
     cdef TTree* tree = <TTree*> rfile.Get(treename)
-    tree = array2tree(arr, name=treename, tree=tree)
-    tree.Write(treename, kOverwrite)
+
+    *dirs, tname = treename.split('/')
+    if dirs:
+        path = ''
+        # check if an object with a conflicting path exists
+        for i, d in enumerate(dirs + [tname]):
+            if path == '':
+                keys = rfile.GetListOfKeys()
+                path = d
+            else:
+                tdf = <TDirectoryFile*> rfile.Get(path)
+                if tdf == NULL:
+                    break
+                keys = tdf.GetListOfKeys()
+                path += '/' + d
+            if keys == NULL:
+                raise IOError("unable to get keys in {0}".format(filename))
+
+            for j in range(keys.GetEntries()):
+                key = <TKey*> keys.At(j)
+                if key.GetName() != d:
+                    continue
+                clsname = str(key.GetClassName())
+                clsToCreate = 'TDirectoryFile' if i < len(dirs) else 'TTree'
+                if clsname != clsToCreate:
+                    raise IOError('{0} with path {1} exists'.format(
+                        clsname, path))
+
+        # create the directory and move there
+        path = '/'.join(dirs)
+        rfile.mkdir(path)
+        rfile.cd(path)
+
+        # create tree
+        if tree == NULL:
+            tree = new TTree(path + '/' + tname, tname)
+
+    tree = array2tree(arr, name=tname, tree=tree)
+    tree.Write(tname, kOverwrite)
     del tree
     rfile.Close()
     del rfile

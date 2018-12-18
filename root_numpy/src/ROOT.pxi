@@ -22,6 +22,8 @@ cdef extern from "TDirectory.h":
     cdef cppclass TDirectory:
         TList* GetListOfKeys()
         TObject* Get(const_char*)
+        bool cd(const_char*)
+        TDirectoryFile* mkdir(const_char*)
 
 cdef extern from "TDirectoryFile.h":
     cdef cppclass TDirectoryFile(TDirectory):
