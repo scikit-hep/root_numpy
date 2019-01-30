@@ -21,9 +21,8 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a # Useful for debugging any issues with conda
-  - conda config --add channels conda-forge/label/gcc7
-  - conda config --add channels chrisburr
-  - conda create -q -n testenv python=${PYTHON} nomkl root nose sphinx
+  - conda config --add channels conda-forge
+  - conda create -q -n testenv python=${PYTHON} root=6.14 nose sphinx
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - pip install coverage coveralls
