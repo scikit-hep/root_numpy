@@ -172,19 +172,10 @@ if has_tmva:
 
 
 def setup_package():
-    # Only add numpy to *_requires lists if not already installed to prevent
-    # pip from trying to upgrade an existing numpy and failing.
-    try:
-        import numpy
-    except ImportError:
-        build_requires = ['numpy']
-    else:
-        build_requires = []
-
     if use_setuptools:
         setuptools_options = dict(
-            setup_requires=build_requires,
-            install_requires=build_requires,
+            setup_requires=['numpy'],
+            install_requires=['numpy'],
             extras_require={
                 'with-numpy': ('numpy',),
             },
