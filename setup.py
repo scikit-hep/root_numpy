@@ -174,8 +174,8 @@ if has_tmva:
 def setup_package():
     if use_setuptools:
         setuptools_options = dict(
-            setup_requires=build_requires,
-            install_requires=build_requires,
+            setup_requires=['numpy'],
+            install_requires=['numpy'],
             extras_require={
                 'with-numpy': ('numpy',),
             },
