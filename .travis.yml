@@ -22,7 +22,7 @@ install:
   - conda update -q conda
   - conda info -a # Useful for debugging any issues with conda
   - conda config --add channels conda-forge
-  - conda create -q -n testenv python=${PYTHON} root=6.14 nose sphinx
+  - conda create -q -n testenv python=${PYTHON} root nose sphinx
   - export CONDA_ENV_PATH=$HOME/miniconda/envs/testenv
   - source activate testenv
   - pip install coverage coveralls
