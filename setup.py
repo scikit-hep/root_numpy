@@ -33,14 +33,6 @@ import os
 from glob import glob
 from contextlib import contextmanager
 
-# Prevent setup from trying to create hard links
-# which are not allowed on AFS between directories.
-# This is a hack to force copying.
-try:
-    del os.link
-except AttributeError:
-    pass
-
 local_path = os.path.dirname(os.path.abspath(__file__))
 # setup.py can be called from outside the root_numpy directory
 os.chdir(local_path)
