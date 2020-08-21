@@ -32,8 +32,8 @@ of data much faster than equivalent pure Python implementations.
 With your ROOT data in NumPy form, make use of NumPy's `broad library
 <http://docs.scipy.org/doc/numpy/reference/>`_, including fancy indexing,
 slicing, broadcasting, random sampling, sorting, shape transformations, linear
-algebra operations, and more. See this `tutorial
-<https://docs.scipy.org/doc/numpy-dev/user/quickstart.html>`_ to get started.
+algebra operations, and more. See this `tutorial 
+<https://docs.scipy.org/doc/numpy/user/quickstart.html>`_ to get started.
 NumPy is the fundamental library of the scientific Python ecosystem. Using
 NumPy arrays opens up many new possibilities beyond what ROOT offers. Convert
 your TTrees into NumPy arrays and use `SciPy <http://www.scipy.org/>`_ for
