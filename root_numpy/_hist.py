@@ -244,7 +244,7 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False, retu
                 errors = np.sqrt(np.ndarray(shape=shape, dtype=DTYPE_ROOT2NUMPY['D'],
                                             buffer=hist.GetSumw2().GetArray()))
         else:
-            raise TypeError("return_errors does not support THn, THnSparce")
+            raise TypeError("return_errors does not support THn, THnSparse")
 
 
     if return_edges:
