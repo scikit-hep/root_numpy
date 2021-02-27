@@ -129,7 +129,7 @@ def fill_profile(profile, array, weights=None, return_indices=False):
         "ROOT.TProfile, ROOT.TProfile2D, or ROOT.TProfile3D")
 
 
-def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
+def hist2array(hist, include_overflow=False, copy=True, return_edges=False, return_errors=False):
     """Convert a ROOT histogram into a NumPy array
 
     Parameters
@@ -145,6 +145,9 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
         histogram's array.
     return_edges : bool, optional (default=False)
         If True, also return the bin edges along each axis.
+    return_errors : bool, optional (default=False)
+        If True, also return the sqrt of the sum of weights squared for
+        each bin in axes
 
     Returns
     -------
@@ -154,6 +157,9 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
         A list of numpy arrays where each array contains the bin edges along
         the corresponding axis of ``hist``. Overflow and underflow bins are not
         included.
+    errors : numpy array
+        A NumPy array containing the sqrt of the sum of weights squared
+        in each bin
 
     Raises
     ------
@@ -226,6 +232,21 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
             array = _librootnumpy.thn2array(ROOT.AsCObject(hist),
                                             shape, dtype)
 
+    if return_errors:
+        # Construct a NumPy array of the sum of weights squared
+        if simple_hist:
+            if hist_type == 'C':
+                raise TypeError("THxC cannot return Errors")
+            else:
+                # the sum of weights squared is stored in a ROOT
+                # TArrayD pointer. So we must use key 'D' from the
+                # DTYPE_ROOT2NUMPY dictionary.
+                errors = np.sqrt(np.ndarray(shape=shape, dtype=DTYPE_ROOT2NUMPY['D'],
+                                            buffer=hist.GetSumw2().GetArray()))
+        else:
+            raise TypeError("return_errors does not support THn and THnSparse")
+
+
     if return_edges:
         if simple_hist:
             ndims = hist.GetDimension()
@@ -248,15 +269,25 @@ def hist2array(hist, include_overflow=False, copy=True, return_edges=False):
     if not include_overflow:
         # Remove overflow and underflow bins
         array = array[tuple([slice(1, -1) for idim in range(array.ndim)])]
+        if return_errors:
+            errors = errors[tuple([slice(1, -1) for idim in range(errors.ndim)])]
 
     if simple_hist:
         # Preserve x, y, z -> axis 0, 1, 2 order
         array = np.transpose(array)
+        if return_errors:
+            errors = np.transpose(errors)
         if copy:
             array = np.copy(array)
+            if return_errors:
+                errors = np.copy(errors)
 
+    if return_edges and return_errors:
+        return array, edges, errors
     if return_edges:
         return array, edges
+    if return_errors:
+        return array, errors
     return array
 
 
