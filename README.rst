@@ -5,7 +5,7 @@
 
 ``root_numpy`` has not been actively maintained in several years. This is mostly due to the emergence of new alternatives which are both faster and more flexible.
 
-* **uproot** provides support for reading and writing ROOT files without the need for an installation of ROOT. `See here for details. <https://github.com/scikit-hep/uproot>`_
+* **uproot** provides support for reading and writing ROOT files without the need for an installation of ROOT. `See here for details. <https://github.com/scikit-hep/uproot4>`_
 * **ROOT** now natively supports converting objects into numpy arrays using either `directly using TTree <https://root.cern/doc/master/pyroot002__TTreeAsMatrix_8py.html>`_ or with `the newer RDataFrame <https://root.cern.ch/doc/master/df026__AsNumpyArrays_8py.html>`_
 
 root_numpy: The interface between ROOT and NumPy
