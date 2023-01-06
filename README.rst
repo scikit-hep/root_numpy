@@ -3,7 +3,7 @@
 :warning:root_numpy is deprecated and unmaintained:warning:
 ***************************************************************
 
-``root_numpy`` has not been actively maintained in several years. This is mostly due to the emergence of new alternatives which are both faster and more flexible.
+``root_numpy`` has not been actively maintained or developed in several years. This is mostly due to the emergence of new alternatives which are both faster and more flexible.
 
 * **uproot** provides support for reading and writing ROOT files without the need for an installation of ROOT. `See here for details. <https://github.com/scikit-hep/uproot4>`_
 * **ROOT** now natively supports converting objects into numpy arrays using either `directly using TTree <https://root.cern/doc/master/pyroot002__TTreeAsMatrix_8py.html>`_ or with `the newer RDataFrame <https://root.cern.ch/doc/master/df026__AsNumpyArrays_8py.html>`_
@@ -17,8 +17,6 @@ root_numpy: The interface between ROOT and NumPy
    :target: https://travis-ci.org/scikit-hep/root_numpy
 .. image:: https://coveralls.io/repos/github/scikit-hep/root_numpy/badge.svg?branch=master
    :target: https://coveralls.io/github/scikit-hep/root_numpy?branch=master
-.. image:: https://landscape.io/github/scikit-hep/root_numpy/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/scikit-hep/root_numpy/master
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.592881.svg
    :target: https://doi.org/10.5281/zenodo.592881
 
